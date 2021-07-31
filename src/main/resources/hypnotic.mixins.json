@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "badgamesinc.hypnotic.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+  ],
+  "client": [
+    "TickMixin",
+    "KeyboardMixin",
+    "InGameHudMixin",
+    "BufferRendererAccessor",
+    "MinecraftClientMixin",
+    "MinecraftClientAccessor",
+    "TitleScreenMixin",
+    "ClientPlayerEntityMixin",
+    "ClientConnectionMixin",
+    "LivingEntityRendererMixin",
+    "PlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

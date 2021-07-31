@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "hypnotic",
+  "version": "${version}",
+
+  "name": "Hypnotic Client",
+  "description": "Insane epic \"utility mod\"",
+  "authors": [
+    "BadGamesInc"
+  ],
+  "contact": {
+    "homepage": "https://hypnotic-client.github.io/",
+    "sources": "https://github.com/badgamesinc/"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/hypnotic/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "badgamesinc.hypnotic.Hypnotic"
+    ]
+  },
+  "mixins": [
+    "hypnotic.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16",
+    "fabric-key-binding-api-v1": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
