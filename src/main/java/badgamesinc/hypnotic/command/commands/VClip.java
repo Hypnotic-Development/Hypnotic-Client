@@ -1,21 +1,32 @@
 package badgamesinc.hypnotic.command.commands;
 
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import badgamesinc.hypnotic.command.Command;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.command.CommandSource;
+import net.minecraft.entity.Entity;
 
 public class VClip extends Command {
-    public String getAlias() {
-        return "vclip";
+	public VClip() {
+        super("vclip", "Lets you clip through blocks vertically.");
     }
 
-    public String getDescription() {
-        return "Clip vertically";
-    }
+    @Override
+    public void build(LiteralArgumentBuilder<CommandSource> builder) {
+        builder.then(argument("blocks", DoubleArgumentType.doubleArg()).executes(context -> {
+            ClientPlayerEntity player = mc.player;
+            assert player != null;
 
-    public String getSyntax() {
-        return ".vclip (distance)";
-    }
+            double blocks = context.getArgument("blocks", Double.class);
+            if (player.hasVehicle()) {
+                Entity vehicle = player.getVehicle();
+                vehicle.setPosition(vehicle.getX(), vehicle.getY() + blocks, vehicle.getZ());
+            }
+            player.setPosition(player.getX(), player.getY() + blocks, player.getZ());
 
-    public void onCommand(String command, String[] args) throws Exception {
-        mc.player.setPosition(this.mc.player.getX(), this.mc.player.getY() + Double.parseDouble(args[0]), this.mc.player.getZ());
+            return SINGLE_SUCCESS;
+        }));
     }
 }

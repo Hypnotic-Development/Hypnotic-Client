@@ -10,33 +10,22 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.RotationUtils;
-import badgamesinc.hypnotic.utils.Timer;
 import badgamesinc.hypnotic.utils.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 
 public class Scaffold extends Mod {
 	
-    public final NumberSetting extend = new NumberSetting("Extend", 0, 0, 9, 1);
+    public final NumberSetting extend = new NumberSetting("Extend", 0, 0, 8, 0.1);
     private final BooleanSetting rotate = new BooleanSetting("Rotate", true);
     private final BooleanSetting down = new BooleanSetting("Down", false);
     private final BooleanSetting tower = new BooleanSetting("Tower", true);
-    private final BooleanSetting packetTower = new BooleanSetting("Packet Tower", false);
-    private final NumberSetting towerJumpVelocity = new NumberSetting("Jump Velocity", 42, 37, 60, 5);
-    private final NumberSetting towerReturnVelocity = new NumberSetting("Return Velocity", 30, 20, 60, 1);
-    private final NumberSetting towerClipDelay = new NumberSetting("Clip Delay", 128, 1, 500, 10);
-    private final BooleanSetting towerReturnPacket = new BooleanSetting("Packet Return To Ground", false);
-    private final NumberSetting returnDelay = new NumberSetting("Return Delay", 7, 0, 12, 1);
-
-    private Timer towerDelayTimer = new Timer();
-    private boolean shouldResetTower;
 
     public Scaffold() {
     	super("Scaffold", "Places blocks underneath you", Category.PLAYER);
-    	addSettings(extend, rotate, down, tower, packetTower, towerJumpVelocity, towerReturnVelocity, towerClipDelay, towerReturnPacket, returnDelay);
+    	addSettings(extend, rotate, down, tower);
     }
     
     @EventTarget
@@ -60,31 +49,8 @@ public class Scaffold extends Mod {
 		        RotationUtils.setSilentPitch(50);
     		}
     	}
-        if(tower.isEnabled() && mc.options.keyJump.isPressed() && extend.getValue() <= 0 && !packetTower.isEnabled()) {
+        if(tower.isEnabled() && mc.options.keyJump.isPressed() && extend.getValue() <= 0) {
         	mc.player.addVelocity(0, 0.5, 0);
-            if(mc.player.isOnGround())
-                mc.player.setVelocity(mc.player.getVelocity().x *0.3,towerJumpVelocity.getValue() / 100, mc.player.getVelocity().z *0.3);
-            if(mc.world.getBlockState(mc.player.getBlockPos().down()).isAir())
-                mc.player.setVelocity(mc.player.getVelocity().x *0.3, -(towerReturnVelocity.getValue() / 100), mc.player.getVelocity().z *0.3);
-        }
-        if(tower.isEnabled() && packetTower.isEnabled() && mc.options.keyJump.isPressed() && extend.getValue() <= 0) {
-            if(shouldResetTower) {
-                towerDelayTimer.reset();
-                shouldResetTower = false;
-            }
-            if(!mc.player.isOnGround()) {
-                if (!mc.world.getBlockState(WorldUtils.roundBlockPos(mc.player.getPos()).down()).isAir()
-                        && towerReturnPacket.isEnabled()
-                        && towerDelayTimer.hasTimeElapsed((long)returnDelay.getValue(), true)) {
-                    mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), Math.floor(mc.player.getY()), mc.player.getZ(), true));
-                    mc.player.updatePosition(mc.player.getX(), Math.floor(mc.player.getY()), mc.player.getZ());
-                }
-                return;
-            }
-            if(towerDelayTimer.hasTimeElapsed((long)towerClipDelay.getValue(), true)) {
-                WorldUtils.fakeJump();
-                mc.player.updatePosition(mc.player.getX(), mc.player.getY() + 1.15, mc.player.getZ());
-            }
         }
     }
 
@@ -151,11 +117,11 @@ public class Scaffold extends Mod {
         }
 
         ArrayList<BlockPos> blocks = new ArrayList<>();
-        for(int i = (int) 0; i < extend.getValue(); i++) {
+        for(double i = (int) 0; i < extend.getValue(); i+=0.01) {
         	blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down());
         }
 
-        for(BlockPos x: blocks) {
+        for(BlockPos x : blocks) {
             if(mc.world.getBlockState(x).getMaterial().isReplaceable()) {
                 WorldUtils.placeBlockMainHand(x, rotate.isEnabled());
                 break;

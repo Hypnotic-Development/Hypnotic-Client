@@ -45,7 +45,7 @@ public class Killaura extends Mod {
 					target = (LivingEntity)targets.get(0);
 					if (mc.player.distanceTo(target) > range.getValue()) target = null;
 					if(target != null){
-						if(target instanceof LivingEntity && target != mc.player && mc.player.distanceTo(target) <= range.getValue() && target.isAlive() && mc.player.isAlive()){
+						if(target instanceof LivingEntity && target != mc.player && mc.player.distanceTo(target) <= range.getValue() && target.isAlive() && mc.player.isAlive() && target.getName().asString() != "PowerMacG4"){
 							RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
 							RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
 							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : true){

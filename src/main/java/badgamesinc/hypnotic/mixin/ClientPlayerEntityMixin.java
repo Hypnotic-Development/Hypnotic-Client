@@ -6,11 +6,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import badgamesinc.hypnotic.command.CommandManager;
 import badgamesinc.hypnotic.event.events.EventPlayerJump;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.utils.Wrapper;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -24,8 +26,12 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	@Inject(at = @At("HEAD"), method = "sendChatMessage()V", cancellable = true)
 	private void onSendChatMessage(String message, CallbackInfo callbackInfo) {
-		if (message.startsWith(".")) {
-			CommandManager.INSTANCE.callCommand(message.substring(1));
+		if (message.startsWith(CommandManager.get().getPrefix())) {
+			try {
+				CommandManager.get().dispatch(message.substring(CommandManager.get().getPrefix().length()));
+            } catch (CommandSyntaxException e) {
+                Wrapper.tellPlayer(e.getMessage());
+            }
 			callbackInfo.cancel();
 		}
 	}

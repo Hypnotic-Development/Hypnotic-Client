@@ -2,35 +2,34 @@ package badgamesinc.hypnotic.command.commands;
 
 import java.util.Locale;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import badgamesinc.hypnotic.command.Command;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.command.CommandSource;
 
 public class Bind extends Command {
 
+	public Bind() {
+		super("bind", "Binds a module to the specified key", new String[] {"bind"});
+	}
+	
 	@Override
-	public String getAlias() 
-	{
-		return "bind";
+	public void build(LiteralArgumentBuilder<CommandSource> builder) {
+		builder.then(argument("module", ModuleArgumentType.module()).then(argument("key", StringArgumentType.string())).executes(c -> {
+			Mod mod = c.getArgument("module", Mod.class);
+			String keyName = StringArgumentType.getString(c, "key");
+			mod.setKey(InputUtil.fromTranslationKey("key.keyboard." + keyName.toLowerCase(Locale.ENGLISH)).getCode());
+			return SINGLE_SUCCESS;
+		}));
 	}
 
-	@Override
-	public String getDescription() 
-	{
-		return "Binds modules to a specified key";
-	}
-
-	@Override
-	public String getSyntax() 
-	{
-		return ".bind (key) (module)";
-	}
-
-	@Override
+	/*@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		System.out.println("hell");
 		if (args.length == 2) {
 				String moduleName = args[0];
 				String keyName = args[1];
@@ -68,6 +67,6 @@ public class Bind extends Command {
 //			Wrapper.tellPlayer("Usage: " + getSyntax());
 		}
 
-	}
+	}*/
 
 }

@@ -21,6 +21,7 @@ public class ColorUtils {
 	public static String gray = "\2477";
 	public static String darkGray = "\2478";
 	public static String reset = "\247r";
+	public static int clientColor = new Color(255, 20, 100).getRGB();
 	
 	public static int rainbow(float seconds, float saturation, float brigtness) {
 		float hue = (System.currentTimeMillis() % (int) (seconds * 1000)) / (float) (seconds * 1000);

@@ -24,10 +24,11 @@ public class SpeedMine extends Mod {
             mc.player.hasStatusEffect(StatusEffects.HASTE);
         }
 
-        if ((double)minething.getBlockBreakProgress() > 1.0D - this.speed.getValue() * 0.1D) {
+        if (minething != null && (double)minething.getBlockBreakProgress() > 1.0D - this.speed.getValue() * 0.1D) {
             minething.setBlockBreakProgress(1.0F);
         }
 
+        if (minething != null)
         minething.setBlockBreakingCooldown(0);
         super.onTick();
     }

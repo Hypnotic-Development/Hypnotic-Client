@@ -18,7 +18,9 @@
     "LivingEntityRendererMixin",
     "PlayerEntityMixin",
     "InventoryScreenMixin",
-    "ClientPlayerInteractionManagerMixin"
+    "ClientPlayerInteractionManagerMixin",
+    "CommandSuggestorMixin",
+    "ChatHudAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
