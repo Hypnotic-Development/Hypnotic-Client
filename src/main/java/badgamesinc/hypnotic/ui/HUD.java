@@ -9,15 +9,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
-<<<<<<< Updated upstream
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
-=======
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.TPSUtils;
->>>>>>> Stashed changes
 import badgamesinc.hypnotic.utils.Timer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -58,17 +56,14 @@ public class HUD {
 		modules.sort(Comparator.comparingInt(m -> tr.getWidth(((Mod)m).getDisplayName())).reversed());
 		for (Mod mod : modules) {
 			if (mod.animation > 0) {
-<<<<<<< Updated upstream
 				DrawableHelper.fill(matrix, (int) (width - tr.getWidth(mod.getDisplayName()) - 10 + 100 - mod.animation), (int) (-100 + mod.animation + tr.fontHeight + off - 2), width - 7, (int) (-100 + mod.animation + tr.fontHeight * 2 + off), new Color(0, 0, 0, 180).getRGB());
 				tr.draw(matrix, mod.getDisplayName(), width - tr.getWidth(mod.getDisplayName()) - 8 + 100 - mod.animation, -100 + mod.animation + tr.fontHeight + off, new Color(
 						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
 						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
 						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
 						).getRGB());
-=======
 //				DrawableHelper.fill(matrix, (int) (width - tr.getWidth(mod.getDisplayName()) - 10 + 100 - mod.animation), (int) (-100 + mod.animation + tr.fontHeight + off - 2), width - 7, (int) (-100 + mod.animation + tr.fontHeight * 2 + off), new Color(0, 0, 0, 180).getRGB());
 				tr.drawWithShadow(matrix, mod.getDisplayName(), width - tr.getWidth(mod.getDisplayName()) - 8 + 100 - mod.animation, tr.fontHeight + off, new Color(255, 20, 100).getRGB());
->>>>>>> Stashed changes
 				off+=11;
 				
 				count++;
