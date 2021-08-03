@@ -19,6 +19,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 
 public class Scaffold extends Mod {
+	
     public final NumberSetting extend = new NumberSetting("Extend", 0, 0, 9, 1);
     private final BooleanSetting rotate = new BooleanSetting("Rotate", true);
     private final BooleanSetting down = new BooleanSetting("Down", false);
