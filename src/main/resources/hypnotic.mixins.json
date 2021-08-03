@@ -16,7 +16,9 @@
     "ClientPlayerEntityMixin",
     "ClientConnectionMixin",
     "LivingEntityRendererMixin",
-    "PlayerEntityMixin"
+    "PlayerEntityMixin",
+    "InventoryScreenMixin",
+    "ClientPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

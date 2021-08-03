@@ -151,7 +151,7 @@ public class Scaffold extends Mod {
 
         ArrayList<BlockPos> blocks = new ArrayList<>();
         for(int i = (int) 0; i < extend.getValue(); i++) {
-        	blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i - 1) : (i + 1)).down());
+        	blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down());
         }
 
         for(BlockPos x: blocks) {

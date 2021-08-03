@@ -16,7 +16,6 @@ public class ClickGUIModule extends Mod {
 	@Override
 	public void onEnable() {
 		mc.setScreen(ClickGUI.INSTANCE);
-		System.out.println(mc.getSession().getProfile());
 		this.toggleSilent();
 		super.onEnable();
 	}

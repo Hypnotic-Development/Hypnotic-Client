@@ -11,6 +11,7 @@ import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.RotationUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.BatEntity;
@@ -45,10 +46,11 @@ public class Killaura extends Mod {
 					if (mc.player.distanceTo(target) > range.getValue()) target = null;
 					if(target != null){
 						if(target instanceof LivingEntity && target != mc.player && mc.player.distanceTo(target) <= range.getValue() && target.isAlive() && mc.player.isAlive()){
-							RotationUtils.setSilentRotations(target, RotationUtils.getRotations(target)[0], RotationUtils.getRotations(target)[1]);
-							
+							RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
+							RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
 							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : true){
 								mc.interactionManager.attackEntity(mc.player, target);
+								MinecraftClient.getInstance().player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround((float) RotationUtils.getRotations(target)[0], (float) RotationUtils.getRotations(target)[1], MinecraftClient.getInstance().player.isOnGround()));
 								if (swing.isEnabled()) mc.player.swingHand(Hand.MAIN_HAND);
 							}
 						}
@@ -66,6 +68,7 @@ public class Killaura extends Mod {
 	@Override
 	public void onDisable() {
 		RotationUtils.resetPitch();
+		RotationUtils.resetYaw();
 		super.onDisable();
 	}
 }
