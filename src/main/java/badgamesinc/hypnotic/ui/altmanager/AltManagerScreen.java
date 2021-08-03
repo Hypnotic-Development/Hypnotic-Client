@@ -12,6 +12,7 @@ import badgamesinc.hypnotic.utils.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
@@ -21,9 +22,16 @@ public class AltManagerScreen extends Screen {
 	
 	private String status;
 	private boolean loggingIn = false;
+	private Screen previousScreen = new TitleScreen();
 	
-	protected AltManagerScreen() {
+	public AltManagerScreen() 
+	{
 		super(new LiteralText("AltManager"));
+	}
+	public AltManagerScreen(Screen prevScreen) 
+	{
+		super(new LiteralText("AltManager"));
+		previousScreen = prevScreen;
 	}
 	
 	public static AltManagerScreen INSTANCE = new AltManagerScreen();
@@ -38,6 +46,10 @@ public class AltManagerScreen extends Screen {
 		RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, status, width / 2, 20, -1);
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height - 50, 200, 20, new LiteralText("Add alt"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
+	    }))).active = true;
+		RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, status, width / 2, 20, -1);
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height - 25, 200, 20, new LiteralText("Back"), (button) -> {
+	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
 		
 		int offset = 0;
