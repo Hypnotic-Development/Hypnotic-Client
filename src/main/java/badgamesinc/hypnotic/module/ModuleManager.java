@@ -61,7 +61,8 @@ public class ModuleManager {
 					new NoFall(),
 					new Scaffold(),
 					new SpeedMine(),
-					new AnticheatDisabler()
+					new AnticheatDisabler(),
+					new HUDModule()
 				);
 	}
 	
