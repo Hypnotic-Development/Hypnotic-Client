@@ -7,6 +7,7 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -35,9 +36,13 @@ public class Frame {
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		Screen.fill(matrices, x, y, x + width, y + height, new Color(255, 20, 100).getRGB());
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, category.name, x + 4, y + 6, -1);
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, extended ? "-" : "+", x + width - 10, y + 6, -1);
+		Screen.fill(matrices, x, y, x + width, y + height, new Color(
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
+				).getRGB());
+		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, category.name, x + 4, y + 4, -1);
+		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, extended ? "-" : "+", x + width - 10, y + 4, -1);
 		for (Button button : buttons) {
 			if (this.extended)
 				button.render(matrices, mouseX, mouseY);

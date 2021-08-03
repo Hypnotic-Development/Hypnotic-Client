@@ -8,6 +8,7 @@ import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.event.events.EventRenderGUI;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.utils.Timer;
 import badgamesinc.hypnotic.utils.font.CustomFontRenderer;
 import net.minecraft.client.MinecraftClient;
@@ -41,7 +42,11 @@ public class HUD {
 		for (Mod mod : modules) {
 			if (mod.animation > 0) {
 				DrawableHelper.fill(matrix, (int) (width - tr.getWidth(mod.getDisplayName()) - 10 + 100 - mod.animation), (int) (-100 + mod.animation + tr.fontHeight + off - 2), width - 7, (int) (-100 + mod.animation + tr.fontHeight * 2 + off), new Color(0, 0, 0, 180).getRGB());
-				tr.draw(matrix, mod.getDisplayName(), width - tr.getWidth(mod.getDisplayName()) - 8 + 100 - mod.animation, -100 + mod.animation + tr.fontHeight + off, new Color(255, 20, 100).getRGB());
+				tr.draw(matrix, mod.getDisplayName(), width - tr.getWidth(mod.getDisplayName()) - 8 + 100 - mod.animation, -100 + mod.animation + tr.fontHeight + off, new Color(
+						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
+						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
+						(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
+						).getRGB());
 				off+=11;
 				
 				count++;

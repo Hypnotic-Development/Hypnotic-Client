@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
@@ -43,8 +45,16 @@ public class Slider extends Component {
 			}
 		}
 		
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(255, 20, 100).darker().getRGB());
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(255, 20, 100).getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
+				).darker().getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
+				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
+				).getRGB());
 		tr.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 8, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() + 6, -1);
 		super.render(matrices, mouseX, mouseY);
 	}

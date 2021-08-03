@@ -52,8 +52,8 @@ public class Button {
 			nameColor = -1;
 		else
 			nameColor = new Color(150, 150, 150).getRGB();
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, mod.getName(), x + 4, y + 6, nameColor);
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, extended ? "-" : "+", x + width - 10, y + 6, nameColor);
+		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, mod.getName(), x + 4, y + 4, nameColor);
+		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, extended ? "-" : "+", x + width - 10, y + 4, nameColor);
 		for (Component component : components) {
 			if (this.extended) {
 				component.render(matrices, mouseX, mouseY);
