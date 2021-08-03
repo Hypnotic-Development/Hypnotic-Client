@@ -13,6 +13,7 @@ public class CommandManager {
 	{
 		commands.add(new Bind());
 		commands.add(new VClip());
+		commands.add(new Ban());
 	}
 	
 	public CopyOnWriteArrayList<Command> getCommands() 

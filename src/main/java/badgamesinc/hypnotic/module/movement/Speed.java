@@ -16,8 +16,6 @@ public class Speed extends Mod {
 	
 	@Override
 	public void onTick() {
-//		if (mc.player.input != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0))
-//			if (jump.isEnabled() && !mc.player.isTouchingWater() && mc.player.isOnGround() && !ModuleManager.INSTANCE.getModuleByName("Flight").isEnabled()) mc.options.keyJump.setPressed(true);;
 		super.onTick();
 	}
 

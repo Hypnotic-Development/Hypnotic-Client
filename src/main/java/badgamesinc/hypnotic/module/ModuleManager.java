@@ -59,7 +59,9 @@ public class ModuleManager {
 					new Velocity(),
 					new Timer(),
 					new NoFall(),
-					new Scaffold()
+					new Scaffold(),
+					new SpeedMine(),
+					new AnticheatDisabler()
 				);
 	}
 	

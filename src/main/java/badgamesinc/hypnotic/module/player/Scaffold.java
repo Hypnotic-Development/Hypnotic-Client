@@ -19,6 +19,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 
 public class Scaffold extends Mod {
+	
     public final NumberSetting extend = new NumberSetting("Extend", 0, 0, 9, 1);
     private final BooleanSetting rotate = new BooleanSetting("Rotate", true);
     private final BooleanSetting down = new BooleanSetting("Down", false);
@@ -151,7 +152,7 @@ public class Scaffold extends Mod {
 
         ArrayList<BlockPos> blocks = new ArrayList<>();
         for(int i = (int) 0; i < extend.getValue(); i++) {
-        	blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i - 1) : (i + 1)).down());
+        	blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down());
         }
 
         for(BlockPos x: blocks) {
