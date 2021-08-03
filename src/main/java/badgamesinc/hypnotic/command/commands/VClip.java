@@ -1,4 +1,6 @@
-package badgamesinc.hypnotic.command;
+package badgamesinc.hypnotic.command.commands;
+
+import badgamesinc.hypnotic.command.Command;
 
 public class VClip extends Command {
 
@@ -19,7 +21,9 @@ public class VClip extends Command {
 
 	@Override
 	public void onCommand(String command, String[] args) throws Exception {
-		mc.player.setPosition(mc.player.getX(), mc.player.getY() + Double.parseDouble(args[0]), mc.player.getZ());
+		Double v = Double.parseDouble(args[0]);
+		mc.player.setPosition(mc.player.getX(), mc.player.getY() + v, mc.player.getZ());
+		mc.player.sendChatMessage("Clipped " + v + " blocks vertically");
 	}
 
 }
