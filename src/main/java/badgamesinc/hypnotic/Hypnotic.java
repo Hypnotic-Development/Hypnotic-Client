@@ -9,6 +9,9 @@ import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.text.Fonts;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class Hypnotic implements ModInitializer {
 
@@ -22,6 +25,9 @@ public class Hypnotic implements ModInitializer {
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
+	
+	public static final Identifier BOOM_SOUND = new Identifier("tutorial:boom");
+    public static SoundEvent BOOM_SOUND_EVENT = new SoundEvent(BOOM_SOUND);
 
 	/*
 	 * Called when Minecraft initializes.
@@ -33,6 +39,7 @@ public class Hypnotic implements ModInitializer {
 	public void onInitialize() {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		System.out.println("Loading Hypnotic stuff");
+		Registry.register(Registry.SOUND_EVENT, Hypnotic.BOOM_SOUND, BOOM_SOUND_EVENT);
 		register();
 		loadFiles();	
 	}
