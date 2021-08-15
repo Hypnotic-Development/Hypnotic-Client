@@ -34,11 +34,13 @@ public class CommandManager {
     private CommandManager() {
     	add(new VClip());
         add(new Ban());
-        add(new Friend());
+        add(new FriendCmd());
         add(new NBT());
         add(new Enchant());
         add(new Give());
         add(new Bind());
+        add(new Say());
+        add(new Baritone());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

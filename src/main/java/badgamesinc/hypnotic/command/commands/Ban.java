@@ -14,7 +14,7 @@ public class Ban extends Command {
 
 	@Override
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
-		// TODO Auto-generated method stub
+//		builder.then
 		
 	}
 }

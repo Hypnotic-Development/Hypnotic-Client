@@ -1,46 +1,107 @@
 package badgamesinc.hypnotic.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import badgamesinc.hypnotic.command.CommandManager;
+import badgamesinc.hypnotic.event.events.EventMove;
 import badgamesinc.hypnotic.event.events.EventPlayerJump;
+import badgamesinc.hypnotic.event.events.EventPushOutOfBlocks;
+import badgamesinc.hypnotic.event.events.EventSendMessage;
+import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.utils.Wrapper;
+import badgamesinc.hypnotic.module.player.NoSlow;
+import badgamesinc.hypnotic.module.player.Scaffold;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.MovementType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 
 @Mixin(ClientPlayerEntity.class)
 public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
 
+	@Shadow protected abstract void autoJump(float dx, float dz);
+	@Shadow public abstract void sendChatMessage(String string);
+	private boolean ignoreMessage = false;
+	
 	public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
 		super(world, profile);
 	}
-
-	@Inject(at = @At("HEAD"), method = "sendChatMessage()V", cancellable = true)
-	private void onSendChatMessage(String message, CallbackInfo callbackInfo) {
-		if (message.startsWith(CommandManager.get().getPrefix())) {
-			try {
-				CommandManager.get().dispatch(message.substring(CommandManager.get().getPrefix().length()));
-            } catch (CommandSyntaxException e) {
-                Wrapper.tellPlayer(e.getMessage());
-            }
-			callbackInfo.cancel();
+	
+	@Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
+    private void onSendChatMessage(String message, CallbackInfo info) {
+		if (ignoreMessage) return;
+		if (!message.startsWith(".") && !message.startsWith("/")) {
+			EventSendMessage event = new EventSendMessage(message);
+			event.call();
+			if (!event.isCancelled()) {
+				ignoreMessage = true;
+				sendChatMessage(event.getMessage());
+				ignoreMessage = false;
+			}
+			info.cancel();
+			if (event.isCancelled()) info.cancel();
 		}
 	}
 	
-	@Inject(method = "move", at = @At(value = "HEAD"))
-    public void onMotion(CallbackInfo ci) {
+	@Inject(method = "move", at = @At(value = "HEAD"), cancellable = true)
+    public void onMotion(MovementType type, Vec3d movement, CallbackInfo ci) {
         for (Mod mod : ModuleManager.INSTANCE.getEnabledModules()) {
         	mod.onMotion();
         }
+        
+        if (type == MovementType.SELF) {
+            EventMove eventMove = new EventMove(movement.x, movement.y, movement.z);
+            eventMove.call();
+            movement = new Vec3d(eventMove.getX(), eventMove.getY(), eventMove.getZ());
+            double d = this.getX();
+            double e = this.getZ();
+            super.move(type, movement);
+            this.autoJump((float) (this.getX() - d), (float) (this.getZ() - e));
+            ci.cancel();
+        }
+    }
+	
+	@Inject(method = "pushOutOfBlocks", at = @At("INVOKE"), cancellable = true)
+    public void pushOut(double x, double y, CallbackInfo ci) {
+        EventPushOutOfBlocks eventPushOutOfBlocks = new EventPushOutOfBlocks();
+        eventPushOutOfBlocks.call();
+        if (eventPushOutOfBlocks.isCancelled())
+            ci.cancel();
+    }
+	
+	@Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isUsingItem()Z"))
+    private boolean redirectUsingItem(ClientPlayerEntity player) {
+        if (ModuleManager.INSTANCE.getModule(NoSlow.class).isEnabled()) return false;
+        return player.isUsingItem();
+    }
+
+    @Inject(method = "isSneaking", at = @At("HEAD"), cancellable = true)
+    private void onIsSneaking(CallbackInfoReturnable<Boolean> info) {
+        if (ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled() && ModuleManager.INSTANCE.getModule(Scaffold.class).down.isEnabled()) info.setReturnValue(false);
+    }
+
+    @Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
+    private void onShouldSlowDown(CallbackInfoReturnable<Boolean> info) {
+        if (ModuleManager.INSTANCE.getModule(NoSlow.class).isEnabled()) {
+            info.setReturnValue(shouldLeaveSwimmingPose());
+        }
+    }
+    
+    @Inject(method = "swingHand", at = @At("HEAD"), cancellable = true)
+    public void onSwingHand(Hand hand, CallbackInfo ci) {
+    	EventSwingHand event = new EventSwingHand(hand);
+    	event.call();
+    	if (event.isCancelled()) ci.cancel();
     }
 	
 	@Override

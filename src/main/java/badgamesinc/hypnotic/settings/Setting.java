@@ -9,5 +9,13 @@ public class Setting {
     @SerializedName("name")
     public String name;
     public boolean focused;
-
+    private boolean visible = true;
+    
+    public boolean isVisible() {
+		return visible;
+	}
+    
+    public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
 }

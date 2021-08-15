@@ -43,6 +43,7 @@ public class SettingsWindow {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		Screen.fill(matrices, 250, 125, MinecraftClient.getInstance().getWindow().getScaledWidth() - 250, MinecraftClient.getInstance().getWindow().getScaledHeight() - 125, -1);
 		MinecraftClient.getInstance().textRenderer.draw(matrices, parent.mod.getDescription(), 260, 135, new Color(0, 0, 0).getRGB());

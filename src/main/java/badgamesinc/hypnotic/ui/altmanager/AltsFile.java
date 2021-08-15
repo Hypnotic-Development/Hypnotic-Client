@@ -8,6 +8,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.ui.altmanager.account.Account;
+import badgamesinc.hypnotic.ui.altmanager.account.Accounts;
+import badgamesinc.hypnotic.ui.altmanager.account.types.PremiumAccount;
 
 public class AltsFile {
 
@@ -24,8 +27,11 @@ public class AltsFile {
 			altsFile.mkdirs();
 		}
 		
-		for (Alt alt : AltManagerScreen.INSTANCE.alts) {
-			credentials.add(alt.getEmail() + ":" + alt.getPassword());
+		for (Account<?> alt : Accounts.get()) {
+			if (alt instanceof PremiumAccount) {
+				PremiumAccount premAlt = (PremiumAccount)alt;
+				credentials.add(alt.getUsername() + ":" + premAlt.getPassword());
+			}
 		}
 		
 		try {
@@ -55,8 +61,8 @@ public class AltsFile {
 
         for (String s : lines) {
             String[] args = s.split(":");
-            Alt alt = new Alt(args[0], args[1]);
-            AltManagerScreen.INSTANCE.alts.add(alt);
+            PremiumAccount alt = new PremiumAccount(args[0], args[1]);
+            Accounts.get().add(alt);;
         }
 	}
 }

@@ -11,7 +11,6 @@ import badgamesinc.hypnotic.config.ConfigSetting;
 import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
-import badgamesinc.hypnotic.settings.settingtypes.KeybindSetting;
 import net.minecraft.client.MinecraftClient;
 
 public class Mod {
@@ -34,7 +33,7 @@ public class Mod {
 	@Expose
     @SerializedName("settings")
     public ConfigSetting[] cfgSettings;
-	private KeybindSetting keyBind = new KeybindSetting("Keybind: ", 0);
+//	private KeybindSetting keyBind = new KeybindSetting("Keybind: ", 0);
 	public boolean wasFlag = false;
 	public BooleanSetting visible = new BooleanSetting("Visible", true);
 	public transient int index;
@@ -47,6 +46,7 @@ public class Mod {
     public float lastSize = 0;
     
     public long start = 0;
+    private boolean binding;
 	
 	public Mod(String name, String description, Category category) {
 		this.name = name;
@@ -55,6 +55,7 @@ public class Mod {
 		enabled = false;
 		displayName = name;
 		this.keyCode = 0;
+		this.binding = false;
 		addSettings(visible);
 	}
 	
@@ -190,6 +191,14 @@ public class Mod {
 		this.category = category;
 	}
 	
+	public boolean isBinding() {
+		return binding;
+	}
+
+	public void setBinding(boolean binding) {
+		this.binding = binding;
+	}
+
 	public final void updateMS()
 	{
 		currentMS = System.currentTimeMillis();

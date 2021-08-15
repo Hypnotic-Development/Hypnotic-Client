@@ -1,9 +1,13 @@
 package badgamesinc.hypnotic.module.combat;
 
+import org.lwjgl.glfw.GLFW;
+
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventSendPacket;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import io.netty.buffer.Unpooled;
@@ -24,6 +28,7 @@ public class Criticals extends Mod {
 	
 	@EventTarget
     public void onSendPacket(EventSendPacket event) {
+		ModuleManager.INSTANCE.getModule(ClickGUIModule.class).setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
         String var10001 = ColorUtils.gray;
         this.setDisplayName("Criticals " + var10001 + this.mode.getSelected());
         if (event.getPacket() instanceof PlayerInteractEntityC2SPacket && mc.player.isOnGround() && !mc.player.isInLava() && !mc.player.isTouchingWater()) {

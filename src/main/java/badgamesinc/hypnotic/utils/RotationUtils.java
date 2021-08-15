@@ -1,7 +1,6 @@
 package badgamesinc.hypnotic.utils;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.MathHelper;
@@ -17,12 +16,14 @@ public class RotationUtils {
 		isCustomPitch = true;
 	}
 	
+	@SuppressWarnings("resource")
 	public static void setSilentYaw(float yaw) {
 		MinecraftClient.getInstance().player.setBodyYaw(yaw);
 		MinecraftClient.getInstance().player.setHeadYaw(yaw);
 		isCustomYaw = true;
 	}
 	
+	@SuppressWarnings("resource")
 	public static void setSilentRotations(LivingEntity target, float yaw, float pitch) {
 		MinecraftClient.getInstance().player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround((float) RotationUtils.getRotations(target)[0], (float) RotationUtils.getRotations(target)[1], MinecraftClient.getInstance().player.isOnGround()));
 		RotationUtils.serverPitch = pitch;
@@ -40,6 +41,7 @@ public class RotationUtils {
 		isCustomYaw = false;
 	}
 	
+	@SuppressWarnings("resource")
 	public static float[] getRotationFromPosition(double x, double z, double y) {
 	    double xDiff = x - MinecraftClient.getInstance().player.getX();
 	    double zDiff = z - MinecraftClient.getInstance().player.getZ();

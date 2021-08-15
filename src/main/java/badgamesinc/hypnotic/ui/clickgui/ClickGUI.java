@@ -147,6 +147,7 @@ public class ClickGUI extends Screen {
 		return false;
 	}
 	
+	@SuppressWarnings("static-access")
 	@Override
 	public void onClose() {
 		for (ModuleButton button : buttons) {

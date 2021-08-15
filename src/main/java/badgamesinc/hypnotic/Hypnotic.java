@@ -4,9 +4,9 @@ import badgamesinc.hypnotic.config.ConfigManager;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.ui.HUD;
 import badgamesinc.hypnotic.ui.altmanager.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.text.Fonts;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundEvent;
@@ -37,6 +37,7 @@ public class Hypnotic implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
+		@SuppressWarnings("unused")
 		MinecraftClient mc = MinecraftClient.getInstance();
 		System.out.println("Loading Hypnotic stuff");
 		Registry.register(Registry.SOUND_EVENT, Hypnotic.BOOM_SOUND, BOOM_SOUND_EVENT);
@@ -52,6 +53,7 @@ public class Hypnotic implements ModInitializer {
 		eventManager = EventManager.INSTANCE;
 		cfgManager = new ConfigManager();
 		saveload = new SaveLoad();
+		EventManager.INSTANCE.register(HUD.INSTANCE);
 	}
 	
 	/*
@@ -69,6 +71,7 @@ public class Hypnotic implements ModInitializer {
                     e.printStackTrace();
                 }
                 cfgManager.saveConfig();
+                saveload.save();
             }
         });
         configDaemon.setDaemon(true);

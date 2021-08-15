@@ -61,8 +61,28 @@ public class ModuleManager {
 					new NoFall(),
 					new Scaffold(),
 					new SpeedMine(),
+<<<<<<< Updated upstream
 					new AnticheatDisabler(),
 					new HUDModule()
+=======
+					new Disabler(),
+					new SpinBot(),
+					new Spammer(),
+					new ESP(),
+					new AntiVoid(),
+					new StorageESP(),
+					new Nametags(),
+					new Blink(),
+					new Freecam(),
+					new OffhandCrash(),
+					new ChatImprovements(),
+					new InvMove(),
+					new NoSlow(),
+					new OldBlock(),
+					new TabGUI(),
+					new AutoTotem(),
+					new Xray()
+>>>>>>> Stashed changes
 				);
 	}
 	

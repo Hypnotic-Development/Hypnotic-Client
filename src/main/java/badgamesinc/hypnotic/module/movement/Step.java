@@ -18,5 +18,11 @@ public class Step extends Mod {
 		mc.player.stepHeight = (float)height.getValue();
 		super.onTick();
 	}
+	
+	@Override
+	public void onDisable() {
+		mc.player.stepHeight = 0.5f;
+		super.onDisable();
+	}
 }
 

@@ -2,46 +2,63 @@ package badgamesinc.hypnotic.config.friends;
 
 import java.util.ArrayList;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.Entity;
+import badgamesinc.hypnotic.config.SaveLoad;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class FriendManager {
 
 	public static FriendManager INSTANCE = new FriendManager();
-	public ArrayList<String> friends = new ArrayList<>();
+	public ArrayList<Friend> friends = new ArrayList<>();
 	
 	public FriendManager() {
 		
 	}
 	
-	public ArrayList<String> getFriends() {
+	public ArrayList<Friend> getFriends() {
 		return friends;
 	}
 	
-	public void addFriend(String friend) {
+	public void addFriend(Friend friend) {
 		friends.add(friend);
 	}
 	
 	public boolean isFriend(LivingEntity friend) {
-		for (String name : friends) {
+		for (Friend f : friends) {
 			if (friend instanceof PlayerEntity)
-	            if (friend.getName().asString().equalsIgnoreCase(name))
+	            if (f.name.equalsIgnoreCase(friend.getName().asString()))
 	                return true;
         }
 		return false;
 	}
 	
 	public boolean isFriend(String friend) {
-		for (String name : friends) {
-			friend = name;
-			for (Entity e : MinecraftClient.getInstance().world.getEntities()) {
-				if (e instanceof PlayerEntity)
-					if (e.getName().asString().equalsIgnoreCase(name))
-			            return true;
-			}
+		for (Friend name : friends) {
+			if (name.name.equalsIgnoreCase(friend));
+				return true;
         }
 		return false;
 	}
+	
+	public boolean remove(Friend friend) {
+        if (friends.remove(friend)) {
+            SaveLoad.INSTANCE.save();
+            return true;
+        }
+
+        return false;
+    }
+	
+	public boolean add(Friend friend) {
+        if (friend.name.isEmpty()) return false;
+
+        if (!friends.contains(friend)) {
+            friends.add(friend);
+            SaveLoad.INSTANCE.save();
+
+            return true;
+        }
+
+        return false;
+    }
 }

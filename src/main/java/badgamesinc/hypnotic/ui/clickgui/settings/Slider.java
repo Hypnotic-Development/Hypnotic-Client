@@ -6,7 +6,9 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class Slider extends Component {
 
+	@SuppressWarnings("unused")
 	private NumberSetting numSet = (NumberSetting)setting;
+	@SuppressWarnings("unused")
 	private boolean sliding = false;
 	
 	public Slider(int x, int y, SettingsWindow parent, Setting setting) {

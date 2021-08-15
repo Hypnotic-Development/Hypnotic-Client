@@ -13,6 +13,7 @@ public class CategoryButton {
 	Category category;
 	ClickGUI parent;
 	
+	@SuppressWarnings("resource")
 	public CategoryButton(int x, int y, Category category, ClickGUI parent) {
         this.x = x;
         this.y = y;
@@ -27,6 +28,7 @@ public class CategoryButton {
 		fadeIn = 0;
 	}
 	
+	@SuppressWarnings("resource")
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		if (fadeIn < 255)
 			fadeIn+=5;

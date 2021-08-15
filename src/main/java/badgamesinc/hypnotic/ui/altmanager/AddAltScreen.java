@@ -1,20 +1,19 @@
 package badgamesinc.hypnotic.ui.altmanager;
 
 import java.awt.Color;
+import java.util.concurrent.Executors;
 
-import com.mojang.authlib.Agent;
-import com.mojang.authlib.exceptions.AuthenticationException;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
-
-import badgamesinc.hypnotic.mixin.MinecraftClientAccessor;
+import badgamesinc.hypnotic.ui.altmanager.account.Account;
+import badgamesinc.hypnotic.ui.altmanager.account.Accounts;
+import badgamesinc.hypnotic.ui.altmanager.account.MicrosoftLogin;
+import badgamesinc.hypnotic.ui.altmanager.account.types.MicrosoftAccount;
+import badgamesinc.hypnotic.ui.altmanager.account.types.PremiumAccount;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.RenderUtils;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
@@ -29,6 +28,8 @@ public class AddAltScreen extends Screen {
 		super(new LiteralText("AddAlt"));
 		this.previousScreen = previousScreen;
 	}
+	
+	boolean accountType = true;
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -45,19 +46,28 @@ public class AddAltScreen extends Screen {
 			this.status = "Trying alt...";
 	        
 	        
-	        try {
-				Alt alt = new Alt(usernameField.getText(), passwordField.getText());
-				alt.login();
-				AltManagerScreen.INSTANCE.alts.add(alt);
+			if (accountType == true) {
+		        PremiumAccount alt = new PremiumAccount(usernameField.getText(), passwordField.getText());
+				Accounts.get().add(alt);
 				AltsFile.INSTANCE.saveAlts();
 				this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
-	        } catch (AuthenticationException e) {
-				System.out.println("Error: Invalid Credentials!");
-				this.status = ColorUtils.red + "Error: Invalid Credentials!";
+			} else {
+				AltsFile.INSTANCE.saveAlts();
+//				this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
 			}
 	    }))).active = true;
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, new LiteralText("Back"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
+	    }))).active = true;
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 350, height / 2 + 85, 50, 20, new LiteralText("Add Microsoft"), (button) -> {
+			MicrosoftLogin.getRefreshToken(refreshToken -> {
+                if (refreshToken != null) {
+                    MicrosoftAccount account = new MicrosoftAccount(refreshToken);
+                    account.login();
+                    addAccount(account);
+                }
+            });
+			accountType = false;
 	    }))).active = true;
 		super.render(matrices, mouseX, mouseY, delta);
 	}
@@ -93,4 +103,12 @@ public class AddAltScreen extends Screen {
 	public boolean charTyped(char chr, int modifiers) {
 		return super.charTyped(chr, modifiers);
 	}
+	
+	public static void addAccount(Account<?> account) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            if (account.fetchInfo()) {
+                Accounts.get().add(account);
+            }
+        });
+    }
 }

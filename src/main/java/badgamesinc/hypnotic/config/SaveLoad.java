@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.config.friends.Friend;
 import badgamesinc.hypnotic.config.friends.FriendManager;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
@@ -48,8 +49,8 @@ public class SaveLoad {
         }
         
         //Will port later
-        for (String friends : FriendManager.INSTANCE.friends) {
-        	toSave.add("FRIEND:" + friends);
+        for (Friend friend : FriendManager.INSTANCE.friends) {
+        	toSave.add("FRIEND:" + friend.name);
         }
         
         /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
@@ -99,7 +100,7 @@ public class SaveLoad {
                 }
                 
             } else if (s.toLowerCase().startsWith("friend:")) {
-            	FriendManager.INSTANCE.addFriend(args[1]);
+            	FriendManager.INSTANCE.add(new Friend(args[1]));
             } /*else if (s.toLowerCase().startsWith("message:")) {
             	ModuleManager.INSTANCE.chatSpammer.custom.add(args[1]);
             } else if (s.toLowerCase().startsWith("mainmenubg")) {

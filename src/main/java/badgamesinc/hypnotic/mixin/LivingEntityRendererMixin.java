@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin {
 
+	@SuppressWarnings("resource")
 	@ModifyVariable(method = "render", ordinal = 5, at = @At(value = "STORE", ordinal = 3))
     public float changePitch(float oldValue, LivingEntity entity) {
         if (entity.equals(MinecraftClient.getInstance().player) && RotationUtils.isCustomPitch) return RotationUtils.serverPitch;

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import badgamesinc.hypnotic.ui.HUD;
+import badgamesinc.hypnotic.event.events.EventRenderGUI;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -18,7 +18,8 @@ public class InGameHudMixin {
     
 	@Inject(method = "render", at = @At("RETURN"), cancellable = true) 
 	public void onRender (MatrixStack matrices, float tickDelta, CallbackInfo info) {
-		HUD.INSTANCE.renderHUD(matrices, scaledWidth, scaledHeight);
+		EventRenderGUI event = new EventRenderGUI(matrices, tickDelta);
+		event.call();
 	}
 
 }

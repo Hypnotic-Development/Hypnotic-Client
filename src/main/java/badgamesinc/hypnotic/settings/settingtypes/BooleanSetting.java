@@ -47,5 +47,4 @@ public class BooleanSetting extends Setting {
         for (Setting child : children)
             addChild(child);
     }
-
 }

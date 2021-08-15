@@ -1,14 +1,12 @@
 package badgamesinc.hypnotic.ui.clickgui2.frame.button.settings;
 
-import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -45,17 +43,9 @@ public class Slider extends Component {
 			}
 		}
 		
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
-				).darker().getRGB());
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, new Color(
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), 
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), 
-				(int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()
-				).getRGB());
-		tr.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 8, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() + 6, -1);
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.category.color.darker().getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.category.color.getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), -1, true);
 		super.render(matrices, mouseX, mouseY);
 	}
 	
@@ -75,7 +65,7 @@ public class Slider extends Component {
 	
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		if (hovered((int)mouseX, (int)mouseY) && button == 0) {
+		if (hovered((int)mouseX, (int)mouseY) && button == 0 && parent.isExtended()) {
 			this.sliding = true;
 		}
 		super.mouseClicked(mouseX, mouseY, button);

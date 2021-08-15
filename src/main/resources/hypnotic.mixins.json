@@ -20,7 +20,24 @@
     "InventoryScreenMixin",
     "ClientPlayerInteractionManagerMixin",
     "CommandSuggestorMixin",
-    "ChatHudAccessor"
+    "ChatHudAccessor",
+    "GameRendererMixin",
+    "CapabilityTrackerMixin",
+    "ClientPlayNetworkHandlerAccessor",
+    "WorldChunkAccessor",
+    "PlayerMoveC2SPacketAccessor",
+    "ItemRendererMixin",
+    "EntityRendererMixin",
+    "ChunkOcclusionDataBuilderMixin",
+    "ClientConnectionAccessor",
+    "LivingEntityMixin",
+    "ChatHudMixin",
+    "ChatScreenMixin",
+    "KeyBindingAccessor",
+    "HeldItemRendererMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "AbstractBlockStateMixin",
+    "BlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

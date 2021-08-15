@@ -5,8 +5,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+<<<<<<< Updated upstream
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.ui.altmanager.AltManagerScreen;
+=======
+import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltManagerScreen;
+>>>>>>> Stashed changes
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;

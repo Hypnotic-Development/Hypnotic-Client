@@ -8,8 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import badgamesinc.hypnotic.event.events.EventKeyPress;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.utils.KeyUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 
@@ -24,10 +26,13 @@ public abstract class KeyboardMixin {
         	 * action == GLFW.GLFW_PRESS is important
         	 * so the module does not toggle twice
         	 */
+        	KeyUtils.setKeyState(key, action != GLFW.GLFW_RELEASE);
             for (Mod mod : ModuleManager.INSTANCE.modules) {
                 if (mod.getKey() == key && action == GLFW.GLFW_PRESS && MinecraftClient.getInstance().currentScreen == null)
                     mod.toggle();
             }
+            EventKeyPress event = new EventKeyPress(key, scancode, action);
+            event.call();
         }
     }
 }

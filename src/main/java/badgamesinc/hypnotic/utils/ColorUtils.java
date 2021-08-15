@@ -2,6 +2,11 @@ package badgamesinc.hypnotic.utils;
 
 import java.awt.Color;
 
+import badgamesinc.hypnotic.module.Category;
+import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
+
 public class ColorUtils {
 
 	public static String colorChar = "\247";
@@ -21,7 +26,23 @@ public class ColorUtils {
 	public static String gray = "\2477";
 	public static String darkGray = "\2478";
 	public static String reset = "\247r";
-	public static int clientColor = new Color(255, 20, 100).getRGB();
+	public static int defaultClientColor = new Color(255, 20, 100).getRGB();
+	
+	public static int getClientColorInt() {
+		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()).getRGB();
+	}
+	
+	public static Color getClientColor() {
+		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue());
+	}
+	
+	public static Color getCategoryColor(Category category) {
+		return category.color;
+	}
+	
+	public static Color getCategoryColor(Mod mod) {
+		return mod.getCategory().color;
+	}
 	
 	public static int rainbow(float seconds, float saturation, float brigtness) {
 		float hue = (System.currentTimeMillis() % (int) (seconds * 1000)) / (float) (seconds * 1000);

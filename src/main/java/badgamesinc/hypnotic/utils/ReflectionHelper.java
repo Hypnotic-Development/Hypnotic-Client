@@ -11,7 +11,8 @@ import java.lang.reflect.Method;
  * https://github.com/AresClient/ares
  */
 public class ReflectionHelper {
-    public static <T> T getPrivateValue(Class clazz, Object object, String... names) {
+    @SuppressWarnings("unchecked")
+	public static <T> T getPrivateValue(Class<?> clazz, Object object, String... names) {
         Field field = getField(clazz, names);
         field.setAccessible(true);
 
@@ -22,7 +23,7 @@ public class ReflectionHelper {
         return null;
     }
 
-    public static <T> boolean setPrivateValue(Class clazz, Object object, T value, String... names) {
+    public static <T> boolean setPrivateValue(Class<?> clazz, Object object, T value, String... names) {
         Field field = getField(clazz, names);
         field.setAccessible(true);
 
@@ -34,7 +35,7 @@ public class ReflectionHelper {
         return true;
     }
 
-    public static Field getField(Class clazz, String... names) {
+    public static Field getField(Class<?> clazz, String... names) {
         Field field = null;
 
         for(String name: names) {
@@ -48,7 +49,8 @@ public class ReflectionHelper {
         return field;
     }
 
-    public static <T> T callPrivateMethod(Class<?> clazz, Object object, String[] names, Object... args) {
+    @SuppressWarnings("unchecked")
+	public static <T> T callPrivateMethod(Class<?> clazz, Object object, String[] names, Object... args) {
         // grab classes of args
         Class<?>[] classes = new Class<?>[]{};
         for(int i = 0; i < args.length; i++) classes[i] = args[i].getClass();

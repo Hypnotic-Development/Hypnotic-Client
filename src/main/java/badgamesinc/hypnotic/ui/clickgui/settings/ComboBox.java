@@ -6,6 +6,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class ComboBox extends Component {
 
+	@SuppressWarnings("unused")
 	private ModeSetting modeSet = (ModeSetting)setting;
 	
 	public ComboBox(int x, int y, SettingsWindow parent, Setting setting) {

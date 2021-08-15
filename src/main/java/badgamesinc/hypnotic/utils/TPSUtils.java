@@ -1,20 +1,22 @@
 package badgamesinc.hypnotic.utils;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.event.EventTarget;
+import badgamesinc.hypnotic.event.events.EventJoinGame;
 import badgamesinc.hypnotic.event.events.EventReceivePacket;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.network.packet.s2c.play.WorldTimeUpdateS2CPacket;
 
 public class TPSUtils {
 
 	public static TPSUtils INSTANCE = new TPSUtils();
 	MinecraftClient mc = MinecraftClient.getInstance();
     private List<Long> reports = new ArrayList<>();
+    private long timeLastTimeUpdate = -1;
+    private long timeGameJoined;
     
     public TPSUtils() {
     	EventManager.INSTANCE.register(this);
@@ -42,11 +44,22 @@ public class TPSUtils {
         if (mc.world == null || mc.player.age < 20) {
             reports.clear();
         }
-        if (event instanceof EventReceivePacket) {
-        	EventReceivePacket packetReceive = (EventReceivePacket) event;
-            if (packetReceive.getPacket() instanceof WorldTimeUpdateS2CPacket) {
-                reports.add(System.currentTimeMillis());
-            }
+        if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+            reports.add(System.currentTimeMillis());
         }
+        if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {
+        	timeLastTimeUpdate = System.currentTimeMillis();
+        }
+    }
+    
+    @EventTarget
+    public void joinGame(EventJoinGame event) {
+    	timeLastTimeUpdate = -1;
+        timeGameJoined = System.currentTimeMillis();
+    }
+    
+    public float getTimeSinceLastTick() {
+        if (System.currentTimeMillis() - timeGameJoined < 4000) return 0;
+        return (System.currentTimeMillis() - timeLastTimeUpdate) / 1000f;
     }
 }
