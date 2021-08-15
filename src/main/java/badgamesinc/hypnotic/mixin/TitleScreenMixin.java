@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import badgamesinc.hypnotic.Hypnotic;
-import badgamesinc.hypnotic.ui.altmanager.AltManagerScreen;
+import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltManagerScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;

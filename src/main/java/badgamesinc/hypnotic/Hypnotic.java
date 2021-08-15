@@ -5,7 +5,7 @@ import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.ui.HUD;
-import badgamesinc.hypnotic.ui.altmanager.AltsFile;
+import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
