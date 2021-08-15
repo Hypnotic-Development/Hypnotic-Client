@@ -61,10 +61,6 @@ public class ModuleManager {
 					new NoFall(),
 					new Scaffold(),
 					new SpeedMine(),
-<<<<<<< Updated upstream
-					new AnticheatDisabler(),
-					new HUDModule()
-=======
 					new Disabler(),
 					new SpinBot(),
 					new Spammer(),
@@ -82,7 +78,6 @@ public class ModuleManager {
 					new TabGUI(),
 					new AutoTotem(),
 					new Xray()
->>>>>>> Stashed changes
 				);
 	}
 	
