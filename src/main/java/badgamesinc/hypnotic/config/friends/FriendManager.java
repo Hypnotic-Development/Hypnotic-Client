@@ -41,7 +41,8 @@ public class FriendManager {
 	}
 	
 	public boolean remove(Friend friend) {
-        if (friends.remove(friend)) {
+        if (this.isFriend(friend.name)) {
+        	getFriends().remove(friend);
             SaveLoad.INSTANCE.save();
             return true;
         }

@@ -29,9 +29,10 @@ public abstract class TitleScreenMixin extends Screen {
 	    }))).active = true;
 	}
 	
+	@SuppressWarnings("resource")
 	@Inject(method = "render", at = @At("TAIL"))
     private void onRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo info) 
 	{
-		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, Hypnotic.INSTANCE.name + " " + Hypnotic.INSTANCE.version, 2, 2, -1);
+		MinecraftClient.getInstance().textRenderer.drawWithShadow(matrices, Hypnotic.name + " " + Hypnotic.version, 2, 2, -1);
 	}
 }

@@ -8,6 +8,7 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
+import badgamesinc.hypnotic.utils.render.shader.ShaderUtils;
 import badgamesinc.hypnotic.utils.world.WorldUtils;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -62,4 +63,12 @@ public class StorageESP extends Mod {
 		if (block instanceof FurnaceBlockEntity) return new Color(Color.GRAY.getRed(), Color.GRAY.getGreen(), Color.GRAY.getBlue(), alpha).brighter();
 		return new Color(255, 255, 255, alpha);
 	}
+
+    @Override
+    public void onEnable() {
+        if (mc.worldRenderer != null)
+            ShaderUtils.INSTANCE.load();
+        super.onEnable();
+    }
+
 }

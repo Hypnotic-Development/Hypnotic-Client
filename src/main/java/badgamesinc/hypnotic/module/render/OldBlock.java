@@ -6,6 +6,7 @@ import badgamesinc.hypnotic.event.events.EventRenderItem;
 import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.combat.Killaura;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import net.minecraft.client.option.Perspective;
@@ -46,7 +47,7 @@ public class OldBlock extends Mod {
 //                                matrixStack.multiply(new Quaternion(-10f, -140f, 260f, true));
 //                                matrixStack.multiply(new Quaternion(-15f, -196f, 260f, true));
                                 if (swingTicks < 60 && !swingHasElapsed) {
-                                	swingTicks+=5;
+                                	swingTicks+=7;
                                 }
                                 //only plays with killaura
                                 if (Killaura.target != null && !Killaura.target.isDead()) {
@@ -68,12 +69,13 @@ public class OldBlock extends Mod {
                                 }
                                 if (swingTicks >= 60) swingHasElapsed = true;
                                 if (swingHasElapsed) {
-                                	swingTicks-=5;
+                                	swingTicks-=7;
                                 	if (swingTicks <= 0) {
                                 		swingHasElapsed = false;
                                 	}
                                 }
-//                                matrixStack.translate(0, 0, 0.2);
+                                ArmCustomize arm = ModuleManager.INSTANCE.getModule(ArmCustomize.class);
+                               if (arm.isEnabled()) matrixStack.translate(arm.mainX.getValue(), arm.mainY.getValue(), arm.mainZ.getValue());
                             }
                         }
                     }

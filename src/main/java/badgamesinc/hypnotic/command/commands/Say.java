@@ -9,7 +9,7 @@ import net.minecraft.command.CommandSource;
 public class Say extends Command {
 
 	public Say() {
-		super("Say", "Says what you type in chat", "say");
+		super("say", "Says what you type in chat", "say");
 	}
 
 	@Override

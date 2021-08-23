@@ -59,8 +59,8 @@ public class Button {
 		
 		int nameColor = -1;
 		
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + 4, y - 1, nameColor, true);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y - 1, nameColor, true);
+		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + 4, y - 1, nameColor);
+		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y - 1, nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, parent.category.color.getRGB());
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, parent.category.color.getRGB());
 		for (Component component : components) {

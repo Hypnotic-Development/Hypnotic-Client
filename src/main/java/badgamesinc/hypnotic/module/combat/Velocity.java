@@ -7,6 +7,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.ReflectionHelper;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
 
@@ -23,6 +24,10 @@ public class Velocity extends Mod {
 	@EventTarget
 	public void onReceivePacket(EventReceivePacket event) {
 		if(mc.world == null || mc.player == null) return;
+		int entries = 0;
+		for (PlayerListEntry entry : mc.getNetworkHandler().getPlayerList()) {
+			entries++;
+		}
 		this.setDisplayName("Velocity " + ColorUtils.gray + "H:" + horizontal.getValue() + " V:" + vertical.getValue());
         if(event.getPacket() instanceof EntityVelocityUpdateS2CPacket) {
             EntityVelocityUpdateS2CPacket velocity = (EntityVelocityUpdateS2CPacket) event.getPacket();

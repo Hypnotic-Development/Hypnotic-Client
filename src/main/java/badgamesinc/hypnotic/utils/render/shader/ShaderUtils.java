@@ -72,10 +72,12 @@ public enum ShaderUtils {
             storageShader = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), identifier_1);
             storageShader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
             storageFBO = storageShader.getSecondaryTarget("final");
+            System.out.println(storageFBO != null);
             boxOutlineShader = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), identifier_1);
             boxOutlineShader.setupDimensions(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
             boxOutlineFBO = boxOutlineShader.getSecondaryTarget("final");
         } catch (Exception var3) {
+        	var3.printStackTrace();
             storageShader = null;
             storageFBO = null;
         }
@@ -84,9 +86,9 @@ public enum ShaderUtils {
 
     public static void loadCustomMCShaders() {
         try {
-            rainbowEnchantShader = new Shader(mc.getResourcePackProvider().getPack(), "jex:rainbow_enchant", VertexFormats.POSITION_TEXTURE);
-            translucentShader = new Shader(mc.getResourcePackProvider().getPack(), "jex:translucent", VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL);
-            testShader = new Shader(mc.getResourcePackProvider().getPack(), "jex:test", VertexFormats.POSITION_COLOR);
+            rainbowEnchantShader = new Shader(mc.getResourcePackProvider().getPack(), "hypnotic:rainbow_enchant", VertexFormats.POSITION_TEXTURE);
+            translucentShader = new Shader(mc.getResourcePackProvider().getPack(), "hypnotic:translucent", VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL);
+            testShader = new Shader(mc.getResourcePackProvider().getPack(), "hypnotic:test", VertexFormats.POSITION_COLOR);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.command.commands;
+package badgamesinc.hypnotic.command.argtypes;
 
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;

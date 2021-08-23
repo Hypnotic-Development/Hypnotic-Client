@@ -37,7 +37,21 @@
     "HeldItemRendererMixin",
     "ClientPlayNetworkHandlerMixin",
     "AbstractBlockStateMixin",
-    "BlockMixin"
+    "BlockMixin",
+    "ParticleManagerMixin",
+    "RaycastContextMixin",
+    "ExplosionMixin",
+    "WorldAccessor",
+    "SimpleEntityLookupAccessor",
+    "SectionedEntityCacheAccessor",
+    "EntityTrackingSectionAccessor",
+    "Vec3dMixin",
+    "BoxMixin",
+    "ClientWorldMixin",
+    "Matrix4fMixin",
+    "MouseMixin",
+    "ClientPlayerEntityAccessor",
+    "HorseBaseEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

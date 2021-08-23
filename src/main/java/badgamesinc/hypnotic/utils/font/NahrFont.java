@@ -26,6 +26,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.GameRenderer;
@@ -55,7 +56,8 @@ public class NahrFont {
     private BufferedImage bufferedImage;
     private Identifier resourceLocation;
     private final Pattern patternControlCode = Pattern.compile("(?i)\\u00A7[0-9A-FK-OG]"), patternUnsupported = Pattern.compile("(?i)\\u00A7[L-O]");
-
+    public boolean mcFont = false;
+    
     public NahrFont(Object font, float size) {
         this(font, size, 0F);
     }
@@ -72,6 +74,17 @@ public class NahrFont {
         this.yPos = new float[this.endChar - this.startChar];
         setupGraphics2D();
         createFont(font, size);
+    }
+    
+    public NahrFont(Object font, float size, float spacing, boolean mcFont) {
+        this.fontSize = size;
+        this.startChar = 32;
+        this.endChar = 255;
+        this.xPos = new float[this.endChar - this.startChar];
+        this.yPos = new float[this.endChar - this.startChar];
+        setupGraphics2D();
+        createFont(font, size);
+        this.mcFont = mcFont;
     }
 
     private final void setupGraphics2D() {
@@ -151,7 +164,7 @@ public class NahrFont {
         }
 
         image.close();
-        this.resourceLocation = new Identifier("jex", "font" + getFont().getFontName().toLowerCase().replace(" ", "-") + size);
+        this.resourceLocation = new Identifier("hypnotic", "font" + getFont().getFontName().toLowerCase().replace(" ", "-") + size);
         applyTexture(resourceLocation, imgNew);
     }
 
@@ -204,7 +217,8 @@ public class NahrFont {
     }
 
     public void drawCenteredString(MatrixStack matrixStack, String text, float x, float y, int color) {
-        drawString(matrixStack, text, (x - getStringWidth(text) / 2), y, FontType.SHADOW_THIN, color);
+    	if (!mcFont) drawString(matrixStack, text, (x - getStringWidth(text) / 2), y, FontType.SHADOW_THIN, color);
+    	else DrawableHelper.drawCenteredText(matrixStack, mc.textRenderer, text, (int)x, (int)y + 5, color);
     }
 
     public final void drawString(MatrixStack matrixStack, String text, float x, float y, FontType fontType, int color) {
@@ -260,14 +274,6 @@ public class NahrFont {
         bufferBuilder.end();
         BufferRenderer.draw(bufferBuilder);
         RenderUtils.shaderColor(0xffffffff);
-    }
-
-    public final float getStringWidth(String text) {
-        return (float) (getBounds(text).getWidth()) / 2.0F;
-    }
-
-    public final float getStringHeight(String text) {
-        return (float) getBounds(text).getHeight() / 2.0F;
     }
 
     private final Rectangle2D getBounds(String text) {
@@ -443,16 +449,16 @@ public class NahrFont {
 
     private static MinecraftClient mc = MinecraftClient.getInstance();
 
-    public float getStringWidth(String string, boolean customFont) {
-        if (customFont)
-            return this.getStringWidth(this.stripControlCodes(string));
+    public float getStringWidth(String string) {
+        if (!mcFont)
+            return (float) (getBounds(this.stripControlCodes(string)).getWidth()) / 2F;
         else
             return mc.textRenderer.getWidth(string);
     }
 
-    public float getStringHeight(String string, boolean customFont) {
-        if (customFont)
-            return this.getStringHeight(this.stripControlCodes(string));
+    public float getStringHeight(String string) {
+        if (!mcFont)
+            return (float) getBounds((this.stripControlCodes(string))).getHeight() / 2.0F;
         else
             return mc.textRenderer.fontHeight;
     }
@@ -461,47 +467,52 @@ public class NahrFont {
         return mc.textRenderer.getWidth(string);
     }
 
-    public void drawWithShadow(MatrixStack matrixStack, String text, float x, float y, int color, boolean customFont) {
-        if (customFont) {
+    public void drawWithShadow(MatrixStack matrixStack, String text, float x, float y, int color) {
+        if (!mcFont) {
             this.drawString(matrixStack, text, x, y, NahrFont.FontType.SHADOW_THIN, color);
         } else {
-            mc.textRenderer.draw(matrixStack, fix(text), x + 0.5f, y + 0.5f, 0xff000000);
-            mc.textRenderer.draw(matrixStack, text, x, y, color);
+            mc.textRenderer.drawWithShadow(matrixStack, text, x, y + 5, color);
         }
     }
+    
+    public float getWidth(String string) {
+        if (!mcFont)
+            return (float) ((getBounds(this.stripControlCodes(string)).getWidth()) / 2F) + 10;
+        else
+            return mc.textRenderer.getWidth(string) + 10;
+    }
 
-    public void draw(MatrixStack matrixStack, String text, float x, float y, int color, boolean customFont) {
-        if (customFont) {
+    public void draw(MatrixStack matrixStack, String text, float x, float y, int color) {
+        if (!mcFont) {
             this.drawString(matrixStack, text, x, y, NahrFont.FontType.NORMAL, color);
         } else {
-            mc.textRenderer.draw(matrixStack, text, x, y, color);
+            mc.textRenderer.draw(matrixStack, text, x, y + 4, color);
         }
     }
 
-    public void drawCenteredString(MatrixStack matrixStack, String string, float x, float y, int color, boolean customFont, boolean shadow) {
-        float newX = x - ((getStringWidth(string, customFont)) / 2);
-        if (customFont) {
+    public void drawCenteredString(MatrixStack matrixStack, String string, float x, float y, int color, boolean shadow) {
+        float newX = x - ((getStringWidth(string)) / 2);
+        if (!mcFont) {
             this.drawString(matrixStack, string, newX, y, shadow ? NahrFont.FontType.SHADOW_THIN : NahrFont.FontType.NORMAL, color);
         } else {
-            mc.textRenderer.draw(matrixStack, fix(string), newX + 0.5f, y + 0.5f, 0xff000000);
-            mc.textRenderer.draw(matrixStack, string, newX, y, color);
+            mc.textRenderer.drawWithShadow(matrixStack, string, newX, y + 2, color);
         }
     }
 
     public void drawWithShadow(MatrixStack matrixStack, Text text, float x, float y, int color) {
         String s = text.getString();
-        draw(matrixStack, s, x + 0.5f, y + 0.5f, 0xff000000, true);
-        draw(matrixStack, s, x, y, color, true);
+        draw(matrixStack, s, x + 0.5f, y + 0.5f + 4, 0xff000000);
+        draw(matrixStack, s, x, y + 4, color);
     }
 
     public void draw(MatrixStack matrixStack, Text text, float x, float y, int color) {
-        mc.textRenderer.draw(matrixStack, text, x, y, color);
+        mc.textRenderer.draw(matrixStack, text, x, y + 4, color);
     }
 
     public void drawCenteredString(MatrixStack matrixStack, Text string, float x, float y, int color) {
         float newX = x - (getStringWidth(string) / 2);
 
-        drawWithShadow(matrixStack, string, newX, y, color);
+        drawWithShadow(matrixStack, string, newX, y + 4, color);
     }
 
     public String fix(String s) {

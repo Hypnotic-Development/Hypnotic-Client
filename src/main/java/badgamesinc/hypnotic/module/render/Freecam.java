@@ -13,7 +13,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.RotationVector;
-import badgamesinc.hypnotic.utils.player.FakePlayerInstance;
+import badgamesinc.hypnotic.utils.player.FakePlayerEntity;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -81,7 +81,7 @@ public class Freecam extends Mod {
             savedCoords = new Vec3d(mc.player.getX(), mc.player.getY(), mc.player.getZ());
             lookVec = new RotationVector(mc.player);
 
-            playerEntity = new FakePlayerInstance(mc.world, new GameProfile(UUID.randomUUID(), mc.getSession().getUsername()));
+            playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.getSession().getUsername()));
             playerEntity.copyFrom(mc.player);
             playerEntity.copyPositionAndRotation(mc.player);
             mc.world.addEntity(69420, playerEntity);

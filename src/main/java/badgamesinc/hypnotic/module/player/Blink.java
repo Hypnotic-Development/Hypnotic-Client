@@ -11,7 +11,7 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
-import badgamesinc.hypnotic.utils.player.FakePlayerInstance;
+import badgamesinc.hypnotic.utils.player.FakePlayerEntity;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,7 +35,7 @@ public class Blink extends Mod {
     public void onEnable() {
     	stopCatching = false;
     	if (mc.player != null) {
-    		playerEntity = new FakePlayerInstance(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().asString()));
+    		playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().asString()));
     		playerEntity.copyFrom(mc.player);
     		playerEntity.copyPositionAndRotation(mc.player);
 			mc.world.addEntity(1000000, playerEntity);

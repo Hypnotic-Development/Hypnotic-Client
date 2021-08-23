@@ -9,9 +9,9 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 
-public class FakePlayerInstance extends AbstractClientPlayerEntity {
+public class FakePlayerEntity extends AbstractClientPlayerEntity {
 
-    public FakePlayerInstance(ClientWorld world, GameProfile profile) {
+    public FakePlayerEntity(ClientWorld world, GameProfile profile) {
         super(world, profile);
     }
 

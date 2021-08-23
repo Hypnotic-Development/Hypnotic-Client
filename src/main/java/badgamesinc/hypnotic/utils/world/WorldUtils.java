@@ -13,13 +13,14 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.player.Scaffold;
 import badgamesinc.hypnotic.utils.Comparators;
 import badgamesinc.hypnotic.utils.RotationUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.ShapeContext;
+import badgamesinc.hypnotic.utils.mixin.IVec3d;
+import badgamesinc.hypnotic.utils.player.inventory.FindItemResult;
+import badgamesinc.hypnotic.utils.player.inventory.InventoryUtils;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
@@ -34,6 +35,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -41,18 +43,28 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameMode;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
 
 /**
  * @author Tigermouthbear 9/26/20
  */
 public class WorldUtils {
 	public static MinecraftClient mc = MinecraftClient.getInstance();
+	private static final Vec3d hitPos = new Vec3d(0, 0, 0);
     public static boolean placeBlockMainHand(BlockPos pos, boolean swing) {
         return placeBlockMainHand(pos, true, swing);
     }
     public static BlockPos getForwardBlock(double length) {
 		MinecraftClient mc = MinecraftClient.getInstance();
         final double yaw = Math.toRadians(mc.player.getYaw());
+        BlockPos fPos = new BlockPos(mc.player.getX() + (-Math.sin(yaw) * length), mc.player.getY(), mc.player.getZ() + (Math.cos(yaw) * length));
+        return fPos;
+	}
+    public static BlockPos getSideBlock(double length, boolean direction) {
+		MinecraftClient mc = MinecraftClient.getInstance();
+        final double yaw = Math.toRadians(mc.player.getYaw() + (direction ? 45 : 90));
         BlockPos fPos = new BlockPos(mc.player.getX() + (-Math.sin(yaw) * length), mc.player.getY(), mc.player.getZ() + (Math.cos(yaw) * length));
         return fPos;
 	}
@@ -234,10 +246,10 @@ public class WorldUtils {
         entity.setVelocity(motionX, motionY, motionZ);
     }
 
-    public static List<BlockPos> getAllInBox(final int x1, final int y1, final int z1, final int x2, final int y2, final int z2) {
+    public static List<BlockPos> getAllInBox(final double d, final int y1, final double e, final double f, final int y2, final double g) {
         List<BlockPos> list = new ArrayList<>();
         // wanted to see how inline I could make this XD, good luck any future readers
-        for(int x = Math.min(x1, x2); x <= Math.max(x1, x2); x++) for(int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) for(int z = Math.min(z1, z2); z <= Math.max(z1, z2); z++) list.add(new BlockPos(x, y, z));
+        for(double x = Math.min(d, f); x <= Math.max(d, f); x++) for(int y = Math.min(y1, y2); y <= Math.max(y1, y2); y++) for(double z = Math.min(e, g); z <= Math.max(e, g); z++) list.add(new BlockPos(x, y, z));
         return list;
     }
 
@@ -427,4 +439,165 @@ public class WorldUtils {
         mc.player.updatePosition(xPos, mc.player.getY(), zPos);
         mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.isOnGround()));
     }
+    
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, int rotationPriority) {
+        return place(blockPos, findItemResult, rotationPriority, true);
+    }
+
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, boolean rotate, int rotationPriority) {
+        return place(blockPos, findItemResult, rotate, rotationPriority, true);
+    }
+
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, boolean rotate, int rotationPriority, boolean checkEntities) {
+        return place(blockPos, findItemResult, rotate, rotationPriority, true, checkEntities);
+    }
+
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, int rotationPriority, boolean checkEntities) {
+        return place(blockPos, findItemResult, true, rotationPriority, true, checkEntities);
+    }
+
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, boolean rotate, int rotationPriority, boolean swingHand, boolean checkEntities) {
+        return place(blockPos, findItemResult, rotate, rotationPriority, swingHand, checkEntities, true);
+    }
+
+    public static boolean place(BlockPos blockPos, FindItemResult findItemResult, boolean rotate, int rotationPriority, boolean swingHand, boolean checkEntities, boolean swapBack) {
+        if (findItemResult.isOffhand()) {
+            return place(blockPos, Hand.OFF_HAND, mc.player.getInventory().selectedSlot, rotate, rotationPriority, swingHand, checkEntities, swapBack);
+        } else if (findItemResult.isHotbar()) {
+            return place(blockPos, Hand.MAIN_HAND, findItemResult.getSlot(), rotate, rotationPriority, swingHand, checkEntities, swapBack);
+        }
+        return false;
+    }
+
+    public static boolean place(BlockPos blockPos, Hand hand, int slot, boolean rotate, int rotationPriority, boolean swingHand, boolean checkEntities, boolean swapBack) {
+        if (slot < 0 || slot > 8) return false;
+        if (!canPlace(blockPos, checkEntities)) return false;
+
+        ((IVec3d) hitPos).set(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
+
+        BlockPos neighbour;
+        Direction side = getPlaceSide(blockPos);
+
+        if (side == null) {
+            side = Direction.UP;
+            neighbour = blockPos;
+        } else {
+            neighbour = blockPos.offset(side.getOpposite());
+            hitPos.add(side.getOffsetX() * 0.5, side.getOffsetY() * 0.5, side.getOffsetZ() * 0.5);
+        }
+
+        Direction s = side;
+
+        if (rotate) {
+            RotationUtils.rotate(RotationUtils.getYaw(hitPos), RotationUtils.getPitch(hitPos), rotationPriority, () -> {
+                InventoryUtils.swap(slot, swapBack);
+
+                place(new BlockHitResult(hitPos, s, neighbour, false), hand, swingHand);
+
+                if (swapBack) InventoryUtils.swapBack();
+            });
+        } else {
+            InventoryUtils.swap(slot, swapBack);
+
+            place(new BlockHitResult(hitPos, s, neighbour, false), hand, swingHand);
+
+            if (swapBack) InventoryUtils.swapBack();
+        }
+
+
+        return true;
+    }
+
+    private static void place(BlockHitResult blockHitResult, Hand hand, boolean swing) {
+        boolean wasSneaking = mc.player.input.sneaking;
+        mc.player.input.sneaking = false;
+
+        ActionResult result = mc.interactionManager.interactBlock(mc.player, mc.world, hand, blockHitResult);
+
+        if (result.shouldSwingHand()) {
+            if (swing) mc.player.swingHand(hand);
+            else mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(hand));
+        }
+
+        mc.player.input.sneaking = wasSneaking;
+    }
+
+    public static boolean canPlace(BlockPos blockPos, boolean checkEntities) {
+        if (blockPos == null) return false;
+
+        // Check y level
+        if (!World.isValid(blockPos)) return false;
+
+        // Check if current block is replaceable
+        if (!mc.world.getBlockState(blockPos).getMaterial().isReplaceable()) return false;
+
+        // Check if intersects entities
+        return !checkEntities || mc.world.canPlace(Blocks.STONE.getDefaultState(), blockPos, ShapeContext.absent());
+    }
+
+    public static boolean canPlace(BlockPos blockPos) {
+        return canPlace(blockPos, true);
+    }
+
+    private static Direction getPlaceSide(BlockPos blockPos) {
+        for (Direction side : Direction.values()) {
+            BlockPos neighbor = blockPos.offset(side);
+            Direction side2 = side.getOpposite();
+
+            BlockState state = mc.world.getBlockState(neighbor);
+
+            // Check if neighbour isn't empty
+            if (state.isAir() || isClickable(state.getBlock())) continue;
+
+            // Check if neighbour is a fluid
+            if (!state.getFluidState().isEmpty()) continue;
+
+            return side2;
+        }
+
+        return null;
+    }
+    
+    public static boolean isClickable(Block block) {
+        return block instanceof CraftingTableBlock
+            || block instanceof AnvilBlock
+            || block instanceof AbstractButtonBlock
+            || block instanceof AbstractPressurePlateBlock
+            || block instanceof BlockWithEntity
+            || block instanceof BedBlock
+            || block instanceof FenceGateBlock
+            || block instanceof DoorBlock
+            || block instanceof NoteBlock
+            || block instanceof TrapdoorBlock;
+    }
+    
+    public static GameMode getGameMode(PlayerEntity player) {
+    	PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(player.getUuid());
+    	if (playerListEntry != null) return playerListEntry.getGameMode();
+    	return GameMode.DEFAULT;
+    }
+    
+    public static Block getBlock(BlockPos pos) {
+        if (mc.world == null)
+            return null;
+        return mc.world.getBlockState(pos).getBlock();
+    }
+   
+    public static List<WorldChunk> getLoadedChunks() {
+		List<WorldChunk> chunks = new ArrayList<>();
+
+		int viewDist = mc.options.viewDistance;
+
+		for (int x = -viewDist; x <= viewDist; x++) {
+			for (int z = -viewDist; z <= viewDist; z++) {
+				WorldChunk chunk = mc.world.getChunkManager().getWorldChunk((int) mc.player.getX() / 16 + x, (int) mc.player.getZ() / 16 + z);
+
+				if (chunk != null) {
+					chunks.add(chunk);
+				}
+			}
+		}
+
+		return chunks;
+	}
 }

@@ -10,7 +10,7 @@ import net.minecraft.command.CommandSource;
 public class Baritone extends Command {
 
 	public Baritone() {
-		super("Baritone", "Run the funy bot", new String[] {"baritone", "b"});
+		super("baritone", "Run the funy bot", new String[] {"baritone", "b"});
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class Baritone extends Command {
 		builder.then(argument("command", StringArgumentType.greedyString())
                 .executes(context -> {
                     String command = context.getArgument("command", String.class);
-//                    BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute(command);
+                    BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute(command);
                     return SINGLE_SUCCESS;
                 }));
 	}

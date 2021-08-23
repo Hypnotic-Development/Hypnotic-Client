@@ -29,6 +29,7 @@ public class NoFall extends Mod {
     
     @EventTarget
     private void onSendPacket(EventSendPacket event) {
+    	if (mc.player == null) return;
         if (mc.player.getAbilities().creativeMode
             || !(event.getPacket() instanceof PlayerMoveC2SPacket) || mc.player.isOnGround() || mc.player.fallDistance < 2.5) return;
 

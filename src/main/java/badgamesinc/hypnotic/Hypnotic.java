@@ -1,12 +1,19 @@
 package badgamesinc.hypnotic;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import badgamesinc.hypnotic.config.ConfigManager;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.ui.HUD;
 import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.utils.player.DamageUtils;
+import badgamesinc.hypnotic.utils.world.BlockIterator;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.sound.SoundEvent;
@@ -16,6 +23,7 @@ import net.minecraft.util.registry.Registry;
 public class Hypnotic implements ModInitializer {
 
 	public static Hypnotic INSTANCE = new Hypnotic();
+	public static Executor EXECUTOR = Executors.newCachedThreadPool();
 	public static String name = "Hypnotic",
 			version = "r1000",
 			fullName = name + "-" + version,
@@ -54,6 +62,9 @@ public class Hypnotic implements ModInitializer {
 		cfgManager = new ConfigManager();
 		saveload = new SaveLoad();
 		EventManager.INSTANCE.register(HUD.INSTANCE);
+		EventManager.INSTANCE.register(DamageUtils.getInstance());
+		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
+		
 	}
 	
 	/*
@@ -78,5 +89,7 @@ public class Hypnotic implements ModInitializer {
         configDaemon.start();
         AltsFile.INSTANCE.loadAlts();
         saveload.load();
+        if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
+        else FontManager.setMcFont(true);
 	}
 }

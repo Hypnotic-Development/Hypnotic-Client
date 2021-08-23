@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.event.events.EventTick;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
 
@@ -19,5 +20,11 @@ public class MinecraftClientMixin {
 	@Inject(at = @At("TAIL"), method = "updateWindowTitle()V")
 	public void updateWindowTitle(CallbackInfo info) {
 		MinecraftClient.getInstance().getWindow().setTitle(Hypnotic.fullName);
+	}
+	
+	@Inject(at = @At("HEAD"), method = "tick")
+    private void onPreTick(CallbackInfo info) {
+		EventTick event = new EventTick();
+		event.call();
 	}
 }

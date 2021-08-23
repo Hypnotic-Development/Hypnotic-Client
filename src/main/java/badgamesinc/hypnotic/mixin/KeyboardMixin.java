@@ -14,11 +14,13 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.utils.KeyUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 
 @Mixin(Keyboard.class)
 public abstract class KeyboardMixin {
     @Shadow @Final private MinecraftClient client;
 
+	@SuppressWarnings("resource")
 	@Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN) {
@@ -33,6 +35,8 @@ public abstract class KeyboardMixin {
             }
             EventKeyPress event = new EventKeyPress(key, scancode, action);
             event.call();
+            
+            if (MinecraftClient.getInstance().currentScreen == null && key == GLFW.GLFW_KEY_PERIOD && action == GLFW.GLFW_PRESS) MinecraftClient.getInstance().setScreen(new ChatScreen(""));
         }
     }
 }

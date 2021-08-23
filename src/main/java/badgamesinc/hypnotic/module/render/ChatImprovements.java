@@ -1,5 +1,6 @@
 package badgamesinc.hypnotic.module.render;
 
+import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventSendMessage;
 import badgamesinc.hypnotic.module.Category;
@@ -11,18 +12,19 @@ import it.unimi.dsi.fastutil.chars.Char2CharMap;
 
 public class ChatImprovements extends Mod {
 
-	public ModeSetting mode = new ModeSetting("Fancy Mode", "1", "1", "2", "3");
+	public ModeSetting mode = new ModeSetting("Fancy Mode", "1", "1", "2");
 	public BooleanSetting infinite = new BooleanSetting("Infinite", true);
+	public BooleanSetting suffix = new BooleanSetting("Suffix", true);
 	public BooleanSetting fancyChat = new BooleanSetting("Fancy Chat", true);
 	private final Char2CharMap SMALL_CAPS = new Char2CharArrayMap();
 	private final Char2CharMap SMALL_CAPS2 = new Char2CharArrayMap();
 	private final String blacklist = "(){}[]|";
 	
 	public ChatImprovements() {
-		super("ChatImprovements", "Improvements for the chat", Category.RENDER);
-		addSettings(mode, fancyChat, infinite);
+		super("BetterChat", "Improvements for the chat", Category.RENDER);
+		addSettings(mode, fancyChat, infinite, suffix);
 		String[] a = "abcdefghijklmnopqrstuvwxyz".split("");
-        String[] b = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴩqʀꜱᴛᴜᴠᴡxyᴢ".split("");
+        String[] b = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘqʀꜱᴛᴜᴠᴡxʏᴢ".split("");
         for (int i = 0; i < a.length; i++) SMALL_CAPS.put(a[i].charAt(0), b[i].charAt(0));
         String[] a2 = "abcdefghijklmnopqrstuvwxyz".split("");
         String[] b2 = "ɐqɔpǝɟɓɥıɾʞlɯuodbɹsʇnʌʍxʎz".split("");
@@ -36,18 +38,18 @@ public class ChatImprovements extends Mod {
 	
 	@EventTarget
 	public void sendMessage(EventSendMessage event) {
+		StringBuilder sb = new StringBuilder();
 		String message = event.getMessage();
 		switch(mode.getSelected()) {
 			case "1":
-				event.setMessage(convertString(message));
+				message = applyFancy(message.toLowerCase());
 				break;
 			case "2":
-				event.setMessage(applyFancy(message));
-				break;
-			case "3":
-				event.setMessage(applyUpsidedown(message));
+				message = applyUpsidedown(message);
 				break;
 		}
+		sb.append(message);
+		event.setMessage(sb.toString());
 	}
 
 	private String applyFancy(String message) {
@@ -65,18 +67,21 @@ public class ChatImprovements extends Mod {
         
         for (char ch : message.toCharArray()) {
             if (SMALL_CAPS2.containsKey(ch)) sb.append(SMALL_CAPS2.get(ch));
-            else sb.append(ch);
+            else sb.append(ch).append(getSuffix());
         }
         return sb.toString();
     }
 	
+	@SuppressWarnings("unused")
 	private String convertString(String input)
 	{
+		StringBuilder sb = new StringBuilder();
 		String output = "";
 		for(char c : input.toCharArray())
 			output += convertChar(c);
 		
-		return output;
+		sb.append(output);
+		return sb.append(getSuffix()).toString();
 	}
 	
 	private String convertChar(char c)
@@ -88,5 +93,10 @@ public class ChatImprovements extends Mod {
 			return "" + c;
 		
 		return new String(Character.toChars(c + 0xfee0));
+	}
+	
+	public String getSuffix() {
+		if (this.isEnabled()) return suffix.isEnabled() ? applyFancy(" | " + Hypnotic.fullName.toLowerCase()) : "";
+		else return "";
 	}
 }

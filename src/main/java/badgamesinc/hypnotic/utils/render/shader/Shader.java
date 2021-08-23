@@ -60,14 +60,6 @@ public abstract class Shader {// unused as of right now. doesn't play well with 
 			System.out.println(glGetProgramInfoLog(shaderProgram, 2048));
 			System.exit(-1);
 		}
-		// Validating here seems to break macs
-		/*
-		 * if(glGetProgrami(shaderProgram, GL_VALIDATE_STATUS) == GL_FALSE) {
-		 * JexClient.INSTANCE.getLogger().info(this.shaderName +
-		 * " Shader failed to compile!");
-		 * JexClient.INSTANCE.getLogger().info(glGetProgramInfoLog(shaderProgram,
-		 * 2048)); System.exit(-1); }
-		 */
 		if (errorCheckValue != GL_NO_ERROR) {
 			System.out.println(this.shaderName + " Could not create shader " + this.shaderName);
 			System.out.println(glGetProgramInfoLog(shaderProgram, glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH)));

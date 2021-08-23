@@ -41,6 +41,7 @@ public class CommandManager {
         add(new Bind());
         add(new Say());
         add(new Baritone());
+        add(new Search());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

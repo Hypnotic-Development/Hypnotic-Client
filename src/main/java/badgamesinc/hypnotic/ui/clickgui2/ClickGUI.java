@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
+import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
@@ -29,6 +30,8 @@ public class ClickGUI extends Screen {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		for (Frame frame : frames) {
 			frame.render(matrices, mouseX, mouseY);
+			frame.updatePosition(mouseX, mouseY);
+			frame.updateButtons();
 		}
 		super.render(matrices, mouseX, mouseY, delta);
 	}
@@ -52,6 +55,19 @@ public class ClickGUI extends Screen {
 	@Override
 	public boolean isPauseScreen() {
 		return false;
+	}
+	
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		for (Frame frame : frames) {
+			if (amount > 0) frame.setY((int) (frame.getY() + 5));
+			else if (amount < 0) frame.setY((int) (frame.getY() - 5));
+			for (Button button : frame.buttons) {
+				if (amount > 0) button.setY((int) (button.getY() + 5));
+				else if (amount < 0) button.setY((int) (button.getY() - 5));
+			}
+		}
+		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 
 	@Override

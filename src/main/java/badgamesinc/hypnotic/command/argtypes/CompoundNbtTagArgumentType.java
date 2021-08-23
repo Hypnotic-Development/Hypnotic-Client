@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.utils;
+package badgamesinc.hypnotic.command.argtypes;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;

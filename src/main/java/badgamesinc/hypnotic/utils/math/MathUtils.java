@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.utils;
+package badgamesinc.hypnotic.utils.math;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

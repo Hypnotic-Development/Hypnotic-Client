@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.utils;
+package badgamesinc.hypnotic.utils.mixin;
 
 public interface IClientPlayerInteractionManager {
     void setBlockBreakProgress(float var1);
@@ -6,4 +6,6 @@ public interface IClientPlayerInteractionManager {
     void setBlockBreakingCooldown(int var1);
 
     float getBlockBreakProgress();
+    
+    void syncSelected();
 }

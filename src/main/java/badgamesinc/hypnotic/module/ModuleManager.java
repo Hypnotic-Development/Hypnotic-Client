@@ -77,7 +77,23 @@ public class ModuleManager {
 					new OldBlock(),
 					new TabGUI(),
 					new AutoTotem(),
-					new Xray()
+					new Xray(),
+					new Surround(),
+					new FakePlayer(),
+					new AutoCrystal(),
+					new CrystalAura(),
+					new ElytraFly(),
+					new Tracers(),
+					new EntityDesync(),
+					new PacketCanceller(),
+					new Search(),
+					new Radar(),
+					new MiddleClickFriend(),
+					new EntityControl(),
+					new CustomFont(),
+					new AntiHunger(),
+					new ArmCustomize(),
+					new ParticleBlocker()
 				);
 	}
 	

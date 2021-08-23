@@ -2,17 +2,28 @@ package badgamesinc.hypnotic.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import badgamesinc.hypnotic.utils.IClientPlayerInteractionManager;
+import badgamesinc.hypnotic.event.events.EventDestroyBlock;
+import badgamesinc.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.util.math.BlockPos;
 
 @Mixin({ClientPlayerInteractionManager.class})
-public class ClientPlayerInteractionManagerMixin implements IClientPlayerInteractionManager {
-    @Shadow
-    private float currentBreakingProgress;
-    @Shadow
-    private int blockBreakingCooldown;
+public abstract class ClientPlayerInteractionManagerMixin implements IClientPlayerInteractionManager {
+   
+	@Shadow private float currentBreakingProgress;
+    @Shadow private int blockBreakingCooldown;
+    
+    @Shadow protected abstract void syncSelectedSlot();
 
+    @Inject(method = "breakBlock", at = @At("RETURN"))
+    public void breakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        new EventDestroyBlock(pos).call();
+    }
+    
     public void setBlockBreakProgress(float progress) {
         this.currentBreakingProgress = progress;
     }
@@ -24,4 +35,9 @@ public class ClientPlayerInteractionManagerMixin implements IClientPlayerInterac
     public float getBlockBreakProgress() {
         return this.currentBreakingProgress;
     }
+
+	@Override
+	public void syncSelected() {
+		syncSelectedSlot();
+	}
 }

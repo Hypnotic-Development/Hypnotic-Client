@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import badgamesinc.hypnotic.command.Command;
 import badgamesinc.hypnotic.command.CommandManager;
-import badgamesinc.hypnotic.utils.CompoundNbtTagArgumentType;
+import badgamesinc.hypnotic.command.argtypes.CompoundNbtTagArgumentType;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.NbtPathArgumentType;
 import net.minecraft.item.ItemStack;

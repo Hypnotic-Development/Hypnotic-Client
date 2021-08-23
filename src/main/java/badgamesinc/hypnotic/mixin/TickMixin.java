@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
+import baritone.api.BaritoneAPI;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 
@@ -20,5 +21,6 @@ public class TickMixin {
 			if (MinecraftClient.getInstance().player != null) mod.onTick();
 		}
 		RenderUtils.INSTANCE.onTick();
+		if (MinecraftClient.getInstance().world != null) BaritoneAPI.getSettings().chatControl.value = false;
 	}
 }

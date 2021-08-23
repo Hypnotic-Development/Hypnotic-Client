@@ -52,8 +52,8 @@ public class Scaffold extends Mod {
 		        RotationUtils.setSilentPitch(50);
     		}
     	}
-        if(tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1 && !PlayerUtils.isMoving()) {
-        	mc.player.setVelocity(0, 0.25, 0);
+        if(tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1) {
+        	mc.player.setVelocity(mc.player.getVelocity().x, 0.3805, mc.player.getVelocity().z);
         }
     }
 
@@ -109,7 +109,9 @@ public class Scaffold extends Mod {
 
         for(BlockPos x : blocks) {
             if(mc.world.getBlockState(x).getMaterial().isReplaceable()) {
+            	if (PlayerUtils.isMoving())
                 WorldUtils.placeBlockMainHand(x, rotate.isEnabled(), swing.isEnabled());
+            	else WorldUtils.placeBlockMainHand(mc.player.getBlockPos().down(), rotate.isEnabled(), swing.isEnabled());
                 break;
             }
         }

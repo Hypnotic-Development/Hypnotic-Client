@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
-import net.minecraft.client.MinecraftClient;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,9 +16,9 @@ import net.minecraft.client.util.math.MatrixStack;
 public class Frame {
 
 	public Category category;
-	private int x, y, width, height;
-	private boolean extended;
-	private ArrayList<Button> buttons;
+	private int x, y, width, height, dragX, dragY;
+	private boolean extended, dragging;
+	public ArrayList<Button> buttons;
 	
 	public Frame(int x, int y, int width, int height, Category category) {
 		this.category = category;
@@ -40,13 +39,10 @@ public class Frame {
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		int color = ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? new Color((int)ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int)ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int)ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()).getRGB() : ColorUtils.getClientColorInt();
 		Screen.fill(matrices, x, y, x + width, y + height, color);
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, category.name, x + 4, y + 4, -1);
-		Screen.drawStringWithShadow(matrices, MinecraftClient.getInstance().textRenderer, extended ? "-" : "+", x + width - 10, y + 4, -1);
-		
 		Screen.fill(matrices, x, y, x + width, y + height, category.color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 1), new Color(25, 25, 25).getRGB());
-		FontManager.roboto.drawWithShadow(matrices, category.name, x + 4, y, -1, true);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y, -1, true);
+		FontManager.roboto.drawWithShadow(matrices, category.name, x + 4, y, -1);
+		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y, -1);
 		for (Button button : buttons) {
 			if (this.extended) {
 				button.render(matrices, mouseX, mouseY);
@@ -60,6 +56,11 @@ public class Frame {
 	
 	public void mouseClicked(double mouseX, double mouseY, int button) {
 		if (hovered(mouseX, mouseY)) {
+			if (button == 0) {
+				setDragging(true);
+				setDragX((int) (mouseX - getX()));
+				setDragY((int) (mouseY - getY()));
+			}
 			if (button == 1) {
 				this.extended = !this.extended;
 			}
@@ -75,19 +76,51 @@ public class Frame {
 	}
 	
 	public void updateButtons() {
-		int offset = (int) (height * 2.45);
+		int offset = (int) (height * 1);
 		for (Button button : buttons) {
-			button.setY(offset);
-			
+			button.setY(this.y + offset);
+			button.setX(this.getX());
 			offset+=height + (button.isExtended() ? button.mod.settings.size() * height : 0);
 			
 		}
 	}
 	
+	public void updatePosition(int mouseX, int mouseY) {
+		if (isDragging()) {
+			setX(mouseX - dragX);
+			setY(mouseY - dragY);
+		}
+	}
+	
 	public void mouseReleased(int button) {
+		if (button == 0) setDragging(false);
 		for (Button funnyButton : buttons) {
 			funnyButton.mouseReleased(button);
 		}
+	}
+	
+	public boolean isDragging() {
+		return dragging;
+	}
+	
+	public void setDragging(boolean dragging) {
+		this.dragging = dragging;
+	}
+	
+	public int getDragX() {
+		return dragX;
+	}
+	
+	public int getDragY() {
+		return dragY;
+	}
+	
+	public void setDragX(int dragX) {
+		this.dragX = dragX;
+	}
+	
+	public void setDragY(int dragY) {
+		this.dragY = dragY;
 	}
 
 	public int getX() {

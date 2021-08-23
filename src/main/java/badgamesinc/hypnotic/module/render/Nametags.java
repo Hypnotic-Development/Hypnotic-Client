@@ -14,8 +14,8 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.MathUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.utils.math.MathUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
@@ -99,9 +99,9 @@ public class Nametags extends Mod {
                             float newY = ((posY - ((10 * scale) * enchCount) + 0.5f) / scale);
                             float newerX = (newX / scale);
                             String name = getEnchantName(compoundTag);
-                            float nameWidth = FontManager.robotoSmall.getStringWidth(name, true);
+                            float nameWidth = FontManager.robotoSmall.getStringWidth(name);
                             RenderUtils.fill(eventRender2D.getMatrices(), newerX, newY - 1, newerX + nameWidth, newY + 9, 0x35000000);
-                            FontManager.robotoSmall.draw(eventRender2D.getMatrices(), name, newerX, newY - 3, -1, true);
+                            FontManager.robotoSmall.draw(eventRender2D.getMatrices(), name, newerX, newY - 3, -1);
                             enchCount++;
                         } catch (Exception ignored) {}
                     }
@@ -131,7 +131,7 @@ public class Nametags extends Mod {
             float x = (float) vec.x;
             float y = (float) vec.y - (playerEntity instanceof PlayerEntity ? 18 : 0);
             String nameString = getNameString(playerEntity);
-            float length = FontManager.robotoSmall.getStringWidth(nameString, true) + 2;
+            float length = FontManager.robotoSmall.getStringWidth(nameString) + 2;
 
             if (playerEntity instanceof LivingEntity) {
                 float percent = ((LivingEntity) playerEntity).getHealth() / ((LivingEntity) playerEntity).getMaxHealth();
@@ -139,7 +139,7 @@ public class Nametags extends Mod {
                 RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - (playerEntity instanceof PlayerEntity ? 18 : 2), y - 1, (x - (length / 2) - 18) + barLength, y, getHealthColor(((LivingEntity) playerEntity)));
             }
             RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - 2 - (playerEntity instanceof PlayerEntity ? 16 : 0), y - 17, x + (length / 2) + 2, y - 1, new Color(0, 0, 0, 150).getRGB());
-            FontManager.robotoSmall.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 15, getEntityColor(playerEntity, 255).getRGB(), true, true);
+            FontManager.robotoSmall.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 15, -1, true);
             if (playerEntity instanceof PlayerEntity) {
                 PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(playerEntity.getUuid());
                 if (playerListEntry != null) {

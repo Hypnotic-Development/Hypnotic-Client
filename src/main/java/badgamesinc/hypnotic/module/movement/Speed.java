@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.module.movement;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.utils.player.PlayerUtils;
 
 public class Speed extends Mod {
 
@@ -16,13 +17,14 @@ public class Speed extends Mod {
 	
 	@Override
 	public void onTick() {
+		if(mc.player.isOnGround() && PlayerUtils.isMoving()) mc.player.setVelocity(mc.player.getVelocity().x, 0.4, mc.player.getVelocity().z);
 		super.onTick();
 	}
 
 	@Override
 	public void onMotion() {
 		if(mc.player != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0) && !mc.player.isTouchingWater()) {
-			if(mc.player.isOnGround()) mc.player.addVelocity(0, jumpHeight.getValue() * 0.02, 0);
+//			if(mc.player.isOnGround()) mc.player.jump();
 
             double speed = this.speed.getValue() * 0.1;
 

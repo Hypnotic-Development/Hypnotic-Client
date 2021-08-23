@@ -37,10 +37,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	// Baritone (the fork is standalone baritone and the only change is a setting to build it as fabric mod instead of forge one)
+    // thanks minegame159 from meteor client
     modImplementation "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
     include "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
-	// PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-	// You may need to force-disable transitiveness on them.
 }
 
 processResources {

@@ -5,7 +5,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.IClientPlayerInteractionManager;
+import badgamesinc.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import net.minecraft.entity.effect.StatusEffects;
 
 public class SpeedMine extends Mod {

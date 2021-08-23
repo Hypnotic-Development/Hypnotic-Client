@@ -19,6 +19,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.player.NoSlow;
 import badgamesinc.hypnotic.module.player.Scaffold;
+import badgamesinc.hypnotic.module.render.ChatImprovements;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -45,7 +46,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			event.call();
 			if (!event.isCancelled()) {
 				ignoreMessage = true;
-				sendChatMessage(event.getMessage());
+				sendChatMessage(event.getMessage() + ModuleManager.INSTANCE.getModule(ChatImprovements.class).getSuffix());
 				ignoreMessage = false;
 			}
 			info.cancel();
@@ -92,7 +93,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     @Inject(method = "shouldSlowDown", at = @At("HEAD"), cancellable = true)
     private void onShouldSlowDown(CallbackInfoReturnable<Boolean> info) {
-        if (ModuleManager.INSTANCE.getModule(NoSlow.class).isEnabled()) {
+        if (ModuleManager.INSTANCE.getModule(NoSlow.class).isEnabled() && !this.isSneaking()) {
             info.setReturnValue(shouldLeaveSwimmingPose());
         }
     }

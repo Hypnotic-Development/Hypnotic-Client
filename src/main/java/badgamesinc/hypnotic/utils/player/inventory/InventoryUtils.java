@@ -4,6 +4,7 @@ import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 import java.util.function.Predicate;
 
+import badgamesinc.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,6 +32,7 @@ import net.minecraft.screen.slot.SlotActionType;
 
 public class InventoryUtils {
 	private static final Action ACTION = new Action();
+	public static int previousSlot = -1;
     public static final int HOTBAR_START = 0;
     public static final int HOTBAR_END = 8;
 
@@ -348,5 +350,54 @@ public class InventoryUtils {
         private void click(int id) {
             mc.interactionManager.clickSlot(mc.player.currentScreenHandler.syncId, id, data, type, mc.player);
         }
+    }
+
+	public static boolean swap(int slot, boolean swapBack) {
+        if (slot < 0 || slot > 8) return false;
+        if (swapBack && previousSlot == -1) previousSlot = mc.player.getInventory().selectedSlot;
+
+        mc.player.getInventory().selectedSlot = slot;
+        ((IClientPlayerInteractionManager) mc.interactionManager).syncSelected();
+        return true;
+    }
+	
+	public static boolean swapBack() {
+        if (previousSlot == -1) return false;
+
+        boolean return_ = swap(previousSlot, false);
+        previousSlot = -1;
+        return return_;
+    }
+
+	public static FindItemResult findInHotbar(Item... items) {
+        return findInHotbar(itemStack -> {
+            for (Item item : items) {
+                if (itemStack.getItem() == item) return true;
+            }
+            return false;
+        });
+    }
+
+    public static FindItemResult findInHotbar(Predicate<ItemStack> isGood) {
+        if (isGood.test(mc.player.getOffHandStack())) {
+            return new FindItemResult(OFFHAND, mc.player.getOffHandStack().getCount());
+        }
+
+        if (isGood.test(mc.player.getMainHandStack())) {
+            return new FindItemResult(mc.player.getInventory().selectedSlot, mc.player.getMainHandStack().getCount());
+        }
+
+        return find(isGood, 0, 8);
+    }
+    
+    public static int findInHotbar(Item item) {
+        int index = -1;
+        for(int i = 0; i < 9; i++) {
+            if(mc.player.getInventory().getStack(i).getItem() == item) {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 }

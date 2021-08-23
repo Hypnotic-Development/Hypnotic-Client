@@ -40,7 +40,7 @@ public class TabGUI extends Mod {
 	public void renderGUI(EventRenderGUI event) {
 		MatrixStack matrices = event.getMatrices();
 		x = 4;
-		y = 80;
+		y = 30;
 		width = 80;
 		height = 15;
 		if (animTicks != currentTab * 15) {
@@ -82,7 +82,7 @@ public class TabGUI extends Mod {
 		DrawableHelper.fill(matrices, x + width, y - 1, x + width + 1, y + Category.values().length * 15, ColorUtils.getClientColorInt());
 		int offset = 0;
 		for (Category category : Category.values()) {
-			FontManager.robotoMed2.drawWithShadow(matrices, category.name, x + 4, y + offset - 2, -1, true);
+			FontManager.robotoMed2.drawWithShadow(matrices, category.name, x + 4, y + offset - 2, -1);
 			offset+= 15;
 		}
 		if (expanded) {
@@ -96,23 +96,20 @@ public class TabGUI extends Mod {
 		}
 		int x2 = x + 4;
 		if (expanded || expandTicks > 0) {
-			Category category = Category.values()[currentTab];
 			ArrayList<Mod> modules = ModuleManager.INSTANCE.getModulesInCategory(Category.values()[currentTab]);
 			
 			RenderSystem.enableScissor(x, y, x + width * 100, mc.getWindow().getScaledHeight());
-			GlStateManager._scissorBox(168, 0, expandTicks, 860);
+			GlStateManager._scissorBox(168, 100, expandTicks, 10000);
 			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15), x2 + width * 2, y + (currentTab * 15) + ((ModuleManager.INSTANCE.getModulesInCategory(Category.values()[currentTab]).size() - 1) * 15) + height, new Color(0, 0, 0, 100).getRGB());
 			DrawableHelper.fill(matrices, x + width + 3, y + currentTab * 15, x2 + width, y + modules.size() * 15 + currentTab * 15, ColorUtils.getClientColorInt());
 			DrawableHelper.fill(matrices, x2 + 1 + width * 2, y - 1 + currentTab * 15, x2 - 1 + width, y + currentTab * 15, ColorUtils.getClientColorInt());
 			DrawableHelper.fill(matrices, x + 3 + width, y + (currentTab * 15) + 1 + modules.size() * 15, x2 + width * 2, y + (currentTab * 15) + modules.size() * 15, ColorUtils.getClientColorInt());
 			DrawableHelper.fill(matrices, x2 + width * 2, y + (currentTab * 15), x2 + width * 2 + 1, y + (currentTab * 15) + 1 + modules.size() * 15, ColorUtils.getClientColorInt());
 			
-			int modCount = 0;
-
 			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15) + animTicks2, x2 + width * 2, y + (currentTab * 15) + animTicks2 + height, ColorUtils.getClientColor().getRGB());
 			int modCount2 = 0;
 			for (Mod mod : modules) {
-				FontManager.robotoMed2.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + (currentTab * 15) + modCount2 - 2, mod.isEnabled() ? ColorUtils.getClientColorInt() : -1, true);
+				FontManager.robotoMed2.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + (currentTab * 15) + modCount2 - 2, mod.isEnabled() ? ColorUtils.getClientColorInt() : -1);
 				modCount2+=15;
 			}
 			RenderSystem.disableScissor();
@@ -125,7 +122,6 @@ public class TabGUI extends Mod {
 	
 	@EventTarget
 	public void eventKeyPress(EventKeyPress event) {
-		mc.player.stepHeight = 0.5f;
 		if (event.getAction() == GLFW.GLFW_PRESS && mc.currentScreen == null) {
 			Category category = Category.values()[currentTab];
 			ArrayList<Mod> modules = ModuleManager.INSTANCE.getModulesInCategory(Category.values()[currentTab]);

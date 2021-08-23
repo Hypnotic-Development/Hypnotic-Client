@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.command.commands;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import badgamesinc.hypnotic.command.Command;
+import badgamesinc.hypnotic.command.argtypes.ModuleArgumentType;
 import badgamesinc.hypnotic.utils.Wrapper;
 import net.minecraft.command.CommandSource;
 

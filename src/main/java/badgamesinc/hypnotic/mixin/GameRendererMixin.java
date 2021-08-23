@@ -8,7 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import badgamesinc.hypnotic.event.events.EventRender2DNoScale;
 import badgamesinc.hypnotic.event.events.EventRender3D;
+import badgamesinc.hypnotic.event.events.EventRenderHand;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -30,5 +33,19 @@ public abstract class GameRendererMixin {
         event.call();
         RenderSystem.applyModelViewMatrix();
         mc.getProfiler().pop();
+    }
+	
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "net/minecraft/client/render/WorldRenderer.drawEntityOutlinesFramebuffer()V"))
+    public void renderForEvent(float float_1, long long_1, boolean boolean_1, CallbackInfo ci) {
+        RenderUtils.setup2DProjection();
+        new EventRender2DNoScale().call();
+    }
+	
+	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)
+    public void renderHand(MatrixStack matrices, Camera camera, float tickDelta, CallbackInfo ci) {
+        EventRenderHand event = new EventRenderHand(matrices);
+        event.call();
+        if (event.isCancelled())
+            ci.cancel();
     }
 }

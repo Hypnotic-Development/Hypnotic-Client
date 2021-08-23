@@ -33,7 +33,10 @@ public class FriendCmd extends Command {
 	                .executes(context -> {
 	                    Friend friend = FriendArgumentType.getFriend(context, "friend");
 	
-	                    if (FriendManager.INSTANCE.add(friend)) info("Added (highlight)%s (default)to friends.", friend.name);
+	                    if (!FriendManager.INSTANCE.isFriend(friend.name)) {
+	                    	FriendManager.INSTANCE.add(friend);
+	                    	info("Added (highlight)%s (default)to friends.", friend.name);
+	                    }
 	                    else error("That person is already your friend.");
 	
 	                    SaveLoad.INSTANCE.save();
@@ -45,8 +48,16 @@ public class FriendCmd extends Command {
 		builder.then(literal("remove").then(argument("friend", FriendArgumentType.friend())
 		                .executes(context -> {
 		                    Friend friend = FriendArgumentType.getFriend(context, "friend");
-		
-		                    if (FriendManager.INSTANCE.remove(friend)) info("Removed (highlight)%s (default)from friends.", friend.name);
+		                    FriendManager.INSTANCE.remove(friend);
+		                    if (FriendManager.INSTANCE.isFriend(friend.name)) {
+		                    	for (Friend friend1 : FriendManager.INSTANCE.friends) {
+		                    		if (friend.name == friend1.name) {
+		                    			FriendManager.INSTANCE.friends.remove(friend1);
+		                    		}
+		                    	}
+		                    	
+		                    	info("Removed (highlight)%s (default)from friends.", friend.name);
+		                    }
 		                    else error("That person is not your friend.");
 		
 		                    return SINGLE_SUCCESS;
