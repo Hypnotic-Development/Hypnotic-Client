@@ -36,7 +36,7 @@ public class Config {
 
     public String serialize() {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
-        for (Mod module : ModuleManager.INSTANCE.modules) {
+        for (Mod module : ModuleManager.INSTANCE.getAllModules()) {
             List<ConfigSetting> settings = new ArrayList<>();
             for (Setting setting : module.settings) {
                 if (setting instanceof KeybindSetting)
@@ -58,7 +58,7 @@ public class Config {
             }
             module.cfgSettings = settings.toArray(new ConfigSetting[0]);
         }
-        return gson.toJson(ModuleManager.INSTANCE.modules);
+        return gson.toJson(ModuleManager.INSTANCE.getAllModules());
     }
 
 }

@@ -1,11 +1,15 @@
 package badgamesinc.hypnotic.ui.clickgui2.frame.button.settings;
 
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -25,7 +29,8 @@ public class Slider extends Component {
 	
 	double renderWidth;
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
+		Color color = parent.parent.category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? parent.parent.category.color : ColorUtils.getClientColor();
 		double diff = Math.min(parent.getWidth(), Math.max(0, mouseX - parent.getX()));
 
 		double min = numSet.getMin();
@@ -43,10 +48,10 @@ public class Slider extends Component {
 			}
 		}
 		
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.category.color.darker().getRGB());
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.category.color.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), -1);
-		super.render(matrices, mouseX, mouseY);
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, color.darker().getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, color.getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() + 2, -1);
+		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
 	private static double roundToPlace(double value, int places) {

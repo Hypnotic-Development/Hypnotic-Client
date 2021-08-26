@@ -19,6 +19,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.Vec3d;
 
@@ -39,7 +42,7 @@ public class Freecam extends Mod {
     @EventTarget
     public void sendPacket(EventSendPacket event) {
     	if (stealth.isEnabled() && mc.world != null && mc.player.age > 100) {
-            if (!(event.getPacket() instanceof KeepAliveC2SPacket || event.getPacket() instanceof ChatMessageC2SPacket))
+            if (!(event.getPacket() instanceof KeepAliveC2SPacket || event.getPacket() instanceof ChatMessageC2SPacket || event.getPacket() instanceof PlayerInteractBlockC2SPacket || event.getPacket() instanceof PlayerInteractEntityC2SPacket || event.getPacket() instanceof PlayerActionC2SPacket))
             	event.setCancelled(true);
         } else if (event.getPacket() instanceof PlayerMoveC2SPacket) {
             PlayerMoveC2SPacket playerMoveC2SPacket = new PlayerMoveC2SPacket.Full(savedCoords.getX(), savedCoords.getY(), savedCoords.getZ(), lookVec.getYaw(), lookVec.getPitch(), true);

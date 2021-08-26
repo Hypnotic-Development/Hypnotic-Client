@@ -1,12 +1,10 @@
-package badgamesinc.hypnotic.module.render;
+package badgamesinc.hypnotic.module.hud.elements;
 
 import java.awt.Color;
 
-import badgamesinc.hypnotic.event.EventTarget;
-import badgamesinc.hypnotic.event.events.EventRenderGUI;
-import badgamesinc.hypnotic.module.Category;
-import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
@@ -29,7 +27,7 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
-public class Radar extends Mod {
+public class Radar extends HudModule {
 
 	public BooleanSetting players = new BooleanSetting("Players", true);
 	public BooleanSetting monsters = new BooleanSetting("Monsters", true);
@@ -37,51 +35,31 @@ public class Radar extends Mod {
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
-	int x, y, width, height;
 	NahrFont font = FontManager.robotoMed;
 	
 	
 	public Radar() {
-		super("Radar", "render the mans", Category.RENDER);
+		super("Radar", "render the mans", 4, 20, 100, 100);
 		addSettings(players, monsters, animals, passives, invisibles, items);
-		x = 4;
-		y = 20;
-		width = 100;
-		height = 100;
-	}
-	
-	public int getX() {
-		return x;
-	}
-	
-	public int getY() {
-		return y;
-	}
-	
-	public int getWidth() {
-		return width;
-	}
-	
-	public int getHeight() {
-		return height;
+		this.setEnabled(true);
 	}
 
-	@EventTarget
-    public void draw(EventRenderGUI event) {
-		MatrixStack matrixStack = event.getMatrices();
+	@Override
+    public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
+		MatrixStack matrixStack = matrices;
         if (mc.player == null) return;
         DrawableHelper.fill(matrixStack, index, index, index, keyCode, index);
-        RenderUtils.fillAndBorder(matrixStack, this.getX(), this.getY() + this.getHeight(), this.getX() + this.getWidth(), this.getY() + this.getHeight() + this.getWidth(), ColorUtils.getClientColorInt(), 0x50000000, 1);
+        RenderUtils.fillAndBorder(matrixStack, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), ColorUtils.getClientColorInt(), 0x50000000, 1);
         float midPos = this.getWidth() / 2.0f - 1;
-        RenderUtils.fill(matrixStack, this.getX() + midPos, this.getY() + this.getHeight() + 1, this.getX() + midPos + 1, this.getY() + this.getHeight() + this.getWidth() - 1, new Color(60, 60, 60, 250).getRGB());
-        RenderUtils.fill(matrixStack, this.getX() + 1, this.getY() + this.getHeight() + midPos, this.getX() + this.getWidth() - 1, this.getY() + this.getHeight() + midPos + 1, new Color(60, 60, 60, 250).getRGB());
+        RenderUtils.fill(matrixStack, this.getX() + midPos, this.getY() + 1, this.getX() + midPos + 1, this.getY() + this.getHeight() - 1, new Color(60, 60, 60, 250).getRGB());
+        RenderUtils.fill(matrixStack, this.getX() + 1, this.getY() + midPos, this.getX() + this.getWidth() - 1, this.getY() + midPos + 1, new Color(60, 60, 60, 250).getRGB());
 
         if (mc.world != null)
             for (Entity entity : mc.world.getEntities()) {
                 if (!shouldRenderEntity(entity)) continue;
                 float xPos = (float) (entity.getX() - mc.player.getX()) + midPos + this.getX();
                 float yPos = (float) (entity.getZ() - mc.player.getZ()) + midPos + this.getY() + this.getHeight();
-                if (xPos < this.getX() + this.getWidth() - 2 && yPos < this.getY() + this.getHeight() + this.getWidth() - 2 && yPos > this.getY() + this.getHeight() + 2 && xPos > this.getX() + 2) {
+                if (xPos < this.getX() + this.getWidth() - 2 && yPos < this.getY() + this.getHeight() - 2 && yPos > this.getY() + 2 && xPos > this.getX() + 2) {
                     RenderUtils.fill(matrixStack, xPos, yPos, xPos + 1, yPos + 1, getEntityColor(entity).getRGB());
                 }
             }
@@ -100,22 +78,23 @@ public class Radar extends Mod {
             matrixStack.pop();
         }*/
         matrixStack.push();
-        matrixStack.translate(this.getX() + midPos + 0.5, this.getY() + this.getHeight() + midPos + 0.5, 0);
+        matrixStack.translate(this.getX() + midPos + 0.5, this.getY() + midPos + 0.5, 0);
         RenderUtils.fill(matrixStack, -0.5f, -0.5f, 0.5f, 0.5f, ColorUtils.getClientColorInt());
         matrixStack.multiply(new Quaternion(new Vec3f(0.0F, 0.0F, 1.0F), mc.player.getYaw() + 180, true));
         drawPointer(matrixStack);
         matrixStack.pop();
         if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) {
-	        font.drawCenteredString(matrixStack, "N", this.getX() + midPos + 1, this.getY() + this.getHeight() - 2, -1);
-	        font.drawCenteredString(matrixStack, "S", this.getX() + midPos + 1, this.getY() + this.getHeight() + this.getWidth() - 15, -1);
-	        font.drawWithShadow(matrixStack, "W", this.getX() + 3, this.getY() + this.getHeight() + (this.getWidth() / 2) - 9, -1);
-	        font.drawWithShadow(matrixStack, "E", this.getX() + this.getWidth() - 3 - font.getStringWidth("E"), this.getY() + this.getHeight() + (this.getWidth() / 2) - 9, -1);
+	        font.drawCenteredString(matrixStack, "N", this.getX() + midPos + 1, this.getY() - 2, -1);
+	        font.drawCenteredString(matrixStack, "S", this.getX() + midPos + 1, this.getY() + this.getWidth() - 15, -1);
+	        font.drawWithShadow(matrixStack, "W", this.getX() + 3, this.getY() + (this.getWidth() / 2) - 9, -1);
+	        font.drawWithShadow(matrixStack, "E", this.getX() + this.getWidth() - 3 - font.getStringWidth("E"), this.getY() + (this.getWidth() / 2) - 9, -1);
         } else {
-        	mc.textRenderer.drawWithShadow(matrixStack, "N", this.getX() + midPos - 2, this.getY() + 4 + this.getHeight() - 2, -1);
-        	mc.textRenderer.drawWithShadow(matrixStack, "S", this.getX() + midPos - 2, this.getY() + 4 + this.getHeight() + this.getWidth() - 15, -1);
-        	mc.textRenderer.drawWithShadow(matrixStack, "W", this.getX() + 3, this.getY() + 4 + this.getHeight() + (this.getWidth() / 2) - 9, -1);
-        	mc.textRenderer.drawWithShadow(matrixStack, "E", this.getX() + this.getWidth() - 3 - font.getStringWidth("E"), this.getY() + 4 + this.getHeight() + (this.getWidth() / 2) - 9, -1);
+        	mc.textRenderer.drawWithShadow(matrixStack, "N", this.getX() + midPos - 2, this.getY() + 4 - 2, -1);
+        	mc.textRenderer.drawWithShadow(matrixStack, "S", this.getX() + midPos - 2, this.getY() + 4 + this.getHeight() - 15, -1);
+        	mc.textRenderer.drawWithShadow(matrixStack, "W", this.getX() + 3, this.getY() + 4 + this.getHeight() / 2 - 9, -1);
+        	mc.textRenderer.drawWithShadow(matrixStack, "E", this.getX() + this.getWidth() - 3 - font.getStringWidth("E"), this.getY() + 4 + this.getHeight() / 2 - 9, -1);
         }
+        super.render(matrices, scaledWidth, scaledHeight, partialTicks);
 	}
 	
 	public boolean shouldRenderEntity(Entity entity) {

@@ -12,8 +12,8 @@ import net.minecraft.text.LiteralText;
 public class ClickGUI extends Screen {
 
 	public static ClickGUI INSTANCE = new ClickGUI();
-	private ArrayList<Frame> frames;
-	
+	public ArrayList<Frame> frames;
+	private MenuBar menuBar;
 	
 	private ClickGUI() {
 		super(new LiteralText("ClickGUI2"));
@@ -33,6 +33,7 @@ public class ClickGUI extends Screen {
 			frame.updatePosition(mouseX, mouseY);
 			frame.updateButtons();
 		}
+		menuBar.renderMenuBar(matrices, mouseX, mouseY, this.width, this.height);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	
@@ -49,6 +50,7 @@ public class ClickGUI extends Screen {
 		for (Frame frame : frames) {
 			frame.mouseReleased(button);
 		}
+		menuBar.mouseClicked((int)mouseX, (int)mouseY, button);
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
@@ -72,7 +74,7 @@ public class ClickGUI extends Screen {
 
 	@Override
 	protected void init() {
-		// TODO Auto-generated method stub
+		menuBar = MenuBar.INSTANCE;
 		super.init();
 	}
 }

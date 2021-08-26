@@ -8,6 +8,8 @@ import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventRenderGUI;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.hud.HudManager;
+import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.Timer;
 import badgamesinc.hypnotic.utils.font.FontManager;
@@ -43,6 +45,10 @@ public class HUD {
 			else if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 10) numColor = ColorUtils.red;
 			fr.drawCenteredString(event.getMatrices(), "Server lagging for " + numColor + MathUtils.round(TPSUtils.INSTANCE.getTimeSinceLastTick(), 1) + " seconds", mc.getWindow().getScaledWidth() / 2, 50, -1, true);
 		}
+		for (HudModule element : HudManager.INSTANCE.hudModules) {
+			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
+			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getPartialTicks());
+		}
 	}
 	
 	public void renderSideHUD(MatrixStack matrices, int width, int height) {
@@ -53,11 +59,11 @@ public class HUD {
 		String netherXyzString = (PlayerUtils.getDimension() == Dimension.NETHER ? "Overworld " : "Nether ") + ColorUtils.gray + MathUtils.round(x, 1) + ", " + MathUtils.round(y, 1) + ", " + MathUtils.round(z, 1);
 		String xyzString = "XYZ " + ColorUtils.gray + MathUtils.round(mc.player.getX(), 1) + ", " + MathUtils.round(mc.player.getY(), 1) + ", " + MathUtils.round(mc.player.getZ(), 1);
 		String tpsString = "TPS " + ColorUtils.gray + MathUtils.round(TPSUtils.INSTANCE.getAverageTPS(), 2);
-		fr.drawWithShadow(matrices, Hypnotic.name + ColorUtils.gray + " " + Hypnotic.version, 5, 5, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, "FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0], 5, height - 20, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, tpsString, 5, height - 30, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, "Ping " + ColorUtils.gray + (mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()) == null ? 0 : mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()).getLatency()), -2 + fr.getWidth("FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0]), height - 20, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, "Blocks/s " + ColorUtils.gray + MathUtils.round(ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).isEnabled() ? moveSpeed() * ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).speed.getValue() : moveSpeed(), 2), -2 + fr.getWidth(tpsString), height - 30, ColorUtils.getClientColorInt());
+		fr.drawWithShadow(matrices, Hypnotic.name + ColorUtils.gray + " 1.1", 5, 5, ColorUtils.getClientColorInt());
+//		fr.drawWithShadow(matrices, "FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0], 5, height - 20, ColorUtils.getClientColorInt());
+//		fr.drawWithShadow(matrices, tpsString, 5, height - 30, ColorUtils.getClientColorInt());
+//		fr.drawWithShadow(matrices, "Ping " + ColorUtils.gray + (mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()) == null ? 0 : mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()).getLatency()), -2 + fr.getWidth("FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0]), height - 20, ColorUtils.getClientColorInt());
+//		fr.drawWithShadow(matrices, "Blocks/s " + ColorUtils.gray + MathUtils.round(ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).isEnabled() ? moveSpeed() * ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).speed.getValue() : moveSpeed(), 2), -2 + fr.getWidth(tpsString), height - 30, ColorUtils.getClientColorInt());
 		fr.drawWithShadow(matrices, xyzString, width - fr.getWidth(xyzString), height - 20, ColorUtils.getClientColorInt());
 		fr.drawWithShadow(matrices, netherXyzString, width - fr.getWidth(netherXyzString), height - 30, ColorUtils.getClientColorInt());
 	}
@@ -91,14 +97,4 @@ public class HUD {
 			}
 		}
 	}
-	
-	private double moveSpeed() {
-        Vec3d move = new Vec3d(mc.player.getX() - mc.player.prevX, 0, mc.player.getZ() - mc.player.prevZ).multiply(20);
-
-        return Math.abs(length2D(move)) ;
-    }
-	
-	public double length2D(Vec3d vec3d) {
-        return MathHelper.sqrt((float)(vec3d.x * vec3d.x + vec3d.z * vec3d.z));
-    }
 }

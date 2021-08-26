@@ -40,7 +40,6 @@ public class Flight extends Mod {
     	if (mc.player == null)
     		return;
     	if (damage.isEnabled() && !hasDamaged) {
-    		System.out.println("hessdfsfsdfs");
     		mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 5.1 + 5, mc.player.getZ(), true));
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), false));
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), true));
@@ -55,10 +54,10 @@ public class Flight extends Mod {
     		mc.player.setVelocity(0, 0, 0);
     		Vec3d velocity = mc.player.getVelocity();
     		if(mc.options.keyJump.isPressed())
-    			mc.player.setVelocity(velocity.add(0, speed.getValue() / 2, 0));
+    			mc.player.setVelocity(velocity.add(0, speed.getValue(), 0));
     		
     		if(mc.options.keySneak.isPressed())
-    			mc.player.setVelocity(velocity.subtract(0, speed.getValue() / 2, 0));
+    			mc.player.setVelocity(velocity.subtract(0, speed.getValue(), 0));
     	}
         super.onTick();
     }

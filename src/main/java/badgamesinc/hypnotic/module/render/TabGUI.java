@@ -82,7 +82,7 @@ public class TabGUI extends Mod {
 		DrawableHelper.fill(matrices, x + width, y - 1, x + width + 1, y + Category.values().length * 15, ColorUtils.getClientColorInt());
 		int offset = 0;
 		for (Category category : Category.values()) {
-			FontManager.robotoMed2.drawWithShadow(matrices, category.name, x + 4, y + offset - 2, -1);
+			FontManager.robotoMed.drawWithShadow(matrices, category.name, x + 4, y + offset + 2, -1);
 			offset+= 15;
 		}
 		if (expanded) {
@@ -109,7 +109,7 @@ public class TabGUI extends Mod {
 			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15) + animTicks2, x2 + width * 2, y + (currentTab * 15) + animTicks2 + height, ColorUtils.getClientColor().getRGB());
 			int modCount2 = 0;
 			for (Mod mod : modules) {
-				FontManager.robotoMed2.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + (currentTab * 15) + modCount2 - 2, mod.isEnabled() ? ColorUtils.getClientColorInt() : -1);
+				FontManager.robotoMed.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + 2 + (currentTab * 15) + modCount2, mod.isEnabled() ? ColorUtils.getClientColorInt() : -1);
 				modCount2+=15;
 			}
 			RenderSystem.disableScissor();

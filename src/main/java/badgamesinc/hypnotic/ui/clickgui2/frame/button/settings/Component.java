@@ -17,7 +17,7 @@ public class Component {
 		
 	}
 	
-	public void render(MatrixStack matrices, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		
 	}
 	

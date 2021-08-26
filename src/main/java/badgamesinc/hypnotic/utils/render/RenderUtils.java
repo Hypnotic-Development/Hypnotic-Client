@@ -282,37 +282,16 @@ public class RenderUtils {
 
 		    }
 		 
-		 public static void drawHLine(double x, double y, double x1, double y1, float width, int color) {
-		        float var11 = (color >> 24 & 0xFF) / 255.0F;
-		        float var6 = (color >> 16 & 0xFF) / 255.0F;
-		        float var7 = (color >> 8 & 0xFF) / 255.0F;
-		        float var8 = (color & 0xFF) / 255.0F;
-		        GlStateManager._enableBlend();
-		        GlStateManager._enableTexture();
-		        GlStateManager._blendFuncSeparate(770, 771, 1, 0);
-		        GlStateManager._clearColor(var6, var7, var8, var11);
-		        GL11.glPushMatrix();
-		        GL11.glLineWidth(width);
-		        GL11.glBegin(GL11.GL_LINE_STRIP);
-		        GL11.glVertex2d(x, y);
-		        GL11.glVertex2d(x1, y1);
-		        GL11.glEnd();
-
-		        GL11.glLineWidth(1);
-
-
-		        GL11.glPopMatrix();
-		        GlStateManager._enableTexture();
-		        GlStateManager._disableBlend();
-		        GlStateManager._clearColor(1, 1, 1, 1);
+		 public static void drawHLine(MatrixStack matrices, double x, double y, double x1, double y1, float width, int color) {
+		        fill(matrices, x, y, x1 + width, y1 + width, color);
 
 		    }
 		 
-		 public static void drawBorderRect(double x, double y, double x1, double y1, int color, double lwidth) {
-		        drawHLine(x, y, x1, y, (float) lwidth, color);
-		        drawHLine(x1, y, x1, y1, (float) lwidth, color);
-		        drawHLine(x, y1, x1, y1, (float) lwidth, color);
-		        drawHLine(x, y1, x, y, (float) lwidth, color);
+		 public static void drawBorderRect(MatrixStack matrices, double x, double y, double x1, double y1, int color, double lwidth) {
+		        fill(matrices, x, y, x1, y + lwidth, color);
+		        fill(matrices, x1, y, x1 + lwidth, y1, color);
+		        fill(matrices, x, y1, x1, y1 - lwidth, color);
+		        fill(matrices, x, y1, x - lwidth, y, color);
 		    }
 		 
 		 /*public static void scissor(double x, double y, double width, double height) {
@@ -546,9 +525,9 @@ public class RenderUtils {
 	        return new Color(0, 255, 0).getRGB();
 	    }
 	    
-	    public static void fill(MatrixStack matrixStack, float x1, float y1, float x2, float y2, int color) {
+	    public static void fill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color) {
 	        Matrix4f matrix = matrixStack.peek().getModel();
-	        float j;
+	        double j;
 	        if (x1 < x2) {
 	            j = x1;
 	            x1 = x2;

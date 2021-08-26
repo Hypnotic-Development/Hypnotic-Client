@@ -22,10 +22,10 @@ public class CheckBox extends Component {
 	}
 	
 	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY) {
+	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, boolSet.name + ": " + boolSet.isEnabled(), parent.getX() + 4, parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), -1);
-		super.render(matrices, mouseX, mouseY);
+		FontManager.robotoSmall.drawWithShadow(matrices, boolSet.name + ": " + boolSet.isEnabled(), parent.getX() + 4, parent.getY() + 2 + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), -1);
+		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
 	@Override

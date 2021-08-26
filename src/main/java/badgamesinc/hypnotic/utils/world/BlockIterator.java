@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import badgamesinc.hypnotic.event.EventTarget;
-import badgamesinc.hypnotic.event.events.EventTick;
 import badgamesinc.hypnotic.utils.Pool;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -25,10 +23,8 @@ public class BlockIterator {
     private static boolean disableCurrent;
     public static BlockIterator INSTANCE = new BlockIterator();
 
-    @EventTarget
-    public void onTick(EventTick event) {
+    public void onTick() {
     	if (mc == null || mc.world == null || mc.player == null) return;
-//    	System.out.println("e");
         int px = (int) mc.player.getX();
         int py = (int) mc.player.getY();
         int pz = (int) mc.player.getZ();
@@ -46,13 +42,13 @@ public class BlockIterator {
                     int dz = Math.abs(z - pz);
 
                     for (Iterator<Callback> it = callbacks.iterator(); it.hasNext(); ) {
-                        Callback callback = it.next();
-
-                        if (dx <= callback.hRadius && dy <= callback.vRadius && dz <= callback.hRadius) {
-                            disableCurrent = false;
-                            callback.function.accept(blockPos, blockState);
-                            if (disableCurrent) it.remove();
-                        }
+	                        Callback callback = it.next();
+	
+	                        if (dx <= callback.hRadius && dy <= callback.vRadius && dz <= callback.hRadius) {
+	                            disableCurrent = false;
+	                            callback.function.accept(blockPos, blockState);
+	                            if (disableCurrent) it.remove();
+	                        }
                     }
                 }
             }

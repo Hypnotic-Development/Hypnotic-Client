@@ -32,11 +32,11 @@ public class ArmCustomize extends Mod {
 						event.getMatrixStack().push();
 						switch (event.getType()) {
 					        case FIRST_PERSON_RIGHT_HAND:
-					        	if (mc.player.getMainHandStack().getItem().getGroup() == ItemGroup.FOOD && mc.player.isUsingItem()) {} else event.getMatrixStack().translate(mainX.getValue(), mainY.getValue(), mainZ.getValue());
+					        	event.getMatrixStack().translate(mainX.getValue(), mainY.getValue(), mc.player.getMainHandStack().getItem().getGroup() == ItemGroup.FOOD && mc.player.isUsingItem() ? 0 : mainZ.getValue());
 								event.getMatrixStack().scale(main, main, main);
 								break;
 					        case FIRST_PERSON_LEFT_HAND:
-					        	event.getMatrixStack().translate(offX.getValue(), offY.getValue(), offZ.getValue());
+					        	event.getMatrixStack().translate(offX.getValue(), offY.getValue(), mc.player.getMainHandStack().getItem().getGroup() == ItemGroup.FOOD && mc.player.isUsingItem() ? 0 : -offZ.getValue());
 					        	event.getMatrixStack().scale(off, off, off);
 					        	break;
 							case FIXED:

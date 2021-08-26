@@ -43,6 +43,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
@@ -600,4 +601,33 @@ public class WorldUtils {
 
 		return chunks;
 	}
+    
+    public static boolean breakBlock(BlockPos blockPos, boolean swing) {
+        if (!canBreak(blockPos, mc.world.getBlockState(blockPos))) return false;
+
+        BlockPos pos = blockPos instanceof BlockPos.Mutable ? new BlockPos(blockPos) : blockPos;
+
+        if (mc.interactionManager.isBreakingBlock()) mc.interactionManager.updateBlockBreakingProgress(pos, Direction.UP);
+        else mc.interactionManager.attackBlock(pos, Direction.UP);
+
+        if (swing) mc.player.swingHand(Hand.MAIN_HAND);
+        else mc.getNetworkHandler().sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
+
+        return true;
+    }
+    
+    public static boolean canBreak(BlockPos blockPos, BlockState state) {
+        if (!mc.player.isCreative() && state.getHardness(mc.world, blockPos) < 0) return false;
+        return state.getOutlineShape(mc.world, blockPos) != VoxelShapes.empty();
+    }
+    public static boolean canBreak(BlockPos blockPos) {
+        return canBreak(blockPos, mc.world.getBlockState(blockPos));
+    }
+
+    public static boolean canInstaBreak(BlockPos blockPos, BlockState state) {
+        return mc.player.isCreative() || state.calcBlockBreakingDelta(mc.player, mc.world, blockPos) >= 1;
+    }
+    public static boolean canInstaBreak(BlockPos blockPos) {
+        return canInstaBreak(blockPos, mc.world.getBlockState(blockPos));
+    }
 }

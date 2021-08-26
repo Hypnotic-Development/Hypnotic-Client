@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.event.events.EventTick;
+import badgamesinc.hypnotic.utils.world.BlockIterator;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
 
@@ -24,7 +25,13 @@ public class MinecraftClientMixin {
 	
 	@Inject(at = @At("HEAD"), method = "tick")
     private void onPreTick(CallbackInfo info) {
+		BlockIterator.INSTANCE.onTick();
 		EventTick event = new EventTick();
 		event.call();
+	}
+	
+	@Inject(at = @At("HEAD"), method = "stop")
+	public void onShutdown(CallbackInfo ci) {
+		Hypnotic.INSTANCE.shutdown();
 	}
 }

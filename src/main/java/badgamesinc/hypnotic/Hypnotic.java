@@ -25,7 +25,7 @@ public class Hypnotic implements ModInitializer {
 	public static Hypnotic INSTANCE = new Hypnotic();
 	public static Executor EXECUTOR = Executors.newCachedThreadPool();
 	public static String name = "Hypnotic",
-			version = "r1000",
+			version = "1.1",
 			fullName = name + "-" + version,
 			hypnoticDir = System.getenv("APPDATA") + "/.minecraft/Hypnotic",
 			chatPrefix = ColorUtils.purple + name + ColorUtils.gray + ": ";
@@ -91,5 +91,11 @@ public class Hypnotic implements ModInitializer {
         saveload.load();
         if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
         else FontManager.setMcFont(true);
+	}
+
+	public void shutdown() {
+		cfgManager.saveConfig();
+        saveload.save();
+		AltsFile.INSTANCE.saveAlts();
 	}
 }

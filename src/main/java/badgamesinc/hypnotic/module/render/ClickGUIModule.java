@@ -6,7 +6,9 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
+import badgamesinc.hypnotic.ui.clickgui2.MenuBar;
 
 public class ClickGUIModule extends Mod 
 {
@@ -26,7 +28,23 @@ public class ClickGUIModule extends Mod
 	
 	@Override
 	public void onEnable() {
-		mc.setScreen(ClickGUI.INSTANCE);
+		switch(MenuBar.INSTANCE.getCurrentTab()) {
+			case CLICKGUI:
+				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.CLICKGUI);
+				mc.setScreen(ClickGUI.INSTANCE);
+				break;
+			case HUDEDITOR:
+				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.HUDEDITOR);
+				mc.setScreen(HudEditorScreen.INSTANCE);
+				break;
+			case OPTIONS:
+				break;
+			case TERMINAL:
+				break;
+			default:
+				break;
+		}
+		
 		this.toggleSilent();
 		super.onEnable();
 	}

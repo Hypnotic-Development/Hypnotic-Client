@@ -13,6 +13,11 @@ import badgamesinc.hypnotic.config.friends.Friend;
 import badgamesinc.hypnotic.config.friends.FriendManager;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.hud.HudManager;
+import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.ui.HudEditorScreen;
+import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
+import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
 
 public class SaveLoad {
     public File dir;
@@ -53,12 +58,17 @@ public class SaveLoad {
         	toSave.add("FRIEND:" + friend.name);
         }
         
-        /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
-        	toSave.add("MESSAGE:" + message);
+        for (HudModule element : HudManager.INSTANCE.hudModules) {
+        	toSave.add("HUD:" + element.getName() + ":" + element.getX() + ":" + element.getY());
         }
         
-        for (Frame frame : ClickGui.instance.frames) {
-        	toSave.add("CLICKGUI:" + frame.category + ":X:" + frame.getX() + ":Y:" + frame.getY() + ":OPEN:" + frame.isOpen());
+        for (Frame frame : ClickGUI.INSTANCE.frames) {
+        	toSave.add("FRAME:" + frame.name + ":" + frame.getX() + ":" + frame.getY() + ":" + frame.isExtended());
+        }
+        toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
+        
+        /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
+        	toSave.add("MESSAGE:" + message);
         }
         
         toSave.add("MAINMENUBG:" + GuiMainMenu.getMenuIndex());
@@ -101,7 +111,25 @@ public class SaveLoad {
                 
             } else if (s.toLowerCase().startsWith("friend:")) {
             	FriendManager.INSTANCE.add(new Friend(args[1]));
-            } /*else if (s.toLowerCase().startsWith("message:")) {
+            } else if (s.toLowerCase().startsWith("hud:")) {
+            	for (HudModule element : HudManager.INSTANCE.hudModules) {
+            		if (element.getName().equalsIgnoreCase(args[1])) {
+            			element.setX(Integer.parseInt(args[2]));
+            			element.setY(Integer.parseInt(args[3]));
+            		}
+            	}
+            } else if (s.toLowerCase().startsWith("frame:")) {
+            	for (Frame frame : ClickGUI.INSTANCE.frames) {
+            		if (frame.name.equalsIgnoreCase(args[1])) {
+            			frame.setX(Integer.parseInt(args[2]));
+            			frame.setY(Integer.parseInt(args[3]));
+            			frame.setExtended(Boolean.parseBoolean(args[4]));
+            		}
+            	}
+            	HudEditorScreen.INSTANCE.frame.setX(Integer.parseInt(args[2]));
+            	HudEditorScreen.INSTANCE.frame.setY(Integer.parseInt(args[3]));
+            	HudEditorScreen.INSTANCE.frame.setExtended(Boolean.parseBoolean(args[4]));
+            }/*else if (s.toLowerCase().startsWith("message:")) {
             	ModuleManager.INSTANCE.chatSpammer.custom.add(args[1]);
             } else if (s.toLowerCase().startsWith("mainmenubg")) {
             	GuiMainMenu.menuIndex = Integer.parseInt(args[1]);

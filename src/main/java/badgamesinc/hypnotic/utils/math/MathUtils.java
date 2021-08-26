@@ -13,4 +13,11 @@ public class MathUtils {
         bd = bd.setScale((int) increment, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+	
+	public static double squaredDistance(double x1, double y1, double z1, double x2, double y2, double z2) {
+        double dX = x2 - x1;
+        double dY = y2 - y1;
+        double dZ = z2 - z1;
+        return dX * dX + dY * dY + dZ * dZ;
+    }
 }
