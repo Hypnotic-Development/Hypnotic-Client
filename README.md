@@ -12,7 +12,7 @@ Fabric Loader 0.11.3 or higher
   
 ## Authors  
 BadGamesInc - actual knowledge  
-KawaiiZenbo - readme editor  
+KawaiiZenbo - website and api
 Whoever else we stole code from  
   
 ## How to import and compile with Eclipse  
