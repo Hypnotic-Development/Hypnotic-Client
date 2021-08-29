@@ -56,11 +56,26 @@ public class StorageESP extends Mod {
 	}
 	
 	public Color getBlockColor(BlockEntity block, int alpha) {
-		if (block instanceof ChestBlockEntity) return new Color(255, 255, 255, alpha);
-		if (block instanceof ShulkerBoxBlockEntity) return new Color(Color.PINK.getRed(), Color.PINK.getGreen(), Color.PINK.getBlue(), alpha);
-		if (block instanceof EnderChestBlockEntity) return new Color(Color.MAGENTA.getRed(), Color.MAGENTA.getGreen(), Color.MAGENTA.getBlue(), alpha);
-		if (block instanceof DispenserBlockEntity) return new Color(Color.GRAY.getRed(), Color.GRAY.getGreen(), Color.GRAY.getBlue(), alpha).brighter();
-		if (block instanceof FurnaceBlockEntity) return new Color(Color.GRAY.getRed(), Color.GRAY.getGreen(), Color.GRAY.getBlue(), alpha).brighter();
+		if (block instanceof ChestBlockEntity) return new Color(
+				Color.YELLOW.getRed(), 
+				Color.YELLOW.getGreen(), 
+				Color.YELLOW.getBlue(), alpha);
+		if (block instanceof ShulkerBoxBlockEntity) return new Color(
+				Color.PINK.getRed(), 
+				Color.PINK.getGreen(), 
+				Color.PINK.getBlue(), alpha);
+		if (block instanceof EnderChestBlockEntity) return new Color(
+				Color.MAGENTA.getRed(), 
+				Color.MAGENTA.getGreen(), 
+				Color.MAGENTA.getBlue(), alpha);
+		if (block instanceof DispenserBlockEntity) return new Color(
+				Color.GRAY.getRed(), 
+				Color.GRAY.getGreen(), 
+				Color.GRAY.getBlue(), alpha).brighter();
+		if (block instanceof FurnaceBlockEntity) return new Color(
+				Color.GRAY.getRed(), 
+				Color.GRAY.getGreen(), 
+				Color.GRAY.getBlue(), alpha).brighter();
 		return new Color(255, 255, 255, alpha);
 	}
 
