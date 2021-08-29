@@ -51,7 +51,10 @@
     "Matrix4fMixin",
     "MouseMixin",
     "ClientPlayerEntityAccessor",
-    "HorseBaseEntityMixin"
+    "HorseBaseEntityMixin",
+    "EntityMixin",
+    "FrustramAccessor",
+    "WorldRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

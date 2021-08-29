@@ -8,12 +8,14 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.BindingScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.CheckBox;
+import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ComboBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Slider;
@@ -44,14 +46,16 @@ public class Button {
 		
 		int count = height;
 		for (Setting setting : mod.getSettings()) {
-			if (setting instanceof BooleanSetting) {
+			 if (setting instanceof ColorSetting) {
+				components.add(new ColorBox(x, y + count, setting, this));
+			} else if (setting instanceof BooleanSetting) {
 				components.add(new CheckBox(x, y + count, this, setting));
 			} else if (setting instanceof ModeSetting) {
 				components.add(new ComboBox(x, y + count, setting, this));
 			} else if (setting instanceof NumberSetting) {
 				components.add(new Slider(x, y + count, this, setting));
 			}
-			count+=height;
+			count+=(setting instanceof ColorSetting ? height * 10 : height);
 		}
 	}
 	
@@ -64,8 +68,8 @@ public class Button {
 		
 		int nameColor = -1;
 		
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + 4, y + 2, nameColor);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y + 2, nameColor);
+		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
+		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width -  (height / 1.5f), y + (height / 6), nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, color);
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, color);
 	}

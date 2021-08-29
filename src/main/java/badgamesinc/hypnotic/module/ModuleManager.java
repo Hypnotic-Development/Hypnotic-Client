@@ -2,55 +2,12 @@ package badgamesinc.hypnotic.module;
 
 import java.util.ArrayList;
 
-import badgamesinc.hypnotic.module.combat.AutoCrystal;
-import badgamesinc.hypnotic.module.combat.AutoTotem;
-import badgamesinc.hypnotic.module.combat.Criticals;
-import badgamesinc.hypnotic.module.combat.CrystalAura;
-import badgamesinc.hypnotic.module.combat.Killaura;
-import badgamesinc.hypnotic.module.combat.Velocity;
-import badgamesinc.hypnotic.module.hud.HudManager;
-import badgamesinc.hypnotic.module.hud.HudModule;
-import badgamesinc.hypnotic.module.hud.elements.Radar;
-import badgamesinc.hypnotic.module.movement.ElytraFly;
-import badgamesinc.hypnotic.module.movement.Flight;
-import badgamesinc.hypnotic.module.movement.InvMove;
-import badgamesinc.hypnotic.module.movement.Speed;
-import badgamesinc.hypnotic.module.movement.Sprint;
-import badgamesinc.hypnotic.module.movement.Step;
-import badgamesinc.hypnotic.module.player.AntiHunger;
-import badgamesinc.hypnotic.module.player.AntiVoid;
-import badgamesinc.hypnotic.module.player.Blink;
-import badgamesinc.hypnotic.module.player.EntityDesync;
-import badgamesinc.hypnotic.module.player.MiddleClickFriend;
-import badgamesinc.hypnotic.module.player.NoFall;
-import badgamesinc.hypnotic.module.player.NoSlow;
-import badgamesinc.hypnotic.module.player.OffhandCrash;
-import badgamesinc.hypnotic.module.player.PacketCanceller;
-import badgamesinc.hypnotic.module.player.Scaffold;
-import badgamesinc.hypnotic.module.player.Spammer;
-import badgamesinc.hypnotic.module.player.SpeedMine;
-import badgamesinc.hypnotic.module.render.ArmCustomize;
-import badgamesinc.hypnotic.module.render.ChatImprovements;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
-import badgamesinc.hypnotic.module.render.CustomFont;
-import badgamesinc.hypnotic.module.render.ESP;
-import badgamesinc.hypnotic.module.render.Freecam;
-import badgamesinc.hypnotic.module.render.Fullbright;
-import badgamesinc.hypnotic.module.render.Nametags;
-import badgamesinc.hypnotic.module.render.OldBlock;
-import badgamesinc.hypnotic.module.render.ParticleBlocker;
-import badgamesinc.hypnotic.module.render.Search;
-import badgamesinc.hypnotic.module.render.SpinBot;
-import badgamesinc.hypnotic.module.render.StorageESP;
-import badgamesinc.hypnotic.module.render.TabGUI;
-import badgamesinc.hypnotic.module.render.Tracers;
-import badgamesinc.hypnotic.module.render.Xray;
-import badgamesinc.hypnotic.module.world.Disabler;
-import badgamesinc.hypnotic.module.world.EntityControl;
-import badgamesinc.hypnotic.module.world.FakePlayer;
-import badgamesinc.hypnotic.module.world.Nuker;
-import badgamesinc.hypnotic.module.world.Surround;
-import badgamesinc.hypnotic.module.world.Timer;
+import badgamesinc.hypnotic.module.combat.*;
+import badgamesinc.hypnotic.module.hud.*;
+import badgamesinc.hypnotic.module.movement.*;
+import badgamesinc.hypnotic.module.player.*;
+import badgamesinc.hypnotic.module.render.*;
+import badgamesinc.hypnotic.module.world.*;
 
 public class ModuleManager {
 
@@ -131,14 +88,16 @@ public class ModuleManager {
 					new EntityDesync(),
 					new PacketCanceller(),
 					new Search(),
-					new Radar(),
 					new MiddleClickFriend(),
 					new EntityControl(),
 					new CustomFont(),
 					new AntiHunger(),
 					new ArmCustomize(),
 					new ParticleBlocker(),
-					new Nuker()
+					new Nuker(),
+					new Phase(),
+					new TargetStrafe(),
+					new NewChunks()
 				);
 	}
 	

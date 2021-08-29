@@ -15,6 +15,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.KeybindSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
@@ -64,6 +65,9 @@ public class ConfigManager {
                                         }
                                         if (setting instanceof NumberSetting) {
                                             ((NumberSetting) setting).setValue((double) cfgSetting.value);
+                                        }
+                                        if (setting instanceof ColorSetting) {
+//                                        	((ColorSetting) setting).set
                                         }
                                     }
                                 }

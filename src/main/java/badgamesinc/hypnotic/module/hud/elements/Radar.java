@@ -6,6 +6,7 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.font.NahrFont;
@@ -35,12 +36,13 @@ public class Radar extends HudModule {
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
 	NahrFont font = FontManager.robotoMed;
 	
 	
 	public Radar() {
 		super("Radar", "render the mans", 4, 20, 100, 100);
-		addSettings(players, monsters, animals, passives, invisibles, items);
+		addSettings(players, monsters, animals, passives, invisibles, items, color);
 		this.setEnabled(true);
 	}
 
@@ -49,7 +51,8 @@ public class Radar extends HudModule {
 		MatrixStack matrixStack = matrices;
         if (mc.player == null) return;
         DrawableHelper.fill(matrixStack, index, index, index, keyCode, index);
-        RenderUtils.fillAndBorder(matrixStack, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), ColorUtils.getClientColorInt(), 0x50000000, 1);
+//        RenderUtils.drawBorderRect(matrices, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), 1-, 2);
+        RenderUtils.fillAndBorder(matrixStack, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), color.getRGB(), 0x50000000, 1);
         float midPos = this.getWidth() / 2.0f - 1;
         RenderUtils.fill(matrixStack, this.getX() + midPos, this.getY() + 1, this.getX() + midPos + 1, this.getY() + this.getHeight() - 1, new Color(60, 60, 60, 250).getRGB());
         RenderUtils.fill(matrixStack, this.getX() + 1, this.getY() + midPos, this.getX() + this.getWidth() - 1, this.getY() + midPos + 1, new Color(60, 60, 60, 250).getRGB());
@@ -119,7 +122,7 @@ public class Radar extends HudModule {
 
     private void drawPointer(MatrixStack matrixStack) {
         Matrix4f matrix4f = matrixStack.peek().getModel();
-        Color color1 = ColorUtils.getClientColor();
+        Color color1 = color.getColor();
 
         RenderUtils.setup2DRender(false);
 

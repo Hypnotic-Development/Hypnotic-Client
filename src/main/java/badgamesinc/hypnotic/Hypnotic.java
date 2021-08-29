@@ -12,6 +12,7 @@ import badgamesinc.hypnotic.ui.HUD;
 import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.utils.input.MouseUtils;
 import badgamesinc.hypnotic.utils.player.DamageUtils;
 import badgamesinc.hypnotic.utils.world.BlockIterator;
 import net.fabricmc.api.ModInitializer;
@@ -25,7 +26,7 @@ public class Hypnotic implements ModInitializer {
 	public static Hypnotic INSTANCE = new Hypnotic();
 	public static Executor EXECUTOR = Executors.newCachedThreadPool();
 	public static String name = "Hypnotic",
-			version = "1.1",
+			version = "r1000",
 			fullName = name + "-" + version,
 			hypnoticDir = System.getenv("APPDATA") + "/.minecraft/Hypnotic",
 			chatPrefix = ColorUtils.purple + name + ColorUtils.gray + ": ";
@@ -64,6 +65,7 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(HUD.INSTANCE);
 		EventManager.INSTANCE.register(DamageUtils.getInstance());
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
+		EventManager.INSTANCE.register(MouseUtils.class);
 		
 	}
 	
@@ -81,6 +83,7 @@ public class Hypnotic implements ModInitializer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                version = "v1.1";
                 cfgManager.saveConfig();
                 saveload.save();
             }

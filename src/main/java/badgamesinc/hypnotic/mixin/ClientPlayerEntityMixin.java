@@ -72,7 +72,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
         }
     }
 	
-	@Inject(method = "pushOutOfBlocks", at = @At("INVOKE"), cancellable = true)
+	@Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
     public void pushOut(double x, double y, CallbackInfo ci) {
         EventPushOutOfBlocks eventPushOutOfBlocks = new EventPushOutOfBlocks();
         eventPushOutOfBlocks.call();

@@ -106,6 +106,7 @@ public class Killaura extends Mod {
 	public void onDisable() {
 		RotationUtils.resetPitch();
 		RotationUtils.resetYaw();
+		target = null;
 		super.onDisable();
 	}
 	

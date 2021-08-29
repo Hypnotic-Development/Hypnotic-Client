@@ -3,7 +3,7 @@ package badgamesinc.hypnotic.module.movement;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
-import badgamesinc.hypnotic.utils.KeyUtils;
+import badgamesinc.hypnotic.utils.input.KeyUtils;
 import net.minecraft.client.gui.screen.ChatScreen;
 
 public class InvMove extends Mod {

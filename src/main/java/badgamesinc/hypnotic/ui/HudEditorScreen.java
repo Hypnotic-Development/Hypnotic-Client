@@ -18,7 +18,7 @@ public class HudEditorScreen extends Screen {
 	
 	public HudEditorScreen() {
 		super(new LiteralText("HudEditorScreen"));
-		frame = new Frame((920 / 2) - 150, 25, 300, 25, "Hud Modules");
+		frame = new Frame(200, 25, 96, 14, "Hud Modules");
 	}
 
 	@Override
@@ -48,6 +48,9 @@ public class HudEditorScreen extends Screen {
 					element.toggle();
 				}
 			}
+			if (element.hovered((int)mouseX, (int)mouseY, element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.getX() + element.getWidth() + 20, element.getY() +  element.getHeight() + 20) && button == 0) {
+//				element.setScaling(true, (int)mouseX, (int)mouseY);
+			}
 		}
 		menuBar.mouseClicked((int)mouseX, (int)mouseY, button);
 		return super.mouseClicked(mouseX, mouseY, button);
@@ -57,7 +60,10 @@ public class HudEditorScreen extends Screen {
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
 		frame.mouseReleased(button);
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
-			if (button == 0) element.setDragging(false);
+			if (button == 0) {
+				element.setDragging(false);
+				element.setScaling(false);
+			}
 		}
 		return super.mouseReleased(mouseX, mouseY, button);
 	}

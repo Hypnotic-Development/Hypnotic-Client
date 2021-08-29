@@ -48,9 +48,9 @@ public class Slider extends Component {
 			}
 		}
 		
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, color.darker().getRGB());
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2, color.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() + 2, -1);
+		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight() * 2 + offset, color.darker().getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.getHeight() * 2 + offset, color.getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + offset  + (parent.getHeight()) + (parent.getHeight() / 4), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	

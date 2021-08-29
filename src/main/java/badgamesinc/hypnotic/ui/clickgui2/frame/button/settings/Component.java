@@ -10,7 +10,8 @@ public class Component {
 
 	MinecraftClient mc = MinecraftClient.getInstance();
 	protected TextRenderer tr = mc.textRenderer;
-	int x, y;
+	protected int offset;
+	private int x, y;
 	public Setting setting;
 	
 	public Component(int x, int y, Setting setting, Button parent) {
@@ -18,7 +19,7 @@ public class Component {
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
-		
+		this.offset = offset;
 	}
 	
 	public void mouseClicked(double mouseX, double mouseY, int button) {

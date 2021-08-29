@@ -53,19 +53,6 @@ public class HUD {
 	
 	public void renderSideHUD(MatrixStack matrices, int width, int height) {
 		fr = FontManager.robotoMed2;
-		double x = PlayerUtils.getDimension() == Dimension.NETHER ? mc.player.getX() * 8 : mc.player.getX() / 8;
-		double y = PlayerUtils.getDimension() == Dimension.NETHER ? mc.player.getY() : mc.player.getY();
-		double z = PlayerUtils.getDimension() == Dimension.NETHER ? mc.player.getZ() * 8 : mc.player.getZ() / 8;
-		String netherXyzString = (PlayerUtils.getDimension() == Dimension.NETHER ? "Overworld " : "Nether ") + ColorUtils.gray + MathUtils.round(x, 1) + ", " + MathUtils.round(y, 1) + ", " + MathUtils.round(z, 1);
-		String xyzString = "XYZ " + ColorUtils.gray + MathUtils.round(mc.player.getX(), 1) + ", " + MathUtils.round(mc.player.getY(), 1) + ", " + MathUtils.round(mc.player.getZ(), 1);
-		String tpsString = "TPS " + ColorUtils.gray + MathUtils.round(TPSUtils.INSTANCE.getAverageTPS(), 2);
-		fr.drawWithShadow(matrices, Hypnotic.name + ColorUtils.gray + " 1.1", 5, 5, ColorUtils.getClientColorInt());
-//		fr.drawWithShadow(matrices, "FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0], 5, height - 20, ColorUtils.getClientColorInt());
-//		fr.drawWithShadow(matrices, tpsString, 5, height - 30, ColorUtils.getClientColorInt());
-//		fr.drawWithShadow(matrices, "Ping " + ColorUtils.gray + (mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()) == null ? 0 : mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()).getLatency()), -2 + fr.getWidth("FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0]), height - 20, ColorUtils.getClientColorInt());
-//		fr.drawWithShadow(matrices, "Blocks/s " + ColorUtils.gray + MathUtils.round(ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).isEnabled() ? moveSpeed() * ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.world.Timer.class).speed.getValue() : moveSpeed(), 2), -2 + fr.getWidth(tpsString), height - 30, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, xyzString, width - fr.getWidth(xyzString), height - 20, ColorUtils.getClientColorInt());
-		fr.drawWithShadow(matrices, netherXyzString, width - fr.getWidth(netherXyzString), height - 30, ColorUtils.getClientColorInt());
 	}
 	
 	

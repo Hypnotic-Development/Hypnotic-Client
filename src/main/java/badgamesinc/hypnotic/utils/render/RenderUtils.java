@@ -5,9 +5,10 @@ import java.awt.Color;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import badgamesinc.hypnotic.mixin.FrustramAccessor;
+import badgamesinc.hypnotic.mixin.WorldRendererAccessor;
 import badgamesinc.hypnotic.module.render.IItemRenderer;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.mixin.IMatrix4f;
@@ -20,6 +21,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.BufferRenderer;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -34,6 +36,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
@@ -133,36 +136,6 @@ public class RenderUtils {
 
 	    public static void setColor(Color c) {
 	        GL11.glColor4d(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
-	    }
-	    
-	    public static void drawCircle(float cx, float cy, float r, int num_segments, int c) {
-	        GL11.glPushMatrix();
-	        cx *= 2.0f;
-	        cy *= 2.0f;
-	        float f = (float)(c >> 24 & 255) / 255.0f;
-	        float f1 = (float)(c >> 16 & 255) / 255.0f;
-	        float f2 = (float)(c >> 8 & 255) / 255.0f;
-	        float f3 = (float)(c & 255) / 255.0f;
-	        float theta = (float)(6.2831852 / (double)num_segments);
-	        float p = (float)Math.cos(theta);
-	        float s = (float)Math.sin(theta);
-	        float x = r *= 2.0f;
-	        float y = 0.0f;
-	        RenderUtils.enableGL2D();
-	        GL11.glScalef((float)0.5f, (float)0.5f, (float)0.5f);
-	        GL11.glColor4f((float)f1, (float)f2, (float)f3, (float)f);
-	        GL11.glBegin((int)2);
-	        for (int ii = 0; ii < num_segments; ++ii) {
-	            GL11.glVertex2f((float)(x + cx), (float)(y + cy));
-	            float t = x;
-	            x = p * x - s * y;
-	            y = s * t + p * y;
-	        }
-	        GL11.glEnd();
-	        GL11.glScalef((float)2.0f, (float)2.0f, (float)2.0f);
-	        RenderUtils.disableGL2D();
-	        GlStateManager._clearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	        GL11.glPopMatrix();
 	    }
 	    
 	    public static void enableGL2D() {
@@ -862,12 +835,12 @@ public class RenderUtils {
 	        BufferBuilder buffer = Tessellator.getInstance().getBuffer();
 	        RenderSystem.setShader(GameRenderer::getPositionColorShader);
 	        GL11.glDepthFunc(GL11.GL_ALWAYS);
+	        
 	        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 	        RenderSystem.defaultBlendFunc();
 	        RenderSystem.enableBlend();
 	        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES,
 	                VertexFormats.POSITION_COLOR);
-
 	        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
 	        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
 
@@ -877,6 +850,138 @@ public class RenderUtils {
 	        GL11.glDepthFunc(GL11.GL_LEQUAL);
 	        RenderSystem.disableBlend();
 	    }
+		
+		public static void drawCircle(MatrixStack matrices, Vec3d pos, float partialTicks, double rad, double height, int color) {
+	        double lastX = 0;
+			double lastZ = rad;
+			for (int angle = 0; angle <= 360; angle += 6) {
+				float cos = MathHelper.cos((float) Math.toRadians(angle));
+				float sin = MathHelper.sin((float) Math.toRadians(angle));
+
+				double x = rad * sin;
+				double z = rad * cos;
+				drawLine(
+						pos.x + lastX, pos.y, pos.z + lastZ,
+						pos.x + x, pos.y, pos.z + z,
+						LineColor.single(color), 2);
+
+				lastX = x;
+				lastZ = z;
+			}
+	    }
+		
+		public static void drawBoxFill(Box box, QuadColor color, Direction... excludeDirs) {
+			if (!getFrustum().isVisible(box)) {
+				return;
+			}
+
+			setup3DRender(true);
+
+			MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+
+			// Fill
+			RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+			buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+			Vertexer.vertexBoxQuads(matrices, buffer, Boxes.moveToZero(box), color, excludeDirs);
+			tessellator.draw();
+
+			end3DRender();
+		}
+		
+		public static void drawBoxOutline(Box box, QuadColor color, float lineWidth, Direction... excludeDirs) {
+			if (!getFrustum().isVisible(box)) {
+				return;
+			}
+
+			setup3DRender(true);
+
+			MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+
+			// Outline
+			RenderSystem.disableCull();
+			RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+			RenderSystem.lineWidth(lineWidth);
+
+			buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+			Vertexer.vertexBoxLines(matrices, buffer, Boxes.moveToZero(box), color, excludeDirs);
+			tessellator.draw();
+
+			RenderSystem.enableCull();
+
+			end3DRender();
+		}
+		
+		public static void drawLine(double x1, double y1, double z1, double x2, double y2, double z2, LineColor color, float width) {
+			if (!isPointVisible(x1, y1, z1) && !isPointVisible(x2, y2, z2)) {
+				return;
+			}
+
+			setup3DRender(true);
+
+			MatrixStack matrices = matrixFrom(x1, y1, z1);
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+
+			// Line
+			RenderSystem.disableDepthTest();
+			RenderSystem.disableCull();
+			RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+			RenderSystem.lineWidth(width);
+
+			buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+			Vertexer.vertexLine(matrices, buffer, 0f, 0f, 0f, (float) (x2 - x1), (float) (y2 - y1), (float) (z2 - z1), color);
+			tessellator.draw();
+
+			RenderSystem.enableCull();
+			RenderSystem.enableDepthTest();
+			end3DRender();
+		}
+		
+		public static MatrixStack matrixFrom(double x, double y, double z) {
+			MatrixStack matrices = new MatrixStack();
+
+			Camera camera = mc.gameRenderer.getCamera();
+			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+			matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+
+			matrices.translate(x - camera.getPos().x, y - camera.getPos().y, z - camera.getPos().z);
+
+			return matrices;
+		}
+		
+		public static Frustum getFrustum() {
+			return ((WorldRendererAccessor) mc.worldRenderer).getFrustum();
+		}
+		
+		public static boolean isPointVisible(double x, double y, double z) {
+			FrustramAccessor frustum = (FrustramAccessor) getFrustum();
+			Vector4f[] frustumCoords = frustum.getHomogeneousCoordinates();
+			Vector4f pos = new Vector4f((float) (x - frustum.getX()), (float) (y - frustum.getY()), (float) (z - frustum.getZ()), 1f);
+
+			for (int i = 0; i < 6; ++i) {
+				if (frustumCoords[i].dotProduct(pos) <= 0f) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+		
+		public static void fill(MatrixStack matrices, int x1, int y1, int x2, int y2, int colTop, int colBot, int colFill) {
+			DrawableHelper.fill(matrices, x1, y1 + 1, x1 + 1, y2 - 1, colTop);
+			DrawableHelper.fill(matrices, x1 + 1, y1, x2 - 1, y1 + 1, colTop);
+			DrawableHelper.fill(matrices, x2 - 1, y1 + 1, x2, y2 - 1, colBot);
+			DrawableHelper.fill(matrices, x1 + 1, y2 - 1, x2 - 1, y2, colBot);
+			DrawableHelper.fill(matrices, x1 + 1, y1 + 1, x2 - 1, y2 - 1, colFill);
+		}
 		
 		public static Vec3d center() {
 			Vec3d pos = new Vec3d(0, 0, 1);

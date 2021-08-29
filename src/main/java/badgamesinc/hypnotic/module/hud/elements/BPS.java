@@ -2,6 +2,7 @@ package badgamesinc.hypnotic.module.hud.elements;
 
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.math.MathUtils;
@@ -11,8 +12,10 @@ import net.minecraft.util.math.Vec3d;
 
 public class BPS extends HudModule {
 
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
 	public BPS() {
 		super("Blocks/s Display", "Renders your blocks/s", (int) FontManager.roboto.getStringWidth("Ping 80") + 5, 1050, (int)FontManager.roboto.getStringWidth("Ping 80"), (int)FontManager.roboto.getStringHeight("Ping 80"));
+		addSetting(color);
 	}
 	
 	@Override
@@ -31,7 +34,7 @@ public class BPS extends HudModule {
 		this.setDefaultY(scaledHeight - 18);
 		this.setWidth((int) font.getStringWidth(bpsString));
 		this.setHeight((int) font.getStringHeight(bpsString));
-		font.drawWithShadow(matrices, bpsString, this.getX(), this.getY(), ColorUtils.getClientColorInt());
+		font.drawWithShadow(matrices, bpsString, this.getX(), this.getY(), color.getRGB());
 		super.render(matrices, scaledWidth, scaledHeight, partialTicks);
 	}
 	

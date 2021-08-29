@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.utils;
+package badgamesinc.hypnotic.utils.input;
 
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;

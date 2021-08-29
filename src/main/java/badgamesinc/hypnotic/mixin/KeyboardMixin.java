@@ -8,10 +8,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import badgamesinc.hypnotic.command.CommandManager;
 import badgamesinc.hypnotic.event.events.EventKeyPress;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.utils.KeyUtils;
+import badgamesinc.hypnotic.utils.input.KeyUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -36,7 +37,7 @@ public abstract class KeyboardMixin {
             EventKeyPress event = new EventKeyPress(key, scancode, action);
             event.call();
             
-            if (MinecraftClient.getInstance().currentScreen == null && key == GLFW.GLFW_KEY_PERIOD && action == GLFW.GLFW_PRESS) MinecraftClient.getInstance().setScreen(new ChatScreen(""));
+            if (MinecraftClient.getInstance().currentScreen == null && key == KeyUtils.getKeyCode(CommandManager.get().getPrefix()) && action == GLFW.GLFW_PRESS) MinecraftClient.getInstance().setScreen(new ChatScreen(""));
         }
     }
 }

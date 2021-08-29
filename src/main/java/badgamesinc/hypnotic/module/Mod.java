@@ -56,7 +56,7 @@ public class Mod {
 		displayName = name;
 		this.keyCode = 0;
 		this.binding = false;
-		addSettings(visible);
+//		addSettings(visible);
 	}
 	
 	public void addSetting(Setting setting) {

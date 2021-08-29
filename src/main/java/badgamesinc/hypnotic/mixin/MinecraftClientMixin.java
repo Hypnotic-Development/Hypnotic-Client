@@ -30,7 +30,7 @@ public class MinecraftClientMixin {
 		event.call();
 	}
 	
-	@Inject(at = @At("HEAD"), method = "stop")
+	@Inject(at = @At("TAIL"), method = "stop")
 	public void onShutdown(CallbackInfo ci) {
 		Hypnotic.INSTANCE.shutdown();
 	}

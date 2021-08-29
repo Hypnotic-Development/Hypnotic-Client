@@ -11,7 +11,9 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
@@ -64,9 +66,8 @@ public class Frame {
 		int color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? category.color.getRGB() : ColorUtils.getClientColorInt();
 		Screen.fill(matrices, x, y, x + width, y + height, color);
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
-		FontManager.roboto.drawWithShadow(matrices, name, x + 4, y + 2, -1);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - 10, y + 2, -1);
-		System.out.println(animTicks);
+		FontManager.roboto.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
+		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
 		if (this.extended) {
 			if (animTicks < length) animTicks+=5;
 			if (animTicks > length) animTicks = length;
@@ -90,7 +91,7 @@ public class Frame {
 							component.render(matrices, mouseX, mouseY, count2);
 							Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color);
 							Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color);
-							count2+=height;
+							count2+=(component instanceof ColorBox ? height * 10 : height);;
 						}
 					}
 				}
@@ -139,7 +140,12 @@ public class Frame {
 		for (Button button : buttons) {
 			button.setY(this.y + offset);
 			button.setX(this.getX());
-			offset+=height + (button.isExtended() ? button.mod.settings.size() * height : 0);
+			offset+=height;
+			if (button.isExtended()) {
+				for (Component component : button.components) {
+					offset+=(component instanceof ColorBox ? height * 6 : height); 
+				}
+			}
 			
 		}
 	}

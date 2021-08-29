@@ -12,11 +12,16 @@ import badgamesinc.hypnotic.utils.world.Dimension;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
 import it.unimi.dsi.fastutil.longs.LongSortedSet;
+import net.minecraft.block.AirBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkSectionPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.entity.EntityLookup;
 import net.minecraft.world.entity.EntityTrackingSection;
 import net.minecraft.world.entity.SectionedEntityCache;
@@ -120,5 +125,81 @@ public class PlayerUtils {
             default:
                 return Dimension.OVERWORLD;
         }
+    }
+	
+	public static boolean isInsideBlock() {
+        for(int x = MathHelper.floor(mc.player.getBoundingBox().minX); x < MathHelper.floor(mc.player.getBoundingBox().maxX) + 1; x++) {
+            for(int y = MathHelper.floor(mc.player.getBoundingBox().minY); y < MathHelper.floor(mc.player.getBoundingBox().maxY) + 1; y++) {
+                for(int z = MathHelper.floor(mc.player.getBoundingBox().minZ); z < MathHelper.floor(mc.player.getBoundingBox().maxZ) + 1; z++) {
+                    Block block = mc.world.getBlockState(new BlockPos(x, y, z)).getBlock();
+                    if(block != null && !(block instanceof AirBlock)) {
+                        Box boundingBox = new Box(new BlockPos(x, y, z));
+                        if(block instanceof HopperBlock)
+                            boundingBox = new Box(x, y, z, x + 1, y + 1, z + 1);
+                        if(boundingBox != null && mc.player.getBoundingBox().intersects(boundingBox))
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+	
+	public static void setMotion(double speed) {
+        double forward = mc.player.input.movementForward;
+        double strafe = mc.player.input.movementSideways;
+        float yaw = mc.player.getYaw();
+        if ((forward == 0.0D) && (strafe == 0.0D)) {
+            mc.player.setVelocity(0, mc.player.getVelocity().getY(), 0);
+        } else {
+            if (forward != 0.0D) {
+                if (strafe > 0.0D) {
+                    yaw += (forward > 0.0D ? -45 : 45);
+                } else if (strafe < 0.0D) {
+                    yaw += (forward > 0.0D ? 45 : -45);
+                }
+                strafe = 0.0D;
+                if (forward > 0.0D) {
+                    forward = 1;
+                } else if (forward < 0.0D) {
+                    forward = -1;
+                }
+            }
+            double x = forward * speed * Math.cos(Math.toRadians(yaw + 90.0F)) + strafe * speed * Math.sin(Math.toRadians(yaw + 90.0F));
+            double z = forward * speed * Math.sin(Math.toRadians(yaw + 90.0F)) - strafe * speed * Math.cos(Math.toRadians(yaw + 90.0F));
+            mc.player.setVelocity(x, mc.player.getVelocity().getY(), z);
+        }
+    }
+	
+	public static void setSpeed(final double moveSpeed, double yVelocity, final float pseudoYaw, final double pseudoStrafe, final double pseudoForward) {
+        double forward = pseudoForward;
+        double strafe = pseudoStrafe;
+        float yaw = pseudoYaw;
+        if (pseudoForward != 0.0D) {
+            if (pseudoStrafe > 0.0D) {
+                yaw = pseudoYaw + (float)(pseudoForward > 0.0D ? -45 : 45);
+            } else if (pseudoStrafe < 0.0D) {
+                yaw = pseudoYaw + (float)(pseudoForward > 0.0D ? 45 : -45);
+            }
+
+            strafe = 0.0D;
+            if (pseudoForward > 0.0D) {
+                forward = 1.0D;
+            } else if (pseudoForward < 0.0D) {
+                forward = -1.0D;
+            }
+        }
+
+        if (strafe > 0.0D) {
+            strafe = 1.0D;
+        } else if (strafe < 0.0D) {
+            strafe = -1.0D;
+        }
+
+        double mx = Math.cos(Math.toRadians((double)(yaw + 90.0F)));
+        double mz = Math.sin(Math.toRadians((double)(yaw + 90.0F)));
+        double x = forward * moveSpeed * mx + strafe * moveSpeed * mz;
+        double z = forward * moveSpeed * mz - strafe * moveSpeed * mx;
+        mc.player.setVelocity(x, yVelocity, z);
     }
 }

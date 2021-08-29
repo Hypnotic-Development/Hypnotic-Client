@@ -17,7 +17,9 @@ public class HudManager {
 				new Ping(),
 				new BPS(),
 				new XYZ(),
-				new NetherXYZ()
+				new NetherXYZ(),
+				new Armor(),
+				new Logo()
 			);
 	}
 	
