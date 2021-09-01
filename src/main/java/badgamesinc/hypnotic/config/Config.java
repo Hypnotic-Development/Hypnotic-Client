@@ -55,7 +55,7 @@ public class Config {
                     cfgSetting.value = ((NumberSetting) setting).getValue();
                 }
                 if (setting instanceof ColorSetting) {
-                	cfgSetting.value = ((ColorSetting) setting).getRGBString();
+                	cfgSetting.value = ((ColorSetting) setting).getHex();
                 }
 
                 settings.add(cfgSetting);

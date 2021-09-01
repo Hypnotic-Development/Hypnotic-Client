@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.mojang.authlib.exceptions.AuthenticationException;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.ui.altmanager.account.Accounts;
@@ -46,6 +47,8 @@ public class AltManagerScreen extends Screen {
 	public File altsFile = new File(Hypnotic.hypnoticDir, "alts.txt");
 	public ArrayList<Alt> alts = new ArrayList<Alt>();
 	
+	int scrollY;
+	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
@@ -60,17 +63,19 @@ public class AltManagerScreen extends Screen {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
 		int offset = 0;
+		RenderSystem.enableScissor(100, 70 * 2, (width - 100) * 2, (height - 70) * 2);
+//		GL11.glScissor(100, 10, 10000, 10000);
 		for (Alt alt : alts) {
 			alt.setX(120);
 			alt.setY(110 + offset);
-			fill(matrices, alt.getX(), alt.getY(), alt.getX() + 230, alt.getY() + 30, new Color(0, 0, 0, 120).getRGB());
+			fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, alt.getY() + scrollY + 30, new Color(0, 0, 0, 120).getRGB());
 			if (alt.hoveredAlt(mouseX, mouseY)) {
-				fill(matrices, alt.getX(), alt.getY(), alt.getX() + 230, alt.getY() + 30, new Color(40, 40, 40, 120).getRGB());
+				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, alt.getY() + scrollY + 30, new Color(40, 40, 40, 120).getRGB());
 			}
 			if (alt.isSelected()) {
-				fill(matrices, alt.getX(), alt.getY(), alt.getX() + 230, alt.getY() + 30, new Color(50, 50, 50, 150).getRGB());
+				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, (int) (alt.getY() + scrollY + 30), new Color(50, 50, 50, 150).getRGB());
 			}
-			((ButtonWidget)this.addDrawableChild(new ButtonWidget(alt.getX() + 130, alt.getY() + 5, 40, 20, new LiteralText("Login"), (button) -> {
+			((ButtonWidget)this.addDrawableChild(new ButtonWidget(alt.getX() + 180, alt.getY() + 5, 40, 20, new LiteralText("Login"), (button) -> {
 				try {
 					status = "Logging into " + ColorUtils.green + alt.getEmail();
 					loggingIn = true;
@@ -80,14 +85,15 @@ public class AltManagerScreen extends Screen {
 				} catch (AuthenticationException e) {
 					e.printStackTrace();
 				}
-		    }))).active = true;
+		    }))).visible = true;
 			((ButtonWidget)this.addDrawableChild(new ButtonWidget(alt.getX() + 180, alt.getY() + 5, 40, 20, new LiteralText("Edit"), (button) -> {
 				MinecraftClient.getInstance().setScreen(new EditAltScreen(this, alt));
-		    }))).active = true;
-			drawStringWithShadow(matrices, textRenderer, alt.getEmail(), alt.getX() + 5, alt.getY() + 5, -1);
-			drawStringWithShadow(matrices, textRenderer, alt.getPassword().replaceAll("(?s).", "*"), alt.getX() + 5, alt.getY() + 20, -1);
+		    }))).visible = false;
+			drawStringWithShadow(matrices, textRenderer, alt.getEmail(), alt.getX() + 5, alt.getY() + scrollY + 5, -1);
+			drawStringWithShadow(matrices, textRenderer, alt.getPassword().replaceAll("(?s).", "*"), alt.getX() + 5, alt.getY() + scrollY + 20, -1);
 			offset+=50;
 		}
+		RenderSystem.disableScissor();
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 310, height - 25, 200, 20, new LiteralText("Login to Microsoft account"), (button) -> {
 			MicrosoftLogin.getRefreshToken(refreshToken -> {
                 if (refreshToken != null) {
@@ -119,5 +125,11 @@ public class AltManagerScreen extends Screen {
 			}
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
+	}
+	
+	@Override
+	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+		scrollY+=amount;
+		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 }

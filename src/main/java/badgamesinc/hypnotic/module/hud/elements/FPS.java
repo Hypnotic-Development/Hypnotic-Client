@@ -26,6 +26,9 @@ public class FPS extends HudModule {
 	@Override
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
 		matrices.push();
+//		color.hue = 0.5f;
+//		color.sat = 0.5f;
+//		color.bri = 1f;
 		matrices.translate(this.getX(), this.getY(), 0);
 		matrices.scale((float) this.getScaleX(), (float) this.getScaleY(), 0);
 		String fpsString = "FPS " + ColorUtils.gray + mc.fpsDebugString.split(" ")[0];

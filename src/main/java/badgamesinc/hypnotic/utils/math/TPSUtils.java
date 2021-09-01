@@ -41,7 +41,7 @@ public class TPSUtils {
 
     @EventTarget
     private void run(EventReceivePacket event) {
-        if (mc.world == null || mc.player.age < 20) {
+        if (mc.player == null || mc.world == null || mc.player.age < 20) {
             reports.clear();
         }
         if (event.getPacket() instanceof WorldTimeUpdateS2CPacket) {

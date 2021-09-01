@@ -1,5 +1,6 @@
 package badgamesinc.hypnotic;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -11,6 +12,7 @@ import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.ui.HUD;
 import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.api.ApiUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.input.MouseUtils;
 import badgamesinc.hypnotic.utils.player.DamageUtils;
@@ -34,6 +36,7 @@ public class Hypnotic implements ModInitializer {
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
+	public ApiUtils api = new ApiUtils();
 	
 	public static final Identifier BOOM_SOUND = new Identifier("tutorial:boom");
     public static SoundEvent BOOM_SOUND_EVENT = new SoundEvent(BOOM_SOUND);
@@ -83,9 +86,7 @@ public class Hypnotic implements ModInitializer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                version = "v1.1";
                 cfgManager.saveConfig();
-                saveload.save();
             }
         });
         configDaemon.setDaemon(true);
@@ -97,6 +98,7 @@ public class Hypnotic implements ModInitializer {
 	}
 
 	public void shutdown() {
+		System.out.println("SHUTING DOWN HYPNOTIC, GOODBYE");
 		cfgManager.saveConfig();
         saveload.save();
 		AltsFile.INSTANCE.saveAlts();

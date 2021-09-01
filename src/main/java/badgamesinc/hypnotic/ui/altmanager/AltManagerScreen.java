@@ -3,6 +3,8 @@ package badgamesinc.hypnotic.ui.altmanager;
 import java.awt.Color;
 import java.io.File;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.ui.altmanager.account.Account;
 import badgamesinc.hypnotic.ui.altmanager.account.Accounts;
@@ -35,8 +37,9 @@ public class AltManagerScreen extends Screen {
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height - 50, 200, 20, new LiteralText("Add alt"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
 	    }))).active = true;
-		
 		int offset = 0;
+		RenderSystem.enableScissor(10, 10, 1000, 1000);
+//		GL11.glScissor(10, 10, 100000, 10000);
 		for (Account<?> alt : Accounts.get()) {
 			((ButtonWidget)this.addDrawableChild(new ButtonWidget(100, height - 50 + offset, 200, 20, new LiteralText("Login"), (button) -> {
 		         MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
@@ -45,6 +48,7 @@ public class AltManagerScreen extends Screen {
 			drawStringWithShadow(matrices, textRenderer, alt.getType().name(), 100 + 5, offset + 20, -1);
 			offset+=50;
 		}
+		RenderSystem.disableScissor();
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	

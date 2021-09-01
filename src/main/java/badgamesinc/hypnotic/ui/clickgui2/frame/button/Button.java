@@ -68,8 +68,8 @@ public class Button {
 		
 		int nameColor = -1;
 		
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width -  (height / 1.5f), y + (height / 6), nameColor);
+		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + parent.getWidth() - 8 + (height / 3) - FontManager.roboto.getStringWidth(mod.getName()), y + (height / 6), nameColor);
+//		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width -  (height / 1.5f), y + (height / 6), nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, color);
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, color);
 	}

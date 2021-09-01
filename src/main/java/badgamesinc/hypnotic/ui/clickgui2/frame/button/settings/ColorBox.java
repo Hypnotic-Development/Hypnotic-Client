@@ -2,11 +2,15 @@ package badgamesinc.hypnotic.ui.clickgui2.frame.button.settings;
 
 import java.awt.Color;
 
+import org.lwjgl.opengl.GL11;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.DrawableHelper;
@@ -29,24 +33,29 @@ public class ColorBox extends Component {
 		this.parent = parent;
 		this.setting = setting;
 		this.colorSet = (ColorSetting)setting;
+		colorSet.displayName = colorSet.name;
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
+		colorSet.displayName = colorSet.name;
 		int sx = parent.getX() + 5,
 				sy = parent.getY() + offset + parent.getHeight() + 12,
 				ex = parent.getX() + parent.getWidth() - 17,
 				ey = parent.getY() + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
 
-		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, new Color(40, 40, 40, 255).getRGB());
-//		RenderUtils.fill(matrices, sx - 1, sy - 1, ex + 1, ey + 1, ColorUtils.getClientColor().getRGB(), ColorUtils.getClientColor().darker().getRGB(), 0x00000000);
-
+		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, ColorUtils.getClientColorInt());
+		DrawableHelper.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 7, new Color(40, 40, 40, 255).getRGB());
+		
+		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 2, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 9, new Color(0, 0, 0, 200).getRGB());
 		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
 		int green = satColor >> 8 & 255;
 		int blue = satColor & 255;
 
+		
+		RenderSystem.disableBlend();
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
@@ -70,7 +79,7 @@ public class ColorBox extends Component {
 
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
-
+		
 		if (hovered(mouseX, mouseY, sx, sy, ex, ey) && lmDown) {
 			colorSet.bri = 1f - 1f / ((float) (ey - sy) / (mouseY - sy));
 			colorSet.sat = 1f / ((float) (ex - sx) / (mouseX - sx));
@@ -85,8 +94,27 @@ public class ColorBox extends Component {
 //		DrawableHelper.fill(matrices, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
 //		DrawableHelper.fill(matrices, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
 
-		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 11, -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 9, -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 9, colorSet.getRGB());
+		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 2, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 9, colorSet.getColor().getRGB());
 
+
+		
+		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 7, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 2)) {
+			RenderSystem.disableDepthTest();
+			RenderSystem.depthFunc(GL11.GL_ALWAYS);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			FontManager.robotoSmall.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
+			RenderSystem.depthFunc(GL11.GL_LEQUAL);
+			RenderSystem.enableDepthTest();
+			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
+//				System.out.println("e");
+				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
+				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue());
+				colorSet.setHSV(vals[0], vals[1], vals[2]);
+			}
+		}
+		
 		sx = ex + 5;
 		ex = ex + 12;
 //		RenderUtils.fill(matrices, sx - 1, sy - 1, ex + 1, ey + 1, ColorUtils.getClientColor().getRGB(), ColorUtils.getClientColor().darker().getRGB(), 0x00000000);
@@ -102,9 +130,7 @@ public class ColorBox extends Component {
 
 		int hueY = (int) (sy + (ey - sy) * colorSet.hue);
 		RenderUtils.fill(matrices, sx, hueY - 2, ex, hueY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
-//		DrawableHelper.fill(matrices, ex - 1, hueY - 1, ex, hueY + 2, 0xffa0a0a0);
-//		DrawableHelper.fill(matrices, sx, hueY, sx + 2, hueY + 1, 0xffa0a0a0);
-//		DrawableHelper.fill(matrices, ex - 2, hueY, ex, hueY + 1, 0xffa0a0a0);
+	
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
@@ -119,6 +145,7 @@ public class ColorBox extends Component {
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
 		if (button == 0) lmDown = true;
+		SaveLoad.INSTANCE.save();
 		super.mouseClicked(mouseX, mouseY, button);
 	}
 	

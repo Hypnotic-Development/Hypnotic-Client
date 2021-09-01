@@ -25,11 +25,13 @@ public class Slider extends Component {
 		this.parent = parent;
 		this.setting = setting;
 		this.numSet = (NumberSetting)setting;
+		numSet.displayName = numSet.name + ": " + numSet.getValue();
 	}
 	
 	double renderWidth;
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
+		numSet.displayName = numSet.name + ": " + numSet.getValue();
 		Color color = parent.parent.category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? parent.parent.category.color : ColorUtils.getClientColor();
 		double diff = Math.min(parent.getWidth(), Math.max(0, mouseX - parent.getX()));
 
@@ -50,7 +52,7 @@ public class Slider extends Component {
 		
 		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight() * 2 + offset, color.darker().getRGB());
 		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.getHeight() * 2 + offset, color.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, numSet.name + ": " + numSet.getValue(), parent.getX() + 4, parent.getY() + offset  + (parent.getHeight()) + (parent.getHeight() / 4), -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, numSet.displayName, parent.getX() + 4, parent.getY() + offset  + (parent.getHeight()) + (parent.getHeight() / 4), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	

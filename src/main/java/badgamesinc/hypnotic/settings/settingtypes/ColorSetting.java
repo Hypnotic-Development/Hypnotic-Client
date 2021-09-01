@@ -43,7 +43,14 @@ public class ColorSetting extends Setting {
 		return new float[] { (col >> 16 & 255) / 255f, (col >> 8 & 255) / 255f, (col & 255) / 255f };
 	}
 	
-	public String getRGBString() {
+	public void setRGB(float r, float g, float b) {
+		float[] vals = rgbToHsv(r, g, b);
+		this.hue = vals[0];
+		this.sat = vals[1];
+		this.bri = vals[2];
+	}
+	
+	public String getHSVString() {
 		StringBuilder string = new StringBuilder();
 		string.append(getRGBFloat()[0] + "-");
 		string.append(getRGBFloat()[1] + "-");
@@ -51,8 +58,10 @@ public class ColorSetting extends Setting {
 		return string.toString();
 	}
 	
-	public void setRGB(int r, int b, int g) {
-//		MathHelper.rgb
+	public void setHSV(float h, float s, float v) {
+		this.hue = h;
+		this.sat = s;
+		this.bri = v;
 	}
 	
 	public Color getColor() {
@@ -63,8 +72,11 @@ public class ColorSetting extends Setting {
 		return new float[] {hue, sat, bri};
 	}
 	
+	public String getHex() {
+		return Integer.toHexString(getRGB());
+	}
 
-	private float[] rgbToHsv(float r, float g, float b) {
+	/*public float[] rgbToHsv(float r, float g, float b) {
 		float minRGB = Math.min(r, Math.min(g, b));
 		float maxRGB = Math.max(r, Math.max(g, b));
 
@@ -81,5 +93,32 @@ public class ColorSetting extends Setting {
 		float computedV = maxRGB;
 
 		return new float[] { computedH, computedS, computedV };
+	}*/
+	
+	public float[] rgbToHsv(float r, float g, float b) {
+		return Color.RGBtoHSB((int)r, (int)g, (int)b, null);
+	}
+	
+	public String rgbToHex(int rgb) {
+		return Integer.toHexString(rgb);
+	}
+	
+	public Color hexToRgb(String hex) {
+		try {
+			return Color.decode("#" + hex.replace("#", ""));
+		} catch(NumberFormatException e) {
+			System.err.println("Invalid hex string!");
+			return Color.WHITE;
+		}
+	}
+	
+	public int[] hexToRgbInt(String hex) {
+		try {
+			Color color = Color.decode("#" + hex.replace("#", ""));
+			return new int[] {color.getRed(), color.getGreen(), color.getBlue()};
+		} catch(NumberFormatException e) {
+			System.err.println("Invalid hex string!");
+			return new int[] {Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue()};
+		}
 	}
 }

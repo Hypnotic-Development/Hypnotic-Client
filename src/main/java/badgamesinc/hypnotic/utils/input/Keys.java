@@ -9,9 +9,9 @@ import badgamesinc.hypnotic.mixin.KeyBindingAccessor;
 import java.util.Map;
 
 public class Keys {
-    private static final String CATEGORY = "Meteor Client";
+    private static final String CATEGORY = "Hypnotic Client";
 
-    public static KeyBinding OPEN_CLICK_GUI = new KeyBinding("key.meteor-client.open-click-gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, CATEGORY);
+    public static KeyBinding OPEN_CLICK_GUI = new KeyBinding("key.hypnotic-client.open-click-gui", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_RIGHT_SHIFT, CATEGORY);
 
     public static KeyBinding[] apply(KeyBinding[] binds) {
         // Add category

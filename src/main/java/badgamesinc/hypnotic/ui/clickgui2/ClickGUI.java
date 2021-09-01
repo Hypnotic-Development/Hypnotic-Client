@@ -28,6 +28,7 @@ public class ClickGUI extends Screen {
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 		for (Frame frame : frames) {
 			frame.render(matrices, mouseX, mouseY);
 			frame.updatePosition(mouseX, mouseY);

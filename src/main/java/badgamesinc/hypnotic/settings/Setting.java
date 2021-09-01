@@ -7,7 +7,8 @@ public class Setting {
 
     @Expose
     @SerializedName("name")
-    public String name;
+    public String name = " ";
+    public String displayName = " ";
     public boolean focused;
     private boolean visible = true;
     

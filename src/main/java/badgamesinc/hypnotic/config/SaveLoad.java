@@ -15,9 +15,12 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.settings.Setting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
+import badgamesinc.hypnotic.utils.Logger;
 
 public class SaveLoad {
     public File dir;
@@ -47,10 +50,17 @@ public class SaveLoad {
 
     public void save() {
 
+    	Logger.logInfo("Saving...");
         ArrayList<String> toSave = new ArrayList<String>();
 
         for (Mod mod : ModuleManager.INSTANCE.modules) {
             toSave.add("MOD:" + mod.getName() + ":" + mod.isEnabled() + ":" + mod.getKey());
+            for (Setting set : mod.settings) {
+            	if (set instanceof ColorSetting) {
+            		ColorSetting color = (ColorSetting)set;
+            		toSave.add("COLOR:" + mod.getName() + ":" + color.name + ":" + color.hue + ":" + color.sat + ":" + color.bri);
+            	}
+            }
         }
         
         //Will port later
@@ -65,6 +75,7 @@ public class SaveLoad {
         for (Frame frame : ClickGUI.INSTANCE.frames) {
         	toSave.add("FRAME:" + frame.name + ":" + frame.getX() + ":" + frame.getY() + ":" + frame.isExtended());
         }
+        
         toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
         
         /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {

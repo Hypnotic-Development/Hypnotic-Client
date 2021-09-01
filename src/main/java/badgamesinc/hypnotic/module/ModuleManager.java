@@ -81,8 +81,6 @@ public class ModuleManager {
 					new Xray(),
 					new Surround(),
 					new FakePlayer(),
-					new AutoCrystal(),
-					new CrystalAura(),
 					new ElytraFly(),
 					new Tracers(),
 					new EntityDesync(),
@@ -97,7 +95,9 @@ public class ModuleManager {
 					new Nuker(),
 					new Phase(),
 					new TargetStrafe(),
-					new NewChunks()
+					new NewChunks(),
+					new ExpFast(),
+					new CrystalAura()
 				);
 	}
 	

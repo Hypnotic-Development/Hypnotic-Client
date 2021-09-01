@@ -19,16 +19,16 @@ public class Armor extends HudModule {
 	
 	@Override
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
-		for (int i = 3; i > 0; i--) {
-			
-			
-		}
-		RenderUtils.drawItem(armorPiece(3), this.getX() + (direction.is("Horizontal") ? (0 * 20) : 0), this.getY() + (direction.is("Vertical") ? (0 * 20) : 0));
-		RenderUtils.drawItem(armorPiece(2), this.getX() + (direction.is("Horizontal") ? (1 * 20) : 0), this.getY() + (direction.is("Vertical") ? (1 * 20) : 0));
-		RenderUtils.drawItem(armorPiece(1), this.getX() + (direction.is("Horizontal") ? (2 * 20) : 0), this.getY() + (direction.is("Vertical") ? (2 * 20) : 0));
-		RenderUtils.drawItem(armorPiece(0), this.getX() + (direction.is("Horizontal") ? (3 * 20) : 0), this.getY() + (direction.is("Vertical") ? (3 * 20) : 0));
-		this.setWidth((direction.is("Horizontal") ? (3 * 26) : 17));
-		this.setHeight( + (direction.is("Vertical") ? (3 * 25) : 16));
+		
+		
+		RenderUtils.drawItem(mc.currentScreen instanceof HudEditorScreen ? Items.GOLDEN_APPLE.getDefaultStack() : mc.player.getOffHandStack(), this.getX() + (direction.is("Horizontal") ? (0 * 20) : 0), this.getY() + (direction.is("Vertical") ? (5 * 20) : 0));
+		RenderUtils.drawItem(mc.currentScreen instanceof HudEditorScreen ? Items.DIAMOND_SWORD.getDefaultStack() : mc.player.getMainHandStack(), this.getX() + (direction.is("Horizontal") ? (5 * 20) : 0), this.getY() + (direction.is("Vertical") ? (0 * 20) : 0));
+		RenderUtils.drawItem(armorPiece(3), this.getX() + (direction.is("Horizontal") ? (1 * 20) : 0), this.getY() + (direction.is("Vertical") ? (1 * 20) : 0), 20);
+		RenderUtils.drawItem(armorPiece(2), this.getX() + (direction.is("Horizontal") ? (2 * 20) : 0), this.getY() + (direction.is("Vertical") ? (2 * 20) : 0));
+		RenderUtils.drawItem(armorPiece(1), this.getX() + (direction.is("Horizontal") ? (3 * 20) : 0), this.getY() + (direction.is("Vertical") ? (3 * 20) : 0));
+		RenderUtils.drawItem(armorPiece(0), this.getX() + (direction.is("Horizontal") ? (4 * 20) : 0), this.getY() + (direction.is("Vertical") ? (4 * 20) : 0));
+		this.setWidth((direction.is("Horizontal") ? (5 * 24) : 17));
+		this.setHeight( + (direction.is("Vertical") ? (5 * 24) : 16));
 		super.render(matrices, scaledWidth, scaledHeight, partialTicks);
 	}
 	

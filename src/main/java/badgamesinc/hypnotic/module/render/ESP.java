@@ -26,6 +26,7 @@ import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 
@@ -62,6 +63,7 @@ public class ESP extends Mod {
 		if (passives.isEnabled() && entity instanceof PassiveEntity && !(entity instanceof AnimalEntity)) return true;
 		if (invisibles.isEnabled() && entity.isInvisible()) return true;
 		if (items.isEnabled() && entity instanceof ItemEntity) return true;
+		if (entity instanceof ChestMinecartEntity) return true;
 		return false;
 	}
 	

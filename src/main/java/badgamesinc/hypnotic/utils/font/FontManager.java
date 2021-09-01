@@ -2,7 +2,7 @@ package badgamesinc.hypnotic.utils.font;
 
 public class FontManager {
 
-	private static String font = "RobotoRegular.ttf";
+	public static String font = "RobotoRegular.ttf";
 	public static int size = 20;
 	private static boolean mcFont = false;
 	public static NahrFont robotoSmall = new NahrFont(font, 16, 1, mcFont);

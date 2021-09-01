@@ -55,7 +55,7 @@ public class CrystalAura extends Mod {
 	
 	public CrystalAura() {
 		super("CrystalAura", "kill the people with funny crytsals", Category.COMBAT);
-		addSettings(mode, attackMode, attackDistance, placeDistance, delay, autoPlace, visualize, onlyShowPlacements);
+		addSettings(mode, attackMode, attackDistance, placeDistance, autoPlace, visualize, onlyShowPlacements);
 	}
 
 	@Override

@@ -1,22 +1,30 @@
 package badgamesinc.hypnotic.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.command.CommandManager;
 import badgamesinc.hypnotic.event.events.EventReceivePacket;
 import badgamesinc.hypnotic.event.events.EventSendPacket;
 import badgamesinc.hypnotic.utils.Wrapper;
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
+import java.io.IOException;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
 
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {
@@ -40,5 +48,20 @@ public class ClientConnectionMixin {
     	EventReceivePacket event = new EventReceivePacket(packet);
     	event.call();
         if(event.isCancelled()) ci.cancel();
+        /*if (packet instanceof GameJoinS2CPacket) {
+    		try {
+				Hypnotic.INSTANCE.api.setOnline(mc.getSession().getUuid());
+			} catch (IOException | InterruptedException e) {
+				System.out.println("ye");
+				e.printStackTrace();
+			}
+    	}
+    	if (packet instanceof DisconnectS2CPacket) {
+    		try {
+				Hypnotic.INSTANCE.api.remOnline(mc.getSession().getUuid());
+			} catch (IOException | InterruptedException e) {
+				e.printStackTrace();
+			}
+    	}*/
     }
 }

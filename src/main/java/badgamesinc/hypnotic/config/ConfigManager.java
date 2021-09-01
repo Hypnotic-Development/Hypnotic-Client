@@ -67,7 +67,8 @@ public class ConfigManager {
                                             ((NumberSetting) setting).setValue((double) cfgSetting.value);
                                         }
                                         if (setting instanceof ColorSetting) {
-//                                        	((ColorSetting) setting).set
+                                        	int[] color = ((ColorSetting)setting).hexToRgbInt((String)cfgSetting.value);
+                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2]);
                                         }
                                     }
                                 }
@@ -110,6 +111,10 @@ public class ConfigManager {
                                         }
                                         if (setting instanceof NumberSetting) {
                                             ((NumberSetting) setting).setValue((double) cfgSetting.value);
+                                        }
+                                        if (setting instanceof ColorSetting) {
+                                        	int[] color = ((ColorSetting)setting).hexToRgbInt((String)cfgSetting.value);
+                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2]);
                                         }
                                     }
                                 }
@@ -173,7 +178,10 @@ public class ConfigManager {
                 if (setting instanceof NumberSetting) {
                     cfgSetting.value = ((NumberSetting) setting).getValue();
                 }
-
+                if (setting instanceof ColorSetting) {
+                	ColorSetting colorSet = (ColorSetting)setting;
+                	cfgSetting.value = colorSet.getHex();
+                }
                 settings.add(cfgSetting);
             }
             module.cfgSettings = settings.toArray(new ConfigSetting[0]);

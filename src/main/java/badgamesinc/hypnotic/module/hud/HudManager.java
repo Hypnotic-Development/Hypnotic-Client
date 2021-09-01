@@ -19,7 +19,8 @@ public class HudManager {
 				new XYZ(),
 				new NetherXYZ(),
 				new Armor(),
-				new Logo()
+				new Logo(),
+				new ArrayListModule()
 			);
 	}
 	

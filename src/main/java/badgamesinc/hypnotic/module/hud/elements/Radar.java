@@ -51,12 +51,11 @@ public class Radar extends HudModule {
 		MatrixStack matrixStack = matrices;
         if (mc.player == null) return;
         DrawableHelper.fill(matrixStack, index, index, index, keyCode, index);
-//        RenderUtils.drawBorderRect(matrices, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), 1-, 2);
+        RenderUtils.drawBorderRect(matrices, this.getX() + 1, this.getY(), this.getX() + this.getWidth() - 1, this.getY() + this.getHeight(), color.getColor().getRGB(), 1);
         RenderUtils.fillAndBorder(matrixStack, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), color.getRGB(), 0x50000000, 1);
         float midPos = this.getWidth() / 2.0f - 1;
         RenderUtils.fill(matrixStack, this.getX() + midPos, this.getY() + 1, this.getX() + midPos + 1, this.getY() + this.getHeight() - 1, new Color(60, 60, 60, 250).getRGB());
         RenderUtils.fill(matrixStack, this.getX() + 1, this.getY() + midPos, this.getX() + this.getWidth() - 1, this.getY() + midPos + 1, new Color(60, 60, 60, 250).getRGB());
-
         if (mc.world != null)
             for (Entity entity : mc.world.getEntities()) {
                 if (!shouldRenderEntity(entity)) continue;

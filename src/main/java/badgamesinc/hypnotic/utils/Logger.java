@@ -2,11 +2,12 @@ package badgamesinc.hypnotic.utils;
 
 public class Logger {
 
-	private static String infoPrefix = "[Hypnotic ERROR] ";
+	private static String infoPrefix = "[Hypnotic INFO] ";
 	private static String errPrefix = "[Hypnotic ERROR] ";
 	
 	public static void logInfo(String message) {
-		System.err.println(infoPrefix + message);
+		infoPrefix = "[Hypnotic INFO] ";
+		System.out.println(infoPrefix + message);
 	}
 	
 	public static void logError(String message) {

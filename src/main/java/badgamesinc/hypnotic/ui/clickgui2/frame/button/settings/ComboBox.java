@@ -19,12 +19,14 @@ public class ComboBox extends Component {
 		this.setting = setting;
 		this.modeSet = (ModeSetting)setting;
 		this.parent = parent;
+		modeSet.displayName = modeSet.name + ": " + modeSet.getSelected();
 	}
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
+		modeSet.displayName = modeSet.name + ": " + modeSet.getSelected();
 		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, modeSet.name + ": " + modeSet.getSelected(), parent.getX() + 4, parent.getY() + 2 + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, modeSet.displayName, parent.getX() + 4, parent.getY() + 2 + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	

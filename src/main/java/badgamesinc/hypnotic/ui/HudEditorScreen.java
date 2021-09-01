@@ -29,6 +29,12 @@ public class HudEditorScreen extends Screen {
 		frame.updateButtons();
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			element.render(matrices, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), delta);
+			if (element.getX() > mc.getWindow().getScaledWidth() - 1 || element.getX() < 1) {
+				element.setX(100);
+			}
+			if (element.getY() > mc.getWindow().getScaledHeight() - 1 || element.getY() < 1) {
+				element.setY(100);
+			}
 			element.updatePosition(mouseX, mouseY);
 		}
 		menuBar.renderMenuBar(matrices, mouseX, mouseY, this.width, this.height);

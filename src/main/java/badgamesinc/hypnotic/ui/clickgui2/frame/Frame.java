@@ -11,7 +11,6 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
-import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
@@ -85,6 +84,7 @@ public class Frame {
 				button.render(matrices, mouseX, mouseY);
 				int count2 = 0;
 				if (button.isExtended()) {
+//					button.components.sort(Comparator.comparingInt(c -> (int)FontManager.robotoSmall.getStringWidth(((Component)c).setting.displayName)).reversed());
 					for (Component component : button.components) {
 						if (button.isExtended()) {
 							if (component.setting.isVisible())

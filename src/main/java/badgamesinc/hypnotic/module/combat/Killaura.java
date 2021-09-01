@@ -19,7 +19,7 @@ import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.RotationUtils;
-import badgamesinc.hypnotic.utils.TimeHelper;
+import badgamesinc.hypnotic.utils.Timer;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +40,6 @@ public class Killaura extends Mod {
 	public BooleanSetting delay = new BooleanSetting("1.9 Delay", true);
 	public BooleanSetting swing = new BooleanSetting("Swing", true);
 	public BooleanSetting autoBlock = new BooleanSetting("AutoBlock", true);
-	private TimeHelper apsTimer = new TimeHelper();
 	int passedTicks;
 	
 	public Killaura() {
@@ -54,23 +53,22 @@ public class Killaura extends Mod {
 			if(mc.world != null){
 				List<LivingEntity> targets = Lists.<LivingEntity>newArrayList();
 				for(Entity e : mc.world.getEntities()){
-					if (e instanceof LivingEntity && e != mc.player) targets.add((LivingEntity)e);
+					if (e instanceof LivingEntity && e != mc.player && !FriendManager.INSTANCE.isFriend((LivingEntity)e)) targets.add((LivingEntity)e);
 				}
 				targets.sort(Comparator.comparingDouble(entity -> mc.player.distanceTo(entity)));
 				if(!targets.isEmpty()){
-					target = (LivingEntity)targets.get(0);
+					if (!FriendManager.INSTANCE.isFriend((LivingEntity)targets.get(0))) target = (LivingEntity)targets.get(0);
 					if (mc.player.distanceTo(target) > range.getValue()) target = null;
 					if(target != null){
 						this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().asString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().asString()));
-						if(target instanceof LivingEntity && target != mc.player && mc.player.distanceTo(target) <= range.getValue() && target.isAlive() && mc.player.isAlive() && !FriendManager.INSTANCE.isFriend(target)){
+						if(target instanceof LivingEntity && target != mc.player && mc.player.distanceTo(target) <= range.getValue() && target.isAlive() && mc.player.isAlive()){
 							RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
 							RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
 							if (passedTicks > aps.getValue()) passedTicks--;
 							else if (passedTicks <= aps.getValue()) passedTicks=(int) (aps.getValue() * 100);
-							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : apsTimer.passedSec((long) (aps.getValue() * 0.1))){
+							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : new Timer().hasTimeElapsed((long) (aps.getValue() / 1000), true)){
 								mc.interactionManager.attackEntity(mc.player, target);
 //								mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround((float) RotationUtils.getRotations(target)[0], (float) RotationUtils.getRotations(target)[1], mc.player.isOnGround()));
-								apsTimer.reset();
 								if (swing.isEnabled() && (autoBlock.isEnabled() ? !ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() : true) || (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() ? mc.options.getPerspective() != Perspective.FIRST_PERSON : false) && !(mc.player.getMainHandStack().getItem() instanceof SwordItem)) mc.player.swingHand(Hand.MAIN_HAND);
 								else mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
 								if (swing.isEnabled() && !(mc.player.getMainHandStack().getItem() instanceof SwordItem) || ModuleManager.INSTANCE.getModule(OldBlock.class).animation.is("Swing")) mc.player.swingHand(Hand.MAIN_HAND); 

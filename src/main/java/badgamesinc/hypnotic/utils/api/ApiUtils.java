@@ -29,6 +29,16 @@ public class ApiUtils
 	
 	public boolean setOnline(String uuid) throws IOException, InterruptedException
 	{
+		System.out.println("okeay");
+		System.out.println("okeay");
+		
+		System.out.println("okeay");System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("http://kzkawaiizenbo.ml:8080/hypnotic/api/setonline.php?uuid=" + uuid))
@@ -40,6 +50,17 @@ public class ApiUtils
 	
 	public boolean remOnline(String uuid) throws IOException, InterruptedException
 	{
+		System.out.println("okey");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		
+		System.out.println("okeay");System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
+		System.out.println("okeay");
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("http://kzkawaiizenbo.ml:8080/hypnotic/api/remonline.php?uuid=" + uuid))
