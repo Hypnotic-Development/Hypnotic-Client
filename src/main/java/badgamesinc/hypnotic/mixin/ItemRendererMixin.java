@@ -62,11 +62,11 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 	}
 
 	@Override
-	public void renderItemIntoGUI(ItemStack itemStack, float x, float y) {
-		renderGuiItemModel(itemStack, x, y, this.getHeldItemModel(itemStack, (World) null, null, 0));
+	public void renderItemIntoGUI(ItemStack itemStack, float x, float y, float scale) {
+		renderGuiItemModel(itemStack, x, y, this.getHeldItemModel(itemStack, (World) null, null, 0), scale);
 	}
 
-	protected void renderGuiItemModel(ItemStack stack, float x, float y, BakedModel model) {
+	protected void renderGuiItemModel(ItemStack stack, float x, float y, BakedModel model, float scale) {
 		this.textureManager.getTexture(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE).setFilter(false, false);
 		RenderSystem.setShaderTexture(0, SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
 		RenderSystem.enableBlend();
@@ -76,7 +76,7 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 		matrixStack.push();
 		matrixStack.translate((double) x, (double) y, (double) (100.0F + this.zOffset));
 		matrixStack.translate(8.0D, 8.0D, 0.0D);
-		matrixStack.scale(1.0F, -1.0F, 1.0F);
+		matrixStack.scale(scale, -scale, 1.0F);
 		matrixStack.scale(16.0F, 16.0F, 16.0F);
 		RenderSystem.applyModelViewMatrix();
 		MatrixStack matrixStack2 = new MatrixStack();

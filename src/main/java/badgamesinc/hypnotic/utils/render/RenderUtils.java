@@ -571,7 +571,7 @@ public class RenderUtils {
 	    public static void drawItem(ItemStack stack, float xPosition, float yPosition, float scale) {
 	        String amountText = stack.getCount() != 1 ? stack.getCount() + "" : "";
 	        IItemRenderer iItemRenderer = (IItemRenderer) mc.getItemRenderer();
-	        iItemRenderer.renderItemIntoGUI(stack, xPosition, yPosition);
+	        iItemRenderer.renderItemIntoGUI(stack, xPosition, yPosition, scale);
 	        renderGuiItemOverlay(mc.textRenderer, stack, xPosition - 0.5f, yPosition + 1, scale, amountText);
 	    }
 	    public static void renderGuiItemOverlay(TextRenderer renderer, ItemStack stack, float x, float y, float scale, @Nullable String countLabel) {

@@ -15,8 +15,6 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
-import badgamesinc.hypnotic.settings.Setting;
-import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
@@ -28,7 +26,7 @@ public class SaveLoad {
     public File dataFile;
 
     public static SaveLoad INSTANCE = new SaveLoad();
-    //Saves various aspects of the client
+    //Currently saves keybinds, hud positions, friends, and frame positions
     
     public SaveLoad() {
         dir = new File(Hypnotic.hypnoticDir);
@@ -55,12 +53,6 @@ public class SaveLoad {
 
         for (Mod mod : ModuleManager.INSTANCE.modules) {
             toSave.add("MOD:" + mod.getName() + ":" + mod.isEnabled() + ":" + mod.getKey());
-            for (Setting set : mod.settings) {
-            	if (set instanceof ColorSetting) {
-            		ColorSetting color = (ColorSetting)set;
-            		toSave.add("COLOR:" + mod.getName() + ":" + color.name + ":" + color.hue + ":" + color.sat + ":" + color.bri);
-            	}
-            }
         }
         
         //Will port later

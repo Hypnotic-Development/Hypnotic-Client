@@ -47,6 +47,7 @@ public class ColorBox extends Component {
 		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, ColorUtils.getClientColorInt());
 		DrawableHelper.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 7, new Color(40, 40, 40, 255).getRGB());
 		
+		//Render name
 		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 2, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 9, new Color(0, 0, 0, 200).getRGB());
 		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
@@ -63,6 +64,7 @@ public class ColorBox extends Component {
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+		//Draw the color
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 		bufferBuilder.vertex(ex, sy, 0).color(red, green, blue, 255).next();
 		bufferBuilder.vertex(sx, sy, 0).color(red, green, blue, 0).next();
@@ -70,6 +72,7 @@ public class ColorBox extends Component {
 		bufferBuilder.vertex(ex, ey, 0).color(red, green, blue, 255).next();
 		tessellator.draw();
 
+		//Draw the black stuff
 		bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 		bufferBuilder.vertex(ex, sy, 0).color(0, 0, 0, 0).next();
 		bufferBuilder.vertex(sx, sy, 0).color(0, 0, 0, 0).next();
@@ -80,6 +83,7 @@ public class ColorBox extends Component {
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 		
+		//Set the color
 		if (hovered(mouseX, mouseY, sx, sy, ex, ey) && lmDown) {
 			colorSet.bri = 1f - 1f / ((float) (ey - sy) / (mouseY - sy));
 			colorSet.sat = 1f / ((float) (ex - sx) / (mouseX - sx));
@@ -89,17 +93,12 @@ public class ColorBox extends Component {
 		int satX = (int) (sx + (ex - sx) * colorSet.sat);
 
 		RenderUtils.fill(matrices, satX - 2, briY - 2, satX + 2, briY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
-//		RenderUtils.fill(matrices, satX - 1.5, briY - 1.5, satX + 1.5, briY + 1.5, -1);
-//		DrawableHelper.fill(matrices, satX + 1, briY, satX + 3, briY + 1, 0xffd0d0d0);
-//		DrawableHelper.fill(matrices, satX, briY - 2, satX + 1, briY, 0xffd0d0d0);
-//		DrawableHelper.fill(matrices, satX, briY + 1, satX + 1, briY + 3, 0xffd0d0d0);
-
 		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 9, -1);
 		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 9, colorSet.getRGB());
 		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 2, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 9, colorSet.getColor().getRGB());
 
 
-		
+		//Set hex codes
 		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 7, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 2)) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.depthFunc(GL11.GL_ALWAYS);
@@ -108,7 +107,6 @@ public class ColorBox extends Component {
 			RenderSystem.depthFunc(GL11.GL_LEQUAL);
 			RenderSystem.enableDepthTest();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
-//				System.out.println("e");
 				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
 				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue());
 				colorSet.setHSV(vals[0], vals[1], vals[2]);
@@ -117,7 +115,6 @@ public class ColorBox extends Component {
 		
 		sx = ex + 5;
 		ex = ex + 12;
-//		RenderUtils.fill(matrices, sx - 1, sy - 1, ex + 1, ey + 1, ColorUtils.getClientColor().getRGB(), ColorUtils.getClientColor().darker().getRGB(), 0x00000000);
 
 		for (int i = sy; i < ey; i++) {
 			float curHue = 1f / ((float) (ey - sy) / (i - sy));
@@ -137,7 +134,7 @@ public class ColorBox extends Component {
 	public int getHeight(int len) {
 		return len - len / 4 - 1;
 	}
-	
+
 	public boolean hovered(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
 		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
 	}

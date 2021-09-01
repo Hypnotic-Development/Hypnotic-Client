@@ -7,6 +7,7 @@ import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
+import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.font.NahrFont;
@@ -36,13 +37,14 @@ public class Radar extends HudModule {
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
+	public NumberSetting size = new NumberSetting("Size", 100, 0, 1000, 10);
 	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
 	NahrFont font = FontManager.robotoMed;
 	
 	
 	public Radar() {
 		super("Radar", "render the mans", 4, 20, 100, 100);
-		addSettings(players, monsters, animals, passives, invisibles, items, color);
+		addSettings(size, players, monsters, animals, passives, invisibles, items, color);
 		this.setEnabled(true);
 	}
 

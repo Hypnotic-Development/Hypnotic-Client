@@ -59,6 +59,7 @@ public class BindingScreen extends Screen {
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (mod.isBinding()) {
+			//Set bind to key pressed or unbind if the key is escape
 			SaveLoad.INSTANCE.save();
 			if (keyCode != GLFW.GLFW_KEY_ESCAPE && keyCode != GLFW.GLFW_KEY_UNKNOWN) {
 				mod.setKey(keyCode);

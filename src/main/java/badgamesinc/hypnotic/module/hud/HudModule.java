@@ -13,7 +13,8 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class HudModule extends Mod {
 
-	private int defaultX, defaultY, x, y, width, height, dragX, dragY;
+	private int defaultX, defaultY, x, y, dragX, dragY;
+	private float width, height;
 	private double scaleX, scaleY, scaleStartX, scaleStartY, startWidth, startHeight, prevScaleX, prevScaleY;
 	private boolean dragging, scaling;
 	public NumberSetting xSet;
@@ -68,19 +69,19 @@ public class HudModule extends Mod {
 		this.ySet.setValue(y);
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public void setWidth(float width) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(float height) {
 		this.height = height;
 	}
 	
@@ -104,8 +105,8 @@ public class HudModule extends Mod {
 		return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
 	}
 	
-	public boolean hovered(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
-		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
+	public boolean hovered(int mouseX, int mouseY, float f, float g, float h, float i) {
+		return mouseX >= f && mouseX <= h && mouseY >= g && mouseY <= i;
 	}
 	
 	public boolean isDragging() {
@@ -173,11 +174,11 @@ public class HudModule extends Mod {
 		return startHeight;
 	}
 	
-	public void setStartWidth(int startWidth) {
+	public void setStartWidth(float startWidth) {
 		this.startWidth = startWidth;
 	}
 	
-	public void setStartHeight(int startHeight) {
+	public void setStartHeight(float startHeight) {
 		this.startHeight = startHeight;
 	}
 	

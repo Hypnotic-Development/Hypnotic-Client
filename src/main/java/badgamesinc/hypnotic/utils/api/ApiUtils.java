@@ -16,57 +16,46 @@ public class ApiUtils
 		client = HttpClient.newHttpClient();
 	}
 	
-	public boolean checkOnline(String uuid) throws IOException, InterruptedException
+	public boolean checkOnline(String username) throws IOException, InterruptedException
 	{
+		System.out.println(username);
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://kzkawaiizenbo.ml:8080/hypnotic/api/chkonline.php?uuid=" + uuid))
+                .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/chkonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body() != "-1";
+		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1";
+		System.out.println(response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1");
 		return didDie;
 	}
 	
-	public boolean setOnline(String uuid) throws IOException, InterruptedException
+	public boolean setOnline(String username) throws IOException, InterruptedException
 	{
-		System.out.println("okeay");
-		System.out.println("okeay");
-		
-		System.out.println("okeay");System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
+		System.out.println(username);
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://kzkawaiizenbo.ml:8080/hypnotic/api/setonline.php?uuid=" + uuid))
+                .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/setonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body() != "-1";
+		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1";
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println(response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", ""));
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		return didDie;
 	}
 	
-	public boolean remOnline(String uuid) throws IOException, InterruptedException
+	public boolean remOnline(String username) throws IOException, InterruptedException
 	{
-		System.out.println("okey");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		
-		System.out.println("okeay");System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
-		System.out.println("okeay");
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://kzkawaiizenbo.ml:8080/hypnotic/api/remonline.php?uuid=" + uuid))
+                .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/remonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body() != "-1";
+		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body>", "</html>") != "-1";
 		return didDie;
 	}
 }

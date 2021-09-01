@@ -33,7 +33,6 @@ public class Mod {
 	@Expose
     @SerializedName("settings")
     public ConfigSetting[] cfgSettings;
-//	private KeybindSetting keyBind = new KeybindSetting("Keybind: ", 0);
 	public boolean wasFlag = false;
 	public BooleanSetting visible = new BooleanSetting("Visible", true);
 	public transient int index;
@@ -56,7 +55,6 @@ public class Mod {
 		displayName = name;
 		this.keyCode = 0;
 		this.binding = false;
-//		addSettings(visible);
 	}
 	
 	public void addSetting(Setting setting) {
@@ -218,5 +216,4 @@ public class Mod {
 	{
 		return currentMS >= lastMS + (long)(1000 / speed);
 	}
-
 }

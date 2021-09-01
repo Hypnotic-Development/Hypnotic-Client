@@ -29,6 +29,7 @@ public class HudEditorScreen extends Screen {
 		frame.updateButtons();
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			element.render(matrices, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), delta);
+			//If its off the screen put it back on the screen
 			if (element.getX() > mc.getWindow().getScaledWidth() - 1 || element.getX() < 1) {
 				element.setX(100);
 			}
@@ -55,7 +56,8 @@ public class HudEditorScreen extends Screen {
 				}
 			}
 			if (element.hovered((int)mouseX, (int)mouseY, element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.getX() + element.getWidth() + 20, element.getY() +  element.getHeight() + 20) && button == 0) {
-//				element.setScaling(true, (int)mouseX, (int)mouseY);
+				// broken
+				//				element.setScaling(true, (int)mouseX, (int)mouseY);
 			}
 		}
 		menuBar.mouseClicked((int)mouseX, (int)mouseY, button);

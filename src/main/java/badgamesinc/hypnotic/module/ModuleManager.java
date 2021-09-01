@@ -12,9 +12,8 @@ import badgamesinc.hypnotic.module.world.*;
 public class ModuleManager {
 
 	public ArrayList<Mod> modules = new ArrayList<>();
-	/*
-	 * Here to prevent a NullPointerException in various mixins
-	 */
+	
+	//Here to prevent a NullPointerException in various mixins
 	public static ModuleManager INSTANCE = new ModuleManager();
 	
 	public ArrayList<Mod> getEnabledModules() {
@@ -115,6 +114,7 @@ public class ModuleManager {
     	return (T) modules.stream().filter(mod -> mod.getClass() == clazz).findFirst().orElse(null);
 	}
 	
+	//All modules including hud modules
 	public ArrayList<Mod> getAllModules() {
 		ArrayList<Mod> mods = new ArrayList<>();
 		for (Mod mod : modules) {
