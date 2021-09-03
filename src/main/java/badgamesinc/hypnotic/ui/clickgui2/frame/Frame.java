@@ -26,6 +26,7 @@ public class Frame {
 	private int x, y, width, height, dragX, dragY;
 	private boolean extended, dragging;
 	public ArrayList<Button> buttons;
+	public Color color = Color.decode(ColorUtils.pingle);
 	
 	public Frame(int x, int y, int width, int height, Category category) {
 		this.category = category;
@@ -62,8 +63,9 @@ public class Frame {
 	int animTicks = 0;
 	int length = 0;
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		int color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? category.color.getRGB() : ColorUtils.getClientColorInt();
-		Screen.fill(matrices, x, y, x + width, y + height, color);
+		this.color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.is("Custom") ? category.color : ModuleManager.INSTANCE.getModule(ClickGUIModule.class).color.getColor();
+//		int color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? category.color.getRGB() : ColorUtils.getClientColorInt();
+		Screen.fill(matrices, x, y, x + width, y + height, color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
 		FontManager.roboto.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
 		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
@@ -89,8 +91,8 @@ public class Frame {
 						if (button.isExtended()) {
 							if (component.setting.isVisible())
 							component.render(matrices, mouseX, mouseY, count2);
-							Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color);
-							Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color);
+							Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color.getRGB());
+							Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color.getRGB());
 							count2+=(component instanceof ColorBox ? height * 10 : height);;
 						}
 					}
@@ -106,11 +108,11 @@ public class Frame {
 						length = button.components.size() * height;
 	//					Screen.fill(matrices, button.getX(), button.getY() + this.height + button.components.size() * height, button.getX() + button.getWidth(), button.getY() + this.height + button.components.size() * height + 1, color);
 					}
-					Screen.fill(matrices, button.getX(), button.getY() + this.height + length, button.getX() + button.getWidth(), button.getY() + this.height + length + 1, color);
+					Screen.fill(matrices, button.getX(), button.getY() + this.height + length, button.getX() + button.getWidth(), button.getY() + this.height + length + 1, color.getRGB());
 				}
 			}
 		} else {
-			Screen.fill(matrices, this.x, this.y + this.height, this.x + this.width, this.y + this.height + 1, color);
+			Screen.fill(matrices, this.x, this.y + this.height, this.x + this.width, this.y + this.height + 1, color.getRGB());
 		}
 	}
 	

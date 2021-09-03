@@ -6,11 +6,9 @@ import org.lwjgl.opengl.GL11;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
-import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
-import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.DrawableHelper;
@@ -44,7 +42,7 @@ public class ColorBox extends Component {
 				ex = parent.getX() + parent.getWidth() - 17,
 				ey = parent.getY() + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
 
-		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, ColorUtils.getClientColorInt());
+		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, parent.parent.color.getRGB());
 		DrawableHelper.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 7, new Color(40, 40, 40, 255).getRGB());
 		
 		//Render name

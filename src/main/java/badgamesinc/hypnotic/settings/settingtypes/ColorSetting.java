@@ -34,6 +34,19 @@ public class ColorSetting extends Setting {
 		this.defaultBri = bri;
 	}
 	
+	public ColorSetting(String name, String hex) {
+		this.name = name;
+
+		int[] vals = hexToRgbInt(hex);
+		this.hue = vals[0];
+		this.sat = vals[1];
+		this.bri = vals[2];
+		
+		this.defaultHue = hue;
+		this.defaultSat = sat;
+		this.defaultBri = bri;
+	}
+	
 	public int getRGB() {
 		return MathHelper.hsvToRgb(hue, sat, bri);
 	}

@@ -2,12 +2,9 @@ package badgamesinc.hypnotic.ui.clickgui2.frame.button.settings;
 
 import java.awt.Color;
 
-import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
-import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,7 +26,7 @@ public class CheckBox extends Component {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		boolSet.displayName = boolSet.name;
 		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		if (boolSet.isEnabled()) Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? parent.parent.category.color.getRGB() : ColorUtils.getClientColor().getRGB());
+		if (boolSet.isEnabled()) Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight() * 2, parent.parent.color.getRGB());
 		FontManager.robotoSmall.drawWithShadow(matrices, boolSet.displayName, parent.getX() + 4, parent.getY() + 2 + parent.mod.settings.indexOf(boolSet) * parent.getHeight() + parent.getHeight(), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}

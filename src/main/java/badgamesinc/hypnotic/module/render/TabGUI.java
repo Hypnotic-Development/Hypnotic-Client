@@ -75,11 +75,11 @@ public class TabGUI extends Mod {
 			animTicks2 = 0;
 		}
 		DrawableHelper.fill(matrices, x, y, x + width, y + Category.values().length * 15, new Color(0, 0, 0, 100).getRGB());
-		DrawableHelper.fill(matrices, x, y + animTicks, x + width, y + height + animTicks, ColorUtils.getClientColorInt());
-		DrawableHelper.fill(matrices, x, y, x + width, y - 1, ColorUtils.getClientColorInt());
-		DrawableHelper.fill(matrices, x, y, x + 1, y + Category.values().length * 15, ColorUtils.getClientColorInt());
-		DrawableHelper.fill(matrices, x, y + Category.values().length * 15, x + width, y - 1 + Category.values().length * 15, ColorUtils.getClientColorInt());
-		DrawableHelper.fill(matrices, x + width, y - 1, x + width + 1, y + Category.values().length * 15, ColorUtils.getClientColorInt());
+		DrawableHelper.fill(matrices, x, y + animTicks, x + width, y + height + animTicks, ColorUtils.defaultClientColor);
+		DrawableHelper.fill(matrices, x, y, x + width, y - 1, ColorUtils.defaultClientColor);
+		DrawableHelper.fill(matrices, x, y, x + 1, y + Category.values().length * 15, ColorUtils.defaultClientColor);
+		DrawableHelper.fill(matrices, x, y + Category.values().length * 15, x + width, y - 1 + Category.values().length * 15, ColorUtils.defaultClientColor);
+		DrawableHelper.fill(matrices, x + width, y - 1, x + width + 1, y + Category.values().length * 15, ColorUtils.defaultClientColor);
 		int offset = 0;
 		for (Category category : Category.values()) {
 			FontManager.robotoMed.drawWithShadow(matrices, category.name, x + 4, y + offset + 2, -1);
@@ -101,15 +101,15 @@ public class TabGUI extends Mod {
 			RenderSystem.enableScissor(x, y, x + width * 100, mc.getWindow().getScaledHeight());
 			GlStateManager._scissorBox(168, 100, expandTicks, 10000);
 			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15), x2 + width * 2, y + (currentTab * 15) + ((ModuleManager.INSTANCE.getModulesInCategory(Category.values()[currentTab]).size() - 1) * 15) + height, new Color(0, 0, 0, 100).getRGB());
-			DrawableHelper.fill(matrices, x + width + 3, y + currentTab * 15, x2 + width, y + modules.size() * 15 + currentTab * 15, ColorUtils.getClientColorInt());
-			DrawableHelper.fill(matrices, x2 + 1 + width * 2, y - 1 + currentTab * 15, x2 - 1 + width, y + currentTab * 15, ColorUtils.getClientColorInt());
-			DrawableHelper.fill(matrices, x + 3 + width, y + (currentTab * 15) + 1 + modules.size() * 15, x2 + width * 2, y + (currentTab * 15) + modules.size() * 15, ColorUtils.getClientColorInt());
-			DrawableHelper.fill(matrices, x2 + width * 2, y + (currentTab * 15), x2 + width * 2 + 1, y + (currentTab * 15) + 1 + modules.size() * 15, ColorUtils.getClientColorInt());
+			DrawableHelper.fill(matrices, x + width + 3, y + currentTab * 15, x2 + width, y + modules.size() * 15 + currentTab * 15, ColorUtils.defaultClientColor);
+			DrawableHelper.fill(matrices, x2 + 1 + width * 2, y - 1 + currentTab * 15, x2 - 1 + width, y + currentTab * 15, ColorUtils.defaultClientColor);
+			DrawableHelper.fill(matrices, x + 3 + width, y + (currentTab * 15) + 1 + modules.size() * 15, x2 + width * 2, y + (currentTab * 15) + modules.size() * 15, ColorUtils.defaultClientColor);
+			DrawableHelper.fill(matrices, x2 + width * 2, y + (currentTab * 15), x2 + width * 2 + 1, y + (currentTab * 15) + 1 + modules.size() * 15, ColorUtils.defaultClientColor);
 			
-			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15) + animTicks2, x2 + width * 2, y + (currentTab * 15) + animTicks2 + height, ColorUtils.getClientColor().getRGB());
+			DrawableHelper.fill(matrices, x2 + width, y + (currentTab * 15) + animTicks2, x2 + width * 2, y + (currentTab * 15) + animTicks2 + height, ColorUtils.defaultClientColor);
 			int modCount2 = 0;
 			for (Mod mod : modules) {
-				FontManager.robotoMed.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + 2 + (currentTab * 15) + modCount2, mod.isEnabled() ? ColorUtils.getClientColorInt() : -1);
+				FontManager.robotoMed.drawWithShadow(matrices, mod.getName(), x2 + width + 4, y + 2 + (currentTab * 15) + modCount2, mod.isEnabled() ? ColorUtils.defaultClientColor : -1);
 				modCount2+=15;
 			}
 			RenderSystem.disableScissor();

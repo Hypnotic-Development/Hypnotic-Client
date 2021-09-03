@@ -1,7 +1,5 @@
 package badgamesinc.hypnotic.module.render;
 
-import java.io.IOException;
-
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
@@ -19,11 +17,7 @@ public class CustomFont extends Mod {
 	public void onEnable() {
 		FontManager.setMcFont(false);
 		for (PlayerEntity e : mc.world.getPlayers()) {
-			try {
-				System.out.println(Hypnotic.INSTANCE.api.checkOnline(e.getName().asString().replace(ColorUtils.colorChar, "").replace(" ", "")));
-			} catch (IOException | InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			System.out.println(Hypnotic.INSTANCE.api.checkOnline(e.getName().asString().replace(ColorUtils.colorChar, "").replace(" ", "")));
 		}
 		super.onEnable();
 	}

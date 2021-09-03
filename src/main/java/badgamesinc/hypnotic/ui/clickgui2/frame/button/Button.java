@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.module.Mod;
-import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
@@ -19,7 +17,6 @@ import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ComboBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Slider;
-import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -60,7 +57,7 @@ public class Button {
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		int color = parent.category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? parent.category.color.getRGB() : ColorUtils.getClientColorInt();
+		int color = parent.color.getRGB();
 		Screen.fill(matrices, x, y, x + width, y + height, new Color(40, 40, 40, 255).getRGB());
 		if (mod.isEnabled()) Screen.fill(matrices, x, y, x + width, y + height, color);
 			

@@ -11,7 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class NetherXYZ extends HudModule {
 
-	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	
 	public NetherXYZ() {
 		super("Nehter Coordinates", "Renders your nether coordinates", (int) FontManager.roboto.getStringWidth("Ping 80") + 5, 1050 - 20, (int)FontManager.roboto.getStringWidth("Ping 80"), (int)FontManager.roboto.getStringHeight("Ping 80"));

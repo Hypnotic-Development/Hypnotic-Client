@@ -38,7 +38,7 @@ public class Radar extends HudModule {
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
 	public NumberSetting size = new NumberSetting("Size", 100, 0, 1000, 10);
-	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	NahrFont font = FontManager.robotoMed;
 	
 	
@@ -83,7 +83,7 @@ public class Radar extends HudModule {
         }*/
         matrixStack.push();
         matrixStack.translate(this.getX() + midPos + 0.5, this.getY() + midPos + 0.5, 0);
-        RenderUtils.fill(matrixStack, -0.5f, -0.5f, 0.5f, 0.5f, ColorUtils.getClientColorInt());
+        RenderUtils.fill(matrixStack, -0.5f, -0.5f, 0.5f, 0.5f, color.getRGB());
         matrixStack.multiply(new Quaternion(new Vec3f(0.0F, 0.0F, 1.0F), mc.player.getYaw() + 180, true));
         drawPointer(matrixStack);
         matrixStack.pop();

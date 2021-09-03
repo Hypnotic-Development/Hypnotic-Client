@@ -1,7 +1,5 @@
 package badgamesinc.hypnotic.mixin;
 
-import java.io.IOException;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,12 +30,8 @@ public class TickMixin {
 		} else {
 			System.out.println("e");
 			for (PlayerListEntry player : MinecraftClient.getInstance().getNetworkHandler().getPlayerList()) {
-				try {
-					System.out.println(player.getProfile().getName());
-					Hypnotic.setHypnoticUser(player.getProfile().getName(), Hypnotic.INSTANCE.api.checkOnline(player.getProfile().getName()));
-				} catch (IOException | InterruptedException e) {
-					e.printStackTrace();
-				}
+				System.out.println(player.getProfile().getName());
+				Hypnotic.setHypnoticUser(player.getProfile().getName(), Hypnotic.INSTANCE.api.checkOnline(player.getProfile().getName()));
 			}
 			checkTicks=0;
 		}

@@ -8,7 +8,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class FPS extends HudModule {
 
-	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	public FPS() {
 		super("Fps Display", "Renders your fps", (int) FontManager.roboto.getStringWidth("TPS 20"), 1050, (int)FontManager.roboto.getStringWidth("FPS 100"), (int)FontManager.roboto.getStringHeight("FPS 100"));
 		addSetting(color);

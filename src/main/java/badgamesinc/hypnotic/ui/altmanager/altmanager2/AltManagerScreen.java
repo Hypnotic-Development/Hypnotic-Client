@@ -29,7 +29,6 @@ public class AltManagerScreen extends Screen {
 	
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
 		super.tick();
 	}
 	
@@ -131,5 +130,9 @@ public class AltManagerScreen extends Screen {
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		scrollY+=amount;
 		return super.mouseScrolled(mouseX, mouseY, amount);
+	}
+	
+	public boolean hovered(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
+		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
 	}
 }

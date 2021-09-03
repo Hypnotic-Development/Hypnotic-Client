@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class TPS extends HudModule {
 
-	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	
 	public TPS() {
 		super("Tps Display", "Renders the servers esimated tps", 5, 1050, (int)FontManager.robotoMed.getStringWidth("TPS 20"), (int)FontManager.robotoMed.getStringHeight("TPS 20"));

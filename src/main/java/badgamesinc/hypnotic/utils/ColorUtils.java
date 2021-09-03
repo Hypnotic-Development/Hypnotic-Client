@@ -26,15 +26,16 @@ public class ColorUtils {
 	public static String gray = "\2477";
 	public static String darkGray = "\2478";
 	public static String reset = "\247r";
+	public static String pingle = "#FF1464";
 	public static int defaultClientColor = new Color(255, 20, 100).getRGB();
 	
-	public static int getClientColorInt() {
-		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()).getRGB();
-	}
-	
-	public static Color getClientColor() {
-		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue());
-	}
+//	public static int getClientColorInt() {
+//		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue()).getRGB();
+//	}
+//	
+//	public static Color getClientColor() {
+//		return new Color((int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).red.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).green.getValue(), (int) ModuleManager.INSTANCE.getModule(ClickGUIModule.class).blue.getValue());
+//	}
 	
 	public static Color getCategoryColor(Category category) {
 		return category.color;

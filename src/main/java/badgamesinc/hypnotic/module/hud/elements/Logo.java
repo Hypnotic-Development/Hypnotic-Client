@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class Logo extends HudModule {
 
-	public ColorSetting color = new ColorSetting("Color", ColorUtils.getClientColor().getRed(), ColorUtils.getClientColor().getGreen(), ColorUtils.getClientColor().getBlue(), false);
+	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	
 	public Logo() {
 		super("Logo", "Renders the Hypnotic logo", 4, 4, (int) FontManager.robotoMed.getStringWidth(Hypnotic.name + ColorUtils.gray + " " + Hypnotic.version), 4);

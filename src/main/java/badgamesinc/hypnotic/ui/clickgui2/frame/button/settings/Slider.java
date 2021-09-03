@@ -4,12 +4,9 @@ import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
-import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -32,7 +29,7 @@ public class Slider extends Component {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		numSet.displayName = numSet.name + ": " + numSet.getValue();
-		Color color = parent.parent.category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? parent.parent.category.color : ColorUtils.getClientColor();
+		Color color = parent.parent.color;
 		double diff = Math.min(parent.getWidth(), Math.max(0, mouseX - parent.getX()));
 
 		double min = numSet.getMin();
