@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import com.google.common.collect.Maps;
 
+import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventRender3D;
 import badgamesinc.hypnotic.event.events.EventRenderGUI;
@@ -194,7 +195,7 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + " " + name + " " + getHealthString((LivingEntity) entity);
+        	displayName = gameModeText + " " + name + " " + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
         return displayName;
     }
 

@@ -169,6 +169,7 @@ public class Frame {
 	}
 	
 	public void setDragging(boolean dragging) {
+		if (dragging)
 		SaveLoad.INSTANCE.save();
 		this.dragging = dragging;
 	}

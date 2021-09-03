@@ -1,5 +1,7 @@
 package badgamesinc.hypnotic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -39,6 +41,7 @@ public class Hypnotic implements ModInitializer {
 	
 	public static final Identifier BOOM_SOUND = new Identifier("tutorial:boom");
     public static SoundEvent BOOM_SOUND_EVENT = new SoundEvent(BOOM_SOUND);
+    public List<String> users = new ArrayList<>();
 
 	/*
 	 * Called when Minecraft initializes.
@@ -101,5 +104,14 @@ public class Hypnotic implements ModInitializer {
 		cfgManager.saveConfig();
         saveload.save();
 		AltsFile.INSTANCE.saveAlts();
+	}
+	
+	public static boolean isHypnoticUser(String name) {
+		return Hypnotic.INSTANCE.users.contains(name);
+	}
+	
+	public static void setHypnoticUser(String name, boolean using) {
+		if (using) Hypnotic.INSTANCE.users.add(name);
+		else if (!using && Hypnotic.INSTANCE.users.contains(name)) Hypnotic.INSTANCE.users.remove(name);
 	}
 }

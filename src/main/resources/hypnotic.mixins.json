@@ -54,7 +54,8 @@
     "HorseBaseEntityMixin",
     "EntityMixin",
     "FrustramAccessor",
-    "WorldRendererAccessor"
+    "WorldRendererAccessor",
+    "ServerWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -24,24 +24,22 @@ public class ApiUtils
                 .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/chkonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1";
-		System.out.println(response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1");
-		return didDie;
+		System.out.println(removeHtmlTags(response.body()) + " sdlkfsjdlkfjslkjflsdjflksfsldkfjsldkfjlsk");
+		return Boolean.parseBoolean(removeHtmlTags(response.body()));
 	}
 	
 	public boolean setOnline(String username) throws IOException, InterruptedException
 	{
-		System.out.println(username);
 		HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/setonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", "") != "-1";
+		boolean didDie = !removeHtmlTags(response.body()).equalsIgnoreCase("-1");
 		System.out.println();
 		System.out.println();
 		System.out.println();
-		System.out.println(response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body></html>", ""));
+		System.out.println(removeHtmlTags(response.body()));
 		System.out.println();
 		System.out.println();
 		System.out.println();
@@ -55,7 +53,11 @@ public class ApiUtils
                 .uri(URI.create("http://68.0.143.100:8080/hypnotic/api/remonline.php?uuid=" + username))
                 .build();
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		boolean didDie = response.body().replace("<!DOCTYPE html><html><body>", "").replace("</body>", "</html>") != "-1";
+		boolean didDie = !removeHtmlTags(response.body()).equalsIgnoreCase("-1");
 		return didDie;
+	}
+	
+	private String removeHtmlTags(String string) {
+		return string.replaceAll("\\<.*?\\>", "");
 	}
 }

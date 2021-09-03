@@ -17,11 +17,13 @@ import badgamesinc.hypnotic.utils.Wrapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 
 import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
@@ -49,18 +51,18 @@ public class ClientConnectionMixin {
     	event.call();
         if(event.isCancelled()) ci.cancel();
         if (packet instanceof GameJoinS2CPacket) {
-    		try {
-				Hypnotic.INSTANCE.api.setOnline(mc.getSession().getUsername());
-			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
-			}
+//    		try {
+//				Hypnotic.INSTANCE.api.setOnline(mc.getSession().getUsername());
+//			} catch (IOException | InterruptedException e) {
+//				e.printStackTrace();
+//			}
     	}
     	if (packet instanceof DisconnectS2CPacket) {
-    		try {
-				Hypnotic.INSTANCE.api.remOnline(mc.getSession().getUsername());
-			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
-			}
+//    		try {
+//				Hypnotic.INSTANCE.api.remOnline(mc.getSession().getUsername());
+//			} catch (IOException | InterruptedException e) {
+//				e.printStackTrace();
+//			}
     	}
     }
 }

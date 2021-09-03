@@ -142,7 +142,6 @@ public class ColorBox extends Component {
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
 		if (button == 0) lmDown = true;
-		SaveLoad.INSTANCE.save();
 		super.mouseClicked(mouseX, mouseY, button);
 	}
 	
