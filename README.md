@@ -1,5 +1,11 @@
-# HYPNOTIC CLINET FABRIC !>&&  
+![](https://img.shields.io/badge/0%25-optimized-brightgreen?style=for-the-badge&logo=appveyor)
+![](https://img.shields.io/badge/Made%20by-skript%20kiddies-red?style=for-the-badge&logo=appveyor)
+![](https://img.shields.io/badge/100%25-spaghetti-orange?style=for-the-badge&logo=appveyor)
+![](https://img.shields.io/badge/works-sometimes-blue?style=for-the-badge&logo=appveyor)
+
+# Hypnotic Client  
 ## gaming awards frame winner 2004/2006/2007  
+https://hypnotic.dev is our WIP sketchy website
   
 ## About
 "Utility Mod" for Minecraft 1.17.1  
@@ -15,6 +21,9 @@ BadGamesInc - actual knowledge
 KawaiiZenbo - website and api
 
 Whoever else we stole code from  
+
+## Support
+Join our "amazing" discord for support https://discord.gg/aZStDUnb29
   
 ## How to import and compile with Eclipse  
 Install Eclipse from https://www.eclipse.org/ide/  
