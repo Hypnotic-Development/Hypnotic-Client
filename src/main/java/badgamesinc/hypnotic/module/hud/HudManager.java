@@ -20,7 +20,8 @@ public class HudManager {
 				new NetherXYZ(),
 				new Armor(),
 				new Logo(),
-				new ArrayListModule()
+				new ArrayListModule(),
+				new Packets()
 			);
 	}
 	

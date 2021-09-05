@@ -18,13 +18,14 @@ public class HudEditorScreen extends Screen {
 	
 	public HudEditorScreen() {
 		super(new LiteralText("HudEditorScreen"));
-		frame = new Frame(200, 25, 96, 14, "Hud Modules");
+		frame = new Frame(200, 25, 120, 14, "Hud Modules");
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
 		frame.render(matrices, mouseX, mouseY);
+		frame.setWidth(120);
 		frame.updatePosition(mouseX, mouseY);
 		frame.updateButtons();
 		for (HudModule element : HudManager.INSTANCE.hudModules) {

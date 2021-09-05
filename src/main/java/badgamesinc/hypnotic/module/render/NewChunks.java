@@ -39,6 +39,7 @@ public class NewChunks extends Mod {
 	public NewChunks() {
 		super("NewChunks", "Renders a border around newley generated chunks", Category.RENDER);
 		addSettings(yOffset, remove, fill, newChunksSet, oldChunksSet, color);
+		newChunksSet.addChild(color);
 	}
 
 	@Override
@@ -47,17 +48,14 @@ public class NewChunks extends Mod {
 			newChunks.clear();
 			oldChunks.clear();
 		}
-
 		super.onDisable();
 	}
 
 	@EventTarget
 	public void onReadPacket(EventReceivePacket event) {
 		Direction[] searchDirs = new Direction[] { Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH, Direction.UP };
-
 		if (event.getPacket() instanceof ChunkDeltaUpdateS2CPacket) {
 			ChunkDeltaUpdateS2CPacket packet = (ChunkDeltaUpdateS2CPacket) event.getPacket();
-
 			packet.visitUpdates((pos, state) -> {
 				if (!state.getFluidState().isEmpty() && !state.getFluidState().isStill()) {
 					ChunkPos chunkPos = new ChunkPos(pos);

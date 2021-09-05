@@ -3,6 +3,8 @@ package badgamesinc.hypnotic.utils;
 public class TimeHelper {
 
     private long nanoTime = -1L;
+    private static float deltaTime = 0;
+    public static float startTime = System.nanoTime();
 
     public void reset() {
         nanoTime = System.nanoTime();
@@ -66,4 +68,16 @@ public class TimeHelper {
     public long convertMicroToSec(long time) { return convertMillisToSec(convertMicroToMillis(time)); }
 
     public long convertMillisToSec(long time) { return time / 1000L; }
+    
+    public static float getDeltaTime() {
+		return deltaTime;
+	}
+    
+    public static float getTime() {
+    	return (float)((System.nanoTime() - startTime) * 1E-9);
+    }
+    
+    public static void setDeltaTime(float deltaTime) {
+		TimeHelper.deltaTime = deltaTime;
+	}
 }

@@ -21,7 +21,6 @@ import net.minecraft.client.gui.screen.ChatScreen;
 public abstract class KeyboardMixin {
     @Shadow @Final private MinecraftClient client;
 
-	@SuppressWarnings("resource")
 	@Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN) {
@@ -37,7 +36,7 @@ public abstract class KeyboardMixin {
             EventKeyPress event = new EventKeyPress(key, scancode, action);
             event.call();
             
-            if (MinecraftClient.getInstance().currentScreen == null && key == KeyUtils.getKeyCode(CommandManager.get().getPrefix()) && action == GLFW.GLFW_PRESS) MinecraftClient.getInstance().setScreen(new ChatScreen(""));
+            if (client.currentScreen == null && key == KeyUtils.getKeyCode(CommandManager.get().getPrefix()) && action == GLFW.GLFW_PRESS) client.setScreen(new ChatScreen(""));
         }
     }
 }

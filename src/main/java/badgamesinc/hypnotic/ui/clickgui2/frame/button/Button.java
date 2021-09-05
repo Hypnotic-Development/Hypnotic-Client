@@ -29,6 +29,7 @@ public class Button {
 	private int x, y, width, height, offset;
 	private boolean extended;
 	public ArrayList<Component> components;
+	public ArrayList<Component> subComponents;
 	
 	public Button(Mod mod, int x, int y, int offset, Frame parent) {
 		this.mod = mod;
@@ -52,20 +53,37 @@ public class Button {
 			} else if (setting instanceof NumberSetting) {
 				components.add(new Slider(x, y + count, this, setting));
 			}
+			/*for (Setting setting2 : setting.children) {
+				if (setting2 instanceof ColorSetting) {
+					subComponents.add(new ColorBox(x, y + count, setting, this));
+				} else if (setting2 instanceof BooleanSetting) {
+					subComponents.add(new CheckBox(x, y + count, this, setting));
+				} else if (setting2 instanceof ModeSetting) {
+					subComponents.add(new ComboBox(x, y + count, setting, this));
+				} else if (setting2 instanceof NumberSetting) {
+					subComponents.add(new Slider(x, y + count, this, setting));
+				}
+			}*/
 			count+=(setting instanceof ColorSetting ? height * 10 : height);
 		}
 	}
 	
+	int animTicks = 0;
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		int color = parent.color.getRGB();
+		if (mod.isEnabled()) {
+			if (animTicks < 255) animTicks+=15;
+		} else if (!mod.isEnabled()) {
+			if (animTicks > 0) animTicks-=15;
+		}
 		Screen.fill(matrices, x, y, x + width, y + height, new Color(40, 40, 40, 255).getRGB());
-		if (mod.isEnabled()) Screen.fill(matrices, x, y, x + width, y + height, color);
+		Screen.fill(matrices, x, y, x + width, y + height, new Color(parent.color.getRed(), parent.color.getGreen(), parent.color.getBlue(), animTicks).darker().getRGB());
 			
 		if (hovered(mouseX, mouseY)) Screen.fill(matrices, x, y, x + width, y + height, new Color(50, 50, 50, 100).getRGB());
 		
 		int nameColor = -1;
 		
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + parent.getWidth() - 8 + (height / 3) - FontManager.roboto.getStringWidth(mod.getName()), y + (height / 6), nameColor);
+		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
 //		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width -  (height / 1.5f), y + (height / 6), nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, color);
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, color);

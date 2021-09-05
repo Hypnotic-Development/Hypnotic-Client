@@ -89,6 +89,7 @@ public class Hypnotic implements ModInitializer {
                     e.printStackTrace();
                 }
                 cfgManager.saveConfig();
+                saveload.save();
             }
         });
         configDaemon.setDaemon(true);

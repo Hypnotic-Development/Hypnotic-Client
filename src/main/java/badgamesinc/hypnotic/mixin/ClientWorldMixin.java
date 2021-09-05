@@ -6,10 +6,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import badgamesinc.hypnotic.event.events.EventEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 @Mixin(ClientWorld.class)
 public class ClientWorldMixin {
@@ -21,12 +22,11 @@ public class ClientWorldMixin {
         new EventEntity.Spawn(entity).call();
     }
 
-    @SuppressWarnings("resource")
 	@Inject(method = "removeEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;onRemoved()V"))
     public void removeEntity(int entityId, Entity.RemovalReason removalReason, CallbackInfo ci) {
-    	if (MinecraftClient.getInstance().world.getEntityById(entityId) instanceof PlayerEntity) {
+    	if (mc.world.getEntityById(entityId) instanceof PlayerEntity) {
     		System.out.println("sdfsdfs");
     	}
-    	new EventEntity.Remove(MinecraftClient.getInstance().world.getEntityById(entityId)).call();
+    	new EventEntity.Remove(mc.world.getEntityById(entityId)).call();
     }
 }

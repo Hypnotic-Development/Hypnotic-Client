@@ -12,6 +12,8 @@ public class EventRenderGUI extends Event {
 		this.matrices = matrices;
 		this.partialTicks = partialTicks;
 	}
+	
+	protected EventRenderGUI() {}
 
 	public MatrixStack getMatrices() {
 		return matrices;
@@ -19,5 +21,9 @@ public class EventRenderGUI extends Event {
 	
 	public float getPartialTicks() {
 		return partialTicks;
+	}
+	
+	public static class Tick extends EventRenderGUI {
+		
 	}
 }

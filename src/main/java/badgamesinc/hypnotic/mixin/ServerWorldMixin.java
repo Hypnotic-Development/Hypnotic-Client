@@ -1,18 +1,11 @@
 package badgamesinc.hypnotic.mixin;
 
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
-
-import java.io.IOException;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import badgamesinc.hypnotic.Hypnotic;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 

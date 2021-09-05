@@ -5,6 +5,7 @@ import java.awt.Color;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -26,7 +27,7 @@ public class ComboBox extends Component {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		modeSet.displayName = modeSet.name + ": " + modeSet.getSelected();
 		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, modeSet.displayName, parent.getX() + 4, parent.getY() + 2 + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, ColorUtils.gray + modeSet.name + ": " + ColorUtils.reset + modeSet.getSelected(), parent.getX() + 4, parent.getY() + 4 + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	

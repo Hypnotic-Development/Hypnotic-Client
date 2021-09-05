@@ -7,6 +7,7 @@ import java.math.RoundingMode;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -47,9 +48,9 @@ public class Slider extends Component {
 			}
 		}
 		
-		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight() * 2 + offset, color.darker().getRGB());
-		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.getHeight() * 2 + offset, color.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, numSet.displayName, parent.getX() + 4, parent.getY() + offset  + (parent.getHeight()) + (parent.getHeight() / 4), -1);
+		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.getHeight() * 2 + offset, color.darker().darker().getRGB());
+		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), (int) (parent.getX() + renderWidth), parent.getY() + parent.getHeight() * 2 + offset, color.darker().getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, ColorUtils.gray + numSet.name + ": " + ColorUtils.reset + numSet.getValue(), parent.getX() + 4, parent.getY() + offset  + (parent.getHeight()) + (parent.getHeight() / 4), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
@@ -64,7 +65,7 @@ public class Slider extends Component {
 	
 	@Override
 	public boolean hovered(int mouseX, int mouseY) {
-		return mouseX >= parent.getX() && mouseX <= parent.getX() + parent.getWidth() && mouseY >= parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() && mouseY <= parent.getY() + parent.mod.settings.indexOf(numSet) * parent.getHeight() + parent.getHeight() * 2;
+		return mouseX >= parent.getX() && mouseX <= parent.getX() + parent.getWidth() && mouseY >= parent.getY() + this.offset + parent.getHeight() && mouseY <= parent.getY() + this.offset + parent.getHeight() * 2;
 	}
 	
 	@Override

@@ -1,8 +1,6 @@
 package badgamesinc.hypnotic.settings.settingtypes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -15,7 +13,6 @@ public class ModeSetting extends Setting {
     @Expose
     @SerializedName("value")
     private String selected;
-    private HashMap<String, ArrayList<Setting>> childrenMap = new HashMap<>();
     private int index;
     private List<String> modes;
 
@@ -64,13 +61,5 @@ public class ModeSetting extends Setting {
             index = 0;
             selected = modes.get(0);
         }
-    }
-
-    public ArrayList<Setting> getChildren(String mode) {
-        return childrenMap.get(mode);
-    }
-
-    public void setChildren(String mode, ArrayList<Setting> children) {
-        childrenMap.put(mode, children);
     }
 }

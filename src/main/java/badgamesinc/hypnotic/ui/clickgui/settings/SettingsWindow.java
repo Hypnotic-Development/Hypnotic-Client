@@ -6,9 +6,10 @@ import java.util.ArrayList;
 import badgamesinc.hypnotic.settings.*;
 import badgamesinc.hypnotic.settings.settingtypes.*;
 import badgamesinc.hypnotic.ui.clickgui.ModuleButton;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
+
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 public class SettingsWindow {
 
@@ -43,10 +44,9 @@ public class SettingsWindow {
 		}
 	}
 	
-	@SuppressWarnings("resource")
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		Screen.fill(matrices, 250, 125, MinecraftClient.getInstance().getWindow().getScaledWidth() - 250, MinecraftClient.getInstance().getWindow().getScaledHeight() - 125, -1);
-		MinecraftClient.getInstance().textRenderer.draw(matrices, parent.mod.getDescription(), 260, 135, new Color(0, 0, 0).getRGB());
+		Screen.fill(matrices, 250, 125, mc.getWindow().getScaledWidth() - 250, mc.getWindow().getScaledHeight() - 125, -1);
+		mc.textRenderer.draw(matrices, parent.mod.getDescription(), 260, 135, new Color(0, 0, 0).getRGB());
 		for (Component component : components) {
 			if (!components.isEmpty())
 				System.out.println("he");

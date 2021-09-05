@@ -4,30 +4,34 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.combat.Killaura;
 import badgamesinc.hypnotic.module.combat.TargetStrafe;
+import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
 
 public class Speed extends Mod {
 
 	public NumberSetting speed = new NumberSetting("Speed", 1, 1, 10, 0.1);
 	public NumberSetting jumpHeight = new NumberSetting("Jump Height", 1, 1, 10, 0.1);
+	public BooleanSetting jump = new BooleanSetting("Jump", true);
 	
 	private int wallTicks = 0;
 	private boolean direction = false;
 	
 	public Speed() {
 		super("Speed", "Makes you go fast", Category.MOVEMENT);
-		addSettings(speed, jumpHeight);
+		addSettings(speed, jumpHeight, jump);
 	}
 	
 	@Override
 	public void onTick() {
-		if(mc.player.isOnGround() && PlayerUtils.isMoving()) mc.player.setVelocity(mc.player.getVelocity().x, 0.4, mc.player.getVelocity().z);
+		if(mc.player.isOnGround() && PlayerUtils.isMoving() && jump.isEnabled()) mc.player.setVelocity(mc.player.getVelocity().x, 0.4, mc.player.getVelocity().z);
 		super.onTick();
 	}
 
 	@Override
 	public void onMotion() {
+		this.setDisplayName("Speed " + ColorUtils.gray + (jump.isEnabled() ? "Hop" : "Ground"));
 		if(mc.player != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0) && !mc.player.isTouchingWater()) {
 //			if(mc.player.isOnGround()) mc.player.jump();
 

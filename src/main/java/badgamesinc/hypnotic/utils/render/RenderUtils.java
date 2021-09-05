@@ -325,7 +325,8 @@ public class RenderUtils {
 		 public static void drawFilledBox(MatrixStack matrixStack, Box bb, Color color, boolean draw) {
 		        Matrix4f matrix4f = matrixStack.peek().getModel();
 		        Color color1 = color;
-
+		        setup3DRender(true);
+		        
 		        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		        if (draw)
 		        	bufferBuilder.begin(VertexFormat.DrawMode.QUADS/*QUADS*/, VertexFormats.POSITION_COLOR);
@@ -369,6 +370,7 @@ public class RenderUtils {
 			        bufferBuilder.end();
 			        BufferRenderer.draw(bufferBuilder);
 		        }
+		        end3DRender();
 		    }
 		 
 		 public static void drawOutlineBox(MatrixStack matrixStack, Box bb, Color color, boolean draw) {
@@ -428,7 +430,7 @@ public class RenderUtils {
 	            bb = new Box(x - 0.15, y + 0.1f, z - 0.15, x + 0.15, y + 0.5, z + 0.15);
 
 
-//	        drawFilledBox(matrixstack, bb, new Color(color.getRed(), color.getGreen(), color.getBlue(), 130), true);
+	        drawFilledBox(matrixstack, bb, new Color(color.getRed(), color.getGreen(), color.getBlue(), 130), true);
 	        RenderSystem.lineWidth(1.5f);
 
 	        drawOutlineBox(matrixstack, bb, color, true);
@@ -1060,4 +1062,32 @@ public class RenderUtils {
 		matrixStack.translate(regionX - camPos.x, -camPos.y,
 			regionZ - camPos.z);
 	}
+
+		public static void drawBoxBoth(BlockPos blockPos, QuadColor color, float lineWidth, Direction... excludeDirs) {
+			drawBoxBoth(new Box(blockPos), color, lineWidth, excludeDirs);
+		}
+
+		public static void drawBoxBoth(Box box, QuadColor color, float lineWidth, Direction... excludeDirs) {
+			QuadColor outlineColor = color.clone();
+			outlineColor.overwriteAlpha(255);
+
+			drawBoxBoth(box, color, outlineColor, lineWidth, excludeDirs);
+		}
+
+		public static void drawBoxBoth(BlockPos blockPos, QuadColor fillColor, QuadColor outlineColor, float lineWidth, Direction... excludeDirs) {
+			drawBoxBoth(new Box(blockPos), fillColor, outlineColor, lineWidth, excludeDirs);
+		}
+
+		public static void drawBoxBoth(Box box, QuadColor fillColor, QuadColor outlineColor, float lineWidth, Direction... excludeDirs) {
+			drawBoxFill(box, fillColor, excludeDirs);
+			drawBoxOutline(box, outlineColor, lineWidth, excludeDirs);
+		}
+
+		public static void drawBoxFill(BlockPos blockPos, QuadColor color, Direction... excludeDirs) {
+			drawBoxFill(new Box(blockPos), color, excludeDirs);
+		}
+
+		public static void drawBoxOutline(BlockPos blockPos, QuadColor color, float lineWidth, Direction... excludeDirs) {
+			drawBoxOutline(new Box(blockPos), color, lineWidth, excludeDirs);
+		}
 }

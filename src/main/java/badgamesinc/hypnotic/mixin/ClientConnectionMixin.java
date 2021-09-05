@@ -1,7 +1,5 @@
 package badgamesinc.hypnotic.mixin;
 
-import java.io.IOException;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.command.CommandManager;
 import badgamesinc.hypnotic.event.events.EventReceivePacket;
 import badgamesinc.hypnotic.event.events.EventSendPacket;
@@ -17,15 +14,11 @@ import badgamesinc.hypnotic.utils.Wrapper;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
-import net.minecraft.network.packet.s2c.play.PlayerListS2CPacket;
-
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 @Mixin(ClientConnection.class)
 public class ClientConnectionMixin {

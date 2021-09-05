@@ -1,6 +1,7 @@
 package badgamesinc.hypnotic.utils;
 
-import net.minecraft.client.MinecraftClient;
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -44,8 +45,7 @@ public class RotationVector {
         return this.pitch;
     }
 
-    @SuppressWarnings("resource")
 	public static RotationVector fromPlayer() {
-        return new RotationVector(MinecraftClient.getInstance().player);
+        return new RotationVector(mc.player);
     }
 }

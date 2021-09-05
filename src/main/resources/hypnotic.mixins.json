@@ -55,7 +55,9 @@
     "EntityMixin",
     "FrustramAccessor",
     "WorldRendererAccessor",
-    "ServerWorldMixin"
+    "ServerWorldMixin",
+    "EntityRenderDispatcherMixin",
+    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

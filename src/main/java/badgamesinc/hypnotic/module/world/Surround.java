@@ -6,6 +6,7 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.utils.player.inventory.InventoryUtils;
 import badgamesinc.hypnotic.utils.world.WorldUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -14,20 +15,22 @@ import net.minecraft.util.math.BlockPos;
 public class Surround extends Mod {
 	
 	public NumberSetting delay = new NumberSetting("Delay", 50, 0, 1000, 10);
-	public BooleanSetting autoDisable = new BooleanSetting("Auto Disable", true);
+	public BooleanSetting autoSwitch = new BooleanSetting("Auto Switch", true);
+	public BooleanSetting switchBack = new BooleanSetting("Auto Switch", true);
 	public BooleanSetting onlyObi = new BooleanSetting("Only Obsidian", true);
+	public BooleanSetting snap = new BooleanSetting("Snap To Center", false);
 	badgamesinc.hypnotic.utils.Timer delayTimer = new badgamesinc.hypnotic.utils.Timer();
 
 	public Surround() {
 		super("Surround", "Surround", Category.WORLD);
-		addSettings(delay, autoDisable, onlyObi);
+		addSettings(delay, autoSwitch, switchBack, onlyObi, snap);
 	}
 	
 	@Override
 	public void onEnable() {
 		double x = Math.round(mc.player.getX()) + 0.5; double y =
 		Math.round(mc.player.getY()); double z = Math.round(mc.player.getZ()) + 0.5;
-		mc.player.setPos(x, y, z); mc.player.setYaw(0);
+		if (snap.isEnabled()) mc.player.setPos(x, y, z); mc.player.setYaw(0);
 		super.onEnable();
 	}
 	
@@ -35,10 +38,22 @@ public class Surround extends Mod {
 	@Override
 	public void onTick() {
 		ArrayList<BlockPos> blocks = new ArrayList<>();
+		
+		if (autoSwitch.isEnabled() 
+				&& mc.world.getBlockState(mc.player.getBlockPos().west()).getMaterial().isReplaceable()
+				&& mc.world.getBlockState(mc.player.getBlockPos().east()).getMaterial().isReplaceable()
+				&& mc.world.getBlockState(mc.player.getBlockPos().south()).getMaterial().isReplaceable()
+				&& mc.world.getBlockState(mc.player.getBlockPos().north()).getMaterial().isReplaceable()) 
+		{
+			if (mc.player.getMainHandStack().getItem() != Blocks.OBSIDIAN.asItem()) {
+				int obsidianSlot = InventoryUtils.findInHotbar(Blocks.OBSIDIAN.asItem());
+				InventoryUtils.selectSlot(obsidianSlot);
+			}
+		}
+		
 		if ((onlyObi.isEnabled() && mc.player.getMainHandStack().getItem() != Blocks.OBSIDIAN.asItem()) || !(mc.player.getMainHandStack().getItem() instanceof BlockItem)) return;
 		
 		if (delayTimer.hasTimeElapsed((long)delay.getValue() / 1000, false)) {
-			System.out.println("eh");
 			if (stage < 4) stage++;
 			else stage = 0;
 			delayTimer.reset();
@@ -70,5 +85,12 @@ public class Surround extends Mod {
 			delayTimer.reset();
 		}
 		super.onTick();
+	}
+	
+	@Override
+	public void onTickDisabled() {
+		this.onlyObi.setVisible(!autoSwitch.isEnabled());
+		this.switchBack.setVisible(autoSwitch.isEnabled());
+		super.onTickDisabled();
 	}
 }

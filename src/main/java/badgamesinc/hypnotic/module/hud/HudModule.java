@@ -16,7 +16,7 @@ public class HudModule extends Mod {
 	private int defaultX, defaultY, x, y, dragX, dragY;
 	private float width, height;
 	private double scaleX, scaleY, scaleStartX, scaleStartY, startWidth, startHeight, prevScaleX, prevScaleY;
-	private boolean dragging, scaling;
+	private boolean dragging, scaling, draggable;
 	public NumberSetting xSet;
 	public NumberSetting ySet;
 	protected NahrFont font = FontManager.robotoMed; 
@@ -29,6 +29,7 @@ public class HudModule extends Mod {
 		this.height = height;
 		this.scaleX = 1;
 		this.scaleY = 1;
+		this.draggable = true;
 		xSet = new NumberSetting("X", defaultX, 0, 1920, 1);
 		ySet = new NumberSetting("Y", defaultY, 0, 1080, 1);
 		this.x = (int) xSet.getValue();
@@ -115,7 +116,8 @@ public class HudModule extends Mod {
 	
 	public void setDragging(boolean dragging) {
 		SaveLoad.INSTANCE.save();
-		this.dragging = dragging;
+		if (this.isDraggable()) this.dragging = dragging;
+		else this.dragging = false;
 	}
 	
 	public int getDragX() {
@@ -186,6 +188,14 @@ public class HudModule extends Mod {
 		return scaling;
 	}
 	
+	public boolean isDraggable() {
+		return draggable;
+	}
+	
+	public void setDraggable(boolean draggable) {
+		this.draggable = draggable;
+	}
+	
 	public void setScaling(boolean scaling, int mouseX, int mouseY) {
 		this.setScaleStartX(mouseX - this.getPrevScaleX());
 		this.setScaleStartY(mouseY + this.getPrevScaleY());
@@ -204,7 +214,7 @@ public class HudModule extends Mod {
 		font = FontManager.robotoMed2;
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			if (mc.currentScreen instanceof HudEditorScreen) {
-				RenderUtils.fillAndBorder(matrices, element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);
+				if (element.isDraggable()) RenderUtils.fillAndBorder(matrices, element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);
 //				RenderUtils.fill(matrices, this.getX() + this.getWidth(), this.getY() + this.getHeight(), this.getX() + this.getWidth() + 20, this.getY() +  this.getHeight() + 20, -1);
 			}
 		}

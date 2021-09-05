@@ -37,7 +37,7 @@ public class Radar extends HudModule {
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
-	public NumberSetting size = new NumberSetting("Size", 100, 0, 1000, 10);
+	public NumberSetting size = new NumberSetting("Size", 100, 0, 200, 10);
 	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	NahrFont font = FontManager.robotoMed;
 	
@@ -50,6 +50,8 @@ public class Radar extends HudModule {
 
 	@Override
     public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
+		this.setWidth((float) this.size.getValue());
+		this.setHeight((float) this.size.getValue());
 		MatrixStack matrixStack = matrices;
         if (mc.player == null) return;
         DrawableHelper.fill(matrixStack, index, index, index, keyCode, index);

@@ -64,7 +64,6 @@ public class Frame {
 	int length = 0;
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		this.color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.is("Custom") ? category.color : ModuleManager.INSTANCE.getModule(ClickGUIModule.class).color.getColor();
-//		int color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.isEnabled() ? category.color.getRGB() : ColorUtils.getClientColorInt();
 		Screen.fill(matrices, x, y, x + width, y + height, color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
 		FontManager.roboto.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
@@ -76,36 +75,33 @@ public class Frame {
 			length = height;
 			if (animTicks > 0) animTicks-=5;
 		}
-//		int count = height;
 		if (this.extended) {
 			buttons.sort(Comparator.comparingInt(b -> (int)FontManager.roboto.getWidth(((Button)b).mod.getName())).reversed());
 			for (Button button : buttons) {
-				
-	//			if (animTicks == 0) return;
-	//			button.setY(0);
+				button.setWidth(this.width);
 				button.render(matrices, mouseX, mouseY);
 				int count2 = 0;
+				length+=this.height;
 				if (button.isExtended()) {
-//					button.components.sort(Comparator.comparingInt(c -> (int)FontManager.robotoSmall.getStringWidth(((Component)c).setting.displayName)).reversed());
 					for (Component component : button.components) {
 						if (button.isExtended()) {
-							if (component.setting.isVisible())
-							component.render(matrices, mouseX, mouseY, count2);
-							Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color.getRGB());
-							Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color.getRGB());
-							count2+=(component instanceof ColorBox ? height * 10 : height);;
+							if (component.setting.isVisible()) {
+								component.render(matrices, mouseX, mouseY, count2);
+								Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color.getRGB());
+								Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color.getRGB());
+								count2+=(component instanceof ColorBox ? height * 7.5f : height);
+							} else {
+							}
 						}
 					}
+					
 				}
-	//			button.setOffset(count - height);
-//				count+=height;
 				if (buttons.indexOf(button) == buttons.size() - 1) {
 					if (!button.isExtended()) {
 						length = 0;
 						if (animTicks > length) animTicks--;
-//						Screen.fill(matrices, button.getX(), button.getY() + this.height, button.getX() + button.getWidth(), button.getY() + this.height + 1, color);
 					} else {
-						length = button.components.size() * height;
+						length = count2;
 	//					Screen.fill(matrices, button.getX(), button.getY() + this.height + button.components.size() * height, button.getX() + button.getWidth(), button.getY() + this.height + button.components.size() * height + 1, color);
 					}
 					Screen.fill(matrices, button.getX(), button.getY() + this.height + length, button.getX() + button.getWidth(), button.getY() + this.height + length + 1, color.getRGB());
@@ -145,7 +141,7 @@ public class Frame {
 			offset+=height;
 			if (button.isExtended()) {
 				for (Component component : button.components) {
-					offset+=(component instanceof ColorBox ? height * 6 : height); 
+					if (component.setting.isVisible()) offset+=(component instanceof ColorBox ? height * 7.5f : height); 
 				}
 			}
 			

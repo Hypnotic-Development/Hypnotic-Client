@@ -38,15 +38,14 @@ public class ColorBox extends Component {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		colorSet.displayName = colorSet.name;
 		int sx = parent.getX() + 5,
-				sy = parent.getY() + offset + parent.getHeight() + 12,
+				sy = parent.getY() + 4 + offset + parent.getHeight() + 12,
 				ex = parent.getX() + parent.getWidth() - 17,
-				ey = parent.getY() + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
+				ey = parent.getY() + 4 + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
 
-		DrawableHelper.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 7, parent.parent.color.getRGB());
-		DrawableHelper.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 7, new Color(40, 40, 40, 255).getRGB());
+		RenderUtils.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 8.5, parent.parent.color.getRGB());
+		RenderUtils.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 8.5, new Color(40, 40, 40, 255).getRGB());
 		
-		//Render name
-		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 2, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 9, new Color(0, 0, 0, 200).getRGB());
+		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
 		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
@@ -91,13 +90,13 @@ public class ColorBox extends Component {
 		int satX = (int) (sx + (ex - sx) * colorSet.sat);
 
 		RenderUtils.fill(matrices, satX - 2, briY - 2, satX + 2, briY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 9, -1);
-		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 9, colorSet.getRGB());
-		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 2, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 9, colorSet.getColor().getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 12, colorSet.getRGB());
+		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
 
 
 		//Set hex codes
-		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 7, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 2)) {
+		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.depthFunc(GL11.GL_ALWAYS);
 			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());

@@ -13,6 +13,7 @@ public class Component {
 	protected int offset;
 	private int x, y;
 	public Setting setting;
+	private boolean extended;
 	
 	public Component(int x, int y, Setting setting, Button parent) {
 		
@@ -23,7 +24,7 @@ public class Component {
 	}
 	
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		
+		if (button == 1) this.extended = true;
 	}
 	
 	public void mouseReleased(int button) {
@@ -48,5 +49,13 @@ public class Component {
 	
 	public void setY(int y) {
 		this.y = y;
+	}
+	
+	public boolean isExtended() {
+		return extended;
+	}
+	
+	public void setExtended(boolean extended) {
+		this.extended = extended;
 	}
 }

@@ -94,7 +94,7 @@ public class Killaura extends Mod {
 					}
 				}
 			}
-		}catch(ArrayIndexOutOfBoundsException | NullPointerException | IllegalArgumentException e){
+		}catch(Exception e){
 			e.printStackTrace();
 		}
 		super.onTick();
