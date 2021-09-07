@@ -57,7 +57,10 @@
     "WorldRendererAccessor",
     "ServerWorldMixin",
     "EntityRenderDispatcherMixin",
-    "WorldRendererMixin"
+    "WorldRendererMixin",
+    "BlockEntityRenderDispatcherMixin",
+    "SoundSystemMixin",
+    "InGameOverlayRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -22,7 +22,7 @@ public class ExpFast extends Mod {
 
 	@Override
 	public void onTick() {
-		if (mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE) {
+		if (mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE && mc.options.keyUse.isPressed()) {
 			mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
 		} else if (mc.player.getMainHandStack().getItem() != Items.EXPERIENCE_BOTTLE && swap.isEnabled()) {
 			int xpSlot = mc.player.getInventory().getSlotWithStack(Items.EXPERIENCE_BOTTLE.getDefaultStack());

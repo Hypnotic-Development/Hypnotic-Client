@@ -1,5 +1,7 @@
 package badgamesinc.hypnotic.module.player;
 
+import badgamesinc.hypnotic.event.EventTarget;
+import badgamesinc.hypnotic.event.events.EventSound;
 import badgamesinc.hypnotic.mixin.ClientConnectionAccessor;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
@@ -7,6 +9,7 @@ import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import io.netty.channel.Channel;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -25,7 +28,6 @@ public class OffhandCrash extends Mod {
 
     @Override
     public void onTick() {
-    	this.setEnabled(false);
     	if (crash.isEnabled()) {
     		Channel channel = ((ClientConnectionAccessor) mc.player.networkHandler.getConnection()).getChannel();
             for (int i = 0; i < speed.getValue(); i++) channel.write(PACKET);
@@ -34,4 +36,8 @@ public class OffhandCrash extends Mod {
         super.onTick();
     }
     
+    @EventTarget
+	public void onSound(EventSound event) {
+    	if (antiCrash.isEnabled() && event.sound == SoundEvents.ITEM_ARMOR_EQUIP_GENERIC) event.setCancelled(true);
+    }
 }

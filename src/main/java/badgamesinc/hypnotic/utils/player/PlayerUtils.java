@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.entity.EntityLookup;
 import net.minecraft.world.entity.EntityTrackingSection;
 import net.minecraft.world.entity.SectionedEntityCache;
@@ -201,5 +202,24 @@ public class PlayerUtils {
         double x = forward * moveSpeed * mx + strafe * moveSpeed * mz;
         double z = forward * moveSpeed * mz - strafe * moveSpeed * mx;
         mc.player.setVelocity(x, yVelocity, z);
+    }
+	
+	public static double distanceTo(Entity entity) {
+        return distanceTo(entity.getX(), entity.getY(), entity.getZ());
+    }
+
+    public static double distanceTo(BlockPos blockPos) {
+        return distanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public static double distanceTo(Vec3d vec3d) {
+        return distanceTo(vec3d.getX(), vec3d.getY(), vec3d.getZ());
+    }
+
+    public static double distanceTo(double x, double y, double z) {
+        float f = (float) (mc.player.getX() - x);
+        float g = (float) (mc.player.getY() - y);
+        float h = (float) (mc.player.getZ() - z);
+        return MathHelper.sqrt(f * f + g * g + h * h);
     }
 }

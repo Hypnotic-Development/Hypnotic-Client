@@ -18,8 +18,11 @@ import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.player.NoSlow;
+import badgamesinc.hypnotic.module.player.PortalGui;
 import badgamesinc.hypnotic.module.player.Scaffold;
 import badgamesinc.hypnotic.module.render.ChatImprovements;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
@@ -104,6 +107,20 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     	event.call();
     	if (event.isCancelled()) ci.cancel();
     }
+    
+    @Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;closeHandledScreen()V", ordinal = 0), require = 0)
+	private void updateNausea_closeHandledScreen(ClientPlayerEntity player) {
+		if (!ModuleManager.INSTANCE.getModule(PortalGui.class).isEnabled()) {
+			closeHandledScreen();
+		}
+	}
+
+	@Redirect(method = "updateNausea", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;setScreen(Lnet/minecraft/client/gui/screen/Screen;)V", ordinal = 0), require = 0)
+	private void updateNausea_setScreen(MinecraftClient client, Screen screen) {
+		if (!ModuleManager.INSTANCE.getModule(PortalGui.class).isEnabled()) {
+			client.setScreen(screen);
+		}
+	}
 	
 	@Override
     public void jump() {

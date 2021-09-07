@@ -46,7 +46,7 @@ public class Surround extends Mod {
 				&& mc.world.getBlockState(mc.player.getBlockPos().north()).getMaterial().isReplaceable()) 
 		{
 			if (mc.player.getMainHandStack().getItem() != Blocks.OBSIDIAN.asItem()) {
-				int obsidianSlot = InventoryUtils.findInHotbar(Blocks.OBSIDIAN.asItem());
+				int obsidianSlot = InventoryUtils.findInHotbarInt(Blocks.OBSIDIAN.asItem());
 				InventoryUtils.selectSlot(obsidianSlot);
 			}
 		}

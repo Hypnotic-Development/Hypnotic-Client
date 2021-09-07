@@ -394,7 +394,7 @@ public class InventoryUtils {
         return find(isGood, 0, 8);
     }
     
-    public static int findInHotbar(Item item) {
+    public static int findInHotbarInt(Item item) {
         int index = -1;
         for(int i = 0; i < 9; i++) {
             if(mc.player.getInventory().getStack(i).getItem() == item) {
@@ -476,4 +476,8 @@ public class InventoryUtils {
 		
 		return i;
 	}
+    
+    public static int getSlotIndex(int index) {
+        return index < 9 ? index + 36 : index;
+    }
 }

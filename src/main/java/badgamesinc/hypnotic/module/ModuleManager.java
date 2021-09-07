@@ -96,7 +96,15 @@ public class ModuleManager {
 					new TargetStrafe(),
 					new NewChunks(),
 					new ExpFast(),
-					new CrystalAura()
+					new CrystalAura(),
+					new CityESP(),
+					new AutoCity(),
+					new HoleESP(),
+					new AutoArmor(),
+					new SoundBlocker(),
+					new Offhand(),
+					new NoRender(),
+					new PortalGui()
 				);
 	}
 	

@@ -34,7 +34,7 @@ public class Packets extends HudModule {
 		try {
 			final long time = System.currentTimeMillis();
 			packets.removeIf(aLong -> aLong + 1000 < time);
-			return this.packets.size() / 10;
+			return this.packets.size();
 		} catch(Exception e) {
 			return 0;
 		}

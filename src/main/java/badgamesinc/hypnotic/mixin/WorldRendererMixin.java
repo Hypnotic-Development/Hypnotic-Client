@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import badgamesinc.hypnotic.event.events.EventBlockEntityRender;
 import badgamesinc.hypnotic.event.events.EventEntityRender;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
@@ -35,11 +36,19 @@ public class WorldRendererMixin {
 	public int render_modifyBoolean(int old) {
 		return 1;
 	}
-
+	
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
 	private void render_swap(Profiler profiler, String string) {
 		if (string.equals("entities")) {
 			new EventEntityRender.PreAll().call();
+		} else if (string.equals("blockentities")) {
+			new EventEntityRender.PostAll().call();
+			new EventBlockEntityRender.PreAll().call();
+		} else if (string.equals("blockentities")) {
+			new EventEntityRender.PostAll().call();
+			new EventBlockEntityRender.PreAll().call();
+		} else if (string.equals("destroyProgress")) {
+			new EventBlockEntityRender.PostAll().call();
 		}
 	}
 

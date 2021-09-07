@@ -8,6 +8,7 @@ import badgamesinc.hypnotic.event.events.EventRender3D;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.utils.RotationUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,12 +21,14 @@ public class Nuker extends Mod {
 
 	final List<BlockPos> renders = new ArrayList<>();
 	public NumberSetting radius = new NumberSetting("Radius", 5, 0, 6, 1);
+	public NumberSetting delay = new NumberSetting("Delay", 0, 0, 100, 1);
 
 	public Nuker() {
 		super("Nuker", "brake stuff", Category.WORLD);
-		addSettings(radius);
+		addSettings(radius, delay);
 	}
 
+	int delayTicks = 0;
 	@Override
 	public void onTick() {
 		BlockPos ppos1 = mc.player.getBlockPos();
@@ -41,18 +44,24 @@ public class Nuker extends Mod {
                         continue;
                     BlockState bs = mc.world.getBlockState(np);
 //                    boolean b = !ignoreXray.getValue() || !XRAY.blocks.contains(bs.getBlock());
-                    if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK && mc.world.getWorldBorder().contains(np)) {
+                    if (!bs.isAir() && bs.getBlock() != Blocks.WATER && bs.getBlock() != Blocks.LAVA && bs.getBlock() != Blocks.BEDROCK && mc.world.getWorldBorder().contains(np) && delayTicks <= 0) {
                         renders.add(np);
 //                        if (autoTool.getValue()) AutoTool.pick(bs);
 //                        mc.player.swingHand(Hand.MAIN_HAND);
 //                        if (!mc.player.getAbilities().creativeMode) {
                             mc.interactionManager.updateBlockBreakingProgress(np, Direction.DOWN);
-//                        } //else mc.interactionManager.attackBlock(np, Direction.DOWN);
+                            //xboxsurvx
+//                          mc.interactionManager.attackBlock(np, Direction.DOWN);
 //                        Rotations.lookAtV3(new Vec3d(np.getX() + .5, np.getY() + .5, np.getZ() + .5));
 //                        blocksBroken++;
+                          RotationUtils.setSilentYaw((float)RotationUtils.getYaw(np));
+                          RotationUtils.setSilentPitch((float)RotationUtils.getPitch(np));
+                          delayTicks = (int) delay.getValue();
                     }
+                    if (delayTicks > 0) delayTicks--;
                 }
             }
+            System.out.println(delayTicks);
         }
 		super.onTick();
 	}
@@ -60,9 +69,8 @@ public class Nuker extends Mod {
 	@EventTarget
 	public void render3d(EventRender3D event) {
 		for (BlockPos pos : renders) {
-			RenderUtils.setup3DRender(true);
-			RenderUtils.drawOutlineBox(event.getMatrices(), new Box(pos), -1);
-			RenderUtils.end3DRender();
+			Vec3d render = RenderUtils.getRenderPosition(pos);
+			RenderUtils.drawOutlineBox(event.getMatrices(), new Box(render.x, render.y, render.z, render.x + 1, render.y + 1, render.z + 1), -1);
 		}
 	}
 }

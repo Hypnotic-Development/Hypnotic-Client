@@ -50,6 +50,7 @@ public class ArrayListModule extends HudModule {
 		CopyOnWriteArrayList<Mod> modules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.modules);
 		List<String> names = new ArrayList<>();
 		modules.sort(Comparator.comparingInt(m -> (int)font.getStringWidth(((Mod)m).getDisplayName())).reversed());
+		int count = 1;
 		for (Mod mod : modules) {
 			if (!mod.visible.isEnabled()) continue;
 			
@@ -58,10 +59,10 @@ public class ArrayListModule extends HudModule {
 					color = this.color.getRGB();
 					break;
 				case "Rainbow":
-					color = ColorUtils.rainbow((float)speed.getValue(), (float)sat.getValue(), 1, modules.indexOf(mod) * (long)spread.getValue());
+					color = ColorUtils.rainbow((float)speed.getValue(), (float)sat.getValue(), 1, count * (long)spread.getValue());
 					break;
 				case "Fade":
-					color = ColorUtils.fade(this.color.getColor(), (int) (modules.indexOf(mod) * (speed.getValue())), ModuleManager.INSTANCE.getEnabledModules().size() * (int)(spread.getValue() / 5)).getRGB();
+					color = ColorUtils.fade(this.color.getColor(), (int) (count * (speed.getValue())), ModuleManager.INSTANCE.getEnabledModules().size() * (int)(spread.getValue() / 5)).getRGB();
 					break;
 				case "Category":
 					color = ColorUtils.getCategoryColor(mod).getRGB();
@@ -77,6 +78,7 @@ public class ArrayListModule extends HudModule {
 			} else {
 				if (names.contains(mod.getDisplayName())) names.remove(mod.getDisplayName());
 			}
+			count++;
 		}
 //		String longest = names.stream().max(Comparator.comparingInt((name)-> (int)font.getStringWidth((String)name))).get();
 		this.setHeight(0);
@@ -88,11 +90,12 @@ public class ArrayListModule extends HudModule {
 	public void onTick() {
 		CopyOnWriteArrayList<Mod> modules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.modules);
 		boolean shouldmove = animationTimer.hasTimeElapsed(1000 / 75, true);
+		// This is in the onTick method to fix speed variations on different frame rates (i hope)
 		for (Mod mod : modules) {
 			if (shouldmove) {
 				if (mod.isEnabled()) {
-					if (mod.offset < 12) {
-						mod.offset+=3;
+					if (mod.offset < 11) {
+						mod.offset+=2.2f;
 					}
 					if (mod.animation < font.getStringWidth(mod.getDisplayName())) {
 						mod.animation+=6;
@@ -102,7 +105,7 @@ public class ArrayListModule extends HudModule {
 					}
 				} else {
 					if (mod.offset > 0 && mod.animation <= 0) {
-						mod.offset-=3;
+						mod.offset-=2.2f;
 					}
 					if (mod.animation > 0) {
 						mod.animation-=6;

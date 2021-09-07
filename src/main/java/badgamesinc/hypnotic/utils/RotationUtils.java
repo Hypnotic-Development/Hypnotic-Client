@@ -229,4 +229,8 @@ public class RotationUtils {
 		return null;
 	}
 
+	public static double getPitch(Entity entity) {
+        return getPitch(entity, Target.Body);
+    }
+
 }
