@@ -1,16 +1,18 @@
 package badgamesinc.hypnotic.module.render;
 
+import java.awt.Color;
+
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventRender3D;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.render.QuadColor;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import badgamesinc.hypnotic.utils.world.EntityUtils;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 
 public class CityESP extends Mod {
 
@@ -22,13 +24,11 @@ public class CityESP extends Mod {
 	
 	@EventTarget
 	public void event3d(EventRender3D event) {
-		try {
-			for (PlayerEntity player : mc.world.getPlayers()) {
-				Vec3d pos = RenderUtils.getRenderPosition(EntityUtils.getCityBlock(player));
-				RenderUtils.drawOutlineBox(event.getMatrices(), new Box(pos.x, pos.y, pos.z, pos.x + 1, pos.y + 1, pos.z + 1), color.getRGB(), true);
+		for (Entity player : mc.world.getEntities()) {
+			if (player instanceof PlayerEntity && EntityUtils.getCityBlock((PlayerEntity) player) != null) {
+				RenderUtils.drawBoxOutline(EntityUtils.getCityBlock((PlayerEntity)player), QuadColor.single(Color.WHITE.getRGB()), 2);
+				RenderUtils.drawBoxFill(EntityUtils.getCityBlock((PlayerEntity)player), QuadColor.single(new Color(255, 255, 255, 100).getRGB()));
 			}
-		} catch(Exception e) {
-			
 		}
 	}
 }

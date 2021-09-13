@@ -43,6 +43,7 @@ public class CommandManager {
         add(new Baritone());
         add(new Search());
         add(new Coords());
+        add(new Explosion());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

@@ -59,7 +59,7 @@ public class Speed extends Mod {
 
             mc.player.setVelocity(-Math.sin(yaw) * speed, mc.player.getVelocity().y, Math.cos(yaw) * speed);
             if (TargetStrafe.canStrafe()) {
-            	TargetStrafe.strafe(speed, Killaura.target, direction, false);
+            	TargetStrafe.strafe(speed * 1.5, Killaura.target, direction, false);
             }
         }
 		super.onMotion();

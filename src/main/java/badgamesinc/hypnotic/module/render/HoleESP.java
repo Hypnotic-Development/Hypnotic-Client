@@ -119,8 +119,10 @@ public class HoleESP extends Mod {
 //					Box box = new Box(renderPos.x, renderPos.y - 1, renderPos.z, renderPos.x + 1, renderPos.y, renderPos.z + 1);
 //					RenderUtils.drawFilledBox(event.getMatrices(), box, new Color(color.getRed(), color.getGreen(), color.getBlue(), 100).getRGB());
 //					RenderUtils.drawOutlineBox(event.getMatrices(), box, color.getRGB());
+					RenderUtils.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
+							QuadColor.single(color[0], color[1], color[2], 1f), 2);
 					RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
-							QuadColor.single(color[0], color[1], color[2], 0.5f), excludeDirs);
+							QuadColor.single(color[0], color[1], color[2], 0.5f));
 				});
 //			} else {
 //				if (sideMode == 2 || sideMode == 4) {

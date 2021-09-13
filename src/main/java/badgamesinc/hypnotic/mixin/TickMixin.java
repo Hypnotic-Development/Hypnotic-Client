@@ -24,12 +24,12 @@ public class TickMixin {
 		BaritoneAPI.getSettings().chatControl.value = false;
 		for (Mod mod : ModuleManager.INSTANCE.modules) {
 			if (mc.player != null) {
-				try {
+//				try {
 					if (mod.isEnabled()) mod.onTick();
 					mod.onTickDisabled();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
+//				} catch(Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 		for (HudModule mod : HudManager.INSTANCE.hudModules) {

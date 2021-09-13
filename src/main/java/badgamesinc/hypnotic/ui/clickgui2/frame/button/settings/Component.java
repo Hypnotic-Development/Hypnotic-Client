@@ -10,7 +10,7 @@ public class Component {
 
 	MinecraftClient mc = MinecraftClient.getInstance();
 	protected TextRenderer tr = mc.textRenderer;
-	protected int offset;
+	public int offset;
 	private int x, y;
 	public Setting setting;
 	private boolean extended;

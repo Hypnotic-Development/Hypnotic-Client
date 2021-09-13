@@ -95,20 +95,20 @@ public class ArrayListModule extends HudModule {
 			if (shouldmove) {
 				if (mod.isEnabled()) {
 					if (mod.offset < 11) {
-						mod.offset+=2.2f;
+						mod.offset+=1.5;
 					}
 					if (mod.animation < font.getStringWidth(mod.getDisplayName())) {
-						mod.animation+=6;
+						mod.animation+=4;
 					}
 					if (mod.animation > font.getStringWidth(mod.getDisplayName())) {
 						mod.animation = font.getStringWidth(mod.getDisplayName());
 					}
 				} else {
 					if (mod.offset > 0 && mod.animation <= 0) {
-						mod.offset-=2.2f;
+						mod.offset-=1.5;
 					}
 					if (mod.animation > 0) {
-						mod.animation-=6;
+						mod.animation-=4;
 					}
 					if (mod.animation < 0) {
 						mod.animation = 0;

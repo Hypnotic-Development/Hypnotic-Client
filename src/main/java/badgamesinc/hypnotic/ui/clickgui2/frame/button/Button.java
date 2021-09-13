@@ -30,6 +30,7 @@ public class Button {
 	private boolean extended;
 	public ArrayList<Component> components;
 	public ArrayList<Component> subComponents;
+	public float animation = 0;
 	
 	public Button(Mod mod, int x, int y, int offset, Frame parent) {
 		this.mod = mod;

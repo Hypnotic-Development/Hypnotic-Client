@@ -33,7 +33,7 @@ public class AutoTotem extends Mod {
 					this.locked = true;
 					InventoryUtils.move().from(result.getSlot()).to(InventoryUtils.OFFHAND);
 				} else {
-					if (mc.player.getHealth() < 10 || mc.player.isFallFlying() || mc.player.fallDistance > 6) {
+					if (mc.player.getHealth() < 15 || mc.player.isFallFlying() || mc.player.fallDistance > 6) {
 						this.locked = true;
 						InventoryUtils.move().from(result.getSlot()).to(InventoryUtils.OFFHAND);
 					} else {

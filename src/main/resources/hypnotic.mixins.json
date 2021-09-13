@@ -60,7 +60,8 @@
     "WorldRendererMixin",
     "BlockEntityRenderDispatcherMixin",
     "SoundSystemMixin",
-    "InGameOverlayRendererMixin"
+    "InGameOverlayRendererMixin",
+    "HandshakeC2SPacketAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

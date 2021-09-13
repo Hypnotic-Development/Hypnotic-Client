@@ -1,6 +1,7 @@
 package badgamesinc.hypnotic.module.render;
 
 import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.utils.ColorUtils;

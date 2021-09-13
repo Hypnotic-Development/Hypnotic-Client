@@ -181,6 +181,7 @@ public class CrystalAura extends Mod {
 	
 			// Place
 			if (place.isEnabled() && placeCooldown <= 0) {
+				
 				int crystalSlot = !autoSwitch.isEnabled()
 						? (mc.player.getMainHandStack().getItem() == Items.END_CRYSTAL ? mc.player.getInventory().selectedSlot
 								: mc.player.getOffHandStack().getItem() == Items.END_CRYSTAL ? 40
@@ -200,6 +201,7 @@ public class CrystalAura extends Mod {
 						continue;
 	
 					for (LivingEntity e : targets) {
+						
 						float targetDamg = DamageUtils.getExplosionDamage(v, 6f, e);
 						if (DamageUtils.willPop(mc.player, playerDamg) && !DamageUtils.willPopOrKill(e, targetDamg)) {
 							continue;
@@ -256,7 +258,7 @@ public class CrystalAura extends Mod {
 					Hand hand = InventoryUtils.selectSlot(crystalSlot);
 	
 					render = block;
-					mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
+					if (canPlace(block)) mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
 	
 					places++;
 					if (places >= (int)cps.getValue()) {
@@ -274,13 +276,13 @@ public class CrystalAura extends Mod {
 				}
 			}
 		} catch(Exception e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 
 	@EventTarget
 	public void onRenderWorld(EventRender3D event) {
-		if (this.render != null) {
+		if (this.render != null && canPlace(render)) {
 			float[] col = color.getRGBFloat();
 			RenderUtils.drawBoxBoth(render, QuadColor.single(col[0], col[1], col[2], 0.4f), 2.5f);
 		}

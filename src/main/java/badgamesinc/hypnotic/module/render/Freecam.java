@@ -102,7 +102,7 @@ public class Freecam extends Mod {
             mc.player.setPos(savedCoords.getX(), savedCoords.getY(), savedCoords.getZ());
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(savedCoords.getX(), savedCoords.getY(), savedCoords.getZ(), false));
             if (!mc.isInSingleplayer())
-                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(savedCoords.getX(), -1337.0, savedCoords.getZ(), true));
+                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(savedCoords.getX(), savedCoords.getY(), savedCoords.getZ(), true));
             mc.player.setYaw(lookVec.getYaw());
             mc.player.setPitch(lookVec.getPitch());
         }

@@ -64,4 +64,8 @@ public class ColorUtils {
         return new Color(red, green, blue, alpha);
     }
 		
+	public static int transparent(int rgb, int opacity) {
+		Color color = new Color(rgb);
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity).getRGB();
+	}
 }

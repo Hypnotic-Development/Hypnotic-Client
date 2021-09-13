@@ -1090,4 +1090,13 @@ public class RenderUtils {
 		public static void drawBoxOutline(BlockPos blockPos, QuadColor color, float lineWidth, Direction... excludeDirs) {
 			drawBoxOutline(new Box(blockPos), color, lineWidth, excludeDirs);
 		}
+
+		public static void startScissor(int x, int y, int width, int height) {
+			double factor = mc.getWindow().getScaleFactor();
+	        RenderSystem.enableScissor((int) (x * factor), (int) ((mc.getWindow().getHeight() - (y * factor) - height * factor)), (int) (width * factor), (int) (height * factor));
+		}
+		
+		public static void endScissor() {
+			RenderSystem.disableScissor();
+		}
 }

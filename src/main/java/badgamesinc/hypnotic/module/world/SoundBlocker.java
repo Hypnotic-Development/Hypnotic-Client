@@ -23,7 +23,6 @@ public class SoundBlocker extends Mod {
 	
 	@EventTarget
 	public void onSound(EventSound event) {
-		System.out.println(event.sound.getId());
 		if ((event.sound.getId().getPath().equals("entity.player.attack.strong") || event.sound.getId().getPath().equals("entity.generic.explode")) && explosion.isEnabled()) event.setCancelled(true);
 		if (event.sound == SoundEvents.ITEM_TOTEM_USE && totem.isEnabled()) event.setCancelled(true);
 		if (event.sound == SoundEvents.BLOCK_WATER_AMBIENT && water.isEnabled()) event.setCancelled(true);

@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public class OutlineVertexConsumers {
 
-	private static final Identifier nonExistentId = new Identifier("bleachhack", "shader-placeholder-id");
+	private static final Identifier nonExistentId = new Identifier("hypnotic", "shader-placeholder-id");
 
 	public static VertexConsumer outlineOnlyConsumer(float r, float g, float b, float a) {
 		OutlineVertexConsumerProvider vertexProvider = MinecraftClient.getInstance().getBufferBuilders().getOutlineVertexConsumers();
