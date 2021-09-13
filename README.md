@@ -2,10 +2,11 @@
 ![](https://img.shields.io/badge/Made%20by-skript%20kiddies-red?style=for-the-badge&logo=appveyor)
 ![](https://img.shields.io/badge/100%25-spaghetti-orange?style=for-the-badge&logo=appveyor)
 ![](https://img.shields.io/badge/works-sometimes-blue?style=for-the-badge&logo=appveyor)
+![](https://img.shields.io/badge/50%25-Original-blue?style=for-the-badge&logo=appveyor)
 
 # Hypnotic Client  
 ## gaming awards frame winner 2004/2006/2007  
-https://hypnotic.dev is our WIP sketchy website
+https://hypnotic.dev is our website that isn't so bad anymore
   
 ## About
 "Utility Mod" for Minecraft 1.17.1  
@@ -18,7 +19,7 @@ Fabric Loader 0.11.3 or higher
   
 ## Authors  
 BadGamesInc - actual knowledge  
-KawaiiZenbo - website and api
+KawaiiZenbo - api
 
 Whoever else we stole code from  
 
