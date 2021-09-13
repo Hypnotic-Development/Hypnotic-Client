@@ -5,7 +5,7 @@
 
 # Hypnotic Client  
 ## gaming awards frame winner 2004/2006/2007  
-https://hypnotic.dev is our WIP sketchy website
+https://hypnotic.dev is our website that isn't so bad anymore
   
 ## About
 "Utility Mod" for Minecraft 1.17.1  
