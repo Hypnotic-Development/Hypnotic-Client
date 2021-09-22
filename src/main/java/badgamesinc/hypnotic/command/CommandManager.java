@@ -44,6 +44,9 @@ public class CommandManager {
         add(new Search());
         add(new Coords());
         add(new Explosion());
+        add(new About());
+        add(new Commands());
+        add(new Modules());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

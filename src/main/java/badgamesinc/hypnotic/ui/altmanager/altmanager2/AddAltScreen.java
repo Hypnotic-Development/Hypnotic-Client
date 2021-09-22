@@ -38,17 +38,27 @@ public class AddAltScreen extends Screen {
 			RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, "Username", this.width / 2 - 70, this.height / 2 + 6, new Color(100, 100, 100).getRGB());
 		if (passwordField.getText().isEmpty() && !passwordField.isFocused())
 			RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, "Password", this.width / 2 - 70, this.height / 2 + 36, new Color(100, 100, 100).getRGB());
+		super.render(matrices, mouseX, mouseY, delta);
+	}
+	
+	@Override
+	protected void init() {
+		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, new LiteralText("Username"));
+		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, new LiteralText("Password"));
+		this.addSelectableChild(usernameField);
+		this.addSelectableChild(passwordField);
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, new LiteralText("Login"), (button) -> {
 			
 			this.status = "Trying alt...";
 	        
 	        
 	        try {
-				Alt alt = new Alt(usernameField.getText(), passwordField.getText());
+				Alt alt = new Alt(usernameField.getText(), passwordField.getText(), AltManagerScreen.INSTANCE.alts.size());
 				alt.login();
 				AltManagerScreen.INSTANCE.alts.add(alt);
 				AltsFile.INSTANCE.saveAlts();
 				this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
+				AltsFile.INSTANCE.saveAlts();
 	        } catch (AuthenticationException e) {
 				System.out.println("Error: Invalid Credentials!");
 				this.status = ColorUtils.red + "Error: Invalid Credentials!";
@@ -66,15 +76,6 @@ public class AddAltScreen extends Screen {
                 }
             });
 	    }))).active = true;
-		super.render(matrices, mouseX, mouseY, delta);
-	}
-	
-	@Override
-	protected void init() {
-		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, new LiteralText("Username"));
-		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, new LiteralText("Password"));
-		this.addSelectableChild(usernameField);
-		this.addSelectableChild(passwordField);
 		status = "Idle...";
 		super.init();
 	}

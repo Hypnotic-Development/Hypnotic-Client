@@ -81,6 +81,10 @@ public class Hypnotic implements ModInitializer {
 		if (cfgManager.config.exists()) {
             cfgManager.loadConfig();
         }
+        configDaemon.setDaemon(true);
+        configDaemon.start();
+        AltsFile.INSTANCE.loadAlts();
+        saveload.load();
         Thread configDaemon = new Thread(() -> {
             while (true) {
                 try {
@@ -92,10 +96,6 @@ public class Hypnotic implements ModInitializer {
                 saveload.save();
             }
         });
-        configDaemon.setDaemon(true);
-        configDaemon.start();
-        AltsFile.INSTANCE.loadAlts();
-        saveload.load();
         if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
         else FontManager.setMcFont(true);
 	}

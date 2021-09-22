@@ -19,6 +19,12 @@ repositories {
 	maven {
 		name = "jitpack"
 		url = "https://jitpack.io"
+		name = 'Ladysnake Mods'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+        }
 	}
 	jcenter()
 }
@@ -42,9 +48,9 @@ dependencies {
 	
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.40.1+1.17"
 	// Baritone (the fork is standalone baritone and the only change is a setting to build it as fabric mod instead of forge one)
-    	// thanks minegame159 from meteor client
-    	modImplementation "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
-    	include "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
+	// thanks minegame159 from meteor client
+	modImplementation "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
+	include "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
 }
 
 processResources {

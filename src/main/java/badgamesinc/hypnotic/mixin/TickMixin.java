@@ -7,11 +7,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
+import baritone.api.BaritoneAPI;
+import net.minecraft.client.network.PlayerListEntry;
 //import baritone.api.BaritoneAPI;
 import net.minecraft.entity.LivingEntity;
 
@@ -21,6 +24,7 @@ public class TickMixin {
 
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	private void init(CallbackInfo info) {
+//		Hypnotic.INSTANCE.api.setOnline("BadGamesInc");
 //		BaritoneAPI.getSettings().chatControl.value = false;
 		for (Mod mod : ModuleManager.INSTANCE.modules) {
 			if (mc.player != null) {
@@ -39,7 +43,15 @@ public class TickMixin {
 			}
 		}
 		RenderUtils.INSTANCE.onTick();
-//		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
+		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
+		
+		if (mc.getNetworkHandler() != null) {
+			for (PlayerListEntry player : mc.getNetworkHandler().getPlayerList()) {
+				if (player.getDisplayName() != null)
+				Hypnotic.setHypnoticUser(player.getProfile().getName(), player.getLatency() == -1000);
+			}
+		}
+		
 //		if (checkTicks < 10000) {
 //			checkTicks++;
 //		} else {

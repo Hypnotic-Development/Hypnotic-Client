@@ -8,6 +8,8 @@ import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.event.events.EventWalkOffLedge;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.movement.Speed;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
@@ -21,15 +23,23 @@ import net.minecraft.util.math.BlockPos;
 
 public class Scaffold extends Mod {
 	
-    public final NumberSetting extend = new NumberSetting("Extend", 0, 0, 8, 0.1);
+    public final NumberSetting extend = new NumberSetting("Extend", 0.7, 0, 8, 0.1);
+    public BooleanSetting boost = new BooleanSetting("Boost", false);
+    public final NumberSetting boostSpeed = new NumberSetting("Speed", 0, 0.25, 1, 0.01);
     private final BooleanSetting rotate = new BooleanSetting("Rotate", true);
     public final BooleanSetting down = new BooleanSetting("Down", false);
     private final BooleanSetting tower = new BooleanSetting("Tower", true);
+    
     private final BooleanSetting swing = new BooleanSetting("Swing", false);
+
+    private final BooleanSetting keepY = new BooleanSetting("KeepY", false);
+    private final BooleanSetting space = new BooleanSetting("Override KeepY", false);
+    
+    private int startY;
     
     public Scaffold() {
     	super("Scaffold", "Places blocks underneath you", Category.PLAYER);
-    	addSettings(extend, rotate, down, tower, swing);
+    	addSettings(extend, boost, boostSpeed, rotate, down, tower, swing, keepY, space);
     }
     
     @EventTarget
@@ -39,9 +49,15 @@ public class Scaffold extends Mod {
 
     @EventTarget
     public void onPlayerJump(EventPlayerJump event) {
-        if(tower.isEnabled() && getBlockInHotbar() != -1 && !PlayerUtils.isMoving()) {
+        if(tower.isEnabled() && getBlockInHotbar() != -1 && !PlayerUtils.isMoving() && !(this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true))) {
             event.setCancelled(true);
         }
+    }
+    
+    @Override
+    public void onEnable() {
+    	startY = (int) (mc.player.getY() - 1);
+    	super.onEnable();
     }
 
     @Override
@@ -52,15 +68,19 @@ public class Scaffold extends Mod {
 		        RotationUtils.setSilentPitch(50);
     		}
     	}
-        if(tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1) {
-        	mc.player.setVelocity(mc.player.getVelocity().x, 0.3805, mc.player.getVelocity().z);
+    	
+    	boolean keepY = this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true);
+    	
+    	if (boost.isEnabled() && !ModuleManager.INSTANCE.getModule(Speed.class).isEnabled()) PlayerUtils.setMotion(boostSpeed.getValue());
+        if(tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1 && !keepY) {
+        	mc.player.setVelocity(0, 0.42f, 0);
         }
     }
 
     @Override
     public void onMotion() {
     	this.setDisplayName("Scaffold " + ColorUtils.gray + extend.getValue());
-        int oldSlot = mc.player.getInventory().selectedSlot;
+    	int oldSlot = mc.player.getInventory().selectedSlot;
         int newSlot = getBlockInHotbar();
         if(newSlot != -1) {
             mc.player.getInventory().selectedSlot = newSlot;
@@ -79,9 +99,16 @@ public class Scaffold extends Mod {
             
             yaw1 = (float) Math.toRadians(yaw1);
         }
+        
+        boolean keepY = this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true);
+        
+        if (mc.options.keyJump.isPressed() && this.space.isEnabled() && mc.options.keyJump.isPressed()) {
+        	startY = (int) (mc.player.getY() - 1);
+        }
+        
         if(mc.options.keySneak.isPressed() && down.isEnabled()) {
 
-            BlockPos under = new BlockPos(mc.player.getX(), mc.player.getY() - 2, mc.player.getZ());
+            BlockPos under = new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 2 : startY, mc.player.getZ());
 
             
             if(mc.world.getBlockState(under).getMaterial().isReplaceable()) WorldUtils.placeBlockMainHand(under, rotate.isEnabled(), swing.isEnabled());
@@ -92,7 +119,7 @@ public class Scaffold extends Mod {
         }
 
         if(extend.getValue() == 0) {
-            BlockPos under = new BlockPos(mc.player.getX(), mc.player.getY() - 1, mc.player.getZ());
+            BlockPos under = new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 1 : startY, mc.player.getZ());
 
             if(mc.world.getBlockState(under).getMaterial().isReplaceable()) WorldUtils.placeBlockMainHand(under, rotate.isEnabled(), swing.isEnabled());
 
@@ -103,12 +130,15 @@ public class Scaffold extends Mod {
 
         ArrayList<BlockPos> blocks = new ArrayList<>();
         for(double i = (int) 0; i < extend.getValue(); i+=0.01) {
-        	if (!mc.options.keyJump.isPressed()) blocks.add(WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down());
-        	else blocks.add(mc.player.getBlockPos().down());
+        	BlockPos pos = WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down();
+        	if (PlayerUtils.distanceTo(pos) > 10) startY = (int) (mc.player.getY() - 1);
+        	if (tower.isEnabled() ? (this.keepY.isEnabled() && !space.isEnabled() ? true : !mc.options.keyJump.isPressed()) : true) blocks.add(new BlockPos(pos.getX(), !keepY ? pos.getY() : startY, pos.getZ()));
+        	else blocks.add(new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 1 : startY, mc.player.getZ()));
         }
 
         for(BlockPos x : blocks) {
             if(mc.world.getBlockState(x).getMaterial().isReplaceable()) {
+            	if (PlayerUtils.distanceTo(x) > 10) startY = (int) (mc.player.getY() - 1);
             	if (PlayerUtils.isMoving())
                 WorldUtils.placeBlockMainHand(x, rotate.isEnabled(), swing.isEnabled());
             	else WorldUtils.placeBlockMainHand(mc.player.getBlockPos().down(), rotate.isEnabled(), swing.isEnabled());
@@ -136,6 +166,13 @@ public class Scaffold extends Mod {
     @EventTarget
     public void onSwingHand(EventSwingHand event) {
 //    	if (!swing.isEnabled()) event.setCancelled(true);
+    }
+    
+    @Override
+    public void onTickDisabled() {
+    	boostSpeed.setVisible(boost.isEnabled());
+    	space.setVisible(keepY.isEnabled());
+    	super.onTickDisabled();
     }
     
     @Override

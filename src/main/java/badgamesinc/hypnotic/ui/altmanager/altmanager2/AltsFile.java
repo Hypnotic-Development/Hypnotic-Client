@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import badgamesinc.hypnotic.Hypnotic;
 
@@ -25,7 +26,7 @@ public class AltsFile {
 		}
 		
 		for (Alt alt : AltManagerScreen.INSTANCE.alts) {
-			credentials.add(alt.getEmail() + ":" + alt.getPassword());
+			credentials.add(alt.getEmail() + ":" + alt.getPassword() + ":" + alt.getUsername() + ":" + alt.getUuid());
 		}
 		
 		try {
@@ -55,7 +56,13 @@ public class AltsFile {
 
         for (String s : lines) {
             String[] args = s.split(":");
-            Alt alt = new Alt(args[0], args[1]);
+            Alt alt = new Alt(args[0], args[1], AltManagerScreen.INSTANCE.alts.size());
+            try {
+            	if (args[2] != null) alt.setUsername(args[2]);
+            	if (args[3] != null && !args[3].equalsIgnoreCase("null") && !args[3].equalsIgnoreCase("")) alt.setUuid(UUID.fromString(args[3]));
+            } catch(Exception e) {
+            	e.printStackTrace();
+            }
             AltManagerScreen.INSTANCE.alts.add(alt);
         }
 	}

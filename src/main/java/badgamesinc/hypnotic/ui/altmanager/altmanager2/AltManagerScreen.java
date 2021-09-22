@@ -5,41 +5,40 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.mojang.authlib.exceptions.AuthenticationException;
-import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.ui.Button;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.altmanager.account.Accounts;
 import badgamesinc.hypnotic.ui.altmanager.account.MicrosoftLogin;
 import badgamesinc.hypnotic.ui.altmanager.account.types.MicrosoftAccount;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 
-public class AltManagerScreen extends Screen {
+public class AltManagerScreen extends HypnoticScreen {
 	
 	private String status;
 	@SuppressWarnings("unused")
 	private boolean loggingIn = false;
 	private Screen previousScreen = new TitleScreen();
+	private Button add = new Button("Add alt", 54321, this.width / 2 - 100, height - 50, 200, 20, false);
+	private Button back = new Button("Back", 12345, this.width / 2 - 100, height - 25, 200, 20, false);
+	private Button msLogin = new Button("Microsoft Login", 69420, this.width / 2 - 310, height - 25, 200, 20, false);
+	private Button login = new Button("Login", 1337, this.width / 2 - 310, height - 50, 200, 20, false);
+	private Button remove = new Button("Remove", 8008, this.width / 2 + 210, height - 25, 200, 20, false);
+	private Alt selectedAlt = null;
 	
 	@Override
 	public void tick() {
 		super.tick();
 	}
 	
-	public AltManagerScreen() 
-	{
-		super(new LiteralText("AltManager"));
-	}
-	public AltManagerScreen(Screen prevScreen) 
-	{
-		super(new LiteralText("AltManager"));
-		previousScreen = prevScreen;
+	public AltManagerScreen() {
 	}
 	
 	public static AltManagerScreen INSTANCE = new AltManagerScreen();
@@ -51,58 +50,53 @@ public class AltManagerScreen extends Screen {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
+		DrawableHelper.fill(matrices, 0, 0, width, height, new Color(20, 20, 20).getRGB());
+		RenderUtils.drawBorderRect(matrices, 1, 1, width - 1, height - 1, ColorUtils.defaultClientColor, 1);
 		fill(matrices, 100, 70, width - 100, height - 70, new Color(0, 0, 0, 80).getRGB());
-		drawStringWithShadow(matrices, textRenderer, MinecraftClient.getInstance().getSession().getProfile().getName(), 20, 20, -1);
-		RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, status, width / 2, 20, -1);
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height - 50, 200, 20, new LiteralText("Add alt"), (button) -> {
-	         MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
-	    }))).active = true;
-		RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, status, width / 2, 20, -1);
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height - 25, 200, 20, new LiteralText("Back"), (button) -> {
-	         MinecraftClient.getInstance().setScreen(previousScreen);
-	    }))).active = true;
+		font.drawWithShadow(matrices, MinecraftClient.getInstance().getSession().getProfile().getName(), 20, 20, -1);
+		font.drawCenteredString(matrices, status, width / 2, 20, -1, true);
 		int offset = 0;
-		RenderSystem.enableScissor(100, 70 * 2, (width - 100) * 2, (height - 70) * 2);
-//		GL11.glScissor(100, 10, 10000, 10000);
+		RenderUtils.startScissor(100, 70, width - 100, height - 140);
+		RenderUtils.fill(matrices, width - 100, 50 - scrollY, width - 104, 80 - scrollY, Color.DARK_GRAY.getRGB());
 		for (Alt alt : alts) {
 			alt.setX(120);
 			alt.setY(110 + offset);
-			fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, alt.getY() + scrollY + 30, new Color(0, 0, 0, 120).getRGB());
-			if (alt.hoveredAlt(mouseX, mouseY)) {
-				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, alt.getY() + scrollY + 30, new Color(40, 40, 40, 120).getRGB());
+			RenderUtils.drawBorderRect(matrices, alt.getX(), alt.getY() + scrollY - 1, alt.getX() + 130, alt.getY() + scrollY + 33, ColorUtils.defaultClientColor, 1);
+			fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 130, alt.getY() + scrollY + 32, new Color(0, 0, 0, 120).getRGB());
+			if (hovered(mouseX, mouseY, alt.getX(), alt.getY() + scrollY, alt.getX() + 130, alt.getY() + 30 + scrollY)) {
+				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 130, alt.getY() + scrollY + 32, new Color(40, 40, 40, 120).getRGB());
 			}
-			if (alt.isSelected()) {
-				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 230, (int) (alt.getY() + scrollY + 30), new Color(50, 50, 50, 150).getRGB());
+			if (selectedAlt == alt) {
+				fill(matrices, alt.getX(), alt.getY() + scrollY, alt.getX() + 130, (int) (alt.getY() + scrollY + 32), new Color(50, 50, 50, 150).getRGB());
 			}
-			((ButtonWidget)this.addDrawableChild(new ButtonWidget(alt.getX() + 180, alt.getY() + 5, 40, 20, new LiteralText("Login"), (button) -> {
-				try {
-					status = "Logging into " + ColorUtils.green + alt.getEmail();
-					loggingIn = true;
-					alt.login();
-					status = "Logged into " + alt.getUsername();
-					loggingIn = false;
-				} catch (AuthenticationException e) {
-					e.printStackTrace();
-				}
-		    }))).visible = true;
-			((ButtonWidget)this.addDrawableChild(new ButtonWidget(alt.getX() + 180, alt.getY() + 5, 40, 20, new LiteralText("Edit"), (button) -> {
-				MinecraftClient.getInstance().setScreen(new EditAltScreen(this, alt));
-		    }))).visible = false;
-			drawStringWithShadow(matrices, textRenderer, alt.getEmail(), alt.getX() + 5, alt.getY() + scrollY + 5, -1);
-			drawStringWithShadow(matrices, textRenderer, alt.getPassword().replaceAll("(?s).", "*"), alt.getX() + 5, alt.getY() + scrollY + 20, -1);
+			font.drawWithShadow(matrices, !alt.getUsername().equalsIgnoreCase("null") && !alt.getUsername().equalsIgnoreCase("") ? alt.getUsername() : alt.getEmail(), alt.getX() + 37, alt.getY() + scrollY + 5, -1);
+			font.drawWithShadow(matrices, alt.getPassword().replaceAll("(?s).", "*"), alt.getX() + 37, alt.getY() + scrollY + 20, -1);
+			alt.drawFace(matrices, alt.getX(), alt.getY() + scrollY);
 			offset+=50;
 		}
-		RenderSystem.disableScissor();
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 310, height - 25, 200, 20, new LiteralText("Login to Microsoft account"), (button) -> {
-			MicrosoftLogin.getRefreshToken(refreshToken -> {
-                if (refreshToken != null) {
-                    MicrosoftAccount account = new MicrosoftAccount(refreshToken);
-                    account.login();
-                    Accounts.get().add(account);
-                    status = "Logged into " + ColorUtils.green + "\"" + account.getUsername() + "\"";
-                }
-            });
-	    }))).active = true;
+		RenderUtils.endScissor();
+		add.setX(this.width / 2 - 100);
+		add.setY(height - 50);
+		back.setX(this.width / 2 - 100);
+		back.setY(height - 25);
+		msLogin.setX(this.width / 2 - 310);
+		msLogin.setY(height - 25);
+		remove.setX(width / 2 + 110);
+		remove.setY(height - 25);
+		login.setX(width / 2 - 310);
+		login.setY(height - 50);
+		login.render(matrices, mouseX, mouseY, delta);
+		remove.render(matrices, mouseX, mouseY, delta);
+		add.render(matrices, mouseX, mouseY, delta);
+		back.render(matrices, mouseX, mouseY, delta);
+		msLogin.render(matrices, mouseX, mouseY, delta);
+		if (selectedAlt == null) {
+			login.enabled = false;
+			remove.enabled = false;
+		} else {
+			login.enabled = true;
+			remove.enabled = true;
+		}
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	
@@ -110,6 +104,12 @@ public class AltManagerScreen extends Screen {
 	protected void init() {
 		status = "Idle...";
 		alts.clear();
+		this.buttons.clear();
+		this.addButton(login);
+		this.addButton(remove);
+		this.addButton(add);
+		this.addButton(back);
+		this.addButton(msLogin);
 		AltsFile.INSTANCE.loadAlts();
 		super.init();
 	}
@@ -117,22 +117,74 @@ public class AltManagerScreen extends Screen {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		for (Alt alt : alts) {
-			if (alt.hoveredAlt(mouseX, mouseY) && button == 0) {
-				alt.setSelected(true);
-			} else if (!alt.hoveredAlt(mouseX, mouseY) && button == 0) {
-				alt.setSelected(false);
+			if (hovered((int)mouseX, (int)mouseY, alt.getX(), alt.getY() + scrollY, alt.getX() + 130, alt.getY() + 30 + scrollY)) {
+				selectedAlt = alt;
 			}
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 	
 	@Override
+	public void buttonClicked(Button button) {
+		if (selectedAlt != null) {
+			if (button.getId() == 1337) {
+				try {
+					status = "Logging into " + selectedAlt.getEmail();
+					loggingIn = true;
+					selectedAlt.login();
+					status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
+					loggingIn = false;
+					AltsFile.INSTANCE.saveAlts();
+				} catch (AuthenticationException e) {
+					e.printStackTrace();
+				}
+			} else if (button.getId() == 8008) {
+				if (alts.contains(selectedAlt)) {
+					try {
+						alts.remove(selectedAlt);
+						status = "Removed " + ColorUtils.red + selectedAlt.getUsername();
+						AltsFile.INSTANCE.saveAlts();
+					} catch(Exception e) {
+						status = "Error removing alt";
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		if (button.getId() == 69420) {
+			MicrosoftLogin.getRefreshToken(refreshToken -> {
+              if (refreshToken != null) {
+                  MicrosoftAccount account = new MicrosoftAccount(refreshToken);
+                  account.login();
+                  Accounts.get().add(account);
+                  status = "Logged into " + ColorUtils.green + "\"" + account.getUsername() + "\"";
+              }
+			});
+		}
+		if (button.getId() == 12345) {
+			MinecraftClient.getInstance().setScreen(previousScreen);
+		}
+		if (button.getId() == 54321) {
+			MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
+		}
+		super.buttonClicked(button);
+	}
+	
+	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-		scrollY+=amount;
+		if (amount > 0 && scrollY < -20) {
+			scrollY+=5;
+		}  else if (amount < 0) {
+			scrollY-=5;
+		}
+		
+//		if (amount < 0 && scrollY > -alts.size() * 15) {
+//			scrollY-=5;
+//		}
 		return super.mouseScrolled(mouseX, mouseY, amount);
 	}
 	
 	public boolean hovered(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
-		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2;
+		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2 && !(y1 > height - 70);
 	}
 }

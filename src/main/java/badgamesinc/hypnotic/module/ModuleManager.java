@@ -104,7 +104,8 @@ public class ModuleManager {
 					new SoundBlocker(),
 					new Offhand(),
 					new NoRender(),
-					new PortalGui()
+					new PortalGui(),
+					new Cape()
 				);
 	}
 	

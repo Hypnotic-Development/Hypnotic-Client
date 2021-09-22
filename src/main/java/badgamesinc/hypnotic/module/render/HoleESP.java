@@ -15,7 +15,6 @@ import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 public class HoleESP extends Mod {
@@ -90,56 +89,12 @@ public class HoleESP extends Mod {
 	
 	@EventTarget
 	public void render3d(EventRender3D event) {
-//		if (getSetting(1).asToggle().state) {
-//			int bottomMode = getSetting(1).asToggle().getChild(0).asMode().mode;
-//			Direction[] excludeDirs = ArrayUtils.remove(Direction.values(), 0);
-//
-//			if (bottomMode == 0 || bottomMode == 2) {
-//				holes.forEach((pos, color) -> {
-//					RenderUtils.drawBoxFill(pos, QuadColor.single(color[0], color[1], color[2], getSetting(1).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs);
-//				});
-//			}
-//
-//			if (bottomMode == 0 || bottomMode == 1) {
-//				holes.forEach((pos, color) -> {
-//					RenderUtils.drawBoxOutline(pos, QuadColor.single(color[0], color[1], color[2], 1f), getSetting(1).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs);
-//				});
-//			}
-//		}
-
-//		if (getSetting(2).asToggle().state) {
-//			float height = getSetting(2).asToggle().getChild(3).asSlider().getValueFloat();
-//			Direction[] excludeDirs = new Direction[] { Direction.UP, Direction.DOWN, };
-
-//			if (sideMode == 0 || sideMode == 1) {
-
-				holes.forEach((pos, color) -> {
-					Direction[] excludeDirs = new Direction[] { Direction.SOUTH, Direction.NORTH, Direction.EAST, Direction.WEST, Direction.UP};
-//					Vec3d renderPos = RenderUtils.getRenderPosition(pos);
-//					Box box = new Box(renderPos.x, renderPos.y - 1, renderPos.z, renderPos.x + 1, renderPos.y, renderPos.z + 1);
-//					RenderUtils.drawFilledBox(event.getMatrices(), box, new Color(color.getRed(), color.getGreen(), color.getBlue(), 100).getRGB());
-//					RenderUtils.drawOutlineBox(event.getMatrices(), box, color.getRGB());
-					RenderUtils.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
-							QuadColor.single(color[0], color[1], color[2], 1f), 2);
-					RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
-							QuadColor.single(color[0], color[1], color[2], 0.5f));
-				});
-//			} else {
-//				if (sideMode == 2 || sideMode == 4) {
-//					holes.forEach((pos, color) -> {
-//						RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
-//								QuadColor.single(color[0], color[1], color[2], getSetting(2).asToggle().getChild(2).asSlider().getValueFloat()), excludeDirs);
-//					});
-//				}
-//
-//				if (sideMode == 2 || sideMode == 3) {
-//					holes.forEach((pos, color) -> {
-//						RenderUtils.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, height, 0),
-//								QuadColor.single(color[0], color[1], color[2], 1f), getSetting(2).asToggle().getChild(1).asSlider().getValueFloat(), excludeDirs);
-//					});
-//				}
-//			}
-//		}
+		holes.forEach((pos, color) -> {
+			RenderUtils.drawBoxOutline(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
+					QuadColor.single(color[0], color[1], color[2], 1f), 2);
+			RenderUtils.drawBoxFill(new Box(Vec3d.of(pos), Vec3d.of(pos).add(1, 0, 1)).stretch(0, 1, 0),
+					QuadColor.single(color[0], color[1], color[2], 0.5f));
+		});
 	}
 	
 	private BlockPos[] neighbours(BlockPos pos) {

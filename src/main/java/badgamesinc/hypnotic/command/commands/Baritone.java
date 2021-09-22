@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import badgamesinc.hypnotic.command.Command;
-//import baritone.api.BaritoneAPI;
+import baritone.api.BaritoneAPI;
 import net.minecraft.command.CommandSource;
 
 public class Baritone extends Command {
@@ -18,7 +18,7 @@ public class Baritone extends Command {
 		builder.then(argument("command", StringArgumentType.greedyString())
                 .executes(context -> {
                     String command = context.getArgument("command", String.class);
-//                    BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute(command);
+                    BaritoneAPI.getProvider().getPrimaryBaritone().getCommandManager().execute(command);
                     return SINGLE_SUCCESS;
                 }));
 	}

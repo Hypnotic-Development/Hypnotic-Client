@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import badgamesinc.hypnotic.config.ConfigManager;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.event.EventManager;
@@ -20,27 +23,23 @@ import badgamesinc.hypnotic.utils.player.DamageUtils;
 import badgamesinc.hypnotic.utils.world.BlockIterator;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class Hypnotic implements ModInitializer {
 
 	public static Hypnotic INSTANCE = new Hypnotic();
 	public static Executor EXECUTOR = Executors.newCachedThreadPool();
+	public static Logger LOGGER = LogManager.getLogger(Hypnotic.class);
 	public static String name = "Hypnotic",
 			version = "r1000",
 			fullName = name + "-" + version,
 			hypnoticDir = System.getenv("APPDATA") + "/.minecraft/Hypnotic",
-			chatPrefix = ColorUtils.purple + name + ColorUtils.gray + ": ";
+			chatPrefix = ColorUtils.red + name + ColorUtils.gray + ": ";
 	public ModuleManager moduleManager;
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
 	public ApiUtils api = new ApiUtils();
 	
-	public static final Identifier BOOM_SOUND = new Identifier("tutorial:boom");
-    public static SoundEvent BOOM_SOUND_EVENT = new SoundEvent(BOOM_SOUND);
     public List<String> users = new ArrayList<>();
 
 	/*
@@ -51,12 +50,11 @@ public class Hypnotic implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
-		@SuppressWarnings("unused")
 		MinecraftClient mc = MinecraftClient.getInstance();
 		System.out.println("Loading Hypnotic stuff");
-		Registry.register(Registry.SOUND_EVENT, Hypnotic.BOOM_SOUND, BOOM_SOUND_EVENT);
 		register();
-		loadFiles();	
+		loadFiles();
+		api.setOnline(mc.getSession().getUsername());
 	}
 
 	/*
@@ -102,8 +100,6 @@ public class Hypnotic implements ModInitializer {
 
 	public void shutdown() {
 		System.out.println("SHUTING DOWN HYPNOTIC, GOODBYE");
-		cfgManager.saveConfig();
-        saveload.save();
 		AltsFile.INSTANCE.saveAlts();
 	}
 	

@@ -1,5 +1,7 @@
 package badgamesinc.hypnotic.utils.render;
 
+import java.awt.Color;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.client.render.VertexConsumer;
@@ -141,6 +143,43 @@ public class Vertexer {
 
 		vertexConsumer.vertex(model, x1, y1, z1).color(color1[0], color1[1], color1[2], color1[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 		vertexConsumer.vertex(model, x2, y2, z2).color(color2[0], color2[1], color2[2], color2[3]).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+	}
+	
+	public static void vertexTri(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, Color c) {
+		Matrix4f model = matrices.peek().getModel();
+		Matrix3f normal = matrices.peek().getNormal();
+
+		Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
+
+		float r = c.getRed() / 255f;
+		float g = c.getGreen() / 255f;
+		float b = c.getBlue() / 255f;
+		float a = c.getAlpha() / 255f;
+
+		vertexConsumer.vertex(model, x1, y1, z1).color(r, g, b, a).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		vertexConsumer.vertex(model, x2, y2, z2).color(r, g, b, a).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		vertexConsumer.vertex(model, x3, y3, z3).color(r, g, b, a).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+	}
+	
+	public static void vertexTri(MatrixStack matrices, VertexConsumer vertexConsumer, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, Color c1, Color c2) {
+		Matrix4f model = matrices.peek().getModel();
+		Matrix3f normal = matrices.peek().getNormal();
+
+		Vec3f normalVec = getNormal(normal, x1, y1, z1, x2, y2, z2);
+
+		float r1 = c1.getRed() / 255f;
+		float g1 = c1.getGreen() / 255f;
+		float b1 = c1.getBlue() / 255f;
+		float a1 = c1.getAlpha() / 255f;
+		
+		float r2 = c2.getRed() / 255f;
+		float g2 = c2.getGreen() / 255f;
+		float b2 = c2.getBlue() / 255f;
+		float a2 = c2.getAlpha() / 255f;
+
+		vertexConsumer.vertex(model, x1, y1, z1).color(r1, g1, b1, a1).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		vertexConsumer.vertex(model, x2, y2, z2).color(r2, g2, b2, a2).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
+		vertexConsumer.vertex(model, x3, y3, z3).color(r2, g2, b2, a2).normal(normal, normalVec.getX(), normalVec.getY(), normalVec.getZ()).next();
 	}
 
 	public static Vec3f getNormal(Matrix3f normal, float x1, float y1, float z1, float x2, float y2, float z2) {

@@ -9,6 +9,8 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
 public class ClickGUI extends Screen {
 
 	public static ClickGUI INSTANCE = new ClickGUI();
@@ -78,5 +80,11 @@ public class ClickGUI extends Screen {
 	protected void init() {
 		menuBar = MenuBar.INSTANCE;
 		super.init();
+	}
+	
+	@Override
+	public void onClose() {
+		mouseReleased(mc.mouse.getX() * mc.getWindow().getScaleFactor(), mc.mouse.getY() * mc.getWindow().getScaleFactor(), 0);
+		super.onClose();
 	}
 }

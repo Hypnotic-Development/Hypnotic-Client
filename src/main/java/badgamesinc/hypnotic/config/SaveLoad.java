@@ -18,7 +18,6 @@ import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
-import badgamesinc.hypnotic.utils.Logger;
 
 public class SaveLoad {
     public File dir;
@@ -48,7 +47,7 @@ public class SaveLoad {
 
     public void save() {
 
-    	Logger.logInfo("Saving...");
+    	Hypnotic.LOGGER.info("Saving...");
         ArrayList<String> toSave = new ArrayList<String>();
 
         for (Mod mod : ModuleManager.INSTANCE.modules) {

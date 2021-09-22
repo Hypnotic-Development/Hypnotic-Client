@@ -29,7 +29,6 @@ import badgamesinc.hypnotic.utils.render.RenderUtils;
 import badgamesinc.hypnotic.utils.render.shader.OutlineShaderManager;
 import badgamesinc.hypnotic.utils.render.shader.OutlineVertexConsumers;
 import badgamesinc.hypnotic.utils.render.shader.ShaderEffectLoader;
-import badgamesinc.hypnotic.utils.render.shader.ShaderUtils;
 import badgamesinc.hypnotic.utils.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -278,8 +277,6 @@ public class StorageESP extends Mod {
 
     @Override
     public void onEnable() {
-        if (mc.worldRenderer != null)
-            ShaderUtils.INSTANCE.load();
         super.onEnable();
     }
 

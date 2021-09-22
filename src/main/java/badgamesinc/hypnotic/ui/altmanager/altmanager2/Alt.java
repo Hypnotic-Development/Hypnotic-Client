@@ -1,30 +1,38 @@
 package badgamesinc.hypnotic.ui.altmanager.altmanager2;
 
+import java.util.UUID;
+
 import com.mojang.authlib.Agent;
 import com.mojang.authlib.exceptions.AuthenticationException;
 import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
 import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 
 import badgamesinc.hypnotic.mixin.MinecraftClientAccessor;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Session;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class Alt {
 
 	private YggdrasilUserAuthentication auth = (YggdrasilUserAuthentication) new YggdrasilAuthenticationService(((MinecraftClientAccessor) MinecraftClient.getInstance()).getProxy(), "").createUserAuthentication(Agent.MINECRAFT);
 	private String email, password, username;
-	private int x, y;
+	private int x, y, id;
 	private boolean selected;
-	
-	public Alt(String username, String password) {
+	private UUID uuid;
+
+	public Alt(String username, String password, int id) {
 		this.email = username;
 		this.password = password;
+		this.id = id;
 	}
 	
 	public void login() throws AuthenticationException {
 		auth.setUsername(email);
         auth.setPassword(password);
         auth.logIn();
+        this.username = auth.getSelectedProfile().getName();
+        this.uuid = auth.getSelectedProfile().getId();
 		setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang"));
 		setUsername(auth.getSelectedProfile().getName());
 	}
@@ -34,6 +42,9 @@ public class Alt {
         MinecraftClient.getInstance().getSessionProperties().clear();
     }
 	
+	public void drawFace(MatrixStack matrices, int x, int y) {
+		RenderUtils.drawFace(matrices, x, y, 4, RenderUtils.getPlayerSkin(uuid));
+	}
 
 	public boolean hoveredAlt(double mouseX, double mouseY) {
 		return mouseX >= x && mouseX <= x + 230 && mouseY >= y && mouseY <= y + 30;
@@ -68,7 +79,7 @@ public class Alt {
 	}
 	
 	public String getUsername() {
-		return username;
+		return !username.equalsIgnoreCase("null") && !username.equalsIgnoreCase("") ? username : email;
 	}
 	
 	public void setEmail(String email) {
@@ -89,5 +100,21 @@ public class Alt {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
 	}
 }

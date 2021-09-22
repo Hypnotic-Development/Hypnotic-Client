@@ -48,6 +48,7 @@ public class ArrayListModule extends HudModule {
 			this.setY(this.getDefaultY());
 		}
 		CopyOnWriteArrayList<Mod> modules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.modules);
+		boolean shouldmove = animationTimer.hasTimeElapsed(1000 / 75, true);
 		List<String> names = new ArrayList<>();
 		modules.sort(Comparator.comparingInt(m -> (int)font.getStringWidth(((Mod)m).getDisplayName())).reversed());
 		int count = 1;
@@ -79,6 +80,30 @@ public class ArrayListModule extends HudModule {
 				if (names.contains(mod.getDisplayName())) names.remove(mod.getDisplayName());
 			}
 			count++;
+			
+			if (shouldmove) {
+				if (mod.isEnabled()) {
+					if (mod.offset < 11) {
+						mod.offset+=1;
+					}
+					if (mod.animation < font.getStringWidth(mod.getDisplayName())) {
+						mod.animation+=2;
+					}
+					if (mod.animation > font.getStringWidth(mod.getDisplayName())) {
+						mod.animation = font.getStringWidth(mod.getDisplayName());
+					}
+				} else {
+					if (mod.offset > 0 && mod.animation <= 0) {
+						mod.offset-=1;
+					}
+					if (mod.animation > 0) {
+						mod.animation-=2;
+					}
+					if (mod.animation < 0) {
+						mod.animation = 0;
+					}
+				}
+			}
 		}
 //		String longest = names.stream().max(Comparator.comparingInt((name)-> (int)font.getStringWidth((String)name))).get();
 		this.setHeight(0);
@@ -88,34 +113,8 @@ public class ArrayListModule extends HudModule {
 	
 	@Override
 	public void onTick() {
-		CopyOnWriteArrayList<Mod> modules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.modules);
-		boolean shouldmove = animationTimer.hasTimeElapsed(1000 / 75, true);
+		
 		// This is in the onTick method to fix speed variations on different frame rates (i hope)
-		for (Mod mod : modules) {
-			if (shouldmove) {
-				if (mod.isEnabled()) {
-					if (mod.offset < 11) {
-						mod.offset+=1.5;
-					}
-					if (mod.animation < font.getStringWidth(mod.getDisplayName())) {
-						mod.animation+=4;
-					}
-					if (mod.animation > font.getStringWidth(mod.getDisplayName())) {
-						mod.animation = font.getStringWidth(mod.getDisplayName());
-					}
-				} else {
-					if (mod.offset > 0 && mod.animation <= 0) {
-						mod.offset-=1.5;
-					}
-					if (mod.animation > 0) {
-						mod.animation-=4;
-					}
-					if (mod.animation < 0) {
-						mod.animation = 0;
-					}
-				}
-			}
-		}
 		super.onTick();
 	}
 	

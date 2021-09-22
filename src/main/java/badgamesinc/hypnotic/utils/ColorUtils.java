@@ -35,6 +35,10 @@ public class ColorUtils {
 		return mod.getCategory().color;
 	}
 	
+	public static Color defaultClientColor() {
+		return new Color(255, 20, 100);
+	}
+	
 	public static int rainbow(float seconds, float saturation, float brigtness) {
 		float hue = (System.currentTimeMillis() % (int) (seconds * 1000)) / (float) (seconds * 1000);
 		int color = Color.HSBtoRGB(hue, saturation, 1);
@@ -66,6 +70,11 @@ public class ColorUtils {
 		
 	public static int transparent(int rgb, int opacity) {
 		Color color = new Color(rgb);
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity).getRGB();
+	}
+	
+	public static int transparent(int opacity) {
+		Color color = Color.BLACK;
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity).getRGB();
 	}
 }

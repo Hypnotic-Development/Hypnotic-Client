@@ -39,7 +39,6 @@ import net.minecraft.util.hit.HitResult.Type;
 public class Killaura extends Mod {
 
 	public static LivingEntity target;
-	//mecraftpvp
 	public ModeSetting rotation = new ModeSetting("Rotations", "Silent", "Silent", "Lock View");
 	public NumberSetting range = new NumberSetting("Range", 4, 1, 6, 0.1);
 	public NumberSetting aps = new NumberSetting("APS", 15, 1, 20, 1);
@@ -86,6 +85,8 @@ public class Killaura extends Mod {
 							else if (passedTicks <= aps.getValue()) passedTicks=(int) (aps.getValue() * 100);
 							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : new Timer().hasTimeElapsed((long) (aps.getValue() / 1000), true)){
 								mc.interactionManager.attackEntity(mc.player, target);
+								
+								
 								if (swing.isEnabled() && (autoBlock.isEnabled() ? !ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() : true) || (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() ? mc.options.getPerspective() != Perspective.FIRST_PERSON : false) && !(mc.player.getMainHandStack().getItem() instanceof SwordItem)) mc.player.swingHand(Hand.MAIN_HAND);
 								else mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
 								if (swing.isEnabled() && !(mc.player.getMainHandStack().getItem() instanceof SwordItem) || ModuleManager.INSTANCE.getModule(OldBlock.class).animation.is("Swing")) mc.player.swingHand(Hand.MAIN_HAND); 

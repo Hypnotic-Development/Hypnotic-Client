@@ -61,7 +61,9 @@
     "BlockEntityRenderDispatcherMixin",
     "SoundSystemMixin",
     "InGameOverlayRendererMixin",
-    "HandshakeC2SPacketAccessor"
+    "HandshakeC2SPacketAccessor",
+    "PlayerListEntryMixin",
+    "AbstractClientPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

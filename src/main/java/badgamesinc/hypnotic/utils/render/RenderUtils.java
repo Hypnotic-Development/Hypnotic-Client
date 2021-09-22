@@ -1,10 +1,16 @@
 package badgamesinc.hypnotic.utils.render;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
+import com.google.common.collect.Maps;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.mixin.FrustramAccessor;
@@ -194,43 +200,94 @@ public class RenderUtils {
 	        final float blue = (colorHex & 0xFF) / 255.0f;
 	        GL11.glColor4f(red, green, blue, (alpha == 0.0f) ? 1.0f : alpha);
 	    }
-		
-		/*
-		 * 	NOTIFICATION
-		 */
-		
-		/*public static void prepareScissorBox(float x, float y, float x2, float y2) {
-		      ScaledResolution scale = new ScaledResolution(mc);
-		      int factor = scale.getScaleFactor();
-		      GL11.glScissor((int)(x * (float)factor), (int)(((float)scale.getScaledHeight() - y2) * (float)factor), (int)((x2 - x) * (float)factor), (int)((y2 - y) * (float)factor));
-		   }*/
 		 
-		 public static void drawFilledCircle(final int xx, final int yy, final float radius, final int color) {
-		        int sections = 50;
+		//took me too long to do this
+		 public static void drawFilledCircle(MatrixStack matrices, final int xx, final int yy, final float radius, int sides, Color color) {
+			 	int sections = sides;
 		        double dAngle = 2 * Math.PI / sections;
-		        float x, y;
-
-		        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
-
-		        GL11.glEnable(GL11.GL_BLEND);
-		        GL11.glDisable(GL11.GL_TEXTURE_2D);
-		        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-
-		        for (int i = 0; i < sections; i++) {
-		            x = (float) (radius * Math.sin((i * dAngle)));
+		        float x, y, lastX = 0, lastY = 0;
+		        
+		        for (int i = -1; i < sections; i++) {
+					x = (float) (radius * Math.sin((i * dAngle)));
 		            y = (float) (radius * Math.cos((i * dAngle)));
+		            
+		            Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
 
-		            GL11.glColor4f(new Color(color).getRed() / 255F, new Color(color).getGreen() / 255F, new Color(color).getBlue() / 255F, new Color(color).getAlpha() / 255F);
-		            GL11.glVertex2f(xx + x, yy + y);
-		        }
+					RenderSystem.enableBlend();
+					RenderSystem.disableDepthTest();
+					RenderSystem.disableCull();
+					RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+					RenderSystem.lineWidth(1);
 
-		        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+					buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+					Vertexer.vertexTri(matrices, buffer, xx, yy, 0f, xx + x, yy + y, 0f, xx + lastX, yy + lastY, 0f, color);
+					tessellator.draw();
 
-		        GL11.glEnd();
+					RenderSystem.enableCull();
+					RenderSystem.enableDepthTest();
 
-		        GL11.glPopAttrib();
+					lastX = x;
+					lastY = y;
+				}
+		    }
+		 
+		 public static void drawGradientFilledCircle(MatrixStack matrices, final int xx, final int yy, final float radius, int sides, Color color1, Color color2) {
+			 	int sections = sides;
+		        double dAngle = 2 * Math.PI / sections;
+		        float x, y, lastX = 0, lastY = 0;
+		        
+		        for (int i = -1; i < sections; i++) {
+					x = (float) (radius * Math.sin((i * dAngle)));
+		            y = (float) (radius * Math.cos((i * dAngle)));
+		            
+		            Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
+
+					RenderSystem.enableBlend();
+					RenderSystem.disableDepthTest();
+					RenderSystem.disableCull();
+					RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+					RenderSystem.lineWidth(1);
+
+					buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+					Vertexer.vertexTri(matrices, buffer, xx, yy, 0f, xx + x, yy + y, 0f, xx + lastX, yy + lastY, 0f, color1, color2);
+					tessellator.draw();
+
+					RenderSystem.enableCull();
+					RenderSystem.enableDepthTest();
+
+					lastX = x;
+					lastY = y;
+				}
+		 }
+		 
+		 public static void drawStar(MatrixStack matrices, final int xx, final int yy, final float radius, Color color) {
+			 	int sections = 360;
+		        double dAngle = 2 * Math.PI / sections;
+		        float x, y, lastX = 0;
+		        
+		        for (int i = 0; i < sections; i++) {
+					x = (float) (radius * Math.sin((i * dAngle)));
+		            y = (float) (radius * Math.cos((i * dAngle)));
+		            
+		            Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
+
+					RenderSystem.disableDepthTest();
+					RenderSystem.disableCull();
+					RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+					RenderSystem.lineWidth(1);
+
+					buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+					Vertexer.vertexTri(matrices, buffer, xx, yy, 0f, xx, yy + y, 10f, xx + lastX, yy, 0f, color);
+					tessellator.draw();
+
+					RenderSystem.enableCull();
+					RenderSystem.enableDepthTest();
+
+					lastX = x;
+				}
 		    }
 		 
 		 public static double getScaleFactor() {
@@ -248,10 +305,10 @@ public class RenderUtils {
 		 public static void drawRoundedRect(MatrixStack matrices, int left, int top, int right, int bottom, int smooth, Color color){
 		        DrawableHelper.fill(matrices, left + smooth, top, right - smooth, bottom, color.getRGB());
 		        DrawableHelper.fill(matrices, left, top + smooth, right, bottom - smooth, color.getRGB());
-		        drawFilledCircle((int)left + smooth, (int)top + smooth, smooth, color.getRGB());
-		        drawFilledCircle((int)right - smooth, (int)top + smooth, smooth, color.getRGB());
-		        drawFilledCircle((int)right - smooth, (int)bottom - smooth, smooth, color.getRGB());
-		        drawFilledCircle((int)left + smooth, (int)bottom - smooth, smooth, color.getRGB());
+		        drawFilledCircle(matrices, (int)left + smooth, (int)top + smooth, smooth, 45, color);
+		        drawFilledCircle(matrices, (int)right - smooth, (int)top + smooth, smooth, 45, color);
+		        drawFilledCircle(matrices, (int)right - smooth, (int)bottom - smooth, smooth, 45, color);
+		        drawFilledCircle(matrices, (int)left + smooth, (int)bottom - smooth, smooth, 45, color);
 
 		    }
 		 
@@ -543,15 +600,15 @@ public class RenderUtils {
 	        }catch (Exception e){}
 	    }
 	    
-	    public void drawTexture(MatrixStack matrices, float x, float y, float u, float v, float width, float height, int textureWidth, int textureHeight) {
+	    public static void drawTexture(MatrixStack matrices, float x, float y, float u, float v, float width, float height, int textureWidth, int textureHeight) {
 	        drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
 	    }
 
-	    private static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, int textureWidth, int textureHeight) {
+	    public static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, int textureWidth, int textureHeight) {
 	        drawTexture(matrices, x, x + width, y, y + height, 0, regionWidth, regionHeight, u, v, textureWidth, textureHeight);
 	    }
 
-	    private static void drawTexture(MatrixStack matrices, float x0, float y0, float x1, float y1, int z, float regionWidth, float regionHeight, float u, float v, int textureWidth, int textureHeight) {
+	    public static void drawTexture(MatrixStack matrices, float x0, float y0, float x1, float y1, int z, float regionWidth, float regionHeight, float u, float v, int textureWidth, int textureHeight) {
 	        drawTexturedQuad(matrices.peek().getModel(), x0, y0, x1, y1, z, (u + 0.0F) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0F) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
 	    }
 
@@ -1099,4 +1156,35 @@ public class RenderUtils {
 		public static void endScissor() {
 			RenderSystem.disableScissor();
 		}
+		
+		private HashMap<UUID, Identifier> playerSkins = Maps.newHashMap();
+		private ArrayList<String> avatarsRequested = new ArrayList<>();
+		
+		private static final Identifier STEVE_SKIN = new Identifier("textures/entity/steve.png");
+		
+		public static void downloadPlayerSkin(UUID uuid) {
+	        if (uuid == null || INSTANCE.avatarsRequested.contains(uuid.toString().replace("-", "")))
+	            return;
+	        
+	        GameProfile gameProfile = new GameProfile(uuid, "skindl");//name doesn't matter because the url uses the uuid
+	        
+	        //using the handy dandy method Minecraft uses because it actually lets you do something with it rather than just automatically storing them
+	        MinecraftClient.getInstance().getSkinProvider().loadSkin(gameProfile, (type, identifier, minecraftProfileTexture) -> {
+	            if (type == MinecraftProfileTexture.Type.SKIN) {
+	            	INSTANCE.playerSkins.put(uuid, identifier);
+	            }
+
+	        }, true);
+	        INSTANCE.avatarsRequested.add(uuid.toString().replace("-", ""));
+	    }
+		
+		public static Identifier getPlayerSkin(UUID uuid) {
+	        if (INSTANCE.playerSkins.containsKey(uuid)) {
+	        	
+	            return INSTANCE.playerSkins.get(uuid);
+	        } else {
+	            downloadPlayerSkin(uuid);
+	        }
+	        return STEVE_SKIN;
+	    }
 }

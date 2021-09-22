@@ -48,7 +48,7 @@ public class SaveLoad {
 
     public void save() {
 
-    	Logger.logInfo("Saving...");
+    	Hypnotic.LOGGER.info("Saving...");
         ArrayList<String> toSave = new ArrayList<String>();
 
         for (Mod mod : ModuleManager.INSTANCE.modules) {

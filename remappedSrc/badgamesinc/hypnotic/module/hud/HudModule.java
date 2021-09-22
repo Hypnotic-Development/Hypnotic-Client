@@ -115,7 +115,7 @@ public class HudModule extends Mod {
 	}
 	
 	public void setDragging(boolean dragging) {
-		SaveLoad.INSTANCE.save();
+//		SaveLoad.INSTANCE.save();
 		if (this.isDraggable()) this.dragging = dragging;
 		else this.dragging = false;
 	}

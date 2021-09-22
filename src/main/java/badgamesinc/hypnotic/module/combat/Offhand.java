@@ -38,6 +38,7 @@ public class Offhand extends Mod {
 	
 	@Override
 	public void onTick() {
+		if (mc.world == null || mc.interactionManager == null) return;
 		this.setDisplayName("Offhand " + ColorUtils.gray + mode.getSelected());
 		AutoTotem autoTotem = ModuleManager.INSTANCE.getModule(AutoTotem.class);
 

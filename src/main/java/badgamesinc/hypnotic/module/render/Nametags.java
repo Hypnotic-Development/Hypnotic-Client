@@ -41,12 +41,19 @@ public class Nametags extends Mod {
 	public BooleanSetting animals = new BooleanSetting("Animals", true);
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
+	
+	public BooleanSetting bg = new BooleanSetting("Background", true);
+	public BooleanSetting ping = new BooleanSetting("Ping", true);
+	public BooleanSetting healthbar = new BooleanSetting("Healthbar", true);
+	public BooleanSetting items = new BooleanSetting("Items", true);
+	public BooleanSetting head = new BooleanSetting("Head", true);
+	
 	private HashMap<Entity, Vec3d> positions = Maps.newHashMap();
 	int count = 0;
 	
 	public Nametags() {
 		super("Nametags", "Renders a custom nametag above players", Category.RENDER);
-		addSettings(players, monsters, animals, passives, invisibles);
+		addSettings(bg, ping, healthbar, items, head, players, monsters, animals, passives, invisibles);
 	}
 	
 	@EventTarget
@@ -72,7 +79,7 @@ public class Nametags extends Mod {
             }
         });
 		mc.world.getEntities().forEach(entity -> {
-            if (entity instanceof LivingEntity && shouldRenderEntity(entity)) {
+            if (entity instanceof LivingEntity && shouldRenderEntity(entity) && items.isEnabled()) {
                 drawNametagInv((LivingEntity) entity, event);
             }
         });
@@ -132,20 +139,20 @@ public class Nametags extends Mod {
             float x = (float) vec.x;
             float y = (float) vec.y - (playerEntity instanceof PlayerEntity ? 18 : 0);
             String nameString = getNameString(playerEntity);
-            float length = FontManager.roboto.getStringWidth(nameString) + 2;
+            float length = FontManager.roboto.getStringWidth(nameString) + 0;
 
-            if (playerEntity instanceof LivingEntity) {
+            if (playerEntity instanceof LivingEntity && healthbar.isEnabled()) {
                 float percent = ((LivingEntity) playerEntity).getHealth() / ((LivingEntity) playerEntity).getMaxHealth();
                 float barLength = (int) ((length + 20) * percent);
                 RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - (playerEntity instanceof PlayerEntity ? 18 : 2), y - 1, (x - (length / 2) - 18) + barLength, y, getHealthColor(((LivingEntity) playerEntity)));
             }
-            RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - 2 - (playerEntity instanceof PlayerEntity ? 16 : 0), y - 17, x + (length / 2) + 2, y - 1, new Color(0, 0, 0, 150).getRGB());
+            if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), y - 17, x + (length / 2) + 6, y - 1, new Color(0, 0, 0, 175).getRGB());
             if (!FontManager.roboto.mcFont)
             FontManager.roboto.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 18, -1, true);
             else FontManager.roboto.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 15, -1, true);
             if (playerEntity instanceof PlayerEntity) {
                 PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(playerEntity.getUuid());
-                if (playerListEntry != null) {
+                if (playerListEntry != null && head.isEnabled()) {
                 	RenderUtils.drawFace(eventRender2D.getMatrices(), x - length / 2 - 18, y - 17, (int)2, playerListEntry.getSkinTexture());
                 }
             }
@@ -186,6 +193,7 @@ public class Nametags extends Mod {
         String name = entity.getDisplayName().asString();
         PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(entity.getUuid());
         String gameModeText = playerListEntry != null ? ColorUtils.aqua + playerListEntry.getGameMode().getName().substring(0, 1).toUpperCase() + ColorUtils.reset : "";
+        String pingText = ping.isEnabled() ? (playerListEntry != null ? playerListEntry.getLatency() : "0") + "ms " : "";
         if (name.trim().isEmpty())
             name = entity.getName().getString();
         if (entity instanceof ItemEntity) {
@@ -195,7 +203,7 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + " " + name + " " + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
+        	displayName = gameModeText + " " + ColorUtils.gray + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
         return displayName;
     }
 
