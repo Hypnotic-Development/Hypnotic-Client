@@ -32,7 +32,7 @@ public class Hypnotic implements ModInitializer {
 	public static String name = "Hypnotic",
 			version = "r1000",
 			fullName = name + "-" + version,
-			hypnoticDir = System.getenv("APPDATA") + "/.minecraft/Hypnotic",
+			hypnoticDir = MinecraftClient.getInstance().runDirectory.getAbsolutePath() + "/Hypnotic",
 			chatPrefix = ColorUtils.red + name + ColorUtils.gray + ": ";
 	public ModuleManager moduleManager;
 	public EventManager eventManager;
