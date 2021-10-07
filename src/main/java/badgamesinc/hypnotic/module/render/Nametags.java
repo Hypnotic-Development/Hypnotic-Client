@@ -210,11 +210,11 @@ public class Nametags extends Mod {
     private String getHealthString(LivingEntity player) {
         String health = ColorUtils.green;
         if (player.getHealth() < 15)
-            health = "§e";
+            health = "ï¿½e";
         if (player.getHealth() < 10)
-            health = "§6";
+            health = "ï¿½6";
         if (player.getHealth() < 5)
-            health = "§4";
+            health = "ï¿½4";
         if (!Float.isNaN(getHealth(player)) && !Float.isInfinite(getHealth(player)))
             health += "[" + MathUtils.round(getHealth(player), 1) + "]";
         else

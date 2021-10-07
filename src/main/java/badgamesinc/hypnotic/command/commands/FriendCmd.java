@@ -91,13 +91,13 @@ public class FriendCmd extends Command {
 			SaveLoad.INSTANCE.save();
 		} else if (args[0].equalsIgnoreCase("list")) {
 			if (FriendManager.INSTANCE.getFriends().size() != 0) {
-				Wrapper.tellPlayer("§n§lFriends: " + "(" + FriendManager.INSTANCE.getFriends().size() + ")");
+				Wrapper.tellPlayer("ï¿½nï¿½lFriends: " + "(" + FriendManager.INSTANCE.getFriends().size() + ")");
 				Wrapper.tellPlayer("");
 				for (String friend : FriendManager.INSTANCE.getFriends()) {
 					Wrapper.tellPlayer(ColorUtils.green + friend);
 				}
 			} else {
-				Wrapper.tellPlayer("§c§l§oYou have no friends...");
+				Wrapper.tellPlayer("ï¿½cï¿½lï¿½oYou have no friends...");
 			}
 		} else if (args[0] == null || args[1] == null) {
 			

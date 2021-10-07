@@ -159,7 +159,6 @@ public class NahrFont {
         NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
         for (int x = 0; x < imagee.getWidth(); x++) {
             for (int y = 0; y < imagee.getHeight(); y++) {
-            	// bullshit moment
             	imgNew.setColor(x, y, imagee.getColor(x, y));
             }
         }
