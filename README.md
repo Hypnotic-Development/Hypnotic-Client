@@ -15,7 +15,7 @@ Use at your own risk, we are not responsible for any punishments on any server
 ## Requirements  
 Minecraft 1.17.1  
 Java Runtime version 16 or higher  
-Fabric Loader 0.11.3 or higher  
+Fabric Loader 0.12.1 or higher  
   
 ## Authors  
 BadGamesInc - actual knowledge  
