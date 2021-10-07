@@ -20,7 +20,9 @@ Fabric Loader 0.11.3 or higher
 ## Authors  
 BadGamesInc - actual knowledge  
 KawaiiZenbo - api
-
+  
+### Other Credits  
+[Baritone](https://github.com/MeteorDevelopment/baritone)  
 Whoever else we stole code from  
 
 ## Support
@@ -33,7 +35,10 @@ Open Command Prompt/Terminal
 Navigate to where you extracted the Hypnotic Source  
 Run `gradlew eclipse`, then, optionally, run `gradlew gensources`  
 Import the folder into Eclipse as `Existing Projects into workspace`  
-Click on the arrow next to be Debug button in the toolstrip, then click `Debug configurations`  
+Click on the arrow next to the Debug button in the toolstrip, then click `Debug configurations`  
 Expand `Java Application`, then double-click `Hypnotic-Fabric-1.17_client`  
 Hypnotic should now run along with all of your changes  
+
+## Compiled Builds  
+Please get compiled releases from the latest Github Actions artifact, we do not keep up regular releases.  
   
