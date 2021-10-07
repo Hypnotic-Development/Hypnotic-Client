@@ -26,6 +26,10 @@ repositories {
             includeGroupByRegex 'io\\.github\\.onyxstudios.*'
         }
 	}
+	maven {
+		name = "meteor-maven"
+		url = "https://maven.meteordev.org/snapshots"
+	}
 	jcenter()
 }
 
@@ -49,8 +53,8 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:0.40.1+1.17"
 	// Baritone (the fork is standalone baritone and the only change is a setting to build it as fabric mod instead of forge one)
 	// thanks minegame159 from meteor client
-	modImplementation "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
-	include "com.github.MeteorDevelopment:baritone:${project.baritone_version}"
+	modImplementation "baritone:baritone:${project.baritone_version}"
+	include "baritone:baritone:${project.baritone_version}"
 }
 
 processResources {

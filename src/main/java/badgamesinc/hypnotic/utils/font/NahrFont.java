@@ -152,18 +152,19 @@ public class NahrFont {
     }
 
     public void setResourceLocation(String base64, Object font, float size) {
-        NativeImage image = readTexture(base64);
-        int imageWidth = image.getWidth();
-        int imageHeight = image.getHeight();
+        NativeImage imagee = readTexture(base64);
+        int imageWidth = imagee.getWidth();
+        int imageHeight = imagee.getHeight();
 
         NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
-        for (int x = 0; x < image.getWidth(); x++) {
-            for (int y = 0; y < image.getHeight(); y++) {
-                imgNew.setPixelColor(x, y, image.getPixelColor(x, y));
+        for (int x = 0; x < imagee.getWidth(); x++) {
+            for (int y = 0; y < imagee.getHeight(); y++) {
+            	// this breaks customfont but i need to to compile rn
+            	//imgNew.setPixelColor(x, y, imagee.getPixelColor(x, y));
             }
         }
 
-        image.close();
+        imagee.close();
         this.resourceLocation = new Identifier("hypnotic", "fonts" + getFont().getFontName().toLowerCase().replace(" ", "-") + size);
         applyTexture(resourceLocation, imgNew);
     }
