@@ -8,6 +8,7 @@ public class CustomFont extends Mod {
 
 	public CustomFont() {
 		super("CustomFont", "gamer font", Category.RENDER);
+		this.setEnabled(true);
 	}
 
 	@Override

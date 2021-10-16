@@ -25,7 +25,6 @@ public abstract class ServerWorldMixin {
 
 	@Inject(method = "addPlayer", at = @At("HEAD"))
 	private void addPlayer(ServerPlayerEntity player, CallbackInfo ci) {
-		System.out.println("he");
 //		try {
 //			Hypnotic.setHypnoticUser(entity.getName().asString(), Hypnotic.INSTANCE.api.checkOnline(entity.getName().asString()));
 //		} catch (IOException | InterruptedException e) {
@@ -35,7 +34,6 @@ public abstract class ServerWorldMixin {
 	
 	@Inject(method = "removePlayer", at = @At("HEAD"))
 	private void removePlayer(ServerPlayerEntity player, Entity.RemovalReason reason, CallbackInfo ci) {
-		System.out.println("he");
 //		try {
 //			Hypnotic.setHypnoticUser(entity.getName().asString(), Hypnotic.INSTANCE.api.checkOnline(entity.getName().asString()));
 //		} catch (IOException | InterruptedException e) {

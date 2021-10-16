@@ -32,16 +32,25 @@ public class FriendManager {
 		return false;
 	}
 	
+	public boolean isFriend(Friend friend) {
+		boolean is = false;
+		for (Friend f : friends) {
+			if (friend == f) System.out.println("hi");;
+		}
+		System.out.println(is);
+		return is;
+	}
+	
 	public boolean isFriend(String friend) {
 		for (Friend name : friends) {
-			if (name.name.equalsIgnoreCase(friend));
+			if (name.name.equalsIgnoreCase(friend))
 				return true;
         }
 		return false;
 	}
 	
 	public boolean remove(Friend friend) {
-        if (this.isFriend(friend.name)) {
+        if (isFriend(friend)) {
         	getFriends().remove(friend);
             SaveLoad.INSTANCE.save();
             return true;
@@ -53,7 +62,7 @@ public class FriendManager {
 	public boolean add(Friend friend) {
         if (friend.name.isEmpty()) return false;
 
-        if (!friends.contains(friend)) {
+        if (!isFriend(friend)) {
             friends.add(friend);
             SaveLoad.INSTANCE.save();
 
@@ -62,4 +71,14 @@ public class FriendManager {
 
         return false;
     }
+	
+	public Friend getFriendByName(String name) {
+		for (Friend friend : friends) {
+			if (friend.name.equals(name)) {
+				
+				return friend;
+			}
+		}
+		return null;
+	}
 }

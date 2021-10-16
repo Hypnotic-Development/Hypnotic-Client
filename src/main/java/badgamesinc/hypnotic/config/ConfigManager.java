@@ -68,7 +68,7 @@ public class ConfigManager {
                                         }
                                         if (setting instanceof ColorSetting) {
                                         	int[] color = ((ColorSetting)setting).hexToRgbInt((String)cfgSetting.value);
-                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2]);
+                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2], color[3]);
                                         }
                                     }
                                 }
@@ -114,7 +114,7 @@ public class ConfigManager {
                                         }
                                         if (setting instanceof ColorSetting) {
                                         	int[] color = ((ColorSetting)setting).hexToRgbInt((String)cfgSetting.value);
-                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2]);
+                                        	((ColorSetting) setting).setRGB(color[0], color[1], color[2], color[3]);
                                         }
                                     }
                                 }

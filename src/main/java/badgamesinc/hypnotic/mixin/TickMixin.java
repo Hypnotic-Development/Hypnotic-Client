@@ -12,10 +12,10 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.ui.BindingScreen;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import baritone.api.BaritoneAPI;
 import net.minecraft.client.network.PlayerListEntry;
-//import baritone.api.BaritoneAPI;
 import net.minecraft.entity.LivingEntity;
 
 @Mixin(LivingEntity.class)
@@ -24,16 +24,17 @@ public class TickMixin {
 
 	@Inject(at = @At("HEAD"), method = "tick()V")
 	private void init(CallbackInfo info) {
-//		Hypnotic.INSTANCE.api.setOnline("BadGamesInc");
-//		BaritoneAPI.getSettings().chatControl.value = false;
 		for (Mod mod : ModuleManager.INSTANCE.modules) {
 			if (mc.player != null) {
-//				try {
-					if (mod.isEnabled()) mod.onTick();
-					mod.onTickDisabled();
-//				} catch(Exception e) {
-//					e.printStackTrace();
-//				}
+				if (mod.isBinding() && mc.currentScreen == null) {
+					try {
+						mc.setScreen(new BindingScreen(mod, null));
+					} catch(Exception e) {
+						
+					}
+				}
+				if (mod.isEnabled()) mod.onTick();
+				mod.onTickDisabled();
 			}
 		}
 		for (HudModule mod : HudManager.INSTANCE.hudModules) {
@@ -51,16 +52,5 @@ public class TickMixin {
 				Hypnotic.setHypnoticUser(player.getProfile().getName(), player.getLatency() == -1000);
 			}
 		}
-		
-//		if (checkTicks < 10000) {
-//			checkTicks++;
-//		} else {
-//			System.out.println("e");
-//			for (PlayerListEntry player : mc.getNetworkHandler().getPlayerList()) {
-//				System.out.println(player.getProfile().getName());
-//				Hypnotic.setHypnoticUser(player.getProfile().getName(), Hypnotic.INSTANCE.api.checkOnline(player.getProfile().getName()));
-//			}
-//			checkTicks=0;
-//		}
 	}
 }

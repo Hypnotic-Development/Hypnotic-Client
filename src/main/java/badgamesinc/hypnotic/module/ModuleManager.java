@@ -3,11 +3,12 @@ package badgamesinc.hypnotic.module;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.module.combat.*;
+import badgamesinc.hypnotic.module.exploit.*;
 import badgamesinc.hypnotic.module.hud.*;
+import badgamesinc.hypnotic.module.misc.*;
 import badgamesinc.hypnotic.module.movement.*;
 import badgamesinc.hypnotic.module.player.*;
 import badgamesinc.hypnotic.module.render.*;
-import badgamesinc.hypnotic.module.world.*;
 
 public class ModuleManager {
 
@@ -30,7 +31,7 @@ public class ModuleManager {
 		ArrayList<Mod> categoryModules = new ArrayList<>();
 		for(Mod m : modules){
 		    if (m.getCategory() == category){
-			categoryModules.add(m);
+		    	categoryModules.add(m);
 		    }
 		}
 		return categoryModules;
@@ -105,7 +106,11 @@ public class ModuleManager {
 					new Offhand(),
 					new NoRender(),
 					new PortalGui(),
-					new Cape()
+					new Cape(),
+					new InvDupe(),
+					new Waypoints(),
+					new BlockOutline(),
+					new AirPlace()
 				);
 	}
 	

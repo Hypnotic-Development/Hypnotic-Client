@@ -23,6 +23,7 @@ public class About extends Command {
 			Wrapper.tellPlayerRaw(ColorUtils.red + "Current build" + ColorUtils.gray + ": " + Hypnotic.version);
 			Wrapper.tellPlayerRaw(ColorUtils.red + "Modules" + ColorUtils.gray + ": " + ModuleManager.INSTANCE.modules.size());
 			Wrapper.tellPlayerRaw(ColorUtils.red + "Commands" + ColorUtils.gray + ": " + CommandManager.get().getAll().size());
+			Wrapper.tellPlayerRaw(ColorUtils.red + "Website" + ColorUtils.gray + ": https://hypnotic.dev");
 			Wrapper.tellPlayerRaw("\n\n\u00A7c                 .,;;;,.                \n"
 					+ "                .xXNNN0:    .....       \n"
 					+ "               .lXMMMNd.   ;OXXKd.      \n"

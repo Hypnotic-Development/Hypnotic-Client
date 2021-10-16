@@ -12,6 +12,8 @@ import badgamesinc.hypnotic.event.EventManager;
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.sound.SoundEvents;
 
 public class Mod {
 
@@ -101,6 +103,7 @@ public class Mod {
 
 	public void toggle() {
 		enabled = !enabled;
+		mc.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.UI_BUTTON_CLICK, enabled ? 1 : 0.8f, 1));
 		if(enabled) {
 			onEnable();
 			EventManager.INSTANCE.register(this);

@@ -11,18 +11,11 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import badgamesinc.hypnotic.command.commands.*;
+import badgamesinc.hypnotic.command.commands.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
 
-/*
- * commands.add(new Bind());
-		commands.add(new VClip());
-//		commands.add(new Ban());
-		commands.add(new Friend());
-		commands.add(new NBT());
-		// .nbt set {EntityTag:{CustomName:":)",Offers:{Recipes:[{buy:{Count:1,Coutn1id:"dirt",id:"air"},buyB:{Count:1,id:"dirt"},maxUses:99,sell:{Count:1,id:"stick"}}]},id:"minecraft:wandering_trader"},display:{Name:'{"text":"Wandering Crasher","color":"dark_red"}'}}
- */
 public class CommandManager {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
@@ -33,20 +26,21 @@ public class CommandManager {
 
     private CommandManager() {
     	add(new VClip());
-        add(new Ban());
         add(new FriendCmd());
         add(new NBT());
         add(new Enchant());
         add(new Give());
-        add(new Bind());
         add(new Say());
         add(new Baritone());
         add(new Search());
-        add(new Coords());
         add(new Explosion());
         add(new About());
         add(new Commands());
         add(new Modules());
+        add(new Toggle());
+        add(new Module());
+        // crashes after two uses, for some reason
+        add(new Bind());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

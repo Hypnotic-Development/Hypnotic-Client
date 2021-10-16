@@ -3,28 +3,24 @@ package badgamesinc.hypnotic.ui.clickgui2;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.module.Category;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
-
-public class ClickGUI extends Screen {
+public class ClickGUI extends HypnoticScreen {
 
 	public static ClickGUI INSTANCE = new ClickGUI();
 	public ArrayList<Frame> frames;
 	private MenuBar menuBar;
 	
 	private ClickGUI() {
-		super(new LiteralText("ClickGUI2"));
 		frames = new ArrayList<Frame>();
 		
 		int offset = 0;
 		for (Category category : Category.values()) {
-			frames.add(new Frame(25 + offset, 20, 96, 14, category));
-			offset+=100;
+			frames.add(new Frame(25 + offset, 20, 120, 14, category));
+			offset+=126;
 		}
 	}
 	

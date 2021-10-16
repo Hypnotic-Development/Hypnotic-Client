@@ -11,6 +11,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.utils.ChatUtils;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.Wrapper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
@@ -81,8 +82,8 @@ public abstract class Command {
         ChatUtils.sendMsg(Hypnotic.chatPrefix, message);
     }
 
-    public void info(String message, Object... args) {
-        Wrapper.tellPlayer(message);
+    public void info(String message) {
+        Wrapper.tellPlayer(message.replace("(highlight)", ColorUtils.white).replace("(default)", ColorUtils.gray));
     }
 
     public void warning(String message, Object... args) {

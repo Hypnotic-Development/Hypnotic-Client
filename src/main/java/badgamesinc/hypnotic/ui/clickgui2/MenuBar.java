@@ -4,7 +4,11 @@ import java.awt.Color;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
+import badgamesinc.hypnotic.ui.OptionsScreen;
+import badgamesinc.hypnotic.ui.WaypointManagerScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -83,17 +87,19 @@ public class MenuBar {
 				switch(tab) {
 					case CLICKGUI:
 						this.setCurrentTab(Tab.CLICKGUI);
-						mc.setScreen(ClickGUI.INSTANCE);
+						mc.setScreen(ModuleManager.INSTANCE.getModule(ClickGUIModule.class).mode.is("New") ? badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE : ClickGUI.INSTANCE);
 						break;
 					case HUDEDITOR:
 						this.setCurrentTab(Tab.HUDEDITOR);
 						mc.setScreen(HudEditorScreen.INSTANCE);
 						break;
 					case OPTIONS:
-//						this.setCurrentTab(Tab.CLICKGUI);
+						this.setCurrentTab(Tab.OPTIONS);
+						mc.setScreen(OptionsScreen.INSTANCE);
 						break;
-					case TERMINAL:
-//						this.setCurrentTab(Tab.CLICKGUI);
+					case WAYPOINT:
+						this.setCurrentTab(Tab.WAYPOINT);
+						mc.setScreen(WaypointManagerScreen.INSTANCE);
 						break;
 					default:
 						this.setCurrentTab(Tab.CLICKGUI);
@@ -107,7 +113,7 @@ public class MenuBar {
 	public static enum Tab {
 		CLICKGUI("ClickGui"),
 		HUDEDITOR("HudEditor"),
-		TERMINAL("Terminal"),
+		WAYPOINT("Waypoint"),
 		OPTIONS("Options");
 		
 		String name;

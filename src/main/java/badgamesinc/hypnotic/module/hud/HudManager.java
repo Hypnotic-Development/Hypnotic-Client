@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.module.hud;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.module.hud.elements.*;
+import badgamesinc.hypnotic.module.render.TargetHUD;
 
 public class HudManager {
 
@@ -21,7 +22,9 @@ public class HudManager {
 				new Armor(),
 				new Logo(),
 				new ArrayListModule(),
-				new Packets()
+				new Packets(),
+				new Doll(),
+				new TargetHUD()
 			);
 	}
 	

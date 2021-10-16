@@ -118,7 +118,7 @@ public class NBT extends Command {
                 int count = IntegerArgumentType.getInteger(context, "count");
                 stack.setCount(count);
                 setStack(stack);
-                info("Set mainhand stack count to %s.",count);
+                info("Set mainhand stack count to " + count);
             }
 
             return SINGLE_SUCCESS;

@@ -202,7 +202,7 @@ public class RenderUtils {
 	    }
 		 
 		//took me too long to do this
-		 public static void drawFilledCircle(MatrixStack matrices, final int xx, final int yy, final float radius, int sides, Color color) {
+		 public static void drawFilledCircle(MatrixStack matrices, float xx, float yy, float radius, int sides, Color color) {
 			 	int sections = sides;
 		        double dAngle = 2 * Math.PI / sections;
 		        float x, y, lastX = 0, lastY = 0;
@@ -230,6 +230,62 @@ public class RenderUtils {
 					lastX = x;
 					lastY = y;
 				}
+		    }
+		 
+		 // Drawing it with the vertexer is way too inconsistent for what I need circles for
+		 public static void drawFilledCircle(MatrixStack matrices, double xx, int yy, int radius, Color color) {
+			 RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/circle.png"));
+			 RenderSystem.enableBlend();
+			 RenderUtils.drawTexture(matrices, (float) xx, yy, radius, radius, 0, 0, radius, radius, radius, radius);
+			 RenderSystem.disableBlend();
+			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		 }
+		 
+		 public static void drawOutlineCircle(MatrixStack matrices, double xx, int yy, int radius, Color color) {
+			 RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/outlinecircle.png"));
+			 RenderSystem.enableBlend();
+			 RenderUtils.drawTexture(matrices, (float) xx, yy, radius, radius, 0, 0, radius, radius, radius, radius);
+			 RenderSystem.disableBlend();
+			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		 }
+		 
+		 public static void drawCircle(MatrixStack matrices, int xx, int yy, float radius, float width, int sides, Color color) {
+			 	int sections = sides;
+		        xx *= 2.0f;
+		        yy *= 2.0f;
+		        float theta = (float)(6.2831852 / (double)sections);
+		        float p = (float)Math.cos(theta);
+		        float s = (float)Math.sin(theta);
+		        float x = radius *= 2.0f;
+		        float y = 0.0f;
+		        float lastX = x, lastY = 0;
+		        RenderUtils.enableGL2D();
+		        for (int ii = -1; ii < sections; ++ii) {
+		            Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
+
+					RenderSystem.enableBlend();
+					RenderSystem.disableDepthTest();
+					RenderSystem.disableCull();
+					RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+					RenderSystem.lineWidth(width);
+
+					buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+					Vertexer.vertexLine(matrices, buffer, x + xx, yy + y, 0f, xx + lastX, yy + lastY, 0f, LineColor.single(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+					tessellator.draw();
+
+					RenderSystem.enableCull();
+					RenderSystem.enableDepthTest();
+
+					lastX = x;
+					lastY = y;
+		            
+		            float t = x;
+		            x = p * x - s * y;
+		            y = s * t + p * y;
+		        }
 		    }
 		 
 		 public static void drawGradientFilledCircle(MatrixStack matrices, final int xx, final int yy, final float radius, int sides, Color color1, Color color2) {
@@ -303,13 +359,19 @@ public class RenderUtils {
 		    }
 		 
 		 public static void drawRoundedRect(MatrixStack matrices, int left, int top, int right, int bottom, int smooth, Color color){
-		        DrawableHelper.fill(matrices, left + smooth, top, right - smooth, bottom, color.getRGB());
-		        DrawableHelper.fill(matrices, left, top + smooth, right, bottom - smooth, color.getRGB());
-		        drawFilledCircle(matrices, (int)left + smooth, (int)top + smooth, smooth, 45, color);
-		        drawFilledCircle(matrices, (int)right - smooth, (int)top + smooth, smooth, 45, color);
-		        drawFilledCircle(matrices, (int)right - smooth, (int)bottom - smooth, smooth, 45, color);
-		        drawFilledCircle(matrices, (int)left + smooth, (int)bottom - smooth, smooth, 45, color);
+		        fill(matrices, left - smooth / 2, top - smooth, right + smooth / 2, bottom + smooth, color.getRGB());
+		        fill(matrices, left - smooth, top - smooth / 2, right + smooth, bottom + smooth / 2, color.getRGB());
+		        drawFilledCircle(matrices, left - smooth, top - smooth, smooth, color);
+		        drawFilledCircle(matrices, right, top - smooth, smooth, color);
+		        drawFilledCircle(matrices, right, bottom, smooth, color);
+		        drawFilledCircle(matrices, left - smooth, bottom, smooth, color);
 
+		    }
+		 
+		 public static void drawShittyRoundedRect(MatrixStack matrices, int left, int top, int right, int bottom, double length, double smooth, Color color){
+		        for (double i = 0; i < length; i+=smooth) {
+		        	fill(matrices, left - i, top + i, right + i, bottom - i, color.getRGB());
+		        }
 		    }
 		 
 		 public static void drawHLine(MatrixStack matrices, double x, double y, double x1, double y1, float width, int color) {
@@ -586,6 +648,88 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g, h, k, f).next();
+	        bufferBuilder.end();
+	        BufferRenderer.draw(bufferBuilder);
+	        RenderSystem.enableTexture();
+	        RenderSystem.disableBlend();
+	    }
+	    
+	    public static void gradientFill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color1, int color2) {
+	        Matrix4f matrix = matrixStack.peek().getModel();
+	        double j;
+	        if (x1 < x2) {
+	            j = x1;
+	            x1 = x2;
+	            x2 = j;
+	        }
+
+	        if (y1 < y2) {
+	            j = y1;
+	            y1 = y2;
+	            y2 = j;
+	        }
+
+	        float f1 = (float)(color1 >> 24 & 255) / 255.0F;
+	        float g1 = (float)(color1 >> 16 & 255) / 255.0F;
+	        float h1 = (float)(color1 >> 8 & 255) / 255.0F;
+	        float k1 = (float)(color1 & 255) / 255.0F;
+	        
+	        float f2 = (float)(color2 >> 24 & 255) / 255.0F;
+	        float g2 = (float)(color2 >> 16 & 255) / 255.0F;
+	        float h2 = (float)(color2 >> 8 & 255) / 255.0F;
+	        float k2 = (float)(color2 & 255) / 255.0F;
+	        
+	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+	        RenderSystem.enableBlend();
+	        RenderSystem.disableTexture();
+	        RenderSystem.defaultBlendFunc();
+	        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+	        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y2, 0.0F).color(g1, h1, k1, f1).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g1, h1, k1, f1).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g2, h2, k2, f2).next();
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g2, h2, k2, f2).next();
+	        bufferBuilder.end();
+	        BufferRenderer.draw(bufferBuilder);
+	        RenderSystem.enableTexture();
+	        RenderSystem.disableBlend();
+	    }
+	    
+	    public static void sideGradientFill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color1, int color2, boolean dir) {
+	        Matrix4f matrix = matrixStack.peek().getModel();
+	        double j;
+	        if (x1 < x2) {
+	            j = x1;
+	            x1 = x2;
+	            x2 = j;
+	        }
+
+	        if (y1 < y2) {
+	            j = y1;
+	            y1 = y2;
+	            y2 = j;
+	        }
+
+	        float f1 = (float)(color1 >> 24 & 255) / 255.0F;
+	        float g1 = (float)(color1 >> 16 & 255) / 255.0F;
+	        float h1 = (float)(color1 >> 8 & 255) / 255.0F;
+	        float k1 = (float)(color1 & 255) / 255.0F;
+	        
+	        float f2 = (float)(color2 >> 24 & 255) / 255.0F;
+	        float g2 = (float)(color2 >> 16 & 255) / 255.0F;
+	        float h2 = (float)(color2 >> 8 & 255) / 255.0F;
+	        float k2 = (float)(color2 & 255) / 255.0F;
+	        
+	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+	        RenderSystem.enableBlend();
+	        RenderSystem.disableTexture();
+	        RenderSystem.defaultBlendFunc();
+	        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+	        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y2, 0.0F).color(!dir ? g2 : g1, !dir ? h2 : h1, !dir ? k2 : k1, !dir ? f2 : f1).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(dir ? g2 : g1, dir ? h2 : h1, dir ? k2 : k1, dir ? f2 : f1).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(dir ? g2 : g1, dir ? h2 : h1, dir ? k2 : k1, dir ? f2 : f1).next();
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(!dir ? g2 : g1, !dir ? h2 : h1, !dir ? k2 : k1, !dir ? f2 : f1).next();
 	        bufferBuilder.end();
 	        BufferRenderer.draw(bufferBuilder);
 	        RenderSystem.enableTexture();
@@ -1143,6 +1287,56 @@ public class RenderUtils {
 		public static void drawBoxFill(BlockPos blockPos, QuadColor color, Direction... excludeDirs) {
 			drawBoxFill(new Box(blockPos), color, excludeDirs);
 		}
+		
+		public static void drawFaceFill(BlockPos blockPos, QuadColor color, Direction face) {
+			Box box = new Box(blockPos);
+			if (!getFrustum().isVisible(box)) {
+				return;
+			}
+
+			setup3DRender(true);
+
+			MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+
+			// Fill
+			RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+			buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+			Vertexer.vertexBoxQuadsFace(matrices, buffer, Boxes.moveToZero(box), color, face);
+			tessellator.draw();
+
+			end3DRender();
+		}
+		
+		public static void drawFaceOutline(BlockPos blockPos, QuadColor color, int width, Direction face) {
+			Box box = new Box(blockPos);
+			if (!getFrustum().isVisible(box)) {
+				return;
+			}
+
+			setup3DRender(true);
+
+			MatrixStack matrices = matrixFrom(box.minX, box.minY, box.minZ);
+
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+
+			// Outline
+			RenderSystem.disableCull();
+			RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+			RenderSystem.lineWidth(width);
+
+			buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
+			Vertexer.vertexBoxLinesFace(matrices, buffer, Boxes.moveToZero(box), color, face);
+			tessellator.draw();
+
+			RenderSystem.enableCull();
+
+			end3DRender();
+		}
 
 		public static void drawBoxOutline(BlockPos blockPos, QuadColor color, float lineWidth, Direction... excludeDirs) {
 			drawBoxOutline(new Box(blockPos), color, lineWidth, excludeDirs);
@@ -1187,4 +1381,13 @@ public class RenderUtils {
 	        }
 	        return STEVE_SKIN;
 	    }
+		
+
+		public static boolean isOnScreen2d(Vec3d pos) {
+	        return pos != null && (pos.z > -1 && pos.z < 1);
+	    }
+		
+		public static double distanceTo(double x1, double x2) {
+			return x2 - x1;
+		}
 }

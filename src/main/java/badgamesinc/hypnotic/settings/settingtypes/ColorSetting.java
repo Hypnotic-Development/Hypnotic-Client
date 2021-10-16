@@ -10,20 +10,22 @@ public class ColorSetting extends Setting {
 	public float hue;
 	public float sat;
 	public float bri;
+	public float alpha;
 
 	protected float defaultHue;
 	protected float defaultSat;
 	protected float defaultBri;
 	
-	public ColorSetting(String name, float r, float g, float b, boolean hsv) {
+	public ColorSetting(String name, float r, float g, float b, float a, boolean hsv) {
 		this.name = name;
 		
 		if (hsv) {
 			this.hue = r;
 			this.sat = g;
 			this.bri = b;
+			this.alpha = a;
 		} else {
-			float[] vals = rgbToHsv(r, g, b);
+			float[] vals = rgbToHsv(r, g, b, a);
 			this.hue = vals[0];
 			this.sat = vals[1];
 			this.bri = vals[2];
@@ -34,13 +36,36 @@ public class ColorSetting extends Setting {
 		this.defaultBri = bri;
 	}
 	
+	public ColorSetting(String name, float r, float g, float b, boolean hsv) {
+		this.name = name;
+		
+		if (hsv) {
+			this.hue = r;
+			this.sat = g;
+			this.bri = b;
+			this.alpha = 1;
+		} else {
+			float[] vals = rgbToHsv(r, g, b, 1f);
+			this.hue = vals[0];
+			this.sat = vals[1];
+			this.bri = vals[2];
+			this.alpha = 1;
+		}
+		
+		this.defaultHue = hue;
+		this.defaultSat = sat;
+		this.defaultBri = bri;
+	}
+	
 	public ColorSetting(String name, String hex) {
 		this.name = name;
-
-		int[] vals = hexToRgbInt(hex);
+		Color hexColor = hexToRgb(hex);
+		float[] vals = rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
+		this.setHSV(vals[0], vals[1], vals[2]);
 		this.hue = vals[0];
 		this.sat = vals[1];
 		this.bri = vals[2];
+		this.alpha = vals[3];
 		
 		this.defaultHue = hue;
 		this.defaultSat = sat;
@@ -48,19 +73,21 @@ public class ColorSetting extends Setting {
 	}
 	
 	public int getRGB() {
-		return MathHelper.hsvToRgb(hue, sat, bri);
+		Color c = new Color(MathHelper.hsvToRgb(hue, sat, bri));
+		return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)alpha).getRGB();
 	}
 
 	public float[] getRGBFloat() {
 		int col = MathHelper.hsvToRgb(hue, sat, bri);
-		return new float[] { (col >> 16 & 255) / 255f, (col >> 8 & 255) / 255f, (col & 255) / 255f };
+		return new float[] { (col >> 16 & 255) / 255f, (col >> 8 & 255) / 255f, (col & 255) / 255f, alpha};
 	}
 	
-	public void setRGB(float r, float g, float b) {
-		float[] vals = rgbToHsv(r, g, b);
+	public void setRGB(float r, float g, float b, float a) {
+		float[] vals = rgbToHsv(r, g, b, a);
 		this.hue = vals[0];
 		this.sat = vals[1];
 		this.bri = vals[2];
+		this.alpha = vals[3];
 	}
 	
 	public String getHSVString() {
@@ -108,8 +135,9 @@ public class ColorSetting extends Setting {
 		return new float[] { computedH, computedS, computedV };
 	}*/
 	
-	public float[] rgbToHsv(float r, float g, float b) {
-		return Color.RGBtoHSB((int)r, (int)g, (int)b, null);
+	public float[] rgbToHsv(float r, float g, float b, float a) {
+		float[] hsv = Color.RGBtoHSB((int)r, (int)g, (int)b, null);
+		return new float[] {hsv[0], hsv[1], hsv[2], a / 255f};
 	}
 	
 	public String rgbToHex(int rgb) {
@@ -128,10 +156,10 @@ public class ColorSetting extends Setting {
 	public int[] hexToRgbInt(String hex) {
 		try {
 			Color color = Color.decode("#" + hex.replace("#", ""));
-			return new int[] {color.getRed(), color.getGreen(), color.getBlue()};
+			return new int[] {color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()};
 		} catch(NumberFormatException e) {
 			System.err.println("Invalid hex string!");
-			return new int[] {Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue()};
+			return new int[] {Color.WHITE.getRed(), Color.WHITE.getGreen(), Color.WHITE.getBlue(), Color.WHITE.getAlpha()};
 		}
 	}
 }

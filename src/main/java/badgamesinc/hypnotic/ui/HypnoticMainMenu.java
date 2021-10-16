@@ -1,7 +1,5 @@
 package badgamesinc.hypnotic.ui;
 
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
-
 import java.awt.Color;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -140,6 +138,8 @@ public class HypnoticMainMenu extends HypnoticScreen {
     	return mouseX >= x && mouseX <= x + size && mouseY >= y && mouseY <= y + size;
     }
 	
+    float linkTicks = 0;
+    
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		renderBackground(matrices);
@@ -153,8 +153,11 @@ public class HypnoticMainMenu extends HypnoticScreen {
 		font.draw(matrices, Hypnotic.fullName, 4, height - 19, -1);
 		font.draw(matrices, TitleScreen.COPYRIGHT, width - font.getStringWidth(TitleScreen.COPYRIGHT) - 4, height - 19, -1);
 		if (hovered(4, height - 4, (int) font.getStringWidth(Hypnotic.fullName) + 4, height - 14)) {
-			RenderUtils.fill(matrices, 4, height - 5, font.getStringWidth(Hypnotic.fullName), height - 6, -1);
+			if (linkTicks < font.getStringWidth(Hypnotic.fullName)) linkTicks+=2;
+		} else {
+			if (linkTicks > 0) linkTicks-=2;
 		}
+		RenderUtils.fill(matrices, 4, height - 5, 4 + linkTicks, height - 6, -1);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	

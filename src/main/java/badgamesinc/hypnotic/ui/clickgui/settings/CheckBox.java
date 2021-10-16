@@ -7,7 +7,6 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class CheckBox extends Component {
 
-	@SuppressWarnings("unused")
 	private BooleanSetting boolSet = (BooleanSetting)setting;
 	
 	public CheckBox(int x, int y, SettingsWindow parent, Setting setting) {

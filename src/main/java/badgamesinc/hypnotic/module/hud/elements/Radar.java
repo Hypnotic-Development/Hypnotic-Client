@@ -45,7 +45,6 @@ public class Radar extends HudModule {
 	public Radar() {
 		super("Radar", "render the mans", 4, 20, 100, 100);
 		addSettings(size, players, monsters, animals, passives, invisibles, items, color);
-		this.setEnabled(true);
 	}
 
 	@Override
@@ -69,20 +68,6 @@ public class Radar extends HudModule {
                     RenderUtils.fill(matrixStack, xPos, yPos, xPos + 1, yPos + 1, getEntityColor(entity).getRGB());
                 }
             }
-        /*if (Radar.INSTANCE.waypoints) {
-            matrixStack.push();
-            float scale = 0.75f;
-            matrixStack.scale(scale, scale, 1);
-            Waypoints.waypoints.forEach(waypoint -> {
-                float xPos = (float) (waypoint.getX() - mc.player.getX()) + midPos + this.getX();
-                float yPos = (float) (waypoint.getZ() - mc.player.getZ()) + midPos + this.getY() + this.getHeight();
-                String letter = waypoint.getName().substring(0, 1);
-                    if (xPos < this.getX() + this.getWidth() - 2 && yPos < this.getY() + this.getHeight() + this.getWidth() - 2 && yPos > this.getY() + this.getHeight() + 2 && xPos > this.getX() + 2) {
-                        font.drawCenteredString(matrixStack, letter, xPos / scale, yPos / scale, waypoint.getColor());
-                    }
-            });
-            matrixStack.pop();
-        }*/
         matrixStack.push();
         matrixStack.translate(this.getX() + midPos + 0.5, this.getY() + midPos + 0.5, 0);
         RenderUtils.fill(matrixStack, -0.5f, -0.5f, 0.5f, 0.5f, color.getRGB());

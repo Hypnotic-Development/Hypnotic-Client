@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.module.world;
+package badgamesinc.hypnotic.module.misc;
 
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
@@ -13,7 +13,7 @@ public class Timer extends Mod {
 	public NumberSetting speed = new NumberSetting("Speed", 10, 0.1, 20, 0.1);
 	
     public Timer() {
-        super("Timer", "Speeds up the game time", Category.WORLD);
+        super("Timer", "Speeds up the game time", Category.MISC);
         addSetting(speed);
     }
 

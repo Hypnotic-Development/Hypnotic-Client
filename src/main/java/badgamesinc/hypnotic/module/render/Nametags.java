@@ -135,7 +135,7 @@ public class Nametags extends Mod {
 
     public void drawNametags(Entity playerEntity, EventRenderGUI eventRender2D) {
         Vec3d vec = positions.get(playerEntity);
-        if (isOnScreen(vec)) {
+        if (RenderUtils.isOnScreen2d(vec)) {
             float x = (float) vec.x;
             float y = (float) vec.y - (playerEntity instanceof PlayerEntity ? 18 : 0);
             String nameString = getNameString(playerEntity);
@@ -143,8 +143,8 @@ public class Nametags extends Mod {
 
             if (playerEntity instanceof LivingEntity && healthbar.isEnabled()) {
                 float percent = ((LivingEntity) playerEntity).getHealth() / ((LivingEntity) playerEntity).getMaxHealth();
-                float barLength = (int) ((length + 20) * percent);
-                RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - (playerEntity instanceof PlayerEntity ? 18 : 2), y - 1, (x - (length / 2) - 18) + barLength, y, getHealthColor(((LivingEntity) playerEntity)));
+                float barLength = (int) (((length) + 6) * percent);
+                RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - (playerEntity instanceof PlayerEntity ? 18 : 2), y - 1, 0 + (x) + barLength - length / 2, y, getHealthColor(((LivingEntity) playerEntity)));
             }
             if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), y - 17, x + (length / 2) + 6, y - 1, new Color(0, 0, 0, 175).getRGB());
             if (!FontManager.roboto.mcFont)
@@ -161,7 +161,7 @@ public class Nametags extends Mod {
 
     public void drawNametagInv(LivingEntity playerEntity, EventRenderGUI eventRender2D) {
         Vec3d vec = positions.get(playerEntity);
-        if (isOnScreen(vec)) {
+        if (RenderUtils.isOnScreen2d(vec)) {
             float x = (float) vec.x;
             float y = (float) vec.y - (playerEntity instanceof PlayerEntity ? 18 : 0);
 //            if (showInv)
@@ -203,18 +203,18 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + " " + ColorUtils.gray + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
+        	displayName = gameModeText + " " + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
         return displayName;
     }
 
     private String getHealthString(LivingEntity player) {
         String health = ColorUtils.green;
         if (player.getHealth() < 15)
-            health = "�e";
+            health = ColorUtils.colorChar + "e";
         if (player.getHealth() < 10)
-            health = "�6";
+            health = ColorUtils.colorChar + "6";
         if (player.getHealth() < 5)
-            health = "�4";
+            health = ColorUtils.colorChar + "4";
         if (!Float.isNaN(getHealth(player)) && !Float.isInfinite(getHealth(player)))
             health += "[" + MathUtils.round(getHealth(player), 1) + "]";
         else
@@ -248,8 +248,4 @@ public class Nametags extends Mod {
 		if (entity.isInvisible()) return new Color(255, 255, 255, alpha);
 		return new Color(255, 255, 255);
 	}
-	
-	public boolean isOnScreen(Vec3d pos) {
-        return pos != null && (pos.z > -1 && pos.z < 1);
-    }
 }

@@ -18,6 +18,9 @@ import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
+import badgamesinc.hypnotic.waypoint.Waypoint;
+import badgamesinc.hypnotic.waypoint.WaypointManager;
+import net.minecraft.util.math.BlockPos;
 
 public class SaveLoad {
     public File dir;
@@ -68,6 +71,10 @@ public class SaveLoad {
         }
         
         toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
+        
+        for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
+        	toSave.add("WAYPOINT:" + ":name:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());
+        }
         
         /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
         	toSave.add("MESSAGE:" + message);
@@ -131,7 +138,21 @@ public class SaveLoad {
             	HudEditorScreen.INSTANCE.frame.setX(Integer.parseInt(args[2]));
             	HudEditorScreen.INSTANCE.frame.setY(Integer.parseInt(args[3]));
             	HudEditorScreen.INSTANCE.frame.setExtended(Boolean.parseBoolean(args[4]));
-            }/*else if (s.toLowerCase().startsWith("message:")) {
+            } else if (s.toLowerCase().startsWith("waypoint:")) {
+            	for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
+            		if (waypoint.getName().equalsIgnoreCase(args[1])) {
+            			int x = Integer.parseInt(args[2]);
+            			int y = Integer.parseInt(args[3]);
+            			int z = Integer.parseInt(args[4]);
+            			waypoint.setX(x);
+            			waypoint.setY(y);
+            			waypoint.setZ(z);
+            			waypoint.setPos(new BlockPos(x, y, z));
+            		}
+            	}
+            }
+            
+            /*else if (s.toLowerCase().startsWith("message:")) {
             	ModuleManager.INSTANCE.chatSpammer.custom.add(args[1]);
             } else if (s.toLowerCase().startsWith("mainmenubg")) {
             	GuiMainMenu.menuIndex = Integer.parseInt(args[1]);

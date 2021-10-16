@@ -10,7 +10,7 @@ public class Wrapper {
 	public static MinecraftClient mc = MinecraftClient.getInstance();
 	
 	public static void tellPlayer(String message) {
-        Text textComponentString = new LiteralText(message);
+        Text textComponentString = new LiteralText(ColorUtils.gray + message);
         mc.inGameHud.getChatHud().addMessage(new LiteralText(Hypnotic.chatPrefix).append(textComponentString));
     }
 	

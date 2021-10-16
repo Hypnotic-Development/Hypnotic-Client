@@ -11,7 +11,7 @@ import badgamesinc.hypnotic.utils.player.PlayerUtils;
 
 public class Speed extends Mod {
 
-	public NumberSetting speed = new NumberSetting("Speed", 1, 1, 10, 0.1);
+	public NumberSetting speed = new NumberSetting("Speed", 4, 1, 10, 0.1);
 	public BooleanSetting jump = new BooleanSetting("Jump", true);
 	public NumberSetting jumpHeight = new NumberSetting("Jump Height", 4, 1, 10, 0.1);
 	public BooleanSetting override = new BooleanSetting("Override Jump Height", true);

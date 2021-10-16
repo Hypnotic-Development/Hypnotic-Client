@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.module.world;
+package badgamesinc.hypnotic.module.misc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class Nuker extends Mod {
 	public NumberSetting delay = new NumberSetting("Delay", 0, 0, 100, 1);
 
 	public Nuker() {
-		super("Nuker", "brake stuff", Category.WORLD);
+		super("Nuker", "brake stuff", Category.MISC);
 		addSettings(radius, delay);
 	}
 

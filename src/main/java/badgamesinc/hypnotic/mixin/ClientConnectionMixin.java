@@ -29,6 +29,7 @@ public class ClientConnectionMixin {
     		try {
 				CommandManager.get().dispatch(((ChatMessageC2SPacket) packet).getChatMessage().substring(CommandManager.get().getPrefix().length()));
             } catch (CommandSyntaxException e) {
+            	e.printStackTrace();
                 Wrapper.tellPlayer(e.getMessage());
             }
 			ci.cancel();

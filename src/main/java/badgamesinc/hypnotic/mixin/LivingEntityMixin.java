@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import badgamesinc.hypnotic.module.ModuleManager;
-import badgamesinc.hypnotic.module.player.OffhandCrash;
+import badgamesinc.hypnotic.module.exploit.OffhandCrash;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

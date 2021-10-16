@@ -1,23 +1,18 @@
 package badgamesinc.hypnotic.ui;
 
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
-
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.ui.clickgui2.MenuBar;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 
-public class HudEditorScreen extends Screen {
+public class HudEditorScreen extends HypnoticScreen {
 
 	public static HudEditorScreen INSTANCE = new HudEditorScreen();
 	private MenuBar menuBar;
 	public Frame frame;
 	
 	public HudEditorScreen() {
-		super(new LiteralText("HudEditorScreen"));
 		frame = new Frame(200, 25, 120, 14, "Hud Modules");
 	}
 

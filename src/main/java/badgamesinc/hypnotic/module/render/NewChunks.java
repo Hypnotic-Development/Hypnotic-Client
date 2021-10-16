@@ -31,7 +31,7 @@ public class NewChunks extends Mod {
 	public BooleanSetting fill = new BooleanSetting("Fill", true);
 	public BooleanSetting newChunksSet = new BooleanSetting("NewChunks", true);
 	public BooleanSetting oldChunksSet = new BooleanSetting("OldChunks", true);
-	public ColorSetting color = new ColorSetting("Color", 0.9f, 0.2f, 0.2f, false);
+	public ColorSetting color = new ColorSetting("Color", 0.9f, 0.2f, 0.2f, 1f, false);
 	private static final Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
 	private Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
 	private Set<ChunkPos> oldChunks = Collections.synchronizedSet(new HashSet<>());

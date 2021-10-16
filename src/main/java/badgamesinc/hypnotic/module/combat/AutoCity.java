@@ -31,7 +31,7 @@ public class AutoCity extends Mod {
     private boolean sentMessage;
     
 	public AutoCity() {
-		super("AutoCity", "City the peeps", Category.WORLD);
+		super("AutoCity", "City the peeps", Category.MISC);
 		addSettings(range, autoDisable, rotate, support, autoSwitch);
 	}
 	

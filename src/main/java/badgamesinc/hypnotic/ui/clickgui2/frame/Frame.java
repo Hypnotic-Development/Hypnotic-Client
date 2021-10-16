@@ -17,6 +17,8 @@ import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
+import badgamesinc.hypnotic.waypoint.Waypoint;
+import badgamesinc.hypnotic.waypoint.WaypointManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -61,6 +63,21 @@ public class Frame {
 		}
 	}
 	
+	public Frame(String name, int x, int y, int width, int height) {
+		this.name = name;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.extended = true;
+		this.buttons = new ArrayList<Button>();
+		int offset = height;
+		for (Waypoint mod : WaypointManager.INSTANCE.waypoints) {
+			buttons.add(new Button(mod, this.x, this.y, offset, this));
+			offset+=height;
+		}
+	}
+	
 	float animTicks = 0;
 	int length = 0;
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
@@ -69,7 +86,8 @@ public class Frame {
 		Screen.fill(matrices, x, y, x + width, y + height, color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
 		FontManager.roboto.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
-		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
+		if (category != null) FontManager.icons.drawWithShadow(matrices, category.icon, x + width - (height), y + (height / 6), -1);
+		else FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
 		if (this.extended) {
 			buttons.sort(Comparator.comparingInt(b -> (int)FontManager.roboto.getWidth(((Button)b).mod.getName())).reversed());
 			for (Button button : buttons) {
@@ -88,7 +106,7 @@ public class Frame {
 							component.render(matrices, mouseX, mouseY, count2);
 							Screen.fill(matrices, x, button.getY() + height, x + 1, button.getY() + height*2 + count2, color.getRGB());
 							Screen.fill(matrices, x + width, button.getY() + height, x + width - 1, button.getY() + height*2 + count2, color.getRGB());
-							count2+=(component instanceof ColorBox ? height * 7.5f : height);
+							count2+=(component instanceof ColorBox ? height * (((ColorBox)component).open ? 7.5f : 1) : height);
 							
 							if (!button.isExtended() && button.animation < count2 && this.extended) button.animation++;
 							if (this.extended && !button.isExtended() && button.animation > 0) button.animation--;
@@ -117,11 +135,7 @@ public class Frame {
 		} if (!this.extended) {
 
 			length = height;
-			if (animTicks > this.height + 1) {
-				animTicks-=5;
-			} else {
-				RenderUtils.drawBorderRect(matrices, this.x, this.y, this.x + this.width, this.y + this.height + 1, color.getRGB(), 1);
-			}
+			RenderUtils.drawBorderRect(matrices, this.x + 1, this.y, this.x + this.width - 1, this.y + this.height, color.getRGB(), 1);
 			if (animTicks < this.height + 1) {
 				animTicks = this.height + 1;
 			}
@@ -166,7 +180,7 @@ public class Frame {
 			offset+=height;
 			if (button.isExtended()) {
 				for (Component component : button.components) {
-					if (component.setting.isVisible()) offset+=(component instanceof ColorBox ? height * 7.5f : height); 
+					if (component.setting.isVisible()) offset+=(component instanceof ColorBox ? height * (((ColorBox)component).open ? 7.5f : 1) : height); 
 				}
 			}
 			

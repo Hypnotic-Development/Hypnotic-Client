@@ -24,6 +24,16 @@ public class Button {
 		this.enabled = true;
 	}
 	
+	public Button(String text, float x, float y, float width, float height, boolean animation) {
+		this.text = text;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.animation = animation;
+		this.enabled = true;
+	}
+	
 	float hoverTicks = 80;
 	public void render(MatrixStack matrices, double mouseX, double mouseY, float delta) {
 		if (isHovered(mouseX, mouseY) && hoverTicks > 20) {

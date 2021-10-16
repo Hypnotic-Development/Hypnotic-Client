@@ -3,13 +3,14 @@ package badgamesinc.hypnotic.ui.clickgui.settings;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import badgamesinc.hypnotic.settings.*;
-import badgamesinc.hypnotic.settings.settingtypes.*;
+import badgamesinc.hypnotic.settings.Setting;
+import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
+import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.clickgui.ModuleButton;
-import net.minecraft.client.gui.screen.Screen;
+import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.util.math.MatrixStack;
-
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 public class SettingsWindow {
 
@@ -37,24 +38,34 @@ public class SettingsWindow {
 					this.components.add(new ComboBox(x, y + count, this, setting));
 				} else if (setting instanceof NumberSetting) {
 					this.components.add(new Slider(x, y + count, this, setting));
+				} else if (setting instanceof ColorSetting) {
+					this.components.add(new ColorBox(x, y + count, this, setting));
 				}
-				
 				count+=20;
 			}
 		}
 	}
 	
-	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		Screen.fill(matrices, 250, 125, mc.getWindow().getScaledWidth() - 250, mc.getWindow().getScaledHeight() - 125, -1);
-		mc.textRenderer.draw(matrices, parent.mod.getDescription(), 260, 135, new Color(0, 0, 0).getRGB());
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		FontManager.roboto.drawWithShadow(matrices, parent.mod.getDescription(), 260, 135, new Color(0, 0, 0).getRGB());
 		for (Component component : components) {
 			if (!components.isEmpty())
-				System.out.println("he");
 				component.render(matrices, mouseX, mouseY);
 		}
 	}
 	
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		
+		for (Component c : components) {
+			c.mouseClicked(mouseX, mouseY, button);
+		}
+	}
+	
+	public void mouseReleased(double mouseX, double mouseY, int button) {
+		for (Component c : components) {
+			c.mouseReleased(mouseX, mouseY, button);
+		}
+	}
+	
+	public void keyPressed(int keyCode, int scanCode, int modifiers) {
 	}
 }

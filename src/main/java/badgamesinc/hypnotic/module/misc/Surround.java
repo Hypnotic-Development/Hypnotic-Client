@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.module.world;
+package badgamesinc.hypnotic.module.misc;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class Surround extends Mod {
 	badgamesinc.hypnotic.utils.Timer delayTimer = new badgamesinc.hypnotic.utils.Timer();
 
 	public Surround() {
-		super("Surround", "Surround", Category.WORLD);
+		super("Surround", "Surround", Category.MISC);
 		addSettings(delay, autoSwitch, switchBack, onlyObi, snap);
 	}
 	

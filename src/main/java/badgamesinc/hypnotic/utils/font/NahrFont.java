@@ -53,7 +53,7 @@ public class NahrFont {
     private float fontSize;
     private int startChar, endChar;
     private float[] xPos, yPos;
-    private BufferedImage bufferedImage;
+    public BufferedImage bufferedImage;
     private Identifier resourceLocation;
     private final Pattern patternControlCode = Pattern.compile("(?i)\\u00A7[0-9A-FK-OG]"), patternUnsupported = Pattern.compile("(?i)\\u00A7[L-O]");
     public boolean mcFont = false;
@@ -106,12 +106,19 @@ public class NahrFont {
                     this.theFont = Font.createFont(0, new File(Hypnotic.hypnoticDir + File.separator + "fonts", (String)font)).deriveFont(size);
                 else
                     this.theFont = new Font((String) font, 0, Math.round(size));
+            } else if ((font instanceof Identifier)) {
+            	String name = ((Identifier)font).getPath();
+            	if (name.toLowerCase().endsWith("ttf") || name.endsWith("otf"))
+                    this.theFont = Font.createFont(0, new File(Hypnotic.hypnoticDir + File.separator + "fonts", name)).deriveFont(size);
+                else
+                    this.theFont = new Font(name, 0, Math.round(size));
             } else {
                 this.theFont = new Font("Verdana", 0, Math.round(size));
             }
             this.theGraphics.setFont(this.theFont);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Error loading font");
             this.theFont = new Font("Verdana", 0, Math.round(size));
             this.theGraphics.setFont(this.theFont);
         }
@@ -152,18 +159,28 @@ public class NahrFont {
     }
 
     public void setResourceLocation(String base64, Object font, float size) {
-        NativeImage imagee = readTexture(base64);
-        int imageWidth = imagee.getWidth();
-        int imageHeight = imagee.getHeight();
+        NativeImage image = readTexture(base64);
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
 
         NativeImage imgNew = new NativeImage(imageWidth, imageHeight, true);
-        for (int x = 0; x < imagee.getWidth(); x++) {
-            for (int y = 0; y < imagee.getHeight(); y++) {
-            	imgNew.setColor(x, y, imagee.getColor(x, y));
+        for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+            	/*
+            	 * !!!!
+            	 *  WHEN COMPILING SET THESE TO imgNew.setColor AND image.getColor really retarded but it works just
+            	 *   ignore if your ide says there is an error until you go
+            	 *    back to actually working from a dev environment then you 
+            	 *    can change back to setPixelColor and getPixelColor
+            	 *  !!!
+            	 *  !!
+            	 * !!!!!!!
+            	 */
+                imgNew.setColor(x, y, image.getColor(x, y));
             }
         }
 
-        imagee.close();
+        image.close();
         this.resourceLocation = new Identifier("hypnotic", "fonts" + getFont().getFontName().toLowerCase().replace(" ", "-") + size);
         applyTexture(resourceLocation, imgNew);
     }
@@ -523,5 +540,21 @@ public class NahrFont {
                 s = s.replace("\247" + i, "");
         }
         return s.replace("\247a", "").replace("\247b", "").replace("\247c", "").replace("\247d", "").replace("\247e", "").replace("\247f", "").replace("\247g", "");
+    }
+    
+    public String trimToWidth(String string, int width) {
+    	try {
+    		return string.substring(0, width);
+    	} catch(Exception e) {
+    		return string;
+    	}
+    }
+    
+    public String trimToWidth(String string, int width, boolean backwards) {
+    	try {
+    		return backwards ? string.substring(width) : string.substring(0, width);
+    	} catch(Exception e) {
+    		return string;
+    	}
     }
 }

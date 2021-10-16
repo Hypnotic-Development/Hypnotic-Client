@@ -1,4 +1,4 @@
-package badgamesinc.hypnotic.module.world;
+package badgamesinc.hypnotic.module.misc;
 
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventSound;
@@ -17,7 +17,7 @@ public class SoundBlocker extends Mod {
 	public BooleanSetting portal = new BooleanSetting("Portal", true);
 	
 	public SoundBlocker() {
-		super("SoundBlocker", "Blocks sounds", Category.WORLD);
+		super("SoundBlocker", "Blocks sounds", Category.MISC);
 		addSettings(explosion, exp, water, rain, totem, portal);
 	}
 	

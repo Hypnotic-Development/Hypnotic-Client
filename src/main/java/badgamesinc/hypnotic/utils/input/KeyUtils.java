@@ -1,11 +1,26 @@
 package badgamesinc.hypnotic.utils.input;
 
-import net.minecraft.client.option.KeyBinding;
+import java.util.List;
+
 import org.lwjgl.glfw.GLFW;
 
+import com.google.common.collect.Lists;
+
+import net.minecraft.client.option.KeyBinding;
+
 public class KeyUtils {
-    private static final boolean[] keys = new boolean[512];
+    
+	public static KeyUtils INSTANCE = new KeyUtils();
+	
+	private static final boolean[] keys = new boolean[512];
     private static final boolean[] buttons = new boolean[16];
+    
+    public List<String> keyList = Lists.newArrayList();
+    public List<Integer> keyList2 = Lists.newArrayList();
+    
+    public KeyUtils() {
+    	addKeys();
+    }
 
     public static void setKeyState(int key, boolean pressed) {
         if (key >= 0 && key < keys.length) keys[key] = pressed;
@@ -33,7 +48,7 @@ public class KeyUtils {
         return button < buttons.length && buttons[button];
     }
     
-    public static int getKeyCode(String key) {
+    public static int getKey(String key) {
     	switch (key.toLowerCase()) {
     		case ".": return GLFW.GLFW_KEY_PERIOD; 
     		case "1": return GLFW.GLFW_KEY_1; 
@@ -75,7 +90,9 @@ public class KeyUtils {
     		case "z": return GLFW.GLFW_KEY_Z; 
     		case "`": return GLFW.GLFW_KEY_GRAVE_ACCENT; 
     		case "rshift": return GLFW.GLFW_KEY_RIGHT_SHIFT;
-    		case "lshift": return GLFW.GLFW_KEY_LEFT_SHIFT; 
+    		case "lshift": return GLFW.GLFW_KEY_LEFT_SHIFT;
+    		case "rctrl": return GLFW.GLFW_KEY_RIGHT_CONTROL;
+    		case "lctrl": return GLFW.GLFW_KEY_LEFT_CONTROL; 
     		case "\\": return GLFW.GLFW_KEY_BACKSLASH;
     		case "space": return GLFW.GLFW_KEY_SPACE;
     		case ";": return GLFW.GLFW_KEY_SEMICOLON;
@@ -89,8 +106,117 @@ public class KeyUtils {
     	return GLFW.GLFW_KEY_UNKNOWN;
     }
 
-	public static int getKeyCode(char key) {
+	public static int getKey(char key) {
 		String stringKey = new StringBuilder().append(key).toString();
-		return getKeyCode(stringKey);
+		return getKey(stringKey);
+	}
+	
+	public static int getKeyScanCode(String key) {
+		return GLFW.glfwGetKeyScancode(getKey(key));
+	}
+	
+	
+	public void addKeys() {
+		keyList.add(".");
+		keyList.add("1");
+		keyList.add("2");
+		keyList.add("3");
+		keyList.add("4");
+		keyList.add("5");
+		keyList.add("6");
+		keyList.add("7");
+		keyList.add("8");
+		keyList.add("9");
+		keyList.add("0");
+		keyList.add(",");
+		keyList.add("a");
+		keyList.add("b");
+		keyList.add("c");
+		keyList.add("d");
+		keyList.add("e");
+		keyList.add("f");
+		keyList.add("g");
+		keyList.add("h");
+		keyList.add("i");
+		keyList.add("j");
+		keyList.add("k");
+		keyList.add("l");
+		keyList.add("m");
+		keyList.add("n");
+		keyList.add("o");
+		keyList.add("p");
+		keyList.add("q");
+		keyList.add("r");
+		keyList.add("s");
+		keyList.add("t");
+		keyList.add("u");
+		keyList.add("v");
+		keyList.add("w");
+		keyList.add("x");
+		keyList.add("y");
+		keyList.add("z");
+		keyList.add("`");
+		keyList.add("rshift");
+		keyList.add("lshift");
+		keyList.add("rctrl");
+		keyList.add("lctrl");
+		keyList.add("space");
+		keyList.add(";");
+		keyList.add("-");
+		keyList.add("=");
+		keyList.add("[");
+		keyList.add("]");
+		keyList.add("/");
+		
+		keyList2.add(getKey("."));
+		keyList2.add(getKey("1"));
+		keyList2.add(getKey("2"));
+		keyList2.add(getKey("3"));
+		keyList2.add(getKey("4"));
+		keyList2.add(getKey("5"));
+		keyList2.add(getKey("6"));
+		keyList2.add(getKey("7"));
+		keyList2.add(getKey("8"));
+		keyList2.add(getKey("9"));
+		keyList2.add(getKey("0"));
+		keyList2.add(getKey(","));
+		keyList2.add(getKey("a"));
+		keyList2.add(getKey("b"));
+		keyList2.add(getKey("c"));
+		keyList2.add(getKey("d"));
+		keyList2.add(getKey("e"));
+		keyList2.add(getKey("f"));
+		keyList2.add(getKey("g"));
+		keyList2.add(getKey("h"));
+		keyList2.add(getKey("i"));
+		keyList2.add(getKey("j"));
+		keyList2.add(getKey("k"));
+		keyList2.add(getKey("l"));
+		keyList2.add(getKey("m"));
+		keyList2.add(getKey("n"));
+		keyList2.add(getKey("o"));
+		keyList2.add(getKey("p"));
+		keyList2.add(getKey("q"));
+		keyList2.add(getKey("r"));
+		keyList2.add(getKey("s"));
+		keyList2.add(getKey("t"));
+		keyList2.add(getKey("u"));
+		keyList2.add(getKey("v"));
+		keyList2.add(getKey("w"));
+		keyList2.add(getKey("x"));
+		keyList2.add(getKey("y"));
+		keyList2.add(getKey("z"));
+		keyList2.add(getKey("`"));
+		keyList2.add(getKey("rshift"));
+		keyList2.add(getKey("lshift"));
+		keyList2.add(getKey("rctrl"));
+		keyList2.add(getKey("lctrl"));
+		keyList2.add(getKey("space"));
+		keyList2.add(getKey(";"));
+		keyList2.add(getKey("-"));
+		keyList2.add(getKey("="));
+		keyList2.add(getKey("["));
+		keyList2.add(getKey("]"));
+		keyList2.add(getKey("/"));
 	}
 }

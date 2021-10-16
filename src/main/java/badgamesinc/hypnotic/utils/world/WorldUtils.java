@@ -48,15 +48,13 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 
-/**
- * @author Tigermouthbear 9/26/20
- */
 public class WorldUtils {
 	public static MinecraftClient mc = MinecraftClient.getInstance();
 	private static final Vec3d hitPos = new Vec3d(0, 0, 0);
     public static boolean placeBlockMainHand(BlockPos pos, boolean swing) {
         return placeBlockMainHand(pos, true, swing);
     }
+    
     public static BlockPos getForwardBlock(double length) {
 		MinecraftClient mc = MinecraftClient.getInstance();
         final double yaw = Math.toRadians(mc.player.getYaw());
@@ -69,6 +67,9 @@ public class WorldUtils {
         BlockPos fPos = new BlockPos(mc.player.getX() + (-Math.sin(yaw) * length), mc.player.getY(), mc.player.getZ() + (Math.cos(yaw) * length));
         return fPos;
 	}
+    /**
+     * @author Tigermouthbear 9/26/20
+     */
     public static boolean placeBlockMainHand(BlockPos pos, Boolean rotate, boolean swing) {
         return placeBlockMainHand(pos, rotate, true, swing);
     }

@@ -31,7 +31,7 @@ public class Flight extends Mod {
     @Override
     public void onEnable() {
     	if (damage.isEnabled()) {
-    		mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 3.1, mc.player.getZ(), true));
+    		mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 1.1, mc.player.getZ(), true));
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), false));
             mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), true));
     	}
@@ -62,7 +62,6 @@ public class Flight extends Mod {
     		mc.player.getAbilities().flying = false;
     		mc.player.flyingSpeed = (float) speed.getValue();
     		
-//    		if (!TargetStrafe.canStrafe())
         	mc.player.setVelocity(0, 0, 0);
         		
     		Vec3d velocity = mc.player.getVelocity();
@@ -87,7 +86,6 @@ public class Flight extends Mod {
     public void onDisable() {
     	mc.player.getAbilities().flying = false;
     	hasDamaged = false;
-    	//skygun
         super.onDisable();
     }
 }

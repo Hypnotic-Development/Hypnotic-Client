@@ -24,7 +24,7 @@ public class TargetStrafe extends Mod {
     public static BooleanSetting thirdPerson = new BooleanSetting("Third Person", false);
     public BooleanSetting rainbow = new BooleanSetting("Rainbow", false);
     public TargetStrafe() {
-        super("TargetStrafe", "Strafe around targets", Category.MOVEMENT);
+        super("TargetStrafe", "Strafe around targets", Category.COMBAT);
         addSettings(radius, spacebar, rainbow, thirdPerson);
     }
     

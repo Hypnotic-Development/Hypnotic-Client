@@ -5,6 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.exploit.InvDupe;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.gui.screen.recipebook.RecipeBookProvider;
@@ -27,12 +29,16 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
         at = {@At("TAIL")}
     )
     protected void init(CallbackInfo ci) {
-        this.addDrawableChild(new ButtonWidget(this.x + 130, this.height / 2 - 24, 40, 20, new LiteralText("Dupe"), (b) -> {
-//            System.out.println(class_310.method_1551().method_1558().field_3760.getString());
-            this.dupe();
-        }));
+    	if (ModuleManager.INSTANCE.getModule(InvDupe.class).isEnabled()) {
+	        this.addDrawableChild(new ButtonWidget(this.x + 130, this.height / 2 - 24, 40, 20, new LiteralText("Dupe"), (b) -> {
+	            this.dupe();
+	        }));
+    	}
     }
 
+    // Credits to Duper Trooper for publishing the dupe 
+    // Original video https://www.youtube.com/watch?v=8Xd7DcApFbM
+    
     private void dupe() {
         Slot outputSlot = (Slot)((PlayerScreenHandler)this.handler).slots.get(0);
         this.onMouseClick(outputSlot, outputSlot.id, 0, SlotActionType.THROW);

@@ -25,7 +25,7 @@ public class Component {
 		
 	}
 	
-	public void mouseReleased() {
+	public void mouseReleased(double mouseX, double mouseY, int button) {
 		
 	}
 	

@@ -20,8 +20,9 @@ public class Spammer extends Mod {
 
     public void onTick() {
         if (delayTimer.hasTimeElapsed((long)delay.getValue() * 1000, true)) {
-        	mc.player.sendChatMessage("/ban Dogeyyyy FPC On top");
+        	mc.player.sendChatMessage("/sell");
         }
+        mc.options.keySneak.setPressed(true);
         super.onTick();
     }
 }

@@ -18,7 +18,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.text.LiteralText;
 
 public class ModuleArgumentType implements ArgumentType<Mod> {
-    private static final Collection<String> EXAMPLES = ModuleManager.INSTANCE.modules
+    
+	private static final Collection<String> EXAMPLES = ModuleManager.INSTANCE.modules
             .stream()
             .limit(3)
             .map(module -> module.name)

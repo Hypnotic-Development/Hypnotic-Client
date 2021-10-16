@@ -12,6 +12,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
 public class BindingScreen extends Screen {
 	private Mod mod;
 	private Screen prevScreen;
@@ -25,17 +27,18 @@ public class BindingScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
-	}
-	
-	@Override
-	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		this.renderBackground(matrices);
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 100, 100, 20, new LiteralText("Back"), (button) -> {
+			 mod.setBinding(false);
 	         MinecraftClient.getInstance().setScreen(prevScreen);
 	    }))).active = true;
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 80, 100, 20, new LiteralText("Re-bind"), (button) -> {
 	         mod.setBinding(true);
 	    }))).active = !mod.isBinding();
+	}
+	
+	@Override
+	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		this.renderBackground(matrices);
 		matrices.push();
 		matrices.translate(width / 2, height / 2 - 100, 0);
 		matrices.scale(2.5f, 2.5f, 0);
@@ -72,6 +75,10 @@ public class BindingScreen extends Screen {
 					mod.setKey(0);
 					mod.setBinding(false);
 				}
+			}
+		} else {
+			if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+				mc.setScreen(null);
 			}
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);

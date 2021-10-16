@@ -2,6 +2,7 @@ package badgamesinc.hypnotic.module.hud;
 
 import java.awt.Color;
 
+import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
@@ -215,7 +216,6 @@ public class HudModule extends Mod {
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			if (mc.currentScreen instanceof HudEditorScreen) {
 				if (element.isDraggable()) RenderUtils.fillAndBorder(matrices, element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);
-//				RenderUtils.fill(matrices, this.getX() + this.getWidth(), this.getY() + this.getHeight(), this.getX() + this.getWidth() + 20, this.getY() +  this.getHeight() + 20, -1);
 			}
 		}
 	}
@@ -234,10 +234,6 @@ public class HudModule extends Mod {
 				this.setWidth((int) (this.startWidth * scaleFactorX));
 				this.setHeight((int) (this.startHeight * scaleFactorY));
 			}
-			
-//			this.setWidth(10);
-//			setScaleX(1);
-//			setScaleY(1);
 		}
 	}
 }

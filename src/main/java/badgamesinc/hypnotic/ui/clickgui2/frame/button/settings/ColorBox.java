@@ -24,7 +24,10 @@ public class ColorBox extends Component {
 
 	private ColorSetting colorSet = (ColorSetting)setting;
 	private Button parent;
-	private boolean lmDown = false;
+	private boolean lmDown = false, rmDown = false;
+	public boolean open = false;
+	public float h, s, v;
+	int sx, sy, ex, ey;
 	
 	public ColorBox(int x, int y, Setting setting, Button parent) {
 		super(x, y, setting, parent);
@@ -32,21 +35,37 @@ public class ColorBox extends Component {
 		this.setting = setting;
 		this.colorSet = (ColorSetting)setting;
 		colorSet.displayName = colorSet.name;
+		h = colorSet.hue;
+		s = colorSet.sat;
+		v = colorSet.bri;
 	}
 
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		colorSet.displayName = colorSet.name;
-		int sx = parent.getX() + 5,
-				sy = parent.getY() + 4 + offset + parent.getHeight() + 12,
-				ex = parent.getX() + parent.getWidth() - 17,
-				ey = parent.getY() + 4 + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
+		sx = parent.getX() + 5;
+		sy = parent.getY() + 4 + offset + parent.getHeight() + 12;
+		ex = parent.getX() + parent.getWidth() - 17;
+		ey = parent.getY() + 4 + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
 
-		RenderUtils.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 8.5, parent.parent.color.getRGB());
-		RenderUtils.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * 8.5, new Color(40, 40, 40, 255).getRGB());
+		RenderUtils.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * (open ? 8.5 : 2), new Color(40, 40, 40, 255).getRGB());
+		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
+		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + (open ? 12 : 2), (int) sy - 12, colorSet.getRGB());
 		
+		if (hovered((int)mouseX, (int)mouseY, sx + (int) FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, (int) (sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30), sy - 4) && !open) {
+			RenderUtils.setup2DRender(true);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			FontManager.robotoSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.end2DRender();
+			if (rmDown) open = true;
+		}
+		if (!open) {
+			RenderUtils.fill(matrices, sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30, sy - 4, colorSet.getColor().getRGB());
+			
+			return;
+		}
 		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
-		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
+		RenderUtils.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
 		int green = satColor >> 8 & 255;
@@ -90,10 +109,15 @@ public class ColorBox extends Component {
 		int satX = (int) (sx + (ex - sx) * colorSet.sat);
 
 		RenderUtils.fill(matrices, satX - 2, briY - 2, satX + 2, briY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
-		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 12, colorSet.getRGB());
 		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
 
+		if (hovered((int)mouseX, (int)mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, sx + 10 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4) && open) {
+			RenderUtils.setup2DRender(true);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			FontManager.robotoSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.end2DRender();
+			if (rmDown) open = false;
+		}
 
 		//Set hex codes
 		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
@@ -105,8 +129,11 @@ public class ColorBox extends Component {
 			RenderSystem.enableDepthTest();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
 				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
-				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue());
+				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
 				colorSet.setHSV(vals[0], vals[1], vals[2]);
+				h = vals[0];
+				s = vals[1];
+				v = vals[2];
 			}
 		}
 		
@@ -139,12 +166,16 @@ public class ColorBox extends Component {
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
 		if (button == 0) lmDown = true;
+		if (button == 1) {
+			rmDown = true;
+		}
 		super.mouseClicked(mouseX, mouseY, button);
 	}
 	
 	@Override
 	public void mouseReleased(int button) {
 		if (button == 0) lmDown = false;
+		if (button == 1) rmDown = false;
 		super.mouseReleased(button);
 	}
 }

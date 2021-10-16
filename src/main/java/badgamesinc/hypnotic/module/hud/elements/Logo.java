@@ -14,6 +14,7 @@ public class Logo extends HudModule {
 	public Logo() {
 		super("Logo", "Renders the Hypnotic logo", 4, 4, (int) FontManager.robotoMed.getStringWidth(Hypnotic.name + ColorUtils.gray + " " + Hypnotic.version), 4);
 		addSetting(color);
+		this.setEnabled(true);
 	}
 	
 	@Override

@@ -1,5 +1,8 @@
 package badgamesinc.hypnotic;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,17 +25,16 @@ import badgamesinc.hypnotic.utils.input.MouseUtils;
 import badgamesinc.hypnotic.utils.player.DamageUtils;
 import badgamesinc.hypnotic.utils.world.BlockIterator;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.MinecraftClient;
 
 public class Hypnotic implements ModInitializer {
 
 	public static Hypnotic INSTANCE = new Hypnotic();
 	public static Executor EXECUTOR = Executors.newCachedThreadPool();
-	public static Logger LOGGER = LogManager.getLogger(Hypnotic.class);
+	public static Logger LOGGER = LogManager.getLogger("Hypnotic");
 	public static String name = "Hypnotic",
 			version = "r1000",
 			fullName = name + "-" + version,
-			hypnoticDir = MinecraftClient.getInstance().runDirectory.getAbsolutePath() + "/Hypnotic",
+			hypnoticDir = mc.runDirectory.getPath() + File.separator + "Hypnotic",
 			chatPrefix = ColorUtils.red + name + ColorUtils.gray + ": ";
 	public ModuleManager moduleManager;
 	public EventManager eventManager;
@@ -50,7 +52,6 @@ public class Hypnotic implements ModInitializer {
 	 */
 	@Override
 	public void onInitialize() {
-		MinecraftClient mc = MinecraftClient.getInstance();
 		System.out.println("Loading Hypnotic stuff");
 		register();
 		loadFiles();

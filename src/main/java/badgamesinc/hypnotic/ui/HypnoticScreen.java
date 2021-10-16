@@ -1,11 +1,12 @@
 package badgamesinc.hypnotic.ui;
 
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
-
 import java.util.ArrayList;
 
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.font.NahrFont;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,6 +18,7 @@ public abstract class HypnoticScreen extends Screen {
 	public double mouseX, mouseY;
 	public NahrFont font = FontManager.roboto;
 	protected ArrayList<Button> buttons = new ArrayList<>();
+	protected MinecraftClient mc = MinecraftClient.getInstance();
 	
 	public HypnoticScreen() {
 		super(new LiteralText("Hypnotic-Screen"));
@@ -24,6 +26,7 @@ public abstract class HypnoticScreen extends Screen {
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		font = FontManager.roboto;
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		super.render(matrices, mouseX, mouseY, delta);
@@ -51,6 +54,11 @@ public abstract class HypnoticScreen extends Screen {
 	
 	public void buttonClicked(Button button) {
 		mc.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.UI_BUTTON_CLICK, 1, 1));
+	}
+	
+	@Override
+	public void renderBackground(MatrixStack matrices) {
+		RenderUtils.gradientFill(matrices, 0, 0, width, height, ColorUtils.transparent(180), ColorUtils.defaultClientColor);
 	}
 	
 	@Override
