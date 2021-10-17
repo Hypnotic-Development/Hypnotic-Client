@@ -168,7 +168,7 @@ public class NahrFont {
             for (int y = 0; y < image.getHeight(); y++) {
             	/*
             	 * !!!!
-            	 *  WHEN COMPILING SET THESE TO imgNew.setColor AND image.getColor really retarded but it works just
+            	 *  WHEN COMPILING/PUSHING TO GH SET THESE TO imgNew.setColor AND image.getColor really retarded but it works just
             	 *   ignore if your ide says there is an error until you go
             	 *    back to actually working from a dev environment then you 
             	 *    can change back to setPixelColor and getPixelColor

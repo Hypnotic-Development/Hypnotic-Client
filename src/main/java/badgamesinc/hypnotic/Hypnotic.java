@@ -19,7 +19,6 @@ import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.ui.HUD;
 import badgamesinc.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.api.ApiUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.input.MouseUtils;
 import badgamesinc.hypnotic.utils.player.DamageUtils;
@@ -40,7 +39,6 @@ public class Hypnotic implements ModInitializer {
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
-	public ApiUtils api = new ApiUtils();
 	
     public List<String> users = new ArrayList<>();
 
@@ -55,7 +53,6 @@ public class Hypnotic implements ModInitializer {
 		System.out.println("Loading Hypnotic stuff");
 		register();
 		loadFiles();
-		api.setOnline(mc.getSession().getUsername());
 	}
 
 	/*

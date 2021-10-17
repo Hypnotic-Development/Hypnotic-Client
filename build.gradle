@@ -17,19 +17,10 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	maven {
-		name = "jitpack"
-		url = "https://jitpack.io"
-		name = 'Ladysnake Mods'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
-        content {
-            includeGroup 'io.github.ladysnake'
-            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
-        }
-	}
-	maven {
 		name = "meteor-maven"
 		url = "https://maven.meteordev.org/snapshots"
 	}
+	maven { url 'https://jitpack.io' }
 	jcenter()
 }
 

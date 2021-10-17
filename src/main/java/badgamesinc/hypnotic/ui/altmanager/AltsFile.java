@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -24,7 +25,12 @@ public class AltsFile {
 	public void saveAlts() {
 		ArrayList<String> credentials = new ArrayList<>();
 		if (!altsFile.exists()) {
-			altsFile.mkdirs();
+			try {
+				altsFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		for (Account<?> alt : Accounts.get()) {
