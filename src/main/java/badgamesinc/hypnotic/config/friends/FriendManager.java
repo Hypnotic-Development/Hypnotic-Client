@@ -35,9 +35,11 @@ public class FriendManager {
 	public boolean isFriend(Friend friend) {
 		boolean is = false;
 		for (Friend f : friends) {
-			if (friend == f) System.out.println("hi");;
+			if (friend == f) {
+				is = true;
+				break;
+			}
 		}
-		System.out.println(is);
 		return is;
 	}
 	

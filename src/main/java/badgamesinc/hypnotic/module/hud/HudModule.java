@@ -2,7 +2,6 @@ package badgamesinc.hypnotic.module.hud;
 
 import java.awt.Color;
 
-import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;

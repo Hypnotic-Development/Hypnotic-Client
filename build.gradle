@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.9-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -46,6 +47,12 @@ dependencies {
 	// thanks minegame159 from meteor client
 	modImplementation "baritone:baritone:${project.baritone_version}"
 	include "baritone:baritone:${project.baritone_version}"
+	
+	dependency "club.minnced:java-discord-rpc:2.0.1"
+}
+
+shadowJar {
+	configurations = [ project.configurations.shadow ]
 }
 
 processResources {

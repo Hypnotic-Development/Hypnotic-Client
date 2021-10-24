@@ -67,7 +67,6 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(DamageUtils.getInstance());
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
-		
 	}
 	
 	/*

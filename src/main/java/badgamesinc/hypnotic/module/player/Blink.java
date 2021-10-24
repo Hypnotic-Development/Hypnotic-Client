@@ -15,6 +15,8 @@ import badgamesinc.hypnotic.utils.player.FakePlayerEntity;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.Packet;
+import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 
 public class Blink extends Mod {
@@ -22,7 +24,7 @@ public class Blink extends Mod {
 	public BooleanSetting buffer = new BooleanSetting("Buffer Packets", true);
 	public NumberSetting amount = new NumberSetting("Send Amount PT", 25, 5, 50, 1);
 	
-	private ArrayList<PlayerMoveC2SPacket> packets = new ArrayList<>();
+	private ArrayList<Packet> packets = new ArrayList<>();
 	public static PlayerEntity playerEntity;
 	private boolean stopCatching;
 	
@@ -60,9 +62,9 @@ public class Blink extends Mod {
 			this.setEnabled(false);
 			return;
 		}
-		if (!stopCatching && event.getPacket() instanceof PlayerMoveC2SPacket) {
+		if (!stopCatching && !(event.getPacket() instanceof KeepAliveC2SPacket)) {
 			if (PlayerUtils.isMoving()) {
-				packets.add((PlayerMoveC2SPacket) event.getPacket());
+				packets.add(event.getPacket());
 			}
 			event.setCancelled(true);;
 		}

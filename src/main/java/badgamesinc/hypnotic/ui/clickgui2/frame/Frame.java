@@ -10,6 +10,7 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
+import badgamesinc.hypnotic.module.movement.FlightBlink;
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
@@ -43,8 +44,10 @@ public class Frame {
 		
 		int offset = height;
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(category)) {
-			buttons.add(new Button(mod, this.x, this.y, offset, this));
-			offset+=height;
+			if (!(mod instanceof FlightBlink)) {
+				buttons.add(new Button(mod, this.x, this.y, offset, this));
+				offset+=height;
+			}
 		}
 	}
 	

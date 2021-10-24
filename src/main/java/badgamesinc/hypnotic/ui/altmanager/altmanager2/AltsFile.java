@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -22,11 +23,16 @@ public class AltsFile {
 	public void saveAlts() {
 		ArrayList<String> credentials = new ArrayList<>();
 		if (!altsFile.exists()) {
-			altsFile.mkdirs();
+			try {
+				altsFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		for (Alt alt : AltManagerScreen.INSTANCE.alts) {
-			credentials.add(alt.getEmail() + ":" + alt.getPassword() + ":" + alt.getUsername() + ":" + alt.getUuid());
+			if (!alt.getPassword().equalsIgnoreCase("cracked")) credentials.add(alt.getEmail() + ":" + alt.getPassword() + ":" + alt.getUsername() + ":" + alt.getUuid());
+			else credentials.add(alt.getEmail() + ":cracked");
 		}
 		
 		try {
@@ -56,14 +62,20 @@ public class AltsFile {
 
         for (String s : lines) {
             String[] args = s.split(":");
-            Alt alt = new Alt(args[0], args[1], AltManagerScreen.INSTANCE.alts.size());
-            try {
-            	if (args[2] != null) alt.setUsername(args[2]);
-            	if (args[3] != null && !args[3].equalsIgnoreCase("null") && !args[3].equalsIgnoreCase("")) alt.setUuid(UUID.fromString(args[3]));
-            } catch(Exception e) {
-            	e.printStackTrace();
+            if (!args[1].equalsIgnoreCase("cracked")) {
+	            Alt alt = new Alt(args[0], args[1], AltManagerScreen.INSTANCE.alts.size());
+	            try {
+	            	if (args[2] != null) alt.setUsername(args[2]);
+	            	if (args[3] != null && !args[3].equalsIgnoreCase("null") && !args[3].equalsIgnoreCase("")) alt.setUuid(UUID.fromString(args[3]));
+	            } catch(Exception e) {
+	            	e.printStackTrace();
+	            }
+	            AltManagerScreen.INSTANCE.alts.add(alt);
+            } else {
+            	Alt alt = new Alt(args[0], "cracked", AltManagerScreen.INSTANCE.alts.size());
+	            if (args[0] != null) alt.setUsername(args[0]);
+	            AltManagerScreen.INSTANCE.alts.add(alt);
             }
-            AltManagerScreen.INSTANCE.alts.add(alt);
         }
 	}
 }

@@ -39,9 +39,9 @@ public class ColorUtils {
 		return new Color(255, 20, 100);
 	}
 	
-	public static int rainbow(float seconds, float saturation, float brigtness) {
+	public static int rainbow(float seconds, float saturation, float brightness) {
 		float hue = (System.currentTimeMillis() % (int) (seconds * 1000)) / (float) (seconds * 1000);
-		int color = Color.HSBtoRGB(hue, saturation, 1);
+		int color = Color.HSBtoRGB(hue, saturation, brightness);
 		return color;
 	}
 	
@@ -57,6 +57,19 @@ public class ColorUtils {
 	      float brightness = Math.abs(((float)(System.currentTimeMillis() % 2000L) / 1000.0F + (float)index / (float)count * 2.0F) % 2.0F - 1.0F);
 	      brightness = 0.5F + 0.5F * brightness;
 	      hsb[2] = brightness % 2.0F;
+	      return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
+	 }
+	
+	public static Color fade(Color color, Color color2, int index, int count) {
+	      float[] hsb = new float[3];
+//	      System.out.println((((float)(System.currentTimeMillis() % 2000L) / 1000.0F)) <= 1);
+//	      if ((((float)(System.currentTimeMillis() % 2000L) / 1000.0F)) <= 1)
+	      Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+//	      else Color.RGBtoHSB(color2.getRed(), color2.getGreen(), color2.getBlue(), hsb);
+	      float brightness = Math.abs(((float)(System.currentTimeMillis() + index % 2000L) / 1000.0F + (float)index / (float)count * 2.0F) % 2.0F - 1.0F);
+	      brightness = 0.5F + 0.5F * brightness;
+	      hsb[2] = brightness % 2.0F;
+	      System.out.println(hsb[2]);
 	      return new Color(Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]));
 	 }
 

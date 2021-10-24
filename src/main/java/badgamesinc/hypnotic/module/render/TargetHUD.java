@@ -34,7 +34,7 @@ public class TargetHUD extends HudModule {
 			this.setWidth(120);
 			this.setHeight(40);
 			if (target != null) {
-				RenderUtils.fill(matrices, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), new Color(45, 45, 45).getRGB());
+				RenderUtils.drawRoundedRect(matrices, this.getX() + 3, this.getY() + 3, this.getX() + (int)this.getWidth() - 3, this.getY() + (int)this.getHeight() - 3, 3, new Color(45, 45, 45));
 				RenderUtils.drawFace(matrices, this.getX() + 4, this.getY() + 4, 4, RenderUtils.getPlayerSkin(target.getUuid()));
 				FontManager.roboto.drawWithShadow(matrices, target.getName().getString(), this.getX() + 45, this.getY() + 2, -1);
 				FontManager.robotoSmall.drawWithShadow(matrices, "Health: " + MathUtils.round(target.getHealth(), 2), this.getX() + 45, this.getY() + 13.5f, -1);

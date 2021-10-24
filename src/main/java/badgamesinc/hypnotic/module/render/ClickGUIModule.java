@@ -9,7 +9,7 @@ import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.OptionsScreen;
 import badgamesinc.hypnotic.ui.WaypointManagerScreen;
-import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
+import badgamesinc.hypnotic.ui.clickgui.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.MenuBar;
 import badgamesinc.hypnotic.utils.ColorUtils;
 
@@ -30,7 +30,7 @@ public class ClickGUIModule extends Mod {
 		switch(MenuBar.INSTANCE.getCurrentTab()) {
 			case CLICKGUI:
 				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.CLICKGUI);
-				mc.setScreen(mode.is("New") ? ClickGUI.INSTANCE : ClickGUI.INSTANCE);
+				mc.setScreen(mode.is("New") ? ClickGUI.INSTANCE : badgamesinc.hypnotic.ui.clickgui2.ClickGUI.INSTANCE);
 				break;
 			case HUDEDITOR:
 				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.HUDEDITOR);

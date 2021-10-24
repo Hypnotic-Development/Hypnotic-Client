@@ -16,6 +16,7 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
+import badgamesinc.hypnotic.ui.clickgui.ModuleButton;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
 import badgamesinc.hypnotic.waypoint.Waypoint;
@@ -57,7 +58,6 @@ public class SaveLoad {
             toSave.add("MOD:" + mod.getName() + ":" + mod.isEnabled() + ":" + mod.getKey());
         }
         
-        //Will port later
         for (Friend friend : FriendManager.INSTANCE.friends) {
         	toSave.add("FRIEND:" + friend.name);
         }
@@ -71,6 +71,11 @@ public class SaveLoad {
         }
         
         toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
+        toSave.add("CLICKGUI:X:" + badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.x + ":Y:" + badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.y);
+        
+        for (ModuleButton mb : badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.buttons) {
+        	if (mb.settingsWindow != null) toSave.add("SETTINGPOS:" + mb.mod.name + ":X:" + mb.settingsWindow.x + ":Y:" + mb.settingsWindow.y);
+        }
         
         for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
         	toSave.add("WAYPOINT:" + ":name:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());
@@ -79,8 +84,6 @@ public class SaveLoad {
         /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
         	toSave.add("MESSAGE:" + message);
         }
-        
-        toSave.add("MAINMENUBG:" + GuiMainMenu.getMenuIndex());
         */
 
         try {
@@ -150,6 +153,16 @@ public class SaveLoad {
             			waypoint.setPos(new BlockPos(x, y, z));
             		}
             	}
+            } else if (s.toLowerCase().startsWith("clickgui:")) {
+            	badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.x = Integer.parseInt(args[2]);
+            	badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.y = Integer.parseInt(args[4]);
+            } else if (s.toLowerCase().startsWith("settingpos:")) {
+            	for (ModuleButton mb : badgamesinc.hypnotic.ui.clickgui.ClickGUI.INSTANCE.buttons) {
+                	if (mb.mod.name.equalsIgnoreCase(args[1])) {
+                		mb.settingsWindow.x = Integer.parseInt(args[3]);
+                		mb.settingsWindow.y = Integer.parseInt(args[5]);
+                	}
+                }
             }
             
             /*else if (s.toLowerCase().startsWith("message:")) {

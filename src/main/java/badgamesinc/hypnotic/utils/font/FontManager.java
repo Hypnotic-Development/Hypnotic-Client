@@ -9,6 +9,7 @@ public class FontManager {
 	private static final String assets = "assets/hypnotic/fonts/";
 	public static int size = 20;
 	private static boolean mcFont = false;
+	public static NahrFont robotoSmaller = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 14, 1, mcFont);
 	public static NahrFont robotoSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 16, 1, mcFont);
 	public static NahrFont roboto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 18, 1, mcFont);
 	public static NahrFont robotoMed = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 20, 1, mcFont);
@@ -21,6 +22,7 @@ public class FontManager {
 	
 	public static void setMcFont(boolean mcFont) {
 		FontManager.mcFont = mcFont;
+		robotoSmaller = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 14, 1, mcFont);
 		robotoSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 16, 1, mcFont);
 		roboto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 18, 1, mcFont);
 		robotoMed = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 20, 1, mcFont);

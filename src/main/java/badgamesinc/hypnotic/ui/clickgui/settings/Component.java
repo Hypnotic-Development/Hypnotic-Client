@@ -14,7 +14,8 @@ public class Component {
 	public Setting setting;
 	
 	public Component(int x, int y, SettingsWindow parent, Setting setting) {
-		
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {

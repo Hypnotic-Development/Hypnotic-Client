@@ -17,7 +17,7 @@ public class ModuleButton {
 	public int x, y, width, height, animation2, startY;
 	double animation = 0;
 	public SettingsWindow settingsWindow = null;
-	public static boolean open = false;
+	public boolean open = false;
 	
 	public ModuleButton(Mod mod, Category cateogry, int x, int y) {
 		this.mod = mod;
@@ -26,15 +26,12 @@ public class ModuleButton {
 		this.startY = y;
 		this.width = 100;
 		this.height = 10;
+		this.settingsWindow = new SettingsWindow(this);
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
 		width = 400;
 		height = 10;
-		if (settingsWindow == null)
-			open = false;
-		else
-			open = true;
 		if (!mod.isEnabled()) {
 			if (animation < 8) animation+=1;
 			if (animation2 > 0) animation2-=5;
@@ -69,9 +66,13 @@ public class ModuleButton {
 			if (button == 0) {
 				mod.toggle();
 			} else if (button == 1) {
-				settingsWindow = new SettingsWindow(this);
+				open = true;
 			}
 		}
+	}
+	
+	public void mouseReleased(int mouseX, int mouseY, int button) {
+		if (settingsWindow != null) settingsWindow.mouseReleased(mouseX, mouseY, button);
 	}
 	
 	public void init() {

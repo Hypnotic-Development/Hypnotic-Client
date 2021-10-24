@@ -18,6 +18,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
+import net.minecraft.client.util.Session;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class AltManagerScreen extends HypnoticScreen {
@@ -31,6 +32,7 @@ public class AltManagerScreen extends HypnoticScreen {
 	private Button msLogin = new Button("Microsoft Login", 69420, this.width / 2 - 310, height - 25, 200, 20, false);
 	private Button login = new Button("Login", 1337, this.width / 2 - 310, height - 50, 200, 20, false);
 	private Button remove = new Button("Remove", 8008, this.width / 2 + 210, height - 25, 200, 20, false);
+	private Button cracked = new Button("Add cracked", 800, this.width / 2 + 210, height - 25, 200, 20, false);
 	private Alt selectedAlt = null;
 	
 	@Override
@@ -77,6 +79,8 @@ public class AltManagerScreen extends HypnoticScreen {
 		RenderUtils.endScissor();
 		add.setX(this.width / 2 - 100);
 		add.setY(height - 50);
+		cracked.setX(this.width / 2 + 110);
+		cracked.setY(height - 50);
 		back.setX(this.width / 2 - 100);
 		back.setY(height - 25);
 		msLogin.setX(this.width / 2 - 310);
@@ -90,6 +94,7 @@ public class AltManagerScreen extends HypnoticScreen {
 		add.render(matrices, mouseX, mouseY, delta);
 		back.render(matrices, mouseX, mouseY, delta);
 		msLogin.render(matrices, mouseX, mouseY, delta);
+		cracked.render(matrices, mouseX, mouseY, delta);
 		if (selectedAlt == null) {
 			login.enabled = false;
 			remove.enabled = false;
@@ -110,6 +115,7 @@ public class AltManagerScreen extends HypnoticScreen {
 		this.addButton(add);
 		this.addButton(back);
 		this.addButton(msLogin);
+		this.addButton(cracked);
 		AltsFile.INSTANCE.loadAlts();
 		super.init();
 	}
@@ -131,7 +137,8 @@ public class AltManagerScreen extends HypnoticScreen {
 				try {
 					status = "Logging into " + selectedAlt.getEmail();
 					loggingIn = true;
-					selectedAlt.login();
+					if (!selectedAlt.getPassword().equalsIgnoreCase("cracked")) selectedAlt.login();
+					else selectedAlt.setSession(new Session(selectedAlt.getUsername(), "", "", "mojang"));
 					status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
 					loggingIn = false;
 					AltsFile.INSTANCE.saveAlts();
@@ -166,6 +173,9 @@ public class AltManagerScreen extends HypnoticScreen {
 		}
 		if (button.getId() == 54321) {
 			MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
+		}
+		if (button.getId() == 800) {
+			MinecraftClient.getInstance().setScreen(new AddCrackedAltScreen(this));
 		}
 		super.buttonClicked(button);
 	}

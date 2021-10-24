@@ -110,7 +110,9 @@ public class ModuleManager {
 					new InvDupe(),
 					new Waypoints(),
 					new BlockOutline(),
-					new AirPlace()
+					new AirPlace(),
+					new DiscordRPCModule(),
+					new FlightBlink()
 				);
 	}
 	

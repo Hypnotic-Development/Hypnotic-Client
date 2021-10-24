@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.ui.clickgui;
 import java.awt.Color;
 
 import badgamesinc.hypnotic.module.Category;
+import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -39,6 +40,9 @@ public class CategoryButton {
 			fadeIn+=5;
 		if (hovered(mouseX, mouseY))
 			RenderUtils.fill(matrices, x, y, x + width, y + height, new Color(0, 0, 0, 100).getRGB());
+		if (parent.dragging && parent.currentCategory == this.category) {
+			RenderUtils.fill(matrices, x, y, x + width, y + height, ColorUtils.defaultClientColor);
+		}
 		FontManager.roboto.drawWithShadow(matrices, category.name, x + width / 3, y + 11, -1);
 		FontManager.icons.drawWithShadow(matrices, category.icon, x + width / 6, y + 11, -1);
 		

@@ -63,7 +63,8 @@
     "InGameOverlayRendererMixin",
     "HandshakeC2SPacketAccessor",
     "PlayerListEntryMixin",
-    "AbstractClientPlayerEntityMixin"
+    "AbstractClientPlayerEntityMixin",
+    "PlayerInputC2SPacketAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

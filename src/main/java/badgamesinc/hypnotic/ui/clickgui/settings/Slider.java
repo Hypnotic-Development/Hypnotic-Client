@@ -1,7 +1,13 @@
 package badgamesinc.hypnotic.ui.clickgui.settings;
 
+import java.awt.Color;
+
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.utils.math.MathUtils;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class Slider extends Component {
@@ -11,23 +17,53 @@ public class Slider extends Component {
 	
 	public Slider(int x, int y, SettingsWindow parent, Setting setting) {
 		super(x, y, parent, setting);
+		this.numSet = (NumberSetting)setting;
 	}
 	
+	double anim;
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		// TODO Auto-generated method stub
+		Color color = ColorUtils.defaultClientColor();
+		double diff = Math.min(100, Math.max(0, mouseX - (x + 80)));
+
+		double min = numSet.getMin();
+		double max = numSet.getMax();
+		
+		double renderWidth = (100) * (numSet.getValue() - min) / (max - min);
+		
+		if (sliding) {
+			if (diff == 0) {
+				numSet.setValue(numSet.getMin());
+			}
+			else {
+				double newValue = MathUtils.round(((diff / 100) * (max - min) + min), 2);
+				numSet.setValue(newValue);
+			}
+		}
+		double distance = RenderUtils.distanceTo(anim, renderWidth);
+		if (distance != 0) {
+			anim+=distance / 6;
+		}
+		RenderUtils.fill(matrices, x + 81, y + 5, x + 179, y + 7, color.darker().getRGB());
+		RenderUtils.drawFilledCircle(matrices, x + 80, y + 5, 2, ColorUtils.defaultClientColor());
+		RenderUtils.fill(matrices, x + 81, y + 5, (x + 80 + anim), y + 7, color.getRGB());
+		RenderUtils.drawFilledCircle(matrices, x + 178, y + 5, 2, ColorUtils.defaultClientColor().darker());
+		RenderUtils.drawFilledCircle(matrices, x + 80 + anim - 3, y + 3, 6, color);
+		FontManager.robotoMed.drawWithShadow(matrices, numSet.name, x - 10, y, -1);
+		FontManager.robotoSmaller.drawWithShadow(matrices, numSet.getValue() + "", x + 120, y - 4, ColorUtils.transparent(-1, 180));
 		super.render(matrices, mouseX, mouseY);
 	}
 	
 	@Override
 	public boolean hovered(int mouseX, int mouseY) {
-		// TODO Auto-generated method stub
-		return super.hovered(mouseX, mouseY);
+		return mouseX >= x + 80 && mouseX <= x + 180 && mouseY >= y + 2 && mouseY <= y + 8;
 	}
 	
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		// TODO Auto-generated method stub
+		if (hovered((int)mouseX, (int)mouseY) && button == 0) {
+			this.sliding = true;
+		}
 		super.mouseClicked(mouseX, mouseY, button);
 	}
 	

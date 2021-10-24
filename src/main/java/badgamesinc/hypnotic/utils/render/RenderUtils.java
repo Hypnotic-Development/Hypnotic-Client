@@ -233,11 +233,11 @@ public class RenderUtils {
 		    }
 		 
 		 // Drawing it with the vertexer is way too inconsistent for what I need circles for
-		 public static void drawFilledCircle(MatrixStack matrices, double xx, int yy, int radius, Color color) {
+		 public static void drawFilledCircle(MatrixStack matrices, double xx, double yy, float radius, Color color) {
 			 RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
 			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/circle.png"));
 			 RenderSystem.enableBlend();
-			 RenderUtils.drawTexture(matrices, (float) xx, yy, radius, radius, 0, 0, radius, radius, radius, radius);
+			 RenderUtils.drawTexture(matrices, (float) xx, (float)yy, radius, radius, 0, 0, radius, radius, radius, radius);
 			 RenderSystem.disableBlend();
 			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		 }
@@ -358,7 +358,7 @@ public class RenderUtils {
 		        return mc.getWindow().getScaledHeight();
 		    }
 		 
-		 public static void drawRoundedRect(MatrixStack matrices, int left, int top, int right, int bottom, int smooth, Color color){
+		 public static void drawRoundedRect(MatrixStack matrices, float left, float top, float right, float bottom, int smooth, Color color){
 		        fill(matrices, left - smooth / 2, top - smooth, right + smooth / 2, bottom + smooth, color.getRGB());
 		        fill(matrices, left - smooth, top - smooth / 2, right + smooth, bottom + smooth / 2, color.getRGB());
 		        drawFilledCircle(matrices, left - smooth, top - smooth, smooth, color);
@@ -385,6 +385,15 @@ public class RenderUtils {
 		        fill(matrices, x, y1, x1, y1 - lwidth, color);
 		        fill(matrices, x, y1, x - lwidth, y, color);
 		    }
+		 
+		 public static void drawArrow(MatrixStack matrices, double x, double y, float size, Color color) {
+			 RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
+			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/arrow.png"));
+			 RenderSystem.enableBlend();
+			 RenderUtils.drawTexture(matrices, (float) x, (float)y, size, size, 0, 0, size, size, size, size);
+			 RenderSystem.disableBlend();
+			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		 }
 		 
 		 /*public static void scissor(double x, double y, double width, double height) {
 		        ScaledResolution sr = new ScaledResolution(mc);
@@ -748,11 +757,11 @@ public class RenderUtils {
 	        drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
 	    }
 
-	    public static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, int textureWidth, int textureHeight) {
+	    public static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, float textureWidth, float textureHeight) {
 	        drawTexture(matrices, x, x + width, y, y + height, 0, regionWidth, regionHeight, u, v, textureWidth, textureHeight);
 	    }
 
-	    public static void drawTexture(MatrixStack matrices, float x0, float y0, float x1, float y1, int z, float regionWidth, float regionHeight, float u, float v, int textureWidth, int textureHeight) {
+	    public static void drawTexture(MatrixStack matrices, float x0, float y0, float x1, float y1, int z, float regionWidth, float regionHeight, float u, float v, float textureWidth, float textureHeight) {
 	        drawTexturedQuad(matrices.peek().getModel(), x0, y0, x1, y1, z, (u + 0.0F) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0F) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
 	    }
 

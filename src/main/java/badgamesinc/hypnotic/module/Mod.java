@@ -38,7 +38,7 @@ public class Mod {
 	public boolean wasFlag = false;
 	public BooleanSetting visible = new BooleanSetting("Visible", true);
 	public transient int index;
-	public transient float animation = 0;
+	public transient double animation = 0;
 	public transient float offset = 0;
 	
 	private long currentMS = 0L;
