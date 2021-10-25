@@ -98,8 +98,8 @@ public class ArrayListModule extends HudModule {
 							RenderUtils.fill(matrices, (float) (scaledWidth - 8), yPos + 1, (float) (scaledWidth - 7), yPos + 12, color);
 							if (location.is("Top") ? enabledModules.indexOf(mod) == 0 : enabledModules.indexOf(mod) == enabledModules.size() - 1) RenderUtils.fill(matrices, (float) (scaledWidth - 13) - mod.animation, yPos + 1, (float) (scaledWidth - 7) - mod.animation + font.getStringWidth(mod.getDisplayName()), yPos, color);
 							if (!location.is("Top") ? enabledModules.indexOf(mod) == 0 : enabledModules.indexOf(mod) == enabledModules.size() - 1) RenderUtils.fill(matrices, (float) (scaledWidth - 13) - mod.animation, yPos + 12, (float) (scaledWidth - 7) - mod.animation + font.getStringWidth(mod.getDisplayName()), yPos + 13, color);
-							if (mod.offset >= 10.9) RenderUtils.fill(matrices, (float) (scaledWidth - 12) - font.getStringWidth(mod.getDisplayName()), yPos + 13, (float) (scaledWidth - 12) - (mod2.animation), yPos + 12, color);
-							RenderUtils.fill(matrices, scaledWidth - 12 - mod.animation, yPos + 1, (scaledWidth - 13) - mod.animation, yPos + 13, color);
+							if (mod.animation >= font.getStringWidth(mod.getDisplayName()) - 1) RenderUtils.fill(matrices, (float) (scaledWidth - 12) - font.getStringWidth(mod.getDisplayName()), yPos + 13, (float) (scaledWidth - 12) - (mod2.animation), yPos + 12, color);
+							if (mod.animation > 1) RenderUtils.fill(matrices, scaledWidth - 12 - mod.animation, yPos + 1, (scaledWidth - 13) - mod.animation, yPos + 13, color);
 							break;
 					}
 				}

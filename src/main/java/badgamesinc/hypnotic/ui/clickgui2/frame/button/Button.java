@@ -54,17 +54,6 @@ public class Button {
 			} else if (setting instanceof NumberSetting) {
 				components.add(new Slider(x, y + count, this, setting));
 			}
-			/*for (Setting setting2 : setting.children) {
-				if (setting2 instanceof ColorSetting) {
-					subComponents.add(new ColorBox(x, y + count, setting, this));
-				} else if (setting2 instanceof BooleanSetting) {
-					subComponents.add(new CheckBox(x, y + count, this, setting));
-				} else if (setting2 instanceof ModeSetting) {
-					subComponents.add(new ComboBox(x, y + count, setting, this));
-				} else if (setting2 instanceof NumberSetting) {
-					subComponents.add(new Slider(x, y + count, this, setting));
-				}
-			}*/
 			count+=(setting instanceof ColorSetting ? height * 10 : height);
 		}
 	}
@@ -85,7 +74,6 @@ public class Button {
 		int nameColor = -1;
 		
 		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
-//		FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width -  (height / 1.5f), y + (height / 6), nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, color);
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, color);
 	}

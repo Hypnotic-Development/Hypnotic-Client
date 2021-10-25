@@ -67,7 +67,7 @@ public class SettingsWindow {
 		}
 		int count = 40;
 		for (Component component : components) {
-			if (!components.isEmpty()) {
+			if (!components.isEmpty() && component.setting.isVisible()) {
 				component.setX(x + 10);
 				component.setY(y + count - animScroll);
 				component.render(matrices, mouseX, mouseY);

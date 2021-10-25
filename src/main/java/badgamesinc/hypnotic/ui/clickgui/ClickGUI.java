@@ -11,6 +11,7 @@ import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.movement.FlightBlink;
+import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui.frame.Frame;
 import badgamesinc.hypnotic.ui.clickgui2.MenuBar;
@@ -33,6 +34,7 @@ public class ClickGUI extends HypnoticScreen {
     public boolean dragging;
 	
 	int fadeIn = 0;
+	double anim1, anim2, aStartX, aStartY;
 	
 	public int x, y, pWidth, pHeight, dragX, dragY;
 	
@@ -65,27 +67,59 @@ public class ClickGUI extends HypnoticScreen {
 	@Override
 	protected void init() {
 		fadeIn = 0;
+		anim1 = 0;
+		anim2 = 0;
+		aStartX = x;
+		aStartY = y;
 		super.init();
 	}
 	
 	double animTicks = 0;
+	int mouseAnim;
+	double mouseAnim2;
+	boolean shouldDraw;
+	int animStartX, animStartY;
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		if (!ModuleManager.INSTANCE.getModule(ClickGUIModule.class).clickAnimation.isEnabled()) shouldDraw = false;
 		this.renderBackground(matrices);
 		if (dragging) {
 			x = (int) (mouseX - dragX);
 			y = (int) (mouseY - dragY);
 		}
+		double dist1 = RenderUtils.distanceTo(anim1, pWidth / 2);
+		double dist2 = RenderUtils.distanceTo(anim2, pHeight / 2);
+		if (dist1 != 0) {
+			anim1+=dist1 / 8;
+		}
+		if (dist2 != 0) {
+			anim2+=dist2 / 8;
+		}
 		MenuBar.INSTANCE.renderMenuBar(matrices, mouseX, mouseY, width, height);
-		double dist = RenderUtils.distanceTo(lastOffset, offset);
-	    if (dist != 0) lastOffset += dist / 10;
+		
 		for (ModuleButton button : buttons) {
 			if (button.open) {
 				button.settingsWindow.render(matrices, mouseX, mouseY, delta);
+				if (shouldDraw) {
+					if (mouseAnim2 < 25) mouseAnim2++;
+					RenderUtils.drawOutlineCircle(matrices, animStartX - (mouseAnim2 / 2), animStartY - (mouseAnim2 / 2), (int)mouseAnim2, new Color(255, 255, 255, mouseAnim));
+					if (mouseAnim > 0) mouseAnim-=10;
+					if (mouseAnim2 >= 25) {
+						if (mouseAnim <= 0) {
+							mouseAnim2 = 0;
+							mouseAnim = 255;
+							shouldDraw = false;
+						}
+					}
+				}
 				return;
 			}
 		}
-		
+		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
+		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
+		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
+		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
+		if (dist1 > 0.1) return;
 		RenderUtils.startScissor(x, y, pWidth, pHeight);
 		for (CategoryButton c : categories) {
 			if (c.category == currentCategory) currentButton = c;
@@ -122,6 +156,19 @@ public class ClickGUI extends HypnoticScreen {
 			button.render(matrices, mouseX, mouseY);
 		}
 		RenderUtils.endScissor();
+		
+		if (shouldDraw) {
+			if (mouseAnim2 < 25) mouseAnim2++;
+			RenderUtils.drawOutlineCircle(matrices, animStartX - (mouseAnim2 / 2), animStartY - (mouseAnim2 / 2), (int)mouseAnim2, new Color(255, 255, 255, mouseAnim));
+			if (mouseAnim > 0) mouseAnim-=10;
+			if (mouseAnim2 >= 25) {
+				if (mouseAnim <= 0) {
+					mouseAnim2 = 0;
+					mouseAnim = 255;
+					shouldDraw = false;
+				}
+			}
+		}
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	
@@ -133,6 +180,10 @@ public class ClickGUI extends HypnoticScreen {
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+		shouldDraw = false;
+		shouldDraw = true;
+		animStartX = (int) mouseX;
+		animStartY = (int) mouseY;
 		if (isButtonOpen()) {
 			for (ModuleButton modButton : buttons) {
 				if (modButton.open) modButton.settingsWindow.mouseClicked(mouseX, mouseY, button);
@@ -210,6 +261,7 @@ public class ClickGUI extends HypnoticScreen {
 			for (ModuleButton button : buttons) {
 				if (button.open) {
 					button.open = false;
+					init();
 					return false;
 				}
 			}

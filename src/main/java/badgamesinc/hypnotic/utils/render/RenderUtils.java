@@ -242,11 +242,11 @@ public class RenderUtils {
 			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		 }
 		 
-		 public static void drawOutlineCircle(MatrixStack matrices, double xx, int yy, int radius, Color color) {
+		 public static void drawOutlineCircle(MatrixStack matrices, double xx, double yy, double radius, Color color) {
 			 RenderSystem.setShaderColor(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
 			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/outlinecircle.png"));
 			 RenderSystem.enableBlend();
-			 RenderUtils.drawTexture(matrices, (float) xx, yy, radius, radius, 0, 0, radius, radius, radius, radius);
+			 RenderUtils.drawTexture(matrices, (float) xx,(float) yy, (float)radius, (float)radius, 0, 0, (float)radius,(float) radius,(float) radius,(float) radius);
 			 RenderSystem.disableBlend();
 			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		 }
@@ -1080,6 +1080,75 @@ public class RenderUtils {
 				lastX = x;
 				lastZ = z;
 			}
+	    }
+		
+		public static void drawAuraESP(MatrixStack matrices, Vec3d pos, float partialTicks, double rad, double height, int color) {
+	        float lastX = 0;
+			float lastZ = (float) rad;
+			for (int angle = 0; angle <= 360; angle += 6) {
+				float cos = MathHelper.cos((float) Math.toRadians(angle));
+				float sin = MathHelper.sin((float) Math.toRadians(angle));
+
+				float x = (float) (rad * sin);
+				float z = (float) (rad * cos);
+//				drawLine(
+//						pos.x + lastX, pos.y, pos.z + lastZ,
+//						pos.x + x, pos.y, pos.z + z,
+//						LineColor.single(color), 2);
+				
+	            Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder buffer = tessellator.getBuffer();
+
+				RenderSystem.enableBlend();
+				RenderSystem.disableDepthTest();
+				RenderSystem.disableCull();
+				RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+				RenderSystem.lineWidth(1);
+
+				buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+				Vertexer.vertexTri(matrices, buffer, (float)pos.x + lastX, (float)pos.y, (float)pos.z + lastZ, (float)pos.x + x, (float)pos.y, (float)pos.z + z, (float)pos.x + lastX + 12, (float)pos.y + 12, (float)pos.z + lastZ + 12, Color.WHITE);
+				tessellator.draw();
+
+				RenderSystem.enableCull();
+				RenderSystem.enableDepthTest();
+
+				lastX = x;
+				lastZ = z;
+			}
+//			Color c = new Color(color);
+//			for (int i = 0; i < 10; i++) {
+//				drawCircle(matrices, pos.add(0, i * 0.01, 0), partialTicks, rad, height, new Color(c.getRed(), c.getGreen(), c.getBlue(), 255 - i * 3).getRGB());
+//			}
+			
+//			int sections = 50;
+//	        double dAngle = 2 * Math.PI / sections;
+//	        float x, y, z, lastX = 0, lastY = 0, lastZ = 0;
+//	        
+//	        for (int i = -1; i < sections; i++) {
+//				x = (float) (rad * Math.sin((i * dAngle)));
+//	            y = (float) (rad * Math.cos((i * dAngle)));
+//	            z = (float) (rad * Math.cos((i * dAngle)));
+//	            
+//	            Tessellator tessellator = Tessellator.getInstance();
+//				BufferBuilder buffer = tessellator.getBuffer();
+//
+//				RenderSystem.enableBlend();
+//				RenderSystem.disableDepthTest();
+//				RenderSystem.disableCull();
+//				RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+//				RenderSystem.lineWidth(1);
+//
+//				buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+//				Vertexer.vertexTri(matrices, buffer, (float)pos.x, (float)pos.y, (float)pos.z, (float)pos.x + x, (float)pos.y + y, (float)pos.z + z, (float)pos.x + lastX, (float)pos.y + lastY, (float)pos.z + lastZ, Color.WHITE);
+//				tessellator.draw();
+//
+//				RenderSystem.enableCull();
+//				RenderSystem.enableDepthTest();
+//
+//				lastX = x;
+//				lastY = y;
+//				lastZ = z;
+//			}
 	    }
 		
 		public static void drawBoxFill(Box box, QuadColor color, Direction... excludeDirs) {

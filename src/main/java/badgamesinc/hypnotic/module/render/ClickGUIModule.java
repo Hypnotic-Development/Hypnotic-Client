@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
@@ -17,12 +18,13 @@ public class ClickGUIModule extends Mod {
 	
 	public ModeSetting mode = new ModeSetting("Style", "New", "New", "Dropdown");
 	public ModeSetting customColor = new ModeSetting("Color Mode", "Custom", "Category", "Custom");
+	public BooleanSetting clickAnimation = new BooleanSetting("Click Animation", true);
 	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
 	
 	public ClickGUIModule() {
 		super("ClickGUI", "The clickable gui", Category.RENDER);
 		this.setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
-		addSettings(mode, customColor, color);
+		addSettings(mode, clickAnimation, customColor, color);
 	}
 	
 	@Override

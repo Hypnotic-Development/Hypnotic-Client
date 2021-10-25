@@ -17,7 +17,7 @@ import net.minecraft.util.hit.HitResult;
 public class MiddleClickFriend extends Mod {
 
 	public MiddleClickFriend() {
-		super("MCF", "Middle click for friends", Category.PLAYER);
+		super("MCF", "Middle click for friends", Category.MISC);
 	}
 
 	@EventTarget

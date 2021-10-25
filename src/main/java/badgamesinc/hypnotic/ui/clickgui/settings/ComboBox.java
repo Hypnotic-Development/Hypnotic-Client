@@ -62,7 +62,7 @@ public class ComboBox extends Component {
 	
 	@Override
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		if (hovered((int)mouseX, (int)mouseY) && button == 1) expanded = !expanded; 
+		if (hovered((int)mouseX, (int)mouseY)) expanded = !expanded; 
 		if (expanded) {
 			int count = 13;
 			for (String name : modeSet.getModes()) {

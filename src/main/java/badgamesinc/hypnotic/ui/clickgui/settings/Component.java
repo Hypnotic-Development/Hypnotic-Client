@@ -12,18 +12,20 @@ public class Component {
 	
 	int x, y;
 	public Setting setting;
+	public SettingsWindow parent;
 	
 	public Component(int x, int y, SettingsWindow parent, Setting setting) {
 		this.x = x;
 		this.y = y;
+		this.parent = parent;
+		this.setting = setting;
 	}
 	
+	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		
 	}
 	
 	public void mouseClicked(double mouseX, double mouseY, int button) {
-		
 	}
 	
 	public void mouseReleased(double mouseX, double mouseY, int button) {
