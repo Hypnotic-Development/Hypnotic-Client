@@ -119,7 +119,9 @@ public class ClickGUI extends HypnoticScreen {
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
-		if (dist1 > 0.1) return;
+		if (dist1 > 0.5) return;
+		double dist = RenderUtils.distanceTo(lastOffset, offset);
+	    if (dist != 0) lastOffset += dist / 10;
 		RenderUtils.startScissor(x, y, pWidth, pHeight);
 		for (CategoryButton c : categories) {
 			if (c.category == currentCategory) currentButton = c;
