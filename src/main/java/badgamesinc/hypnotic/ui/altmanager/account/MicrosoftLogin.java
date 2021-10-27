@@ -1,6 +1,5 @@
 /*
- * This file is part of the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- * Copyright (c) 2021 Meteor Development.
+ * This file is (mostly) from the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
  */
 
 package badgamesinc.hypnotic.ui.altmanager.account;
@@ -43,7 +42,7 @@ public class MicrosoftLogin {
         }
     }
 
-    private static final String CLIENT_ID = "4673b348-3efa-4f6a-bbb6-34e141cdc638";
+    private static final String CLIENT_ID = "538a3bf8-38e9-49b3-8dec-019f73f89fdb";
     private static final int PORT = 9675;
 
     private static HttpServer server;
