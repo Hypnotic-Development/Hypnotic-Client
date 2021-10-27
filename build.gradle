@@ -48,7 +48,7 @@ dependencies {
 	modImplementation "baritone:baritone:${project.baritone_version}"
 	include "baritone:baritone:${project.baritone_version}"
 	
-	dependency "club.minnced:java-discord-rpc:2.0.1"
+	dependency files('lib/java-discord-rpc-2.0.1-all.jar')
 }
 
 shadowJar {
@@ -85,6 +85,11 @@ jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+}
+
+remapJar {
+    input.set(shadowJar.archiveFile)
+    archiveName = "Hypnotic.jar"
 }
 
 // configure the maven publication
