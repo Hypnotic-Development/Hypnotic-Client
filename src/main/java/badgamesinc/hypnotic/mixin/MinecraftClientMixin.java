@@ -42,7 +42,7 @@ public class MinecraftClientMixin {
 				if (mc.currentScreen instanceof MultiplayerScreen) DiscordRPCModule.status = "Browsing servers";
 			} else {
 				if (mc.isInSingleplayer()) DiscordRPCModule.status = "Playing singlelplayer";
-				if (mc.getCurrentServerEntry() != null && !mc.isInSingleplayer()) DiscordRPCModule.status = "Playing multiplayer on " + mc.getCurrentServerEntry().address;
+				if (mc.getCurrentServerEntry() != null && !mc.isInSingleplayer()) DiscordRPCModule.status = ModuleManager.INSTANCE.getModule(DiscordRPCModule.class).serverpriv.isEnabled() ? "Playing multiplayer." : "Playing multiplayer on " + mc.getCurrentServerEntry().address;
 			}
 		}
 	}

@@ -168,13 +168,10 @@ public class NahrFont {
             for (int y = 0; y < image.getHeight(); y++) {
             	/*
             	 * !!!!
-            	 *  WHEN COMPILING/PUSHING TO GH SET THESE TO imgNew.setColor AND image.getColor really retarded but it works just
-            	 *   ignore if your ide says there is an error until you go
-            	 *    back to actually working from a dev environment then you 
-            	 *    can change back to setPixelColor and getPixelColor
-            	 *  !!!
-            	 *  !!
-            	 * !!!!!!!
+            	 * 
+            	 * 	if this gives you an error in eclipse, run "gradlew clean", then "gradlew eclipse", then "gradlew gensources" in the hypnotic root folder
+            	 * 
+            	 * !!!!
             	 */
                 imgNew.setColor(x, y, image.getColor(x, y));
             }

@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.module.misc;
 import badgamesinc.hypnotic.Hypnotic;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import club.minnced.discord.rpc.DiscordEventHandlers;
 import club.minnced.discord.rpc.DiscordRPC;
 import club.minnced.discord.rpc.DiscordRichPresence;
@@ -15,8 +16,11 @@ public class DiscordRPCModule extends Mod {
 	public Thread updateThread;
 	public static String status = "";
 	
+	public BooleanSetting serverpriv = new BooleanSetting("Server Privacy", false);
+	
 	public DiscordRPCModule() {
 		super("DiscordRPC", "Displays that you are playing Hypnotic on Discord", Category.MISC);
+		addSettings(serverpriv);
 		this.setEnabled(true);
 	}
 	
