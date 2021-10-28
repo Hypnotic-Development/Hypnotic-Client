@@ -144,8 +144,8 @@ public class MicrosoftLogin {
                     }
                 }
 
-                if (!ok) writeText(req, "Cannot authenticate.");
-                else writeText(req, "You may now close this page.");
+                if (!ok) writeText(req, "<body style=\"font-family: sans-serif;\"><h1 style=\"color: #ff0098;\">Hypnotic Client</h1><p>Failed to authenticate with Microsoft.</p><body>");
+                else writeText(req, "<body style=\"font-family: sans-serif;\"><h1 style=\"color: #ff0098;\">Hypnotic Client</h1><p>Successfully authenticated with Microsoft.<br>You may now close this page.</p></body>");
             }
 
             stopServer();
