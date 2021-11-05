@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
@@ -22,7 +23,7 @@ public class ComboBox extends Component {
 	float anim2;
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		FontManager.robotoMed.drawWithShadow(matrices, modeSet.name, x - 10, y, -1);
+		HypnoticScreen.fontMed.drawWithShadow(matrices, modeSet.name, x - 10, y, -1);
 		double distance = RenderUtils.distanceTo(anim, 2 + modeSet.getModes().size() * 15);
 		double distance2 = RenderUtils.distanceTo(anim, 0);
 		if (distance != 0 && expanded) {
@@ -31,23 +32,25 @@ public class ComboBox extends Component {
 			anim+=distance2 / 6;
 		}
 		RenderUtils.drawRoundedRect(matrices, x + 120, y + 4, x + 174, (float) (y + 4 + anim), 6, new Color(35, 35, 35));
-		FontManager.roboto.drawWithShadow(matrices, modeSet.getSelected(), x + 118, y - 1, -1);
+		HypnoticScreen.font.drawWithShadow(matrices, modeSet.getSelected(), x + 118, y - 1, -1);
 //		matrices.push();
 //		matrices.translate(x + 176, y + 1, 0);
 //		if (expanded && anim2 < 90) anim2+=5;
 //		else if (!expanded && anim2 > 0) anim2-=5;
 //		matrices.multiply(new Quaternion(0, 0, 90, true));
 //		matrices.multiply(new Quaternion(0, 0, anim2, true));
-//		FontManager.roboto.drawWithShadow(matrices, "^", 0, 2 - anim2 / 10, -1);
+//		HypnoticScreen.font.drawWithShadow(matrices, "^", 0, 2 - anim2 / 10, -1);
 //		matrices.pop();
-		FontManager.roboto.drawWithShadow(matrices, expanded ? "-" : "+", x + 170, y - 2, -1);
+		HypnoticScreen.font.drawWithShadow(matrices, expanded ? "-" : "+", x + 170, y - 2, -1);
 		int count = 13;
+//		RenderUtils.startScissor(x + 118, y + 13, x + 170, (int)anim);
 		if (expanded) {
 			for (String name : modeSet.getModes()) {
-				FontManager.roboto.drawWithShadow(matrices, name, x + 118, y + count, -1);
+			 	HypnoticScreen.font.drawWithShadow(matrices, name, x + 118, y + count, -1);
 				count+=15;
 			}
 		}
+//		RenderUtils.endScissor();
 		super.render(matrices, mouseX, mouseY);
 	}
 	
@@ -69,7 +72,6 @@ public class ComboBox extends Component {
 				
 				if (hovered((int)mouseX, (int)mouseY, x + 118, y + count, x + 178, y + count + 9) && !modeSet.getSelected().equalsIgnoreCase(name)) {
 					modeSet.setIndex(modeSet.getModes().indexOf(name));
-					System.out.println(count);
 				}
 				count+=15;
 			}

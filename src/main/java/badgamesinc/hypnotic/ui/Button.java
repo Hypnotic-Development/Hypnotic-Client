@@ -1,7 +1,6 @@
 package badgamesinc.hypnotic.ui;
 
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -43,7 +42,7 @@ public class Button {
 		}
 		RenderUtils.drawBorderRect(matrices, x, y - 1, x + width, y + height + 1, ColorUtils.defaultClientColor, 1);
 		RenderUtils.fill(matrices, x, y, x + width, y + height, ColorUtils.transparent((int)hoverTicks));
-		FontManager.roboto.drawCenteredString(matrices, text, x + width / 2, y + 2, -1, true);
+		HypnoticScreen.font.drawCenteredString(matrices, text, x + width / 2, y + 2, -1, true);
 	}
 	
 	public boolean isHovered(double mouseX, double mouseY) {

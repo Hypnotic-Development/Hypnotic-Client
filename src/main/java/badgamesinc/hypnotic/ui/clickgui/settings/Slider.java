@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.math.MathUtils;
@@ -44,13 +45,14 @@ public class Slider extends Component {
 		if (distance != 0) {
 			anim+=distance / 6;
 		}
+
 		RenderUtils.fill(matrices, x + 81, y + 5, x + 179, y + 7, color.darker().getRGB());
 		RenderUtils.drawFilledCircle(matrices, x + 80, y + 5, 2, ColorUtils.defaultClientColor());
 		RenderUtils.fill(matrices, x + 81, y + 5, (x + 80 + anim), y + 7, color.getRGB());
 		RenderUtils.drawFilledCircle(matrices, x + 178, y + 5, 2, ColorUtils.defaultClientColor().darker());
 		RenderUtils.drawFilledCircle(matrices, x + 80 + anim - 3, y + 3, 6, color);
-		FontManager.robotoMed.drawWithShadow(matrices, numSet.name, x - 10, y, -1);
-		FontManager.robotoSmaller.drawWithShadow(matrices, numSet.getValue() + "", x + 120, y - 4, ColorUtils.transparent(-1, 180));
+		HypnoticScreen.fontMed.drawWithShadow(matrices, numSet.name, x - 10, y, -1);
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, numSet.getValue() + "", x + 120, y - 4, ColorUtils.transparent(-1, 180));
 		super.render(matrices, mouseX, mouseY);
 	}
 	

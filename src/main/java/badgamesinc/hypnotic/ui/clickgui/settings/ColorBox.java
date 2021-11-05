@@ -2,13 +2,11 @@ package badgamesinc.hypnotic.ui.clickgui.settings;
 
 import java.awt.Color;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
-import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
@@ -22,11 +20,9 @@ import net.minecraft.util.math.MathHelper;
 public class ColorBox extends Component {
 
 	private ColorSetting colorSet = (ColorSetting)setting;
-	private SettingsWindow parent;
 	private boolean lmDown = false, rmDown = false;
 	public boolean open = false;
 	public float h, s, v;
-	private int width, height;
 	
 	public ColorBox(int x, int y, SettingsWindow parent, Setting setting) {
 		super(x, y, parent, setting);
@@ -47,8 +43,8 @@ public class ColorBox extends Component {
 				ex = this.x + 100,
 				ey = this.y + getHeight(120);
 
-		FontManager.robotoMed.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
-		FontManager.robotoMed.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoMed.getStringWidth(colorSet.name) + 12, (int) sy - 12, colorSet.getRGB());
+		HypnoticScreen.fontMed.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
+		HypnoticScreen.fontMed.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + HypnoticScreen.fontMed.getStringWidth(colorSet.name) + 12, (int) sy - 12, colorSet.getRGB());
 		if (hovered((int)mouseX, (int)mouseY, sx + 160, sy - 12, sx + 190, sy - 4) && rmDown) {
 			RenderUtils.setup2DRender(true);
 			RenderUtils.end2DRender();
@@ -56,8 +52,8 @@ public class ColorBox extends Component {
 			rmDown = false;
 		}
 		RenderUtils.fill(matrices, sx + 190, sy - 12, sx + 160, sy - 4, colorSet.getColor().getRGB());
-		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoMed.getStringWidth(colorSet.name), sy - 3, sx + 10 + FontManager.robotoMed.getStringWidth(colorSet.name), sy - 11, colorSet.getColor().getRGB());
-		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
+		RenderUtils.fill(matrices, sx + 3 + HypnoticScreen.fontMed.getStringWidth(colorSet.name), sy - 3, sx + 10 + HypnoticScreen.fontMed.getStringWidth(colorSet.name), sy - 11, colorSet.getColor().getRGB());
+		if (hovered(mouseX, mouseY, sx + 3 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
 			RenderUtils.setup2DRender(true);
 			RenderUtils.end2DRender();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
@@ -74,7 +70,7 @@ public class ColorBox extends Component {
 			return;
 		}
 		
-		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
+		RenderUtils.fill(matrices, sx + 3 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
 		RenderUtils.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
@@ -120,10 +116,10 @@ public class ColorBox extends Component {
 
 
 		//Set hex codes
-		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
+		if (hovered(mouseX, mouseY, sx + 3 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
 			RenderUtils.setup2DRender(true);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoMed.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			FontManager.robotoMed.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontMed.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			HypnoticScreen.fontMed.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
 			RenderUtils.end2DRender();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
 				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());

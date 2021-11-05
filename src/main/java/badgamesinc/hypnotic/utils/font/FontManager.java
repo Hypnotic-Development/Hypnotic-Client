@@ -17,6 +17,7 @@ public class FontManager {
 	public static NahrFont robotoBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 25, 1, mcFont);
 	public static NahrFont robotoCustomSize = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), size, 1, mcFont);
 	public static NahrFont icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
+	public static NahrFont iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
 	public static NahrFont magneto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "magneto.ttf"), 16, 1, false);
 	
 	
@@ -30,6 +31,7 @@ public class FontManager {
 		robotoBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 25, 1, mcFont);
 		robotoCustomSize = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), size, 1, mcFont);
 		icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
+		iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
 		magneto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "magneto.ttf"), 16, 1, false);
 	}
 	

@@ -1,7 +1,10 @@
 package badgamesinc.hypnotic.ui.clickgui;
 
 import java.awt.Color;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.lwjgl.glfw.GLFW;
 
@@ -16,7 +19,6 @@ import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui.frame.Frame;
 import badgamesinc.hypnotic.ui.clickgui2.MenuBar;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -28,6 +30,7 @@ public class ClickGUI extends HypnoticScreen {
 	public CategoryButton currentButton;
 	private ArrayList<CategoryButton> categories;
 	public ArrayList<ModuleButton> buttons;
+	private ArrayList<String> buttonNames;
 	double offset = 0;
     double lastOffset = 0;
     
@@ -42,6 +45,7 @@ public class ClickGUI extends HypnoticScreen {
 		frame = new Frame(this.width, this.height);
 		categories = new ArrayList<CategoryButton>();
 		buttons = new ArrayList<ModuleButton>();
+		buttonNames = new ArrayList<String>();
 		int modCount = 0;
 		this.x = 200;
 		this.y = 100;
@@ -53,14 +57,18 @@ public class ClickGUI extends HypnoticScreen {
 			categories.add(new CategoryButton(200, 109 + count, category, this));
 			count+=30;
 		}
-		
+		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
 			if (!(mod instanceof FlightBlink)) {
-				ModuleButton mb = new ModuleButton(mod, currentCategory, x + 120, y + modCount);
-				buttons.add(mb);
-				mb.startY = modCount;
-				modCount+=30;
+				buttonNames.add(mod.getName());
 			}
+		}
+		buttonNames.sort(Collator.getInstance());
+		for (String name : buttonNames) {
+			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + modCount);
+			buttons.add(mb);
+			mb.startY = modCount;
+			modCount+=30;
 		}
 	}
 	
@@ -97,6 +105,13 @@ public class ClickGUI extends HypnoticScreen {
 		}
 		MenuBar.INSTANCE.renderMenuBar(matrices, mouseX, mouseY, width, height);
 		
+		// Sort the buttons alphabetically
+		buttonNames.sort(Collator.getInstance());
+//		Collections.sort(Comparator.comparingInt(buttonNames::indexOf));
+		
+		Collections.sort(buttons, Comparator.comparing(ModuleButton::getName));
+		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
+		
 		for (ModuleButton button : buttons) {
 			if (button.open) {
 				button.settingsWindow.render(matrices, mouseX, mouseY, delta);
@@ -119,7 +134,7 @@ public class ClickGUI extends HypnoticScreen {
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
-		if (dist1 > 0.5) return;
+		if (dist1 > 0.7) return;
 		double dist = RenderUtils.distanceTo(lastOffset, offset);
 	    if (dist != 0) lastOffset += dist / 10;
 		RenderUtils.startScissor(x, y, pWidth, pHeight);
@@ -132,7 +147,7 @@ public class ClickGUI extends HypnoticScreen {
 		int color = new Color(45, 45, 45, fadeIn).getRGB();
 		
 		RenderUtils.sideGradientFill(matrices, x + 110, y, x + 100, y + height, color, 0, false);
-		FontManager.robotoBig.drawWithShadow(matrices, Hypnotic.fullName, x + font.getStringWidth(Hypnotic.fullName) / 6, y + 20, -1);
+		fontBig.drawWithShadow(matrices, Hypnotic.fullName, x + font.getStringWidth(Hypnotic.fullName) / 6, y + 20, -1);
 		if (currentButton != null) {
 			if (!dragging) {
 				double distance = RenderUtils.distanceTo(animTicks, currentButton.y);
@@ -206,15 +221,27 @@ public class ClickGUI extends HypnoticScreen {
 				catButton.mouseClicked(mouseX, mouseY, button);
 				if (catButton.hovered(mouseX, mouseY)) {
 					buttons.clear();
-					int count = 0;
+					buttonNames.clear();
+					Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
+					
+					// Sort buttons alphabetically
+					
 					for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
 						if (!(mod instanceof FlightBlink)) {
-							ModuleButton mb = new ModuleButton(mod, currentCategory, x + 120, y + count);
-							buttons.add(mb);
-							mb.startY = count;
-							count+=30;
+							buttonNames.add(mod.getName());
+							
 						}
 					}
+					buttonNames.sort(Collator.getInstance());
+					Collections.sort(buttons, Comparator.comparing(ModuleButton::getName));
+					int count = 0;
+					for (String name : buttonNames) {
+						ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + count);
+						buttons.add(mb);
+						mb.startY = count;
+						count+=30;
+					}
+					
 					this.offset = 0;
 				}
 			}

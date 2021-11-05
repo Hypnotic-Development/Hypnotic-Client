@@ -1,5 +1,7 @@
 package badgamesinc.hypnotic.mixin;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +14,11 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.event.events.EventRenderItem;
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.combat.Killaura;
+import badgamesinc.hypnotic.module.render.ArmCustomize;
 import badgamesinc.hypnotic.module.render.IItemRenderer;
+import badgamesinc.hypnotic.module.render.OldBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.DiffuseLighting;
@@ -25,7 +31,11 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.world.World;
 
 @Mixin(ItemRenderer.class)
@@ -42,14 +52,46 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 
 	@Shadow
 	public abstract BakedModel getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int i);
-
 	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"), cancellable = true)
 	public void preRenderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		EventRenderItem event = new EventRenderItem(matrices, stack, renderMode, EventRenderItem.RenderTime.PRE, leftHanded);
 		event.call();
+		if (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled()) {
+		if (!mc.player.isUsingItem() || renderMode != ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND) return;
+        MatrixStack matrixStack = event.getMatrixStack();
+        boolean offHand = event.isLeftHanded() ? event.getType() == ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND : event.getType() == ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND;
+                    if (!offHand) {
+                        if ((event.getItemStack().getItem() instanceof AxeItem || event.getItemStack().getItem() instanceof SwordItem) && event.getItemStack() == mc.player.getMainHandStack()) {
+                            matrixStack.multiply(new Quaternion(-270f, 0f, 270f, true));
+                            matrixStack.multiply(new Quaternion(-120f, 270f, -150f, true));
+                            matrixStack.multiply(new Quaternion(-70f, -108f, 90f, true));
+                            
+                            // Only plays with killaura
+                            if (Killaura.target != null && !Killaura.target.isDead()) {
+                            	switch(ModuleManager.INSTANCE.getModule(OldBlock.class).animation.getSelected()) {
+                                	case "1.7(ish)":
+                                		matrixStack.multiply(new Quaternion(-ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks, 0, 0, true));
+	                                	break;
+                                	case "Slide":
+	                                	matrixStack.multiply(new Quaternion(-ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks, ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks, ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks / 2, true));
+	                                	break;
+                                	case "Sigma":
+	                                	matrixStack.multiply(new Quaternion(-ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks * 0.15f, 0, 0, true));
+	                                	matrixStack.multiply(new Quaternion(0, 0, ModuleManager.INSTANCE.getModule(OldBlock.class).swingTicks * 0.5f, true));
+	                                	break;
+                                	case "Swing":
+                                		mc.player.swingHand(Hand.MAIN_HAND);
+                                		break;
+                            	}
+                            }
+                            ArmCustomize arm = ModuleManager.INSTANCE.getModule(ArmCustomize.class);
+                           if (arm.isEnabled()) matrixStack.translate(arm.mainX.getValue(), arm.mainY.getValue(), arm.mainZ.getValue());
+                        }
+                    }
+		}
 		if (event.isCancelled()) ci.cancel();
 	}
-
+	
 	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("RETURN"), cancellable = true)
 	public void postRenderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		EventRenderItem event = new EventRenderItem(matrices, stack, renderMode, EventRenderItem.RenderTime.POST, leftHanded);

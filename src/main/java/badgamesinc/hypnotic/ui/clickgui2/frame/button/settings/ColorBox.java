@@ -8,8 +8,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
-import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
@@ -49,22 +49,22 @@ public class ColorBox extends Component {
 		ey = parent.getY() + 4 + offset + parent.getHeight() + getHeight(parent.getWidth()) + 8;
 
 		RenderUtils.fill(matrices, parent.getX() + 1, parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth() - 1, parent.getY() + offset + parent.getHeight() * (open ? 8.5 : 2), new Color(40, 40, 40, 255).getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
-		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + (open ? 12 : 2), (int) sy - 12, colorSet.getRGB());
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name) + (open ? 12 : 2), (int) sy - 12, colorSet.getRGB());
 		
-		if (hovered((int)mouseX, (int)mouseY, sx + (int) FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, (int) (sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30), sy - 4) && !open) {
+		if (hovered((int)mouseX, (int)mouseY, sx + (int) HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, (int) (sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30), sy - 4) && !open) {
 			RenderUtils.setup2DRender(true);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			FontManager.robotoSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
 			RenderUtils.end2DRender();
 			if (rmDown) open = true;
 		}
 		if (!open) {
-			RenderUtils.fill(matrices, sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, sx + FontManager.robotoSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30, sy - 4, colorSet.getColor().getRGB());
+			RenderUtils.fill(matrices, sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30, sy - 4, colorSet.getColor().getRGB());
 			
 			return;
 		}
-		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
+		RenderUtils.fill(matrices, sx + 3 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
 		RenderUtils.fill(matrices, sx, sy, ex, ey, -1);
 		int satColor = MathHelper.hsvToRgb(colorSet.hue, 1f, 1f);
 		int red = satColor >> 16 & 255;
@@ -109,22 +109,22 @@ public class ColorBox extends Component {
 		int satX = (int) (sx + (ex - sx) * colorSet.sat);
 
 		RenderUtils.fill(matrices, satX - 2, briY - 2, satX + 2, briY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
-		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
+		RenderUtils.fill(matrices, sx + 3 + HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
 
-		if (hovered((int)mouseX, (int)mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, sx + 10 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4) && open) {
+		if (hovered((int)mouseX, (int)mouseY, sx + 3 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 12, sx + 10 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 4) && open) {
 			RenderUtils.setup2DRender(true);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			FontManager.robotoSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
 			RenderUtils.end2DRender();
 			if (rmDown) open = false;
 		}
 
 		//Set hex codes
-		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
+		if (hovered(mouseX, mouseY, sx + 3 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
 			RenderSystem.disableDepthTest();
 			RenderSystem.depthFunc(GL11.GL_ALWAYS);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			FontManager.robotoSmall.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
+			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
+			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
 			RenderSystem.depthFunc(GL11.GL_LEQUAL);
 			RenderSystem.enableDepthTest();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {

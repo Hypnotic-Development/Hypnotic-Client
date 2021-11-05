@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui.settings.SettingsWindow;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
@@ -18,6 +19,7 @@ public class ModuleButton {
 	double animation = 0;
 	public SettingsWindow settingsWindow = null;
 	public boolean open = false;
+	public String name = "";
 	
 	public ModuleButton(Mod mod, Category cateogry, int x, int y) {
 		this.mod = mod;
@@ -27,6 +29,11 @@ public class ModuleButton {
 		this.width = 100;
 		this.height = 10;
 		this.settingsWindow = new SettingsWindow(this);
+		this.name = mod.getName();
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
@@ -43,7 +50,7 @@ public class ModuleButton {
 		RenderUtils.bindTexture(new Identifier("hypnotic", "textures/modulebackground.png"));
 		RenderUtils.drawTexture(matrices, x - 15, y - 11, 430, 32, 0, 0, 430, 32, 430, 32);
 		RenderUtils.drawRoundedRect(matrices, x, y, x + width, y + height, 6, new Color(55, 55, 55));
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x, y, new Color(255, 255, 255).getRGB());
+		HypnoticScreen.font.drawWithShadow(matrices, name, x, y, new Color(255, 255, 255).getRGB());
 		Color color = ColorUtils.defaultClientColor();
 		RenderUtils.drawFilledCircle(matrices, x + width - 30, y - 5 + height / 2, 10, new Color(45, 45, 45));
 		RenderUtils.drawFilledCircle(matrices, x + width - 20, y - 5 + height / 2, 10, new Color(45, 45, 45));

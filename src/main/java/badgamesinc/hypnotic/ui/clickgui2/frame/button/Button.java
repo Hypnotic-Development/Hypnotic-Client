@@ -10,6 +10,7 @@ import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.ui.BindingScreen;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui2.ClickGUI;
 import badgamesinc.hypnotic.ui.clickgui2.frame.Frame;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.CheckBox;
@@ -17,7 +18,6 @@ import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ComboBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Slider;
-import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -73,7 +73,7 @@ public class Button {
 		
 		int nameColor = -1;
 		
-		FontManager.roboto.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
+		HypnoticScreen.font.drawWithShadow(matrices, mod.getName(), x + (height / 3), y + (height / 6), nameColor);
 		Screen.fill(matrices, x, y, x + 1, y + height, color);
 		Screen.fill(matrices, x + width, y, x + width - 1, y + height, color);
 	}

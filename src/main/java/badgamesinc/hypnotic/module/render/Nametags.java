@@ -13,9 +13,13 @@ import badgamesinc.hypnotic.event.events.EventRenderGUI;
 import badgamesinc.hypnotic.event.events.EventRenderNametags;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.Utils;
 import badgamesinc.hypnotic.utils.font.FontManager;
+import badgamesinc.hypnotic.utils.font.NahrFont;
 import badgamesinc.hypnotic.utils.math.MathUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.network.PlayerListEntry;
@@ -41,19 +45,24 @@ public class Nametags extends Mod {
 	public BooleanSetting animals = new BooleanSetting("Animals", true);
 	public BooleanSetting passives = new BooleanSetting("Passives", true);
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", true);
-	
+	public NumberSetting scale = new NumberSetting("Scale", 1.3, 0.5, 5, 0.01);
 	public BooleanSetting bg = new BooleanSetting("Background", true);
 	public BooleanSetting ping = new BooleanSetting("Ping", true);
 	public BooleanSetting healthbar = new BooleanSetting("Healthbar", true);
 	public BooleanSetting items = new BooleanSetting("Items", true);
 	public BooleanSetting head = new BooleanSetting("Head", true);
+	public BooleanSetting distance = new BooleanSetting("Distance", true);
+	public BooleanSetting gamemode = new BooleanSetting("Gamemode", true);
+	public BooleanSetting forceMcFont = new BooleanSetting("Force MC Font", false);
 	
 	private HashMap<Entity, Vec3d> positions = Maps.newHashMap();
 	int count = 0;
 	
+	private NahrFont font = FontManager.roboto;
+	
 	public Nametags() {
 		super("Nametags", "Renders a custom nametag above players", Category.RENDER);
-		addSettings(bg, ping, healthbar, items, head, players, monsters, animals, passives, invisibles);
+		addSettings(scale, bg, ping, healthbar, items, head, distance, gamemode, players, monsters, animals, passives, invisibles, forceMcFont);
 	}
 	
 	@EventTarget
@@ -63,6 +72,7 @@ public class Nametags extends Mod {
 
 	@EventTarget
 	public void eventRender3D(EventRender3D event) {
+		if (font.mcFont != forceMcFont.isEnabled()) font = new NahrFont(Utils.getFileFromJar(ModuleManager.INSTANCE.getModule(this.getClass()).getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, forceMcFont.isEnabled());
 		this.positions.clear();
 		mc.world.getEntities().forEach(entity -> {
 			float offset = entity.getHeight() + 0.2f;
@@ -107,9 +117,9 @@ public class Nametags extends Mod {
                             float newY = ((posY - ((10 * scale) * enchCount) + 0.5f) / scale);
                             float newerX = (newX / scale);
                             String name = getEnchantName(compoundTag);
-                            float nameWidth = FontManager.roboto.getStringWidth(name);
+                            float nameWidth = font.getStringWidth(name);
                             RenderUtils.fill(eventRender2D.getMatrices(), newerX, newY - 1, newerX + nameWidth, newY + 9, 0x35000000);
-                            FontManager.roboto.draw(eventRender2D.getMatrices(), name, newerX, newY - 3, -1);
+                            font.draw(eventRender2D.getMatrices(), name, newerX, newY - 3, -1);
                             enchCount++;
                         } catch (Exception ignored) {}
                     }
@@ -139,23 +149,28 @@ public class Nametags extends Mod {
             float x = (float) vec.x;
             float y = (float) vec.y - (playerEntity instanceof PlayerEntity ? 18 : 0);
             String nameString = getNameString(playerEntity);
-            float length = FontManager.roboto.getStringWidth(nameString) + 0;
-
+            float length = font.getStringWidth(nameString) + 0;
+            eventRender2D.getMatrices().push();
+            eventRender2D.getMatrices().translate(x, y, 0);
+            float scaleDist = mc.player.distanceTo(playerEntity) < 60 ? 60 : (mc.player.distanceTo(playerEntity) > 100 ? 100 : mc.player.distanceTo(playerEntity));
+            float scaleFactor = ((scaleDist) * 0.05f) * (float)scale.getValue() * 0.2f;
+            eventRender2D.getMatrices().scale(scaleFactor, scaleFactor, 0);
             if (playerEntity instanceof LivingEntity && healthbar.isEnabled()) {
                 float percent = ((LivingEntity) playerEntity).getHealth() / ((LivingEntity) playerEntity).getMaxHealth();
                 float barLength = (int) (((length) + 6) * percent);
-                RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - (playerEntity instanceof PlayerEntity ? 18 : 2), y - 1, 0 + (x) + barLength - length / 2, y, getHealthColor(((LivingEntity) playerEntity)));
+                RenderUtils.fill(eventRender2D.getMatrices(), - (length / 2) - (playerEntity instanceof PlayerEntity ? (head.isEnabled() ? 18 : 2) : 2), - 1, 0 + barLength - length / 2, 0, getHealthColor(((LivingEntity) playerEntity)));
             }
-            if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), x - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), y - 17, x + (length / 2) + 6, y - 1, new Color(0, 0, 0, 175).getRGB());
-            if (!FontManager.roboto.mcFont)
-            FontManager.roboto.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 18, -1, true);
-            else FontManager.roboto.drawCenteredString(eventRender2D.getMatrices(), nameString, x + 2, y - 15, -1, true);
+            if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), - 17, (length / 2) + 6, - 1, new Color(0, 0, 0, 175).getRGB());
+            if (!font.mcFont)
+            font.drawCenteredString(eventRender2D.getMatrices(), nameString, 2, - 18, -1, true);
+            else font.drawCenteredString(eventRender2D.getMatrices(), nameString, 2, - 15, -1, true);
             if (playerEntity instanceof PlayerEntity) {
                 PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(playerEntity.getUuid());
                 if (playerListEntry != null && head.isEnabled()) {
-                	RenderUtils.drawFace(eventRender2D.getMatrices(), x - length / 2 - 18, y - 17, (int)2, playerListEntry.getSkinTexture());
+                	RenderUtils.drawFace(eventRender2D.getMatrices(), - length / 2 - 18, - 17, (int)2, playerListEntry.getSkinTexture());
                 }
             }
+            eventRender2D.getMatrices().pop();
         }
     }
 
@@ -192,8 +207,9 @@ public class Nametags extends Mod {
     public String getNameString(Entity entity) {
         String name = entity.getDisplayName().asString();
         PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(entity.getUuid());
-        String gameModeText = playerListEntry != null ? ColorUtils.aqua + playerListEntry.getGameMode().getName().substring(0, 1).toUpperCase() + ColorUtils.reset : "";
+        String gameModeText = gamemode.isEnabled() ? (playerListEntry != null ? ColorUtils.aqua + playerListEntry.getGameMode().getName().substring(0, 1).toUpperCase() + " " + ColorUtils.reset : "") : "";
         String pingText = ping.isEnabled() ? (playerListEntry != null ? playerListEntry.getLatency() : "0") + "ms " : "";
+        String distanceText = distance.isEnabled() ? Math.round(mc.player.distanceTo(entity)) + "m " : " ";   	
         if (name.trim().isEmpty())
             name = entity.getName().getString();
         if (entity instanceof ItemEntity) {
@@ -203,17 +219,18 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + " " + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
+        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
         return displayName;
     }
 
     private String getHealthString(LivingEntity player) {
         String health = ColorUtils.green;
-        if (player.getHealth() < 15)
+        int healthPercent = (int) ((player.getHealth() / player.getMaxHealth()) * 100);
+        if (healthPercent <= 75)
             health = ColorUtils.colorChar + "e";
-        if (player.getHealth() < 10)
+        if (healthPercent <= 50)
             health = ColorUtils.colorChar + "6";
-        if (player.getHealth() < 5)
+        if (healthPercent <= 25)
             health = ColorUtils.colorChar + "4";
         if (!Float.isNaN(getHealth(player)) && !Float.isInfinite(getHealth(player)))
             health += "[" + MathUtils.round(getHealth(player), 1) + "]";

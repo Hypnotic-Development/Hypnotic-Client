@@ -358,7 +358,7 @@ public class RenderUtils {
 		        return mc.getWindow().getScaledHeight();
 		    }
 		 
-		 public static void drawRoundedRect(MatrixStack matrices, float left, float top, float right, float bottom, int smooth, Color color){
+		 public static void drawRoundedRect(MatrixStack matrices, float left, float top, float right, float bottom, float smooth, Color color){
 		        fill(matrices, left - smooth / 2, top - smooth, right + smooth / 2, bottom + smooth, color.getRGB());
 		        fill(matrices, left - smooth, top - smooth / 2, right + smooth, bottom + smooth / 2, color.getRGB());
 		        drawFilledCircle(matrices, left - smooth, top - smooth, smooth, color);

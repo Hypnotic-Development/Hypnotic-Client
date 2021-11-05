@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import badgamesinc.hypnotic.config.ConfigManager;
 import badgamesinc.hypnotic.config.SaveLoad;
 import badgamesinc.hypnotic.event.EventManager;
+import badgamesinc.hypnotic.mixin.ItemRendererMixin;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.render.CustomFont;
 import badgamesinc.hypnotic.ui.HUD;

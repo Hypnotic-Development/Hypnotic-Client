@@ -3,6 +3,7 @@ package badgamesinc.hypnotic.ui;
 import java.util.ArrayList;
 
 import badgamesinc.hypnotic.utils.ColorUtils;
+import badgamesinc.hypnotic.utils.Utils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.font.NahrFont;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
@@ -16,7 +17,10 @@ import net.minecraft.text.LiteralText;
 public abstract class HypnoticScreen extends Screen {
 
 	public double mouseX, mouseY;
-	public NahrFont font = FontManager.roboto;
+	public static NahrFont font = FontManager.roboto;
+	public static NahrFont fontMed = FontManager.robotoMed;
+	public static NahrFont fontSmall = FontManager.robotoSmall;
+	public static NahrFont fontBig = FontManager.robotoBig;
 	protected ArrayList<Button> buttons = new ArrayList<>();
 	protected MinecraftClient mc = MinecraftClient.getInstance();
 	
@@ -26,7 +30,12 @@ public abstract class HypnoticScreen extends Screen {
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		font = FontManager.roboto;
+		if (font.mcFont == OptionsScreen.INSTANCE.forceCFont.isEnabled()) {
+			font = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
+			fontMed = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 20, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
+			fontSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 16, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
+			fontBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 25, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
+		}
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		super.render(matrices, mouseX, mouseY, delta);
@@ -58,7 +67,8 @@ public abstract class HypnoticScreen extends Screen {
 	
 	@Override
 	public void renderBackground(MatrixStack matrices) {
-		RenderUtils.gradientFill(matrices, 0, 0, width, height, ColorUtils.transparent(180), ColorUtils.defaultClientColor);
+		if (OptionsScreen.INSTANCE.disableGradient.isEnabled()) this.renderBackground(matrices, 0);
+		else RenderUtils.gradientFill(matrices, 0, 0, width, height, ColorUtils.transparent(180), ColorUtils.defaultClientColor);
 	}
 	
 	@Override

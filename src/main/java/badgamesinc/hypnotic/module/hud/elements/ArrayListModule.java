@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.hud.HudModule;

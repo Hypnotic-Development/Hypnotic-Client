@@ -1,16 +1,17 @@
 package badgamesinc.hypnotic.ui.clickgui;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
 import java.awt.Color;
 
 import badgamesinc.hypnotic.module.Category;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.sound.SoundEvents;
-
-import static badgamesinc.hypnotic.utils.MCUtils.mc;
 
 public class CategoryButton {
 
@@ -43,7 +44,7 @@ public class CategoryButton {
 		if (parent.dragging && parent.currentCategory == this.category) {
 			RenderUtils.fill(matrices, x, y, x + width, y + height, ColorUtils.defaultClientColor);
 		}
-		FontManager.roboto.drawWithShadow(matrices, category.name, x + width / 3, y + 11, -1);
+		HypnoticScreen.font.drawWithShadow(matrices, category.name, x + width / 3, y + 11, -1);
 		FontManager.icons.drawWithShadow(matrices, category.icon, x + width / 6, y + 11, -1);
 		
 	}

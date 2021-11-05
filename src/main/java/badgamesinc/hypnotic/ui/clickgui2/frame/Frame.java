@@ -12,6 +12,7 @@ import badgamesinc.hypnotic.module.hud.HudManager;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.movement.FlightBlink;
 import badgamesinc.hypnotic.module.render.ClickGUIModule;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.ColorBox;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.settings.Component;
@@ -88,11 +89,11 @@ public class Frame {
 		this.color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.is("Custom") ? category.color : ModuleManager.INSTANCE.getModule(ClickGUIModule.class).color.getColor();
 		Screen.fill(matrices, x, y, x + width, y + height, color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
-		FontManager.roboto.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
+		HypnoticScreen.font.drawWithShadow(matrices, name, x + (height / 3), y + (height / 6), -1);
 		if (category != null) FontManager.icons.drawWithShadow(matrices, category.icon, x + width - (height), y + (height / 6), -1);
-		else FontManager.roboto.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
+		else HypnoticScreen.font.drawWithShadow(matrices, extended ? "-" : "+", x + width - (height / 1.5f), y + (height / 6), -1);
 		if (this.extended) {
-			buttons.sort(Comparator.comparingInt(b -> (int)FontManager.roboto.getWidth(((Button)b).mod.getName())).reversed());
+			buttons.sort(Comparator.comparingInt(b -> (int)HypnoticScreen.font.getWidth(((Button)b).mod.getName())).reversed());
 			for (Button button : buttons) {
 				button.setWidth(this.width);
 				button.render(matrices, mouseX, mouseY);

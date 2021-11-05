@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
@@ -18,15 +19,18 @@ public class CheckBox extends Component {
 		this.boolSet = (BooleanSetting)setting;
 	}
 	
-	int anim = 0;
+	double anim, anim2;
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-		FontManager.robotoMed.drawWithShadow(matrices, boolSet.name, x - 10, y, -1);
-		RenderUtils.drawOutlineCircle(matrices, x + 170, y, 10, new Color(170, 170, 170));
-		if (anim < 255 && boolSet.isEnabled()) anim+=5; 
-		if (anim > 0 && !boolSet.isEnabled()) anim-=5; 
-		RenderUtils.drawFilledCircle(matrices, x + 171.8, y + 1.8, 6.5f, new Color(ColorUtils.defaultClientColor().getRed(), ColorUtils.defaultClientColor().getGreen(), ColorUtils.defaultClientColor().getBlue(), anim));
-		
+		HypnoticScreen.fontMed.drawWithShadow(matrices, boolSet.name, x - 10, y, -1);
+		double dist1 = RenderUtils.distanceTo(anim, 5);
+		double dist2 = RenderUtils.distanceTo(anim, 0);
+		if (dist1 != 0 && boolSet.isEnabled()) anim+=dist1 / 6; 
+		if (dist2 != 0 && !boolSet.isEnabled()) anim+=dist2 / 6; 
+		RenderUtils.drawRoundedRect(matrices, x + 172, y + 4, x + 173, y + 5, 5, new Color(40, 40, 40));
+//		RenderUtils.drawRoundedRect(matrices, x + 171 - 5 - (float)anim, y - 2 - (float)anim, x + 172 + (float)anim, y + 4 + (float)anim, 5, ColorUtils.defaultClientColor());
+		if (dist1 <= 4.9) RenderUtils.drawRoundedRect(matrices, x + 172, y + 4, x + 173, y + 5, (float)anim, ColorUtils.defaultClientColor());
+		if (boolSet.isEnabled()) FontManager.iconsSmall.draw(matrices, "f", x + 167.8f, y - 4, -1);
 		super.render(matrices, mouseX, mouseY);
 	}
 	

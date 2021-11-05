@@ -54,7 +54,7 @@ public class NahrFont {
     private int startChar, endChar;
     private float[] xPos, yPos;
     public BufferedImage bufferedImage;
-    private Identifier resourceLocation;
+    public Identifier resourceLocation;
     private final Pattern patternControlCode = Pattern.compile("(?i)\\u00A7[0-9A-FK-OG]"), patternUnsupported = Pattern.compile("(?i)\\u00A7[L-O]");
     public boolean mcFont = false;
     

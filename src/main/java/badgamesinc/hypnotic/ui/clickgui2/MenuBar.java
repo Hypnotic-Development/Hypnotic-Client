@@ -9,6 +9,7 @@ import badgamesinc.hypnotic.module.render.ClickGUIModule;
 import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.ui.OptionsScreen;
 import badgamesinc.hypnotic.ui.WaypointManagerScreen;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -56,11 +57,11 @@ public class MenuBar {
 			tab.y = (y - animTicks) + 5;
 			tab.width = 30;
 			tab.height = 30;
-			RenderSystem.setShaderTexture(0, new Identifier("hypnotic", "textures/" + tab.name.toLowerCase() + ".png"));
+			RenderUtils.bindTexture(new Identifier("hypnotic", "textures/" + tab.name.toLowerCase() + ".png"));
 			if (hoveredTab(tab, mouseX, mouseY) || tab.equals(currentTab)) RenderSystem.setShaderColor(0.6f, 0.6f, 0.6f, 0.6f);
 			else RenderSystem.setShaderColor(1, 1, 1, 1);
-			Screen.drawTexture(matrices, tab.x, tab.y, 0, 0, tab.width, tab.height, tab.width, tab.height);
-			
+			RenderUtils.drawTexture(matrices, tab.x, tab.y, 0, 0, tab.width, tab.height, tab.width, tab.height);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 			count+=50;
 		}
 	}

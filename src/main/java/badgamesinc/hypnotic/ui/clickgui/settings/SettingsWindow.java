@@ -9,6 +9,7 @@ import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui.ModuleButton;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
@@ -57,8 +58,8 @@ public class SettingsWindow {
 			y = mouseY - dragY;
 		}
 		RenderUtils.drawRoundedRect(matrices, x, y, x + 190, y + 250, 10, new Color(50, 50, 50));
-		FontManager.robotoBig.drawWithShadow(matrices, parent.mod.getName(), x, y - 6, -1);
-		FontManager.robotoSmall.drawWithShadow(matrices, parent.mod.getDescription(), x, y + 12, ColorUtils.transparent(-1, 180));
+		HypnoticScreen.fontBig.drawWithShadow(matrices, parent.mod.getName(), x, y - 6, -1);
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, parent.mod.getDescription(), x + 1, y + 12, ColorUtils.transparent(-1, 180));
 		RenderUtils.gradientFill(matrices, x - 10, y + 25, x + 200, y + 30, new Color(50, 50, 50).darker().getRGB(), 0);
 		RenderUtils.startScissor(x, y + 30, 200, 228);
 		double distance = RenderUtils.distanceTo(animScroll, scroll);

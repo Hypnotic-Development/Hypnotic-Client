@@ -7,6 +7,7 @@ import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 
 public class Doll extends HudModule {
 
@@ -21,7 +22,7 @@ public class Doll extends HudModule {
 	@Override
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
 		if (bg.isEnabled()) RenderUtils.fill(matrices, getX(), getY(), getX() + getWidth(), getY() + getHeight(), ColorUtils.transparent(150));
-		InventoryScreen.drawEntity((int) (getX() + getWidth() / 2), (int) (getY() + this.getHeight() - size.getValue() * 1.5f), (int) size.getValue() * 10, mc.player.getYaw(), -mc.player.getPitch(), mc.player);
+		InventoryScreen.drawEntity((int) (getX() + getWidth() / 2), (int) (getY() + this.getHeight() - size.getValue() * 1.5f), (int) size.getValue() * 10, MathHelper.wrapDegrees(mc.player.getYaw()), -mc.player.getPitch(), mc.player);
 		this.setWidth((int)size.getValue() * 10);
 		this.setHeight((int)size.getValue() * 22);
 		super.render(matrices, scaledWidth, scaledHeight, partialTicks);

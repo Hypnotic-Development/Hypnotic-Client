@@ -39,12 +39,15 @@ import net.minecraft.util.hit.HitResult.Type;
 public class Killaura extends Mod {
 
 	public static LivingEntity target;
+	public ModeSetting mode = new ModeSetting("Mode", "Sort", "Sort", "Multi");
+	public ModeSetting sortMode = new ModeSetting("Sort Mode", "Distance", "Distance", "Health");
 	public ModeSetting rotation = new ModeSetting("Rotations", "Silent", "Silent", "Lock View");
 	public NumberSetting range = new NumberSetting("Range", 4, 1, 6, 0.1);
 	public NumberSetting aps = new NumberSetting("APS", 15, 1, 20, 1);
 	public BooleanSetting delay = new BooleanSetting("1.9 Delay", true);
 	public BooleanSetting swing = new BooleanSetting("Swing", true);
 	public BooleanSetting autoBlock = new BooleanSetting("AutoBlock", true);
+	public ModeSetting autoBlockMode = new ModeSetting("AutoBlock Mode", "Normal", "Normal", "Visual");
 	public BooleanSetting trigger = new BooleanSetting("Trigger", false);
 	public BooleanSetting walls = new BooleanSetting("Walls", true);
 	public BooleanSetting players = new BooleanSetting("Players", true);
@@ -54,10 +57,11 @@ public class Killaura extends Mod {
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 	
 	int passedTicks;
+	boolean blocking = false;
 	
 	public Killaura() {
 		super("Killaura", "Attacks select surrounding entities", Category.COMBAT);
-		addSettings(rotation, range, aps, delay, swing, autoBlock, trigger, walls, players, animals, monsters, passives, invisibles);
+		addSettings(mode, sortMode, rotation, range, aps, delay, swing, autoBlock, autoBlockMode, trigger, walls, players, animals, monsters, passives, invisibles);
 	}
 	
 	@Override
@@ -66,50 +70,73 @@ public class Killaura extends Mod {
 			if(mc.world != null){
 				List<LivingEntity> targets = Lists.<LivingEntity>newArrayList();
 				for(Entity e : mc.world.getEntities()){
-					if (e instanceof LivingEntity && e != mc.player && !FriendManager.INSTANCE.isFriend((LivingEntity)e)) targets.add((LivingEntity)e);
-				}
-				targets.sort(Comparator.comparingDouble(entity -> mc.player.distanceTo(entity)));
-				if(!targets.isEmpty()){
-					if (!FriendManager.INSTANCE.isFriend((LivingEntity)targets.get(0))) target = (LivingEntity)targets.get(0);
-					if (mc.player.distanceTo(target) > range.getValue()) target = null;
-					if(target != null){
-						this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().asString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().asString()));
-						if(canAttack(target)){
-							RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
-							RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
-							if (rotation.is("Lock View")) {
-								mc.player.setYaw(RotationUtils.getRotations(target)[0]);
-								mc.player.setPitch(RotationUtils.getRotations(target)[1]);
-							}
-							if (passedTicks > aps.getValue()) passedTicks--;
-							else if (passedTicks <= aps.getValue()) passedTicks=(int) (aps.getValue() * 100);
-							if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : new Timer().hasTimeElapsed((long) (aps.getValue() / 1000), true)){
-								mc.interactionManager.attackEntity(mc.player, target);
-								
-								
-								if (swing.isEnabled() && (autoBlock.isEnabled() ? !ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() : true) || (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() ? mc.options.getPerspective() != Perspective.FIRST_PERSON : false) && !(mc.player.getMainHandStack().getItem() instanceof SwordItem)) mc.player.swingHand(Hand.MAIN_HAND);
-								else mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
-								if (swing.isEnabled() && !(mc.player.getMainHandStack().getItem() instanceof SwordItem) || ModuleManager.INSTANCE.getModule(OldBlock.class).animation.is("Swing")) mc.player.swingHand(Hand.MAIN_HAND); 
-							}
-							if(autoBlock.isEnabled() && mc.player.getOffHandStack().getItem() instanceof ShieldItem){
-								mc.interactionManager.interactItem(mc.player, mc.world, Hand.OFF_HAND);
-								mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
-							}
-						}
-						if (target.isDead()) {
-							RotationUtils.resetYaw();
-							RotationUtils.resetPitch();
-						}
-					}else{
-						if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){
-							RotationUtils.resetPitch();
-							RotationUtils.resetYaw();
-						}
-						this.setDisplayName("Killaura " + ColorUtils.gray + "None");
-						if(autoBlock.isEnabled()){
-//							mc.interactionManager.stopUsingItem(mc.player);
-						}
+					if (e instanceof LivingEntity && e != mc.player && !FriendManager.INSTANCE.isFriend((LivingEntity)e) && mc.player.distanceTo(e) <= range.getValue()) targets.add((LivingEntity)e);
+					else {
+						if (targets.contains(e)) targets.remove(e);
 					}
+				}
+				if (target != null && mc.player.distanceTo(target) > range.getValue()) {
+					targets.remove(target);
+					target = null;
+					if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){
+						RotationUtils.resetPitch();
+						RotationUtils.resetYaw();
+					}
+				}
+				switch(mode.getSelected()) {
+					case "Sort":
+						switch(sortMode.getSelected()) {
+							case "Distance": 
+								targets.sort(Comparator.comparingDouble(entity -> mc.player.distanceTo(entity)));
+								break;
+							case "Health": 
+								targets.sort(Comparator.comparingDouble(entity -> ((LivingEntity)entity).getHealth()));
+								break;
+						}
+						if(!targets.isEmpty()){
+							if (!FriendManager.INSTANCE.isFriend((LivingEntity)targets.get(0))) target = (LivingEntity)targets.get(0);
+							if (mc.player.distanceTo(target) > range.getValue()) target = null;
+							if(target != null){
+								this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().asString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().asString()));
+								if(canAttack(target)){
+									RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
+									RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
+									if (rotation.is("Lock View")) {
+										mc.player.setYaw(RotationUtils.getRotations(target)[0]);
+										mc.player.setPitch(RotationUtils.getRotations(target)[1]);
+									}
+									if (passedTicks > aps.getValue()) passedTicks--;
+									else if (passedTicks <= aps.getValue()) passedTicks=(int) (aps.getValue() * 100);
+									if(delay.isEnabled() ? mc.player.getAttackCooldownProgress(0.5F) == 1 : new Timer().hasTimeElapsed((long) (aps.getValue() / 1000), true)){
+										mc.interactionManager.attackEntity(mc.player, target);
+										
+										
+										if (swing.isEnabled() && (autoBlock.isEnabled() ? !ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() : true) || (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled() ? mc.options.getPerspective() != Perspective.FIRST_PERSON : false) && !(mc.player.getMainHandStack().getItem() instanceof SwordItem)) mc.player.swingHand(Hand.MAIN_HAND);
+										else mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(Hand.MAIN_HAND));
+										if (swing.isEnabled() && !(mc.player.getMainHandStack().getItem() instanceof SwordItem) || ModuleManager.INSTANCE.getModule(OldBlock.class).animation.is("Swing")) mc.player.swingHand(Hand.MAIN_HAND); 
+									}
+									if(autoBlock.isEnabled() && mc.player.getOffHandStack().getItem() instanceof ShieldItem && !mc.player.getMainHandStack().getItem().isFood() && autoBlockMode.is("Normal")) {
+										mc.options.keyUse.setPressed(true);
+										blocking = true;
+									}
+								}
+								if (target.isDead()) {
+									RotationUtils.resetYaw();
+									RotationUtils.resetPitch();
+								}
+							}else{
+								if (blocking) mc.options.keyUse.setPressed(false);
+								blocking = false;
+								if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){
+									RotationUtils.resetPitch();
+									RotationUtils.resetYaw();
+								}
+								this.setDisplayName("Killaura " + ColorUtils.gray + "None");
+							}
+						}
+						break;
+					case "Multi":
+						break;
 				}
 			}
 		}catch(Exception e){
@@ -158,5 +185,11 @@ public class Killaura extends Mod {
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public void onTickDisabled() {
+		sortMode.setVisible(mode.is("Sort"));
+		super.onTickDisabled();
 	}
 }

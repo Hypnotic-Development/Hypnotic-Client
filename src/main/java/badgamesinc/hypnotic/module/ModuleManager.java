@@ -9,6 +9,7 @@ import badgamesinc.hypnotic.module.misc.*;
 import badgamesinc.hypnotic.module.movement.*;
 import badgamesinc.hypnotic.module.player.*;
 import badgamesinc.hypnotic.module.render.*;
+import badgamesinc.hypnotic.ui.OptionsScreen;
 
 public class ModuleManager {
 
@@ -112,7 +113,8 @@ public class ModuleManager {
 					new BlockOutline(),
 					new AirPlace(),
 					new DiscordRPCModule(),
-					new FlightBlink()
+					new FlightBlink(),
+					new PCPinger()
 				);
 	}
 	
@@ -139,6 +141,7 @@ public class ModuleManager {
 		for (HudModule hudMod : HudManager.INSTANCE.hudModules) {
 			mods.add(hudMod);
 		}
+		mods.add(OptionsScreen.INSTANCE.options);
 		return mods;
 	}
 }

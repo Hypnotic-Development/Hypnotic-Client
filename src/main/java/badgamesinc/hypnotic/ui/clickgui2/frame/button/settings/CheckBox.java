@@ -4,9 +4,9 @@ import java.awt.Color;
 
 import badgamesinc.hypnotic.settings.Setting;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.ui.HypnoticScreen;
 import badgamesinc.hypnotic.ui.clickgui2.frame.button.Button;
 import badgamesinc.hypnotic.utils.ColorUtils;
-import badgamesinc.hypnotic.utils.font.FontManager;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -28,7 +28,7 @@ public class CheckBox extends Component {
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		boolSet.displayName = boolSet.name;
 		Screen.fill(matrices, parent.getX(), parent.getY() + offset + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + offset + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		FontManager.robotoSmall.drawWithShadow(matrices, (!boolSet.isEnabled() ? ColorUtils.gray : "") + boolSet.displayName, parent.getX() + 4, parent.getY() + 4 + offset + parent.getHeight(), parent.parent.color.getRGB());
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, (!boolSet.isEnabled() ? ColorUtils.gray : "") + boolSet.displayName, parent.getX() + 4, parent.getY() + 4 + offset + parent.getHeight(), parent.parent.color.getRGB());
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
