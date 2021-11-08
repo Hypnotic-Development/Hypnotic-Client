@@ -15,21 +15,29 @@ Use at your own risk, we are not responsible for any punishments on any server
 ## Requirements  
 Minecraft 1.17.1  
 Java Runtime version 16 or higher  
-Fabric Loader 0.12.1 or higher  
-Fabric API 0.40.6+1.17 or higher  
+Fabric Loader 0.12.4 or higher  
   
 ## Authors  
 BadGamesInc - actual knowledge  
 KawaiiZenbo - idk
   
 ### Other Credits  
+[Fabric](https://fabricmc.net/)  
 [Baritone](https://github.com/MeteorDevelopment/baritone)  
 Whoever else we stole code from  
 
 ## Support
 Join our "amazing" discord for support https://discord.gg/aZStDUnb29
+
+## How to compile  
+Download and extract the Hypnotic client source code  
+Open Command Prompt/Terminal  
+Navigate to where you extracted the Hypnotic Source  
+Run `gradlew build`  
+After Gradle is done, the complete mod JAR should be located in -  
+`<hypnotic repo folder>/build/libs/Hypnotic-r1000.jar` **Any other jar in that folder will not work**  
   
-## How to import and compile with Eclipse  
+## How to import into Eclipse  
 Install Eclipse from https://www.eclipse.org/ide/  
 Download and extract the Hypnotic client source code  
 Open Command Prompt/Terminal  
@@ -42,4 +50,5 @@ Hypnotic should now run along with all of your changes
 
 ## Compiled Builds  
 Please get compiled build from the latest Github Actions artifact, we do not keep up regular releases.  
+**Ensure you select specifically `Hypnotic-r1000.jar` from `Artifacts.zip`, any others will not work**  
   
