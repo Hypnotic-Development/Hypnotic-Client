@@ -16,10 +16,11 @@ Use at your own risk, we are not responsible for any punishments on any server
 Minecraft 1.17.1  
 Java Runtime version 16 or higher  
 Fabric Loader 0.12.1 or higher  
+Fabric API 0.40.6+1.17 or higher  
   
 ## Authors  
 BadGamesInc - actual knowledge  
-KawaiiZenbo - api
+KawaiiZenbo - idk
   
 ### Other Credits  
 [Baritone](https://github.com/MeteorDevelopment/baritone)  
@@ -40,5 +41,5 @@ Expand `Java Application`, then double-click `Hypnotic-Fabric-1.17_client`
 Hypnotic should now run along with all of your changes  
 
 ## Compiled Builds  
-Please get compiled releases from the latest Github Actions artifact, we do not keep up regular releases.  
+Please get compiled build from the latest Github Actions artifact, we do not keep up regular releases.  
   
