@@ -19,7 +19,7 @@ Fabric Loader 0.12.4 or higher
   
 ## Authors  
 BadGamesInc - actual knowledge  
-KawaiiZenbo - idk
+KawaiiZenbo - idk edits the readme
   
 ### Other Credits  
 [Fabric](https://fabricmc.net/)  
@@ -49,6 +49,6 @@ Expand `Java Application`, then double-click `Hypnotic-Fabric-1.17_client`
 Hypnotic should now run along with all of your changes  
 
 ## Compiled Builds  
-Please get compiled build from the latest Github Actions artifact, we do not keep up regular releases.  
+Please get compiled builds from the latest Github Actions artifact, we do not keep up regular releases.  
 **Ensure you select specifically `Hypnotic-r1000.jar` from `Artifacts.zip`, any others will not work**  
   
