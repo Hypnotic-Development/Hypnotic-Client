@@ -35,7 +35,6 @@ public class Waypoints extends Mod {
 	
 	@Override
 	public void onEnable() {
-		WaypointManager.INSTANCE.waypoints.add(new Waypoint("Test", mc.player.getX(), mc.player.getY(), mc.player.getZ()));
 		super.onEnable();
 	}
 	

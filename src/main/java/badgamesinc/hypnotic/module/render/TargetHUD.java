@@ -10,7 +10,6 @@ import badgamesinc.hypnotic.ui.HudEditorScreen;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.font.FontManager;
 import badgamesinc.hypnotic.utils.math.MathUtils;
-import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
@@ -49,27 +48,23 @@ public class TargetHUD extends HudModule {
 		}
 		if (mc.currentScreen instanceof HudEditorScreen) animation2 = this.getWidth();
 		if (mode.is("Compact")) {
-			this.setWidth(120);
-			this.setHeight(45);
-			if (lastTarget != null) {
+			this.setWidth(FontManager.robotoMed.getStringWidth(lastTarget.getName().getString()) > 110 - 38 ? 42 + FontManager.robotoMed.getStringWidth(lastTarget.getName().getString()) : 110);
+			this.setHeight(36);
+			if (lastTarget != null && animation3 <= 120) {
 				RenderUtils.startScissor(target == mc.player ? this.getX() + (int)animation3 : this.getX(), this.getY(), target == mc.player ? (int)this.getWidth() : (int)animation2, (int) this.getHeight());
-				RenderUtils.drawRoundedRect(matrices, this.getX() + 4, this.getY() + 4, this.getX() + (int)this.getWidth() - 4, this.getY() + (int)this.getHeight() - 4, 4, new Color(45, 45, 45));
-				RenderUtils.drawFace(matrices, this.getX() + 4, this.getY() + 4, 4, RenderUtils.getPlayerSkin(lastTarget != null ? lastTarget.getUuid() : mc.player.getUuid()));
-				FontManager.robotoMed2.drawWithShadow(matrices, lastTarget.getName().getString(), this.getX() + 45, this.getY() + 4, -1);
-				int ping = mc.getNetworkHandler().getPlayerListEntry(lastTarget.getUuid()) != null ? mc.getNetworkHandler().getPlayerListEntry(lastTarget.getUuid()).getLatency() : 0;
-				FontManager.roboto.drawWithShadow(matrices, "Ping: " + ping, this.getX() + 45, this.getY() + 18f, -1);
-				FontManager.roboto.drawWithShadow(matrices, "Distance: " + MathUtils.round(PlayerUtils.distanceTo(lastTarget), 2), this.getX() + 45, this.getY() + 28f, -1);
+				RenderUtils.fill(matrices, this.getX(), this.getY(), this.getX() + (int)this.getWidth(), this.getY() + (int)this.getHeight(), new Color(35, 35, 35, 250).getRGB());
+				RenderUtils.drawFace(matrices, this.getX() + 2, this.getY() + 2, 4, RenderUtils.getPlayerSkin(lastTarget != null ? lastTarget.getUuid() : mc.player.getUuid()));
+				FontManager.robotoMed.drawWithShadow(matrices, lastTarget.getName().getString(), this.getX() + 38, this.getY() + 4, -1);
 				float percent = target.getHealth() / target.getMaxHealth();
-                float barLength = (int) ((this.getWidth() - 5) * percent);
+				float length = this.getWidth() - 42;
+                float barLength = length * percent;
 				double dist = RenderUtils.distanceTo(animation, barLength);
 				if (dist != 0) {
 					animation+=dist / 10;
 				}
-				RenderUtils.fill(matrices, this.getX() + 2, this.getY() + this.getHeight() - 1, this.getX() + this.getWidth() - 2, this.getY() + this.getHeight() - 4, color.getColor().darker().getRGB());
-				RenderUtils.drawFilledCircle(matrices, this.getX() + this.getWidth() - 4, this.getY() + this.getHeight() - 4, 3, color.getColor().darker());
-				RenderUtils.fill(matrices, this.getX() + 2, this.getY() + this.getHeight() - 1, this.getX() + 2 + animation, this.getY() + this.getHeight() - 4, color.getColor().getRGB());
-				RenderUtils.drawFilledCircle(matrices, this.getX() + animation, this.getY() + this.getHeight() - 4, 3, color.getColor());
-				RenderUtils.drawFilledCircle(matrices, this.getX() + 1, this.getY() + this.getHeight() - 4, 3, color.getColor());
+				RenderUtils.fill(matrices, this.getX() + 38, this.getY() + 28, this.getX() + 106, this.getY() + 18, color.getColor().darker().getRGB());
+				RenderUtils.fill(matrices, this.getX() + 38, this.getY() + 28, this.getX() + 38 + animation, this.getY() + 18, color.getColor().getRGB());
+				FontManager.roboto.drawWithShadow(matrices, MathUtils.round(percent * 100, 1) + "%", (this.getX() + 35 + length / 2) - FontManager.robotoSmaller.getStringWidth(MathUtils.round(percent * 100, 1) + "") / 2, this.getY() + 26 - (FontManager.roboto.mcFont ? 9 : 8f), -1);
 				RenderUtils.endScissor();
 				if (target != mc.player && target != null) lastTarget = target;
 			}

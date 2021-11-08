@@ -58,7 +58,7 @@ public class Nametags extends Mod {
 	private HashMap<Entity, Vec3d> positions = Maps.newHashMap();
 	int count = 0;
 	
-	private NahrFont font = FontManager.roboto;
+	private static NahrFont font = FontManager.roboto;
 	
 	public Nametags() {
 		super("Nametags", "Renders a custom nametag above players", Category.RENDER);

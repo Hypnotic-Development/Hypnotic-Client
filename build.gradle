@@ -43,7 +43,9 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	// Baritone (the fork is standalone baritone and the only change is a setting to build it as fabric mod instead of forge one)
+	modImplementation include(fabricApi.module("fabric-api-base", project.fabric_version));
+	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version));
+
 	// thanks minegame159 from meteor client
 	modImplementation "baritone:baritone:${project.baritone_version}"
 	include "baritone:baritone:${project.baritone_version}"
@@ -89,7 +91,7 @@ jar {
 
 remapJar {
     input.set(shadowJar.archiveFile)
-    archiveName = "Hypnotic.jar"
+    archiveName = "Hypnotic-${project.mod_version}.jar"
 }
 
 // configure the maven publication

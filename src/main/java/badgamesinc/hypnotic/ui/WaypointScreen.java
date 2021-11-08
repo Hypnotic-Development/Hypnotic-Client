@@ -3,7 +3,6 @@ package badgamesinc.hypnotic.ui;
 import java.awt.Color;
 
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
-import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import badgamesinc.hypnotic.waypoint.Waypoint;
 import badgamesinc.hypnotic.waypoint.WaypointManager;
@@ -29,6 +28,7 @@ public class WaypointScreen extends HypnoticScreen {
 		nameBox = new TextBox(width / 2 - 180, height / 2 - 140, 100, 10, "Name");
 		colorPicker = new ColorPicker(100, 100, 120, 20, color);
 		doneButton = new Button("Done", 209385, width / 2, height / 2 - 60, 100, 20, false);
+		this.buttons.add(doneButton);
 		super.init();
 	}
 	
@@ -43,7 +43,6 @@ public class WaypointScreen extends HypnoticScreen {
 		colorPicker.render(matrices, mouseX, mouseY);
 		doneButton.render(matrices, mouseX, mouseY, delta);
 		for (Waypoint wp : WaypointManager.INSTANCE.waypoints) {
-//			System.out.println(wp.getName());
 		}
 		super.render(matrices, mouseX, mouseY, delta);
 	}

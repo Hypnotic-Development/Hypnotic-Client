@@ -6,6 +6,8 @@ import badgamesinc.hypnotic.event.events.EventRenderItem;
 import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.module.combat.Killaura;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.utils.Timer;
 import net.minecraft.client.option.Perspective;
@@ -36,7 +38,7 @@ public class OldBlock extends Mod {
 	@EventTarget
     private void runMethod(EventRenderItem event) {
 		boolean shouldmove = animationTimer.hasTimeElapsed(1000 / 75, true);
-		if (!mc.player.isUsingItem()) return;
+		if (ModuleManager.INSTANCE.getModule(Killaura.class).autoBlockMode.is("Visual") && Killaura.target != null ? Killaura.target == null : !mc.player.isUsingItem()) return;
         if ((event.getItemStack().getItem() instanceof AxeItem || mc.player.getMainHandStack().getItem() instanceof SwordItem) && shouldmove) {
         	if (swingTicks < 60 && !swingHasElapsed) {
         		swingTicks+=7;

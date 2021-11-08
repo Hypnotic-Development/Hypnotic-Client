@@ -5,13 +5,20 @@ import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.combat.Killaura;
 import badgamesinc.hypnotic.module.combat.TargetStrafe;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.IceBlock;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.util.math.BlockPos;
 
 public class Speed extends Mod {
 
+	public ModeSetting mode = new ModeSetting("Mode", "Vanilla", "Vanilla", "NCP");
 	public NumberSetting speed = new NumberSetting("Speed", 4, 1, 10, 0.1);
+	public NumberSetting timerBoost = new NumberSetting("Timer Boost", 1, 1, 5, 0.01);
 	public BooleanSetting jump = new BooleanSetting("Jump", true);
 	public NumberSetting jumpHeight = new NumberSetting("Jump Height", 4, 1, 10, 0.1);
 	public BooleanSetting override = new BooleanSetting("Override Jump Height", true);
@@ -21,7 +28,7 @@ public class Speed extends Mod {
 	
 	public Speed() {
 		super("Speed", "Makes you go fast", Category.MOVEMENT);
-		addSettings(speed, jump, jumpHeight, override);
+		addSettings(mode, speed, timerBoost, jump, jumpHeight, override);
 	}
 	
 	@Override
@@ -32,7 +39,7 @@ public class Speed extends Mod {
 
 	@Override
 	public void onMotion() {
-		this.setDisplayName("Speed " + ColorUtils.gray + (jump.isEnabled() ? "Hop" : "Ground"));
+		this.setDisplayName("Speed " + ColorUtils.gray + mode.getSelected());
 		if(mc.player != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0) && !mc.player.isTouchingWater()) {
 			if (!mc.player.isOnGround()) {
 				wallTicks++;
@@ -41,10 +48,14 @@ public class Speed extends Mod {
 					wallTicks = 0;
 				}
 			} else wallTicks = 0;
-            double speed = this.speed.getValue() * 0.1 + (mc.player.isOnGround() ? this.speed.getValue() * 0.01 : 0);
-            PlayerUtils.setMotion(speed);
+			BlockPos downBlock = mc.player.isOnGround() ? mc.player.getBlockPos() : mc.player.getBlockPos().down();
+			boolean isIce = mc.world.getBlockState(downBlock).getBlock() == Blocks.ICE || mc.world.getBlockState(downBlock).getBlock() == Blocks.PACKED_ICE || mc.world.getBlockState(downBlock).getBlock() == Blocks.BLUE_ICE;
+			double ncpLimit = (mc.player.isOnGround() ? 0 : (mc.player.hasStatusEffect(StatusEffects.SPEED) ? (mc.player.getStatusEffect(StatusEffects.SPEED).getAmplifier() == 1 ? 4 : 3.5) : 2.9)) + (isIce ? 4.3 : 0);
+            double speed = (mode.is("NCP") ? ncpLimit * 0.1 : (this.speed.getValue()) * 0.1 + (mc.player.isOnGround() ? this.speed.getValue() * 0.01 : 0));
+            if (mode.is("NCP") && !mc.player.isOnGround()) PlayerUtils.setMotion(speed);
+            else if (mode.is("Vanilla")) PlayerUtils.setMotion(speed);
             if (TargetStrafe.canStrafe()) {
-            	TargetStrafe.strafe(speed * 1.05, Killaura.target, direction, false);
+            	TargetStrafe.strafe(speed, Killaura.target, direction, false);
             }
         }
 		super.onMotion();
@@ -52,13 +63,14 @@ public class Speed extends Mod {
 	
 	@Override
 	public void onTickDisabled() {
+		speed.setVisible(!mode.is("NCP"));
 		jumpHeight.setVisible(jump.isEnabled());
 		super.onTickDisabled();
 	}
 	
-//	@Override
-//	public void onDisable() {
-//		mc.options.
-//		super.onDisable();
-//	}
+	@Override
+	public void onDisable() {
+		super.onDisable();
+	}
+
 }

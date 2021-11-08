@@ -78,7 +78,7 @@ public class SaveLoad {
         }
         
         for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
-        	toSave.add("WAYPOINT:" + ":name:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());
+        	toSave.add("WAYPOINT:NAME:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());
         }
         
         /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {

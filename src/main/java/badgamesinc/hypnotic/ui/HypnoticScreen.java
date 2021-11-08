@@ -30,11 +30,11 @@ public abstract class HypnoticScreen extends Screen {
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		if (font.mcFont == OptionsScreen.INSTANCE.forceCFont.isEnabled()) {
-			font = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
-			fontMed = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 20, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
-			fontSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 16, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
-			fontBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 25, 1, !OptionsScreen.INSTANCE.forceCFont.isEnabled());
+		if (font.mcFont != (OptionsScreen.INSTANCE.forceCFont.isEnabled() ? false : FontManager.mcFont)) {
+			font = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, OptionsScreen.INSTANCE.forceCFont.isEnabled() ? false : FontManager.mcFont);
+			fontMed = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 20, 1, OptionsScreen.INSTANCE.forceCFont.isEnabled() ? false : FontManager.mcFont);
+			fontSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 16, 1, OptionsScreen.INSTANCE.forceCFont.isEnabled() ? false : FontManager.mcFont);
+			fontBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 25, 1, OptionsScreen.INSTANCE.forceCFont.isEnabled() ? false : FontManager.mcFont);
 		}
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;

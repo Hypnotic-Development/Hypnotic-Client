@@ -8,7 +8,7 @@ public class FontManager {
 	public static String font = "Roboto-Regular.ttf";
 	private static final String assets = "assets/hypnotic/fonts/";
 	public static int size = 20;
-	private static boolean mcFont = false;
+	public static boolean mcFont = false;
 	public static NahrFont robotoSmaller = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 14, 1, mcFont);
 	public static NahrFont robotoSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 16, 1, mcFont);
 	public static NahrFont roboto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 18, 1, mcFont);
@@ -18,7 +18,6 @@ public class FontManager {
 	public static NahrFont robotoCustomSize = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), size, 1, mcFont);
 	public static NahrFont icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
 	public static NahrFont iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
-	public static NahrFont magneto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "magneto.ttf"), 16, 1, false);
 	
 	
 	public static void setMcFont(boolean mcFont) {
@@ -32,7 +31,6 @@ public class FontManager {
 		robotoCustomSize = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), size, 1, mcFont);
 		icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
 		iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
-		magneto = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "magneto.ttf"), 16, 1, false);
 	}
 	
 	public static void setSize(int size) {

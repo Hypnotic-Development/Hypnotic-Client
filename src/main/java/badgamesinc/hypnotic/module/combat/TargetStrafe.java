@@ -43,7 +43,7 @@ public class TargetStrafe extends Mod {
     @EventTarget
     public final void onRender3D(EventRender3D event) {
     	if (Killaura.target != null)
-    		this.setDisplayName("TargetStrafe " + ColorUtils.gray + Killaura.target.getName().asString());
+    		this.setDisplayName("TargetStrafe " + ColorUtils.gray + Killaura.target.getName().getString());
     	else
     		this.setDisplayName("TargetStrafe " + ColorUtils.gray + "None");
         if (ModuleManager.INSTANCE.getModule(Killaura.class).isEnabled() && Killaura.target != null) {

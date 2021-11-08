@@ -57,7 +57,7 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 		EventRenderItem event = new EventRenderItem(matrices, stack, renderMode, EventRenderItem.RenderTime.PRE, leftHanded);
 		event.call();
 		if (ModuleManager.INSTANCE.getModule(OldBlock.class).isEnabled()) {
-		if (!mc.player.isUsingItem() || renderMode != ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND) return;
+		if ((ModuleManager.INSTANCE.getModule(Killaura.class).autoBlockMode.is("Visual") && Killaura.target != null ? Killaura.target == null : !mc.player.isUsingItem()) || renderMode != ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND) return;
         MatrixStack matrixStack = event.getMatrixStack();
         boolean offHand = event.isLeftHanded() ? event.getType() == ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND : event.getType() == ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND;
                     if (!offHand) {

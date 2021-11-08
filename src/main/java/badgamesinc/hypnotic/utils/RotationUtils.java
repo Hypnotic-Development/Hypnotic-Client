@@ -25,6 +25,7 @@ public class RotationUtils {
 	public static float serverPitch;
 	public static boolean isCustomPitch = false;
 	public static boolean isCustomYaw = false;
+	public static float serverYaw;
 	
 	public static void setSilentPitch(float pitch) {
 		RotationUtils.serverPitch = pitch;
@@ -32,8 +33,7 @@ public class RotationUtils {
 	}
 	
 	public static void setSilentYaw(float yaw) {
-		mc.player.setBodyYaw(yaw);
-		mc.player.setHeadYaw(yaw);
+		RotationUtils.serverYaw = yaw;
 		isCustomYaw = true;
 	}
 	
@@ -41,8 +41,7 @@ public class RotationUtils {
 		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround((float) RotationUtils.getRotations(target)[0], (float) RotationUtils.getRotations(target)[1], mc.player.isOnGround()));
 		RotationUtils.serverPitch = pitch;
 		isCustomPitch = true;
-		mc.player.setBodyYaw(yaw);
-		mc.player.setHeadYaw(yaw);
+		RotationUtils.serverYaw = yaw;
 		isCustomYaw = true;
 	}
 	
@@ -50,8 +49,7 @@ public class RotationUtils {
 		mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(yaw, pitch, mc.player.isOnGround()));
 		RotationUtils.serverPitch = pitch;
 		isCustomPitch = true;
-		mc.player.setBodyYaw(yaw);
-		mc.player.setHeadYaw(yaw);
+		RotationUtils.serverYaw = yaw;
 		isCustomYaw = true;
 	}
 	

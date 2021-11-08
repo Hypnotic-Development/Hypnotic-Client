@@ -1,7 +1,13 @@
 package badgamesinc.hypnotic.mixin;
 
+import static badgamesinc.hypnotic.utils.MCUtils.mc;
+
+import java.util.List;
+
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -10,6 +16,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
+import badgamesinc.hypnotic.Hypnotic;
+import badgamesinc.hypnotic.event.Event;
+import badgamesinc.hypnotic.event.events.EventMotionUpdate;
 import badgamesinc.hypnotic.event.events.EventMove;
 import badgamesinc.hypnotic.event.events.EventPlayerJump;
 import badgamesinc.hypnotic.event.events.EventPushOutOfBlocks;
@@ -18,15 +27,26 @@ import badgamesinc.hypnotic.event.events.EventSwingHand;
 import badgamesinc.hypnotic.module.Mod;
 import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.exploit.PortalGui;
+import badgamesinc.hypnotic.module.hud.HudManager;
+import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.module.player.NoSlow;
 import badgamesinc.hypnotic.module.player.Scaffold;
 import badgamesinc.hypnotic.module.render.ChatImprovements;
+import badgamesinc.hypnotic.module.render.Freecam;
+import badgamesinc.hypnotic.ui.BindingScreen;
+import badgamesinc.hypnotic.ui.OptionsScreen;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
+import baritone.api.BaritoneAPI;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 
@@ -35,6 +55,18 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
 	@Shadow protected abstract void autoJump(float dx, float dz);
 	@Shadow public abstract void sendChatMessage(String string);
+	@Shadow protected abstract boolean isCamera();
+	@Unique private boolean lastSneaking;
+	@Unique private boolean lastSprinting;
+	@Unique private double lastX;
+	@Unique private double lastBaseY;
+	@Unique private double lastZ;
+	@Unique private float lastYaw;
+	@Unique private float lastPitch;
+	@Unique private boolean lastOnGround;
+	@Unique private int ticksSinceLastPositionPacketSent;
+	@Shadow private boolean autoJumpEnabled = true;
+	@Shadow @Final private List<ClientPlayerTickable> tickables;
 	private boolean ignoreMessage = false;
 	
 	public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
@@ -119,6 +151,122 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	private void updateNausea_setScreen(MinecraftClient client, Screen screen) {
 		if (!ModuleManager.INSTANCE.getModule(PortalGui.class).isEnabled()) {
 			client.setScreen(screen);
+		}
+	}
+	
+	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+	public void tick(CallbackInfo ci) {
+		for (Mod mod : ModuleManager.INSTANCE.modules) {
+			if (mc.player != null) {
+				if (mod.isBinding() && mc.currentScreen == null) {
+					try {
+						mc.setScreen(new BindingScreen(mod, null));
+					} catch(Exception e) {
+						
+					}
+				}
+				if (mod.isEnabled()) mod.onTick();
+				mod.onTickDisabled();
+			}
+		}
+		for (HudModule mod : HudManager.INSTANCE.hudModules) {
+			if (mc.player != null) {
+				if (mod.isEnabled()) mod.onTick();
+				mod.onTickDisabled();
+			}
+		}
+		RenderUtils.INSTANCE.onTick();
+		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
+		
+		if (mc.getNetworkHandler() != null) {
+			for (PlayerListEntry player : mc.getNetworkHandler().getPlayerList()) {
+				if (player.getDisplayName() != null)
+				Hypnotic.setHypnoticUser(player.getProfile().getName(), player.getLatency() == -1000);
+			}
+		}
+		
+		OptionsScreen options = OptionsScreen.INSTANCE;
+		
+		BaritoneAPI.getSettings().allowBreak.value = options.allowBreak.isEnabled();
+		BaritoneAPI.getSettings().allowParkour.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowParkourAscend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowParkourPlace.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDownward.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDiagonalAscend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDiagonalDescend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().chatControl.value = options.chatControl.isEnabled();
+		BaritoneAPI.getSettings().allowPlace.value = options.allowPlace.isEnabled();
+		BaritoneAPI.getSettings().allowInventory.value = options.allowInventory.isEnabled();
+		BaritoneAPI.getSettings().assumeWalkOnWater.value = options.assumeJesus.isEnabled();
+		BaritoneAPI.getSettings().assumeWalkOnLava.value = options.assumeJesus.isEnabled();
+		BaritoneAPI.getSettings().assumeStep.value = options.assumeStep.isEnabled();
+		BaritoneAPI.getSettings().assumeSafeWalk.value = options.assumeSafewalk.isEnabled();
+	}
+	
+	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
+	private void sendMovementPackets(CallbackInfo ci) {
+		if (!ModuleManager.INSTANCE.getModule(Freecam.class).isEnabled()) {
+			this.sendMovementPacketsWithEvent();
+			EventMotionUpdate event = new EventMotionUpdate(mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYaw(), mc.player.getPitch(), this.lastYaw, this.lastPitch, mc.player.isOnGround(), this.isSneaking(), Event.State.POST);
+			event.call();
+			ci.cancel();
+		}
+	}
+	
+	private void sendMovementPacketsWithEvent() {
+		EventMotionUpdate event = new EventMotionUpdate(mc.player.getX(), mc.player.getY(), mc.player.getZ(), mc.player.getYaw(), mc.player.getPitch(), this.lastYaw, this.lastPitch, mc.player.isOnGround(), this.isSneaking(), Event.State.PRE);
+		event.call();
+		boolean bl = this.isSprinting();
+		if (bl != this.lastSprinting) {
+			ClientCommandC2SPacket.Mode mode = bl ? ClientCommandC2SPacket.Mode.START_SPRINTING : ClientCommandC2SPacket.Mode.STOP_SPRINTING;
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(this, mode));
+			this.lastSprinting = bl;
+		}
+
+		boolean bl2 = this.isSneaking();
+		if (bl2 != this.lastSneaking) {
+			ClientCommandC2SPacket.Mode mode2 = bl2 ? ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY : ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY;
+			mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(this, mode2));
+			this.lastSneaking = bl2;
+		}
+
+		if (this.isCamera()) {
+			double d = event.getX() - this.lastX;
+			double e = this.getY() - this.lastBaseY;
+			double f = event.getZ() - this.lastZ;
+			double g = (double)(event.getYaw() - this.lastYaw);
+			double h = (double)(event.getPitch() - this.lastPitch);
+			++this.ticksSinceLastPositionPacketSent;
+			boolean bl3 = d * d + e * e + f * f > 9.0E-4D || this.ticksSinceLastPositionPacketSent >= 20;
+			boolean bl4 = g != 0.0D || h != 0.0D;
+			if (this.hasVehicle()) {
+				Vec3d vec3d = this.getVelocity();
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(vec3d.x, -999.0D, vec3d.z, this.getYaw(), this.getPitch(), this.onGround));
+				bl3 = false;
+			} else if (bl3 && bl4) {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.Full(event.getX(), this.getY(), event.getZ(), event.getYaw(), event.getPitch(), event.isOnGround()));
+			} else if (bl3) {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(event.getX(), this.getY(), event.getZ(), event.isOnGround()));
+			} else if (bl4) {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(event.getYaw(), event.getPitch(), event.isOnGround()));
+			} else if (this.lastOnGround != this.onGround) {
+				mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(event.isOnGround()));
+			}
+
+			if (bl3) {
+				this.lastX = event.getX();
+				this.lastBaseY = this.getY();
+				this.lastZ = event.getZ();
+				this.ticksSinceLastPositionPacketSent = 0;
+			}
+
+			if (bl4) {
+				this.lastYaw = event.getYaw();
+				this.lastPitch = event.getPitch();
+			}
+
+			this.lastOnGround = event.isOnGround();
+			this.autoJumpEnabled = mc.options.autoJump;
 		}
 	}
 	

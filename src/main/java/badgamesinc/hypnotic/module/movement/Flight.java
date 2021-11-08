@@ -108,7 +108,6 @@ public class Flight extends Mod {
     
     @EventTarget 
     public void eventSendPacket(EventSendPacket event) {
-    	System.out.println(mc.player.hurtTime);
     	if (blink.isEnabled()) {
     		if (blinkTimer.hasTimeElapsed(50, true) && (damage.isEnabled() ? hasDamaged : true)) {
     			ModuleManager.INSTANCE.getModule(FlightBlink.class).toggle();

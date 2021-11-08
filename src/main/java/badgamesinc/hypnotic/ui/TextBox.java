@@ -386,8 +386,8 @@ public class TextBox extends ClickableWidget implements Drawable, Element {
          int j;
          if (this.drawsBackground()) {
             j = this.isFocused() ? -1 : -6250336;
-            fill(matrices, this.x - 1, this.y - 1, this.x + this.width + 1, this.y + this.height + 1, j);
-            fill(matrices, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
+            fill(matrices, this.x - 1, this.y + this.height + 2, this.x + this.width + 1, this.y + this.height + 3, j);
+//            fill(matrices, this.x, this.y, this.x + this.width, this.y + this.height, -16777216);
          }
 
          j = this.editable ? this.editableColor : this.uneditableColor;
