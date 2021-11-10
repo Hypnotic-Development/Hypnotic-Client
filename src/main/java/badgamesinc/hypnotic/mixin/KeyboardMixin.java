@@ -35,7 +35,7 @@ public abstract class KeyboardMixin {
             }
             EventKeyPress event = new EventKeyPress(key, scancode, action);
             event.call();
-            
+            if (event.isCancelled()) info.cancel();
             if (client.currentScreen == null && key == KeyUtils.getKey(CommandManager.get().getPrefix()) && action == GLFW.GLFW_PRESS) client.setScreen(new ChatScreen(""));
         }
     }

@@ -8,16 +8,22 @@ import badgamesinc.hypnotic.mixin.EntityTrackingSectionAccessor;
 import badgamesinc.hypnotic.mixin.SectionedEntityCacheAccessor;
 import badgamesinc.hypnotic.mixin.SimpleEntityLookupAccessor;
 import badgamesinc.hypnotic.mixin.WorldAccessor;
+import badgamesinc.hypnotic.utils.ReflectionHelper;
 import badgamesinc.hypnotic.utils.world.Dimension;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
 import it.unimi.dsi.fastutil.longs.LongSortedSet;
 import net.minecraft.block.AirBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -204,6 +210,183 @@ public class PlayerUtils {
         mc.player.setVelocity(x, yVelocity, z);
     }
 	
+	public static float getDistanceToGround() {
+        if (mc.player.verticalCollision && mc.player.isOnGround()) {
+            return 0.0F;
+        }
+        ClientPlayerEntity e = mc.player;
+        for (float a = (float) e.getY(); a > 0.0F; a -= 1.0F) {
+            int[] stairs = {53, 67, 108, 109, 114, 128, 134, 135, 136, 156, 163, 164, 180};
+            int[] exemptIds = {
+                    6, 27, 28, 30, 31, 32, 37, 38, 39, 40, 50, 51, 55, 59,
+                    63, 65, 66, 68, 69, 70, 72, 75, 76, 77, 83, 92, 93, 94,
+                    104, 105, 106, 115, 119, 131, 132, 143, 147, 148, 149, 150,
+                    157, 171, 175, 176, 177};
+            BlockState block = mc.world.getBlockState(new BlockPos(e.getX(), a - 1.0F, e.getZ()));
+            if (!(block.getBlock() instanceof AirBlock)) {
+                if ((Block.getRawIdFromState(block) == 44) || (Block.getRawIdFromState(block) == 126)) {
+                    return (float) (e.getY() - a - 0.5D) < 0.0F ? 0.0F : (float) (e.getY() - a - 0.5D);
+                }
+                int[] arrayOfInt1;
+                int j = (arrayOfInt1 = stairs).length;
+                for (int i = 0; i < j; i++) {
+                    int id = arrayOfInt1[i];
+                    if (Block.getRawIdFromState(block) == id) {
+                        return (float) (e.getY() - a - 1.0D) < 0.0F ? 0.0F : (float) (e.getY() - a - 1.0D);
+                    }
+                }
+                j = (arrayOfInt1 = exemptIds).length;
+                for (int i = 0; i < j; i++) {
+                    int id = arrayOfInt1[i];
+                    if (Block.getRawIdFromState(block) == id) {
+                        return (float) (e.getY() - a) < 0.0F ? 0.0F : (float) (e.getY() - a);
+                    }
+                }
+                return (float) (e.getY() - a + block.getBlock().getMaxModelOffset() - 1.0D);
+            }
+        }
+        return 0.0F;
+    }
+	
+	public static int getSpeedEffect() {
+        if (mc.player.hasStatusEffect(StatusEffects.SPEED))
+            return mc.player.getStatusEffect(StatusEffects.SPEED).getAmplifier() + 1;
+        else
+            return 0;
+    }
+	
+	public static void teleport(BlockPos endPos){
+    	double dist = Math.sqrt(mc.player.squaredDistanceTo(endPos.getX(), endPos.getY(), endPos.getZ()));
+    	double distanceEntreLesPackets = 5;
+    	double xtp, ytp, ztp = 0;
+    	
+    	if(dist> distanceEntreLesPackets){
+    		double nbPackets = Math.round(dist / distanceEntreLesPackets + 0.49999999999) - 1;
+    		xtp = mc.player.getX();
+    		ytp = mc.player.getY();
+    		ztp = mc.player.getZ();		
+    		for (int i = 1; i < nbPackets;i++){		
+    			double xdi = (endPos.getX() - mc.player.getX())/( nbPackets);	
+    			xtp += xdi;
+    			 
+    			double zdi = (endPos.getZ() - mc.player.getZ())/( nbPackets);	
+    			ztp += zdi;
+    			 
+    			double ydi = (endPos.getY() - mc.player.getY())/( nbPackets);	
+    			ytp += ydi;
+    			PlayerMoveC2SPacket.PositionAndOnGround packet= new PlayerMoveC2SPacket.PositionAndOnGround(xtp, ytp, ztp, true);
+    			
+    			mc.player.networkHandler.sendPacket(packet);
+    		}
+    		
+    		mc.player.setPosition(endPos.getX() + 0.5, endPos.getY(), endPos.getZ() + 0.5);
+    	}else{
+    		mc.player.setPosition(endPos.getX(), endPos.getY(), endPos.getZ());
+    	}
+    }
+	
+	public static void teleport(Vec3d startPos, final BlockPos endPos){
+    	double dist = Math.sqrt(mc.player.squaredDistanceTo(endPos.getX(), endPos.getZ(), endPos.getY()));
+    	double distanceEntreLesPackets = 0.31 + PlayerUtils.getSpeedEffect() / 20;
+    	double xtp, ytp, ztp = 0;
+    	if(dist> distanceEntreLesPackets){
+    		
+    		double nbPackets = Math.round(dist / distanceEntreLesPackets + 0.49999999999) - 1;
+    	
+    		xtp = mc.player.getX();
+    		ytp = mc.player.getY();
+    		ztp = mc.player.getZ();		
+    		for (int i = 1; i < nbPackets;i++)	{		
+    			double xdi = (endPos.getX() - mc.player.getX())/( nbPackets);	
+    			 xtp += xdi;
+    			 
+    			double zdi = (endPos.getZ() - mc.player.getZ())/( nbPackets);	
+    			 ztp += zdi;
+    			 
+    			double ydi = (endPos.getY() - mc.player.getY())/( nbPackets);	
+    			ytp += ydi;
+    			PlayerMoveC2SPacket.PositionAndOnGround packet= new PlayerMoveC2SPacket.PositionAndOnGround(xtp, ytp, ztp, false);
+    			mc.player.networkHandler.sendPacket(packet);
+    		}
+    	
+    			mc.player.setPosition(endPos.getX() + 0.5, endPos.getY(), endPos.getZ() + 0.5);
+    		
+    	}else{
+    			mc.player.setPosition(endPos.getX(), endPos.getY(), endPos.getZ());
+    		
+    		}
+    }
+	
+	public static void blinkToPos(Vec3d startPos, final BlockPos endPos, final double slack, final double[] pOffset) {
+        double curX = startPos.x;
+        double curY = startPos.y;
+        double curZ = startPos.z;
+        try {
+            final double endX = endPos.getX() + 0.5;
+            final double endY = endPos.getY() + 1.0;
+            final double endZ = endPos.getZ() + 0.5;
+
+            double distance = Math.abs(curX - endX) + Math.abs(curY - endY) + Math.abs(curZ - endZ);
+            int count = 0;
+            while (distance > slack) {
+                distance = Math.abs(curX - endX) + Math.abs(curY - endY) + Math.abs(curZ - endZ);
+                if (count > 120) {
+                    break;
+                }
+                final double diffX = curX - endX;
+                final double diffY = curY - endY;
+                final double diffZ = curZ - endZ;
+                final double offset = ((count & 0x1) == 0x0) ? pOffset[0] : pOffset[1];
+                if (diffX < 0.0) {
+                    if (Math.abs(diffX) > offset) {
+                        curX += offset;
+                    } else {
+                        curX += Math.abs(diffX);
+                    }
+                }
+                if (diffX > 0.0) {
+                    if (Math.abs(diffX) > offset) {
+                        curX -= offset;
+                    } else {
+                        curX -= Math.abs(diffX);
+                    }
+                }
+                if (diffY < 0.0) {
+                    if (Math.abs(diffY) > 0.25) {
+                        curY += 0.25;
+                    } else {
+                        curY += Math.abs(diffY);
+                    }
+                }
+                if (diffY > 0.0) {
+                    if (Math.abs(diffY) > 0.25) {
+                        curY -= 0.25;
+                    } else {
+                        curY -= Math.abs(diffY);
+                    }
+                }
+                if (diffZ < 0.0) {
+                    if (Math.abs(diffZ) > offset) {
+                        curZ += offset;
+                    } else {
+                        curZ += Math.abs(diffZ);
+                    }
+                }
+                if (diffZ > 0.0) {
+                    if (Math.abs(diffZ) > offset) {
+                        curZ -= offset;
+                    } else {
+                        curZ -= Math.abs(diffZ);
+                    }
+                }
+                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(curX, curY, curZ, true));
+                ++count;
+            }
+        } catch (Exception e) {
+
+        }
+    }
+	
 	public static double distanceTo(Entity entity) {
         return distanceTo(entity.getX(), entity.getY(), entity.getZ());
     }
@@ -221,5 +404,17 @@ public class PlayerUtils {
         float g = (float) (mc.player.getY() - y);
         float h = (float) (mc.player.getZ() - z);
         return MathHelper.sqrt(f * f + g * g + h * h);
+    }
+    
+    public static void setTimerSpeed(float speed) {
+    	ReflectionHelper.setPrivateValue(RenderTickCounter.class, ReflectionHelper.getPrivateValue(MinecraftClient.class, mc, "renderTickCounter", "field_1728"), 1000.0F / (float) speed / 20, "tickTime", "field_1968");
+    }
+    
+    public static boolean isOnGround(double height) {
+        if (!mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0D, -height, 0.0D)).toList().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

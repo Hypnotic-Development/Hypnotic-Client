@@ -9,6 +9,7 @@ import com.google.common.collect.Lists;
 import badgamesinc.hypnotic.config.friends.FriendManager;
 import badgamesinc.hypnotic.event.EventTarget;
 import badgamesinc.hypnotic.event.events.EventMotionUpdate;
+import badgamesinc.hypnotic.event.events.EventRender3D;
 import badgamesinc.hypnotic.event.events.EventSendPacket;
 import badgamesinc.hypnotic.mixin.PlayerMoveC2SPacketAccessor;
 import badgamesinc.hypnotic.module.Category;
@@ -17,11 +18,13 @@ import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.player.Scaffold;
 import badgamesinc.hypnotic.module.render.OldBlock;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
+import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.RotationUtils;
 import badgamesinc.hypnotic.utils.Timer;
+import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -62,6 +65,8 @@ public class Killaura extends Mod {
 	public BooleanSetting swing = new BooleanSetting("Swing", true);
 	public BooleanSetting autoBlock = new BooleanSetting("AutoBlock", true);
 	public ModeSetting autoBlockMode = new ModeSetting("AutoBlock Mode", "Normal", "Normal", "NCP", "Visual");
+	public BooleanSetting esp = new BooleanSetting("ESP", true);
+	public ColorSetting espColor = new ColorSetting("ESP Color", ColorUtils.pingle);
 	public BooleanSetting trigger = new BooleanSetting("Trigger", false);
 	public BooleanSetting walls = new BooleanSetting("Walls", true);
 	public BooleanSetting players = new BooleanSetting("Players", true);
@@ -77,7 +82,7 @@ public class Killaura extends Mod {
 	
 	public Killaura() {
 		super("Killaura", "Attacks select surrounding entities", Category.COMBAT);
-		addSettings(mode, sortMode, rotation, range, minAps, maxAps, delay, random, swing, autoBlock, autoBlockMode, trigger, walls, players, animals, monsters, passives, invisibles);
+		addSettings(mode, sortMode, rotation, range, minAps, maxAps, delay, random, swing, autoBlock, autoBlockMode, esp, espColor, trigger, walls, players, animals, monsters, passives, invisibles);
 	}
 	
 	@EventTarget
@@ -264,6 +269,43 @@ public class Killaura extends Mod {
 	@Override
 	public void onTickDisabled() {
 		sortMode.setVisible(mode.is("Sort"));
+		espColor.setVisible(esp.isEnabled());
 		super.onTickDisabled();
+	}
+	
+	double anim = 0;
+	double anim2 = 0;
+	boolean dir = false;
+	boolean filler = false;
+	
+	@EventTarget
+	public void render3d(EventRender3D event) {
+		if (target != null) {
+
+			if (anim > 200) {
+				dir = false;
+			}
+			if (anim < 0) {
+				dir = true;
+			}
+			if (dir) {
+				anim+=3;
+			} else {
+				anim-=3;
+			}
+
+			RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() + anim / 100, target.getZ()), event.getTickDelta(), 0.6f, 1, espColor.getColor().getRGB());
+//			if (dir) {
+//				for (double i = 0; i < anim / 20; i++) {
+//					RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() - (i * 0.015) + (anim / (100)) + (dir ? 0 : 0.1), target.getZ()), event.getTickDelta(), 0.6f, 1, new Color(espColor.getColor().getRed(), espColor.getColor().getGreen(), espColor.getColor().getBlue(), (255 - ((int)i * 25))).getRGB());
+//				}
+//			} else {
+//				for (double i = 0; i < anim / 20; i++) {
+//					RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() + (i * 0.015) + (anim / (100)), target.getZ()), event.getTickDelta(), 0.6f, 1, new Color(espColor.getColor().getRed(), espColor.getColor().getGreen(), espColor.getColor().getBlue(), (255 - ((int)i * 25))).getRGB());
+//				}
+//			}
+		} else {
+			anim = 0;
+		}
 	}
 }

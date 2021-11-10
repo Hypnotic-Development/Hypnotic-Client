@@ -63,7 +63,10 @@
     "HandshakeC2SPacketAccessor",
     "PlayerListEntryMixin",
     "AbstractClientPlayerEntityMixin",
-    "PlayerInputC2SPacketAccessor"
+    "PlayerInputC2SPacketAccessor",
+    "CameraMixin",
+    "ModelPredicateProviderRegistryMixin",
+    "RenderTickCounterAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

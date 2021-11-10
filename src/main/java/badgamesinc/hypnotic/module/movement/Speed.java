@@ -2,8 +2,10 @@ package badgamesinc.hypnotic.module.movement;
 
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.module.ModuleManager;
 import badgamesinc.hypnotic.module.combat.Killaura;
 import badgamesinc.hypnotic.module.combat.TargetStrafe;
+import badgamesinc.hypnotic.module.misc.Timer;
 import badgamesinc.hypnotic.settings.settingtypes.BooleanSetting;
 import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
@@ -40,6 +42,7 @@ public class Speed extends Mod {
 	@Override
 	public void onMotion() {
 		this.setDisplayName("Speed " + ColorUtils.gray + mode.getSelected());
+		PlayerUtils.setTimerSpeed((float) timerBoost.getValue());
 		if(mc.player != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0) && !mc.player.isTouchingWater()) {
 			if (!mc.player.isOnGround()) {
 				wallTicks++;
@@ -70,6 +73,7 @@ public class Speed extends Mod {
 	
 	@Override
 	public void onDisable() {
+		if (!ModuleManager.INSTANCE.getModule(Timer.class).isEnabled()) PlayerUtils.setTimerSpeed(1f);
 		super.onDisable();
 	}
 

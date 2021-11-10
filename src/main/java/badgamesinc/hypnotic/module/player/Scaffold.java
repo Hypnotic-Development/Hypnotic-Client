@@ -16,6 +16,7 @@ import badgamesinc.hypnotic.settings.settingtypes.ModeSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
 import badgamesinc.hypnotic.utils.RotationUtils;
+import badgamesinc.hypnotic.utils.Timer;
 import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import badgamesinc.hypnotic.utils.world.WorldUtils;
 import net.minecraft.block.Block;
@@ -41,6 +42,7 @@ public class Scaffold extends Mod {
     
     private int startY;
     private BlockPos pos;
+    public Timer towerTimer = new Timer();
     
     public Scaffold() {
     	super("Scaffold", "Places blocks underneath you", Category.PLAYER);
@@ -67,12 +69,7 @@ public class Scaffold extends Mod {
 
     @Override
     public void onTick() {
-    	boolean keepY = this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true);
-    	
     	if (boost.isEnabled() && !ModuleManager.INSTANCE.getModule(Speed.class).isEnabled()) PlayerUtils.setMotion(boostSpeed.getValue());
-        if(tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1 && !keepY && mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock() != Blocks.AIR) {
-        	mc.player.setVelocity(0, 0.4165f, 0);
-        }
     }
 
     @Override
@@ -102,7 +99,7 @@ public class Scaffold extends Mod {
     @EventTarget
     public void onMotionUpdate(EventMotionUpdate event) {
     	if (event.isPre()) {
-	    	this.setDisplayName("Scaffold " + ColorUtils.gray + extend.getValue());
+	    	this.setDisplayName("Scaffold " + ColorUtils.gray + mode.getSelected());
 	    	int oldSlot = mc.player.getInventory().selectedSlot;
 	        int newSlot = getBlockInHotbar();
 	        if(newSlot != -1) {
@@ -127,6 +124,19 @@ public class Scaffold extends Mod {
 	        
 	        if (mc.options.keyJump.isPressed() && this.space.isEnabled() && mc.options.keyJump.isPressed()) {
 	        	startY = (int) (mc.player.getY() - 1);
+	        }
+	        
+	        if (tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1 && !keepY) {
+	        	if ((PlayerUtils.isOnGround(0.70) || mc.player.isOnGround()) && mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock() != Blocks.AIR) {
+	        		
+	        		mc.player.setVelocity(0, 0.40985, 0);
+	        	}
+	        	
+	        	if(towerTimer.hasTimeElapsed(500, true)) {
+	                mc.player.setVelocity(mc.player.getVelocity().x, -1, mc.player.getVelocity().z);
+	            }
+	        } else {
+	        	towerTimer.reset();
 	        }
 	        
 	        if(mc.options.keySneak.isPressed() && down.isEnabled()) {
@@ -156,7 +166,7 @@ public class Scaffold extends Mod {
 	        	BlockPos pos = WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down();
 	        	if (PlayerUtils.distanceTo(pos) > 10) startY = (int) (mc.player.getY() - 1);
 	        	if (tower.isEnabled() ? (this.keepY.isEnabled() && !space.isEnabled() ? true : !mc.options.keyJump.isPressed()) : true) blocks.add(new BlockPos(pos.getX(), !keepY ? pos.getY() : startY, pos.getZ()));
-	        	else blocks.add(new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 0.9 : startY, mc.player.getZ()));
+	        	else blocks.add(new BlockPos(mc.player.getX(), !keepY ? mc.player.getBlockPos().getY() - 0.2 : startY, mc.player.getZ()));
 	        }
 	
 	        for(BlockPos x : blocks) {

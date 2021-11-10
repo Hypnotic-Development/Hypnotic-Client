@@ -4,9 +4,11 @@ import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import badgamesinc.hypnotic.command.Command;
+import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 public class VClip extends Command {
 	public VClip() {
@@ -24,7 +26,7 @@ public class VClip extends Command {
                 Entity vehicle = player.getVehicle();
                 vehicle.setPosition(vehicle.getX(), vehicle.getY() + blocks, vehicle.getZ());
             }
-            player.setPosition(player.getX(), player.getY() + blocks, player.getZ());
+            PlayerUtils.teleport(new BlockPos(mc.player.getX(), mc.player.getY() + blocks, mc.player.getZ()));
 
             return SINGLE_SUCCESS;
         }));

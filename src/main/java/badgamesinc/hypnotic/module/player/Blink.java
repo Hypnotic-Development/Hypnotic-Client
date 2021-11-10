@@ -18,13 +18,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class Blink extends Mod {
 
 	public BooleanSetting buffer = new BooleanSetting("Buffer Packets", true);
 	public NumberSetting amount = new NumberSetting("Send Amount PT", 25, 5, 50, 1);
 	
-	private ArrayList<Packet> packets = new ArrayList<>();
+	private ArrayList<Packet<?>> packets = new ArrayList<>();
+	
+	private double startX, startY, startZ;
+	
 	public static PlayerEntity playerEntity;
 	private boolean stopCatching;
 	
@@ -42,6 +47,9 @@ public class Blink extends Mod {
     		playerEntity.copyPositionAndRotation(mc.player);
 			mc.world.addEntity(1000000, playerEntity);
 		}
+    	startX = mc.player.getX();
+    	startY = mc.player.getY();
+    	startZ = mc.player.getZ();
     	super.onEnable();
     }
 
@@ -63,7 +71,7 @@ public class Blink extends Mod {
 			return;
 		}
 		if (!stopCatching && !(event.getPacket() instanceof KeepAliveC2SPacket)) {
-			if (PlayerUtils.isMoving()) {
+			if (event.getPacket() instanceof PlayerMoveC2SPacket) {
 				packets.add(event.getPacket());
 			}
 			event.setCancelled(true);;
@@ -85,6 +93,7 @@ public class Blink extends Mod {
     		if (mc.world != null) mc.world.removeEntity(1000000, Entity.RemovalReason.DISCARDED);
     		playerEntity = null;
     	}
+    	PlayerUtils.blinkToPos(new Vec3d(startX, startY, startZ), new BlockPos(mc.player.getX(), mc.player.getY(), mc.player.getZ()), 0, new double[] {1, 2});
     	super.onDisable();
     }
 }

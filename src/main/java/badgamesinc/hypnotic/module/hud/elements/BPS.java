@@ -1,6 +1,7 @@
 package badgamesinc.hypnotic.module.hud.elements;
 
-import badgamesinc.hypnotic.module.ModuleManager;
+import badgamesinc.hypnotic.mixin.MinecraftClientAccessor;
+import badgamesinc.hypnotic.mixin.RenderTickCounterAccessor;
 import badgamesinc.hypnotic.module.hud.HudModule;
 import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.utils.ColorUtils;
@@ -29,7 +30,7 @@ public class BPS extends HudModule {
 
 	@Override
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
-		String bpsString = "Blocks/s " + ColorUtils.gray + MathUtils.round(ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.misc.Timer.class).isEnabled() ? moveSpeed() * ModuleManager.INSTANCE.getModule(badgamesinc.hypnotic.module.misc.Timer.class).speed.getValue() : moveSpeed(), 2);
+		String bpsString = "Blocks/s " + ColorUtils.gray + MathUtils.round(moveSpeed() * (50f / ((RenderTickCounterAccessor)((MinecraftClientAccessor)mc).getRenderTickCounter()).getTickTime()), 2);
 		this.setDefaultX((int) FontManager.roboto.getStringWidth("TPS 20"));
 		this.setDefaultY(scaledHeight - 18);
 		this.setWidth((int) font.getStringWidth(bpsString));

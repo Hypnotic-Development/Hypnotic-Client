@@ -39,8 +39,8 @@ public class CommandManager {
         add(new Modules());
         add(new Toggle());
         add(new Module());
-        // crashes after two uses, for some reason
         add(new Bind());
+        add(new Teleport());
         commands.sort(Comparator.comparing(Command::getName));
     }
 
