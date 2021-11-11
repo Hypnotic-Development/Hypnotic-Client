@@ -1,43 +1,48 @@
-![](https://img.shields.io/badge/0%25-optimized-brightgreen?style=for-the-badge&logo=appveyor)
-![](https://img.shields.io/badge/Made%20by-skript%20kiddies-red?style=for-the-badge&logo=appveyor)
-![](https://img.shields.io/badge/100%25-spaghetti-orange?style=for-the-badge&logo=appveyor)
-![](https://img.shields.io/badge/works-sometimes-blue?style=for-the-badge&logo=appveyor)
-![](https://img.shields.io/badge/50%25-Original-blue?style=for-the-badge&logo=appveyor)
+<h1 align="center">Hypnotic Client</h1>
 
-# Hypnotic Client  
-## gaming awards frame winner 2004/2006/2007  
-https://hypnotic.dev is our website that isn't so bad anymore
+<p align="center">
+    <a href="https://hypnotic.dev"><img src="https://raw.githubusercontent.com/BadGamesInc/Hypnotic-Fabric-1.17/main/src/main/resources/assets/hypnotic/icon.png"     alt="logo" width="100"/></a>
+</p>
+<p align="center">
+    <img src="https://img.shields.io/badge/0%25-optimized-brightgreen?style=for-the-badge&logo=appveyor"/>
+    <img src="https://img.shields.io/badge/Made%20by-skript%20kiddies-red?style=for-the-badge&logo=appveyor"/>
+    <img src="https://img.shields.io/badge/100%25-spaghetti-orange?style=for-the-badge&logo=appveyor"/>
+    <img src="https://img.shields.io/badge/works-sometimes-blue?style=for-the-badge&logo=appveyor"/>
+    <img src="https://img.shields.io/badge/50%25-Original-blue?style=for-the-badge&logo=appveyor"/>
+</p>
+
+<h2 align="center">Gaming awards frame winner 2004/2006/2007</h2>           
   
 ## About
 "Utility Mod" for Minecraft 1.17.1  
 Use at your own risk, we are not responsible for any punishments on any server  
+https://hypnotic.dev is our website that isn't so bad anymore  
   
 ## Requirements  
 Minecraft 1.17.1  
 Java Runtime version 16 or higher  
-Fabric Loader 0.12.4 or higher  
+Fabric Loader 0.12.1 or higher  
   
 ## Authors  
 BadGamesInc - actual knowledge  
-KawaiiZenbo - idk edits the readme
+KawaiiZenbo - various backend stuff
   
 ### Other Credits  
-[Fabric](https://fabricmc.net/)  
-[Baritone](https://github.com/MeteorDevelopment/baritone)  
+[Baritone](https://github.com/cabaletta/baritone)  
+[DiscordRPC](https://github.com/MinnDevelopment/java-discord-rpc)  
 Whoever else we stole code from  
 
 ## Support
 Join our "amazing" discord for support https://discord.gg/aZStDUnb29
-
-## How to compile  
-Download and extract the Hypnotic client source code  
-Open Command Prompt/Terminal  
-Navigate to where you extracted the Hypnotic Source  
-Run `gradlew build`  
-After Gradle is done, the complete mod JAR should be located in -  
-`<hypnotic repo folder>/build/libs/Hypnotic-r1000.jar` **Any other jar in that folder will not work**  
   
-## How to import into Eclipse  
+## How to build the client yourself
+Download the repository  
+Open the Command Prompt  
+Change the directory to the repository source folder containing `gradlew.bat`  
+Run the command `gradlew build`  
+The output jar should be in `/build/libs/Hypnotic-(version).jar`  
+  
+## How to import the project into Eclipse  
 Install Eclipse from https://www.eclipse.org/ide/  
 Download and extract the Hypnotic client source code  
 Open Command Prompt/Terminal  
@@ -47,8 +52,9 @@ Import the folder into Eclipse as `Existing Projects into workspace`
 Click on the arrow next to the Debug button in the toolstrip, then click `Debug configurations`  
 Expand `Java Application`, then double-click `Hypnotic-Fabric-1.17_client`  
 Hypnotic should now run along with all of your changes  
+If you use IntelliJ or some other ide the process should be fairly similar  
+Check out the [fabric wiki](https://fabricmc.net/wiki/tutorial:setup) for more details  
 
 ## Compiled Builds  
-Please get compiled builds from the latest Github Actions artifact, we do not keep up regular releases.  
-**Ensure you select specifically `Hypnotic-r1000.jar` from `Artifacts.zip`, any others will not work**  
+Please get compiled releases from the latest Github Actions artifact, we do not keep up regular releases.  
   

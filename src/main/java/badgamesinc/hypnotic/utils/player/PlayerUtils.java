@@ -257,11 +257,11 @@ public class PlayerUtils {
 	
 	public static void teleport(BlockPos endPos){
     	double dist = Math.sqrt(mc.player.squaredDistanceTo(endPos.getX(), endPos.getY(), endPos.getZ()));
-    	double distanceEntreLesPackets = 5;
+    	double packetDist = 5;
     	double xtp, ytp, ztp = 0;
     	
-    	if(dist> distanceEntreLesPackets){
-    		double nbPackets = Math.round(dist / distanceEntreLesPackets + 0.49999999999) - 1;
+    	if(dist> packetDist){
+    		double nbPackets = Math.round(dist / packetDist + 0.49999999999) - 1;
     		xtp = mc.player.getX();
     		ytp = mc.player.getY();
     		ztp = mc.player.getZ();		
@@ -283,38 +283,6 @@ public class PlayerUtils {
     	}else{
     		mc.player.setPosition(endPos.getX(), endPos.getY(), endPos.getZ());
     	}
-    }
-	
-	public static void teleport(Vec3d startPos, final BlockPos endPos){
-    	double dist = Math.sqrt(mc.player.squaredDistanceTo(endPos.getX(), endPos.getZ(), endPos.getY()));
-    	double distanceEntreLesPackets = 0.31 + PlayerUtils.getSpeedEffect() / 20;
-    	double xtp, ytp, ztp = 0;
-    	if(dist> distanceEntreLesPackets){
-    		
-    		double nbPackets = Math.round(dist / distanceEntreLesPackets + 0.49999999999) - 1;
-    	
-    		xtp = mc.player.getX();
-    		ytp = mc.player.getY();
-    		ztp = mc.player.getZ();		
-    		for (int i = 1; i < nbPackets;i++)	{		
-    			double xdi = (endPos.getX() - mc.player.getX())/( nbPackets);	
-    			 xtp += xdi;
-    			 
-    			double zdi = (endPos.getZ() - mc.player.getZ())/( nbPackets);	
-    			 ztp += zdi;
-    			 
-    			double ydi = (endPos.getY() - mc.player.getY())/( nbPackets);	
-    			ytp += ydi;
-    			PlayerMoveC2SPacket.PositionAndOnGround packet= new PlayerMoveC2SPacket.PositionAndOnGround(xtp, ytp, ztp, false);
-    			mc.player.networkHandler.sendPacket(packet);
-    		}
-    	
-    			mc.player.setPosition(endPos.getX() + 0.5, endPos.getY(), endPos.getZ() + 0.5);
-    		
-    	}else{
-    			mc.player.setPosition(endPos.getX(), endPos.getY(), endPos.getZ());
-    		
-    		}
     }
 	
 	public static void blinkToPos(Vec3d startPos, final BlockPos endPos, final double slack, final double[] pOffset) {
