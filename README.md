@@ -30,11 +30,11 @@ KawaiiZenbo - various backend stuff
 ### Other Credits  
 [Baritone](https://github.com/cabaletta/baritone)  
 [DiscordRPC](https://github.com/MinnDevelopment/java-discord-rpc)  
-[Meteor Client for ms login]("https://github.com/MeteorDevelopment/meteor-client")
-[Jex Client for font renderer]("https://github.com/DustinRepo/JexClient")
-
-## Support
-Join our "amazing" discord for support https://discord.gg/aZStDUnb29
+[Meteor Client](https://github.com/MeteorDevelopment/meteor-client) for ms login  
+[Jex Client](https://github.com/DustinRepo/JexClient) for font renderer  
+  
+## Support  
+Join our "amazing" discord for support https://discord.gg/aZStDUnb29  
   
 ## How to build the mod yourself
 Download the repository  
