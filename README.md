@@ -30,12 +30,13 @@ KawaiiZenbo - various backend stuff
 ### Other Credits  
 [Baritone](https://github.com/cabaletta/baritone)  
 [DiscordRPC](https://github.com/MinnDevelopment/java-discord-rpc)  
-Whoever else we stole code from  
+[Meteor Client for ms login]("https://github.com/MeteorDevelopment/meteor-client")
+[Jex Client for font renderer]("https://github.com/DustinRepo/JexClient")
 
 ## Support
 Join our "amazing" discord for support https://discord.gg/aZStDUnb29
   
-## How to build the client yourself
+## How to build the mod yourself
 Download the repository  
 Open the Command Prompt  
 Change the directory to the repository source folder containing `gradlew.bat`  
