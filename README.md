@@ -1,7 +1,7 @@
 <h1 align="center">Hypnotic Client</h1>
 
 <p align="center">
-    <a href="https://hypnotic.dev"><img src="https://raw.githubusercontent.com/BadGamesInc/Hypnotic-Fabric-1.17/main/src/main/resources/assets/hypnotic/icon.png"     alt="logo" width="100"/></a>
+    <a href="https://hypnotic.dev"><img src="https://raw.githubusercontent.com/Hypnotic-Development/Hypnotic-Client/main/src/main/resources/assets/hypnotic/icon.png"     alt="logo" width="100"/></a>
 </p>
 <p align="center">
     <img src="https://img.shields.io/badge/0%25-optimized-brightgreen?style=for-the-badge&logo=appveyor"/>
@@ -51,7 +51,7 @@ Navigate to where you extracted the Hypnotic Source
 Run `gradlew eclipse`, then, optionally, run `gradlew gensources`  
 Import the folder into Eclipse as `Existing Projects into workspace`  
 Click on the arrow next to the Debug button in the toolstrip, then click `Debug configurations`  
-Expand `Java Application`, then double-click `Hypnotic-Fabric-1.17_client`  
+Expand `Java Application`, then double-click `Hypnotic-Client_client`  
 Hypnotic should now run along with all of your changes  
 If you use IntelliJ or some other ide the process should be fairly similar  
 Check out the [fabric wiki](https://fabricmc.net/wiki/tutorial:setup) for more details  
