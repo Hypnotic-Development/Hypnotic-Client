@@ -27,7 +27,7 @@ public class MicrosoftAccount extends Account<MicrosoftAccount> {
         String token = auth();
         if (token == null) return false;
 
-        setSession(new Session(cache.username, cache.uuid, token, "mojang"));
+        setSession(new Session(cache.username, cache.uuid, token, null, null, Session.AccountType.MOJANG));
         return true;
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.Session;
+import net.minecraft.client.util.Session.AccountType;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
@@ -40,7 +41,7 @@ public class AddCrackedAltScreen extends Screen {
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, new LiteralText("Login"), (button) -> {
 			Alt alt = new Alt(usernameField.getText(), "cracked", AltManagerScreen.INSTANCE.alts.size());
 			alt.setUsername(usernameField.getText());
-			alt.setSession(new Session(alt.getUsername(), "", "", "mojang"));
+			alt.setSession(new Session(alt.getUsername(), "", "", null, null, AccountType.MOJANG));
 			AltManagerScreen.INSTANCE.alts.add(alt);
 			AltsFile.INSTANCE.saveAlts();
 			this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";

@@ -451,7 +451,7 @@ public class RenderUtils {
 		    }
 		 
 		 public static void drawFilledBox(MatrixStack matrixStack, Box bb, Color color, boolean draw) {
-		        Matrix4f matrix4f = matrixStack.peek().getModel();
+		        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 		        Color color1 = color;
 		        setup3DRender(true);
 		        
@@ -503,7 +503,7 @@ public class RenderUtils {
 		 
 		 public static void drawOutlineBox(MatrixStack matrixStack, Box bb, Color color, boolean draw) {
 		        Color color1 = color;
-		        Matrix4f matrix4f = matrixStack.peek().getModel();
+		        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 
 		        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		        if (draw)
@@ -528,7 +528,7 @@ public class RenderUtils {
 		 }
 
 	    public static Vec3d getRenderPosition(double x, double y, double z, MatrixStack matrixStack) {
-	        Matrix4f matrix = matrixStack.peek().getModel();
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
 	        double minX = x - mc.getEntityRenderDispatcher().camera.getPos().x;
 	        double minY = y - mc.getEntityRenderDispatcher().camera.getPos().y;
 	        double minZ = z - mc.getEntityRenderDispatcher().camera.getPos().z;
@@ -538,7 +538,7 @@ public class RenderUtils {
 	    }
 	
 	    public static Vec3d getRenderPosition(Vec3d vec3d, MatrixStack matrixStack) {
-	        Matrix4f matrix = matrixStack.peek().getModel();
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
 	        double minX = vec3d.getX() - mc.getEntityRenderDispatcher().camera.getPos().x;
 	        double minY = vec3d.getY() - mc.getEntityRenderDispatcher().camera.getPos().y;
 	        double minZ = vec3d.getZ() - mc.getEntityRenderDispatcher().camera.getPos().z;
@@ -629,7 +629,7 @@ public class RenderUtils {
 	    }
 	    
 	    public static void fill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color) {
-	        Matrix4f matrix = matrixStack.peek().getModel();
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
 	        double j;
 	        if (x1 < x2) {
 	            j = x1;
@@ -664,7 +664,7 @@ public class RenderUtils {
 	    }
 	    
 	    public static void gradientFill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color1, int color2) {
-	        Matrix4f matrix = matrixStack.peek().getModel();
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
 	        double j;
 	        if (x1 < x2) {
 	            j = x1;
@@ -705,7 +705,7 @@ public class RenderUtils {
 	    }
 	    
 	    public static void sideGradientFill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, int color1, int color2, boolean dir) {
-	        Matrix4f matrix = matrixStack.peek().getModel();
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
 	        double j;
 	        if (x1 < x2) {
 	            j = x1;
@@ -762,7 +762,7 @@ public class RenderUtils {
 	    }
 
 	    public static void drawTexture(MatrixStack matrices, float x0, float y0, float x1, float y1, int z, float regionWidth, float regionHeight, float u, float v, float textureWidth, float textureHeight) {
-	        drawTexturedQuad(matrices.peek().getModel(), x0, y0, x1, y1, z, (u + 0.0F) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0F) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
+	        drawTexturedQuad(matrices.peek().getPositionMatrix(), x0, y0, x1, y1, z, (u + 0.0F) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0F) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
 	    }
 
 	    public static void drawTexturedQuad(Matrix4f matrices, float x0, float x1, float y0, float y1, float z, float u0, float u1, float v0, float v1) {
@@ -793,7 +793,7 @@ public class RenderUtils {
 	                String string = countLabel == null ? String.valueOf(stack.getCount()) : countLabel;
 	                matrixStack.translate(0.0D, 0.0D, (double)(mc.getItemRenderer().zOffset + 200.0F));
 	                VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-	                renderer.draw(string, (float)(x + 19 - 2 - renderer.getWidth(string)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getModel(), immediate, false, 0, 15728880);
+	                renderer.draw(string, (float)(x + 19 - 2 - renderer.getWidth(string)), (float)(y + 6 + 3), 16777215, true, matrixStack.peek().getPositionMatrix(), immediate, false, 0, 15728880);
 	                immediate.draw();
 	            }
 
@@ -857,7 +857,7 @@ public class RenderUtils {
 	    public static Vec3d getPos(Entity entity, float yOffset, float partialTicks, MatrixStack matrixStack) {
 	        Vec3d bound = getEntityRenderPosition(entity, partialTicks).add(0, yOffset, 0);
 	        Vector4f vector4f = new Vector4f((float)bound.x, (float)bound.y, (float)bound.z, 1.f);
-	        vector4f.transform(matrixStack.peek().getModel());
+	        vector4f.transform(matrixStack.peek().getPositionMatrix());
 	        Vec3d twoD = to2D(vector4f.getX(), vector4f.getY(), vector4f.getZ());
 	        return new Vec3d(twoD.x, twoD.y, twoD.z);
 	    }
@@ -874,7 +874,7 @@ public class RenderUtils {
 	        Vec3d camPos = c.getPos();
 	        start = start.subtract(camPos);
 	        Vec3d end = start.add(dimensions);
-	        Matrix4f matrix = stack.peek().getModel();
+	        Matrix4f matrix = stack.peek().getPositionMatrix();
 	        float x1 = (float) start.x;
 	        float y1 = (float) start.y;
 	        float z1 = (float) start.z;
@@ -929,7 +929,7 @@ public class RenderUtils {
 	    }
 		
 		public static void drawFilledBox(MatrixStack matrixStack, Box bb, int color, boolean draw) {
-	        Matrix4f matrix4f = matrixStack.peek().getModel();
+	        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 	        Color color1 = ColorUtils.getColor(color);
 
 	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
@@ -987,7 +987,7 @@ public class RenderUtils {
 
 	    public static void drawOutlineBox(MatrixStack matrixStack, Box bb, int color, boolean draw) {
 	        Color color1 = ColorUtils.getColor(color);
-	        Matrix4f matrix4f = matrixStack.peek().getModel();
+	        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
 
 	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 	        if (draw)
@@ -1037,7 +1037,7 @@ public class RenderUtils {
 	        Vec3d camPos = c.getPos();
 	        start = start.subtract(camPos);
 	        end = end.subtract(camPos);
-	        Matrix4f matrix = matrices.peek().getModel();
+	        Matrix4f matrix = matrices.peek().getPositionMatrix();
 	        float x1 = (float) start.x;
 	        float y1 = (float) start.y;
 	        float z1 = (float) start.z;
@@ -1271,9 +1271,9 @@ public class RenderUtils {
 	            MatrixStack bobViewMatrices = new MatrixStack();
 
 	            bobView(bobViewMatrices);
-	            bobViewMatrices.peek().getModel().invert();
+	            bobViewMatrices.peek().getPositionMatrix().invert();
 
-	            pos = ((IMatrix4f) (Object) bobViewMatrices.peek().getModel()).mul(pos);
+	            pos = ((IMatrix4f) (Object) bobViewMatrices.peek().getPositionMatrix()).mul(pos);
 	        }
 	        return new Vec3d(pos.x, -pos.y, pos.z)
 	            .rotateX(-(float) Math.toRadians(mc.gameRenderer.getCamera().getPitch()))
@@ -1468,4 +1468,36 @@ public class RenderUtils {
 		public static double distanceTo(double x1, double x2) {
 			return x2 - x1;
 		}
+		
+		public static void setCircularStencil(MatrixStack matrices, double x, double y, double r) {
+		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		// disable drawing to the color and depth buffers.
+		// circle will only be drawn to stencil buffer.
+		RenderSystem.colorMask(false, false, false, false);
+		RenderSystem.depthMask(false);
+		// set up stencil func and op so that a 1 is always written to the stencil buffer
+		// whenever a pixel is drawn.
+		RenderSystem.stencilFunc(GL11.GL_NEVER, 1, 0x01);
+		// replace stencil buffer value with 1 whenever stencil test fails.
+		// keep stencil buffer value otherwise.
+		RenderSystem.stencilOp(GL11.GL_REPLACE, GL11.GL_KEEP, GL11.GL_KEEP);
+		// enable writing to 8 bits of the stencil buffer
+		RenderSystem.stencilMask(0x01);
+		// clear stencil buffer, with mask 0xff
+		RenderSystem.clearStencil(GL11.GL_STENCIL_BUFFER_BIT);
+		// draw stencil pattern
+		drawFilledCircle(matrices, x, y, (float) r, Color.WHITE);
+		
+		// re-enable drawing to colour and depth buffers
+		GL11.glColorMask(true, true, true, true);
+		// probably shouldn't enable? -> GL11.glDepthMask(true);
+		// disable writing to stencil buffer
+		GL11.glStencilMask(0x00);
+		// draw only when stencil buffer value == 1 (inside circle)
+		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0x01);
+	}
+	
+	public static void disableStencil() {
+		GL11.glDisable(GL11.GL_STENCIL_TEST);
+	}
 }

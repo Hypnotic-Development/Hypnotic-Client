@@ -109,7 +109,7 @@ public class Radar extends HudModule {
 	}
 
     private void drawPointer(MatrixStack matrixStack) {
-        Matrix4f matrix4f = matrixStack.peek().getModel();
+        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         Color color1 = color.getColor();
 
         RenderUtils.setup2DRender(false);

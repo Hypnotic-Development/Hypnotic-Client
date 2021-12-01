@@ -47,6 +47,7 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 
@@ -93,8 +94,6 @@ public class ESP extends Mod {
 		for (Entity entity : mc.world.getEntities()) {
 			if (shouldRenderEntity(entity) && entity != mc.player) {
 				Vec3d renderPos = RenderUtils.getEntityRenderPosition(entity, event.getTickDelta());
-//				RenderUtils.renderOutline(entity.getPos().subtract(new Vec3d(entity.getWidth(), 0, entity.getWidth()).multiply(0.5)), new Vec3d(entity.getWidth(), entity.getHeight(), entity.getWidth()), getEntityColor(entity, 255), event.getMatrices());
-//				renderOutline(entity, getEntityColor(entity, 255), event.getMatrices());
 				Box bb = new Box(renderPos.x - entity.getWidth() + 0.25, renderPos.y, renderPos.z - entity.getWidth() + 0.25, renderPos.x + entity.getWidth() - 0.25, renderPos.y + entity.getHeight() + 0.1, renderPos.z + entity.getWidth() - 0.25);
 				if (mode.is("Box-Fill")) RenderUtils.drawEntityBox(event.getMatrices(), entity, renderPos.x, renderPos.y, renderPos.z, getEntityColor(entity, 80));
 				if (mode.is("Box")) RenderUtils.drawOutlineBox(event.getMatrices(), bb, getEntityColor(entity, 80), true);
@@ -199,7 +198,7 @@ public class ESP extends Mod {
         float cos = (float) (Math.cos(r) * (e.getWidth() / 1.7));
         stack.push();
 
-        Matrix4f matrix = stack.peek().getModel();
+        Matrix4f matrix = stack.peek().getPositionMatrix();
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         GL11.glDepthFunc(GL11.GL_ALWAYS);

@@ -5,6 +5,7 @@ import badgamesinc.hypnotic.event.events.EventCollide;
 import badgamesinc.hypnotic.event.events.EventPushOutOfBlocks;
 import badgamesinc.hypnotic.module.Category;
 import badgamesinc.hypnotic.module.Mod;
+import badgamesinc.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -48,7 +49,7 @@ public class Phase extends Mod {
 	            BlockState bs2 = mc.world.getBlockState(cpos.up());
 	            if (!bs1.getMaterial().blocksMovement() && !bs2.getMaterial().blocksMovement() && bs1.getBlock() != Blocks.LAVA && bs2.getBlock() != Blocks.LAVA) {
 	                mc.player.updatePosition(cpos.getX() + 0.5, cpos.getY(), cpos.getZ() + 0.5);
-	                mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), false));
+	                PlayerUtils.blinkToPos(new Vec3d(cpos.getX(), cpos.getY(), cpos.getZ()), new BlockPos(cpos.getX() + 0.5, cpos.getY(), cpos.getZ() + 0.5), 5, new double[] {1, 2, 42});
 	                break;
 	            }
 	        }
@@ -63,7 +64,7 @@ public class Phase extends Mod {
 	
 	@EventTarget
 	public void onCollision(EventCollide.Block event) {
-		
+		event.setCancelled(true);
 	}
 	
 	@Override

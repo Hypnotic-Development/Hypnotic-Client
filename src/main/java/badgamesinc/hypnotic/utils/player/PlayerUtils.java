@@ -379,7 +379,7 @@ public class PlayerUtils {
     }
     
     public static boolean isOnGround(double height) {
-        if (!mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0D, -height, 0.0D)).toList().isEmpty()) {
+        if (mc.world.getBlockCollisions(mc.player, mc.player.getBoundingBox().offset(0.0D, -height, 0.0D)).iterator().hasNext()) {
             return true;
         } else {
             return false;

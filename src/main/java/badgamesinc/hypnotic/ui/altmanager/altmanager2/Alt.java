@@ -11,6 +11,7 @@ import badgamesinc.hypnotic.mixin.MinecraftClientAccessor;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.Session;
+import net.minecraft.client.util.Session.AccountType;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class Alt {
@@ -33,7 +34,7 @@ public class Alt {
         auth.logIn();
         this.username = auth.getSelectedProfile().getName();
         this.uuid = auth.getSelectedProfile().getId();
-		setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang"));
+		setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), null, null, AccountType.MOJANG));
 		setUsername(auth.getSelectedProfile().getName());
 	}
 	

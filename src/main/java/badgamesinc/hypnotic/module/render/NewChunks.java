@@ -14,15 +14,11 @@ import badgamesinc.hypnotic.settings.settingtypes.ColorSetting;
 import badgamesinc.hypnotic.settings.settingtypes.NumberSetting;
 import badgamesinc.hypnotic.utils.render.QuadColor;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
-import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.network.packet.s2c.play.ChunkDeltaUpdateS2CPacket;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.chunk.WorldChunk;
 
 public class NewChunks extends Mod {
 
@@ -30,7 +26,6 @@ public class NewChunks extends Mod {
 	public BooleanSetting remove = new BooleanSetting("Remove", true);
 	public BooleanSetting fill = new BooleanSetting("Fill", true);
 	public BooleanSetting newChunksSet = new BooleanSetting("NewChunks", true);
-	public BooleanSetting oldChunksSet = new BooleanSetting("OldChunks", true);
 	public ColorSetting color = new ColorSetting("Color", 0.9f, 0.2f, 0.2f, 1f, false);
 	private static final Direction[] skipDirs = new Direction[] { Direction.DOWN, Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH };
 	private Set<ChunkPos> newChunks = Collections.synchronizedSet(new HashSet<>());
@@ -38,7 +33,7 @@ public class NewChunks extends Mod {
 
 	public NewChunks() {
 		super("NewChunks", "Renders a border around newley generated chunks", Category.RENDER);
-		addSettings(yOffset, remove, fill, newChunksSet, oldChunksSet, color);
+		addSettings(yOffset, remove, fill, newChunksSet, color);
 		newChunksSet.addChild(color);
 	}
 
@@ -81,28 +76,6 @@ public class NewChunks extends Mod {
 					}
 				}
 			}
-		} else if (event.getPacket() instanceof ChunkDataS2CPacket && mc.world != null) {
-			ChunkDataS2CPacket packet = (ChunkDataS2CPacket) event.getPacket();
-
-			ChunkPos pos = new ChunkPos(packet.getX(), packet.getZ());
-			
-			if (!newChunks.contains(pos) && mc.world.getChunkManager().getChunk(packet.getX(), packet.getZ()) == null) {
-				WorldChunk chunk = new WorldChunk(mc.world, pos, null);
-				chunk.loadFromPacket(null, packet.getReadBuffer(), new NbtCompound(), packet.getVerticalStripBitmask());
-				
-				for (int x = 0; x < 16; x++) {
-					for (int y = 0; y < mc.world.getHeight(); y++) {
-						for (int z = 0; z < 16; z++) {
-							FluidState fluid = chunk.getFluidState(x, y, z);
-							
-							if (!fluid.isEmpty() && !fluid.isStill()) {
-								oldChunks.add(pos);
-								return;
-							}
-						}
-					}
-				}
-			}
 		}
 	}
 
@@ -117,28 +90,6 @@ public class NewChunks extends Mod {
 
 			synchronized (newChunks) {
 				for (ChunkPos c: newChunks) {
-					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
-						Box box = new Box(
-								c.getStartX(), renderY, c.getStartZ(),
-								c.getStartX() + 16, renderY, c.getStartZ() + 16);
-
-						if (fill.isEnabled()) {
-							RenderUtils.drawBoxFill(box, fillColor, skipDirs);
-						}
-	
-						RenderUtils.drawBoxOutline(box, outlineColor, 2f, skipDirs);
-					}
-				}
-			}
-		}
-
-		if (oldChunksSet.isEnabled()) {
-			int color = this.color.getRGB();
-			QuadColor outlineColor = QuadColor.single(0xff000000 | color);
-			QuadColor fillColor = QuadColor.single(((int) (100) << 24) | color);
-
-			synchronized (oldChunks) {
-				for (ChunkPos c: oldChunks) {
 					if (mc.getCameraEntity().getBlockPos().isWithinDistance(c.getStartPos(), 1024)) {
 						Box box = new Box(
 								c.getStartX(), renderY, c.getStartZ(),

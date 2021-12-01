@@ -51,7 +51,7 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 	public abstract void renderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model);
 
 	@Shadow
-	public abstract BakedModel getHeldItemModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int i);
+	public abstract BakedModel getModel(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity, int i);
 	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"), cancellable = true)
 	public void preRenderItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
 		EventRenderItem event = new EventRenderItem(matrices, stack, renderMode, EventRenderItem.RenderTime.PRE, leftHanded);
@@ -105,7 +105,7 @@ public abstract class ItemRendererMixin implements IItemRenderer {
 
 	@Override
 	public void renderItemIntoGUI(ItemStack itemStack, float x, float y, float scale) {
-		renderGuiItemModel(itemStack, x, y, this.getHeldItemModel(itemStack, (World) null, null, 0), scale);
+		renderGuiItemModel(itemStack, x, y, this.getModel(itemStack, (World) null, null, 0), scale);
 	}
 
 	protected void renderGuiItemModel(ItemStack stack, float x, float y, BakedModel model, float scale) {

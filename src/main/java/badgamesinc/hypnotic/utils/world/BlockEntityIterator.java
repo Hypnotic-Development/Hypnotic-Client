@@ -7,7 +7,7 @@ import net.minecraft.world.chunk.WorldChunk;
 import java.util.Iterator;
 import java.util.Map;
 
-import badgamesinc.hypnotic.mixin.WorldChunkAccessor;
+import badgamesinc.hypnotic.mixin.ChunkAccessor;
 
 public class BlockEntityIterator implements Iterator<BlockEntity> {
     private final Iterator<WorldChunk> chunks;
@@ -23,7 +23,7 @@ public class BlockEntityIterator implements Iterator<BlockEntity> {
         while (true) {
             if (!chunks.hasNext()) break;
 
-            Map<BlockPos, BlockEntity> blockEntityMap = ((WorldChunkAccessor) chunks.next()).getBlockEntities();
+            Map<BlockPos, BlockEntity> blockEntityMap = ((ChunkAccessor) chunks.next()).getBlockEntities();
 
             if (blockEntityMap.size() > 0) {
                 blockEntities = blockEntityMap.values().iterator();

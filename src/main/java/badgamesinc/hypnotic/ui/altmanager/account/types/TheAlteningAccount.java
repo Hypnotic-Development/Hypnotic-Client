@@ -62,7 +62,7 @@ public class TheAlteningAccount extends Account<TheAlteningAccount> {
 
         try {
             auth.logIn();
-            setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang"));
+            setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), null, null, Session.AccountType.MOJANG));
 
             cache.username = auth.getSelectedProfile().getName();
             return true;

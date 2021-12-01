@@ -11,7 +11,6 @@ import badgamesinc.hypnotic.utils.font.NahrFont;
 import badgamesinc.hypnotic.utils.math.MathUtils;
 import badgamesinc.hypnotic.utils.math.TPSUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
 
 public class HUD {
 	
@@ -26,9 +25,6 @@ public class HUD {
 	@EventTarget
 	public void renderHUD(EventRenderGUI event) {
 		if (mc.options.debugEnabled) return;
-		renderArrayList(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event);
-		renderSideHUD(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight());
-		
 		if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 1) {
 			String numColor = ColorUtils.green;
 			if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 5 && TPSUtils.INSTANCE.getTimeSinceLastTick() < 10 ) numColor = ColorUtils.yellow;
@@ -39,14 +35,5 @@ public class HUD {
 			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
 			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getPartialTicks());
 		}
-	}
-	
-	public void renderSideHUD(MatrixStack matrices, int width, int height) {
-		fr = FontManager.robotoMed2;
-	}
-	
-	
-	public void renderArrayList(MatrixStack matrix, int width, int height, EventRenderGUI event) {	
-		
 	}
 }

@@ -47,7 +47,7 @@ public abstract class TitleScreenMixin extends Screen {
 //			
 //			RenderSystem.disableCull();
 //			RenderSystem.setShader(GameRenderer::getPositionColorShader);
-//			Matrix4f matrix4f = matrices.peek().getModel();
+//			Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 //			BufferBuilder builder = Tessellator.getInstance().getBuffer();
 //			builder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 ////			builder.vertex(matrix4f, -1f, -1f, 0);

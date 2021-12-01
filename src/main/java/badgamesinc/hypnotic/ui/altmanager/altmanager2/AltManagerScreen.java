@@ -33,6 +33,7 @@ public class AltManagerScreen extends HypnoticScreen {
 	private Button login = new Button("Login", 1337, this.width / 2 - 310, height - 50, 200, 20, false);
 	private Button remove = new Button("Remove", 8008, this.width / 2 + 210, height - 25, 200, 20, false);
 	private Button cracked = new Button("Add cracked", 800, this.width / 2 + 210, height - 25, 200, 20, false);
+	private Button sessionID = new Button("Use sessionID", 800, this.width / 2 + 210, height - 25, 200, 20, false);
 	private Alt selectedAlt = null;
 	
 	@Override
@@ -116,6 +117,7 @@ public class AltManagerScreen extends HypnoticScreen {
 		this.addButton(back);
 		this.addButton(msLogin);
 		this.addButton(cracked);
+		this.addButton(sessionID);
 		AltsFile.INSTANCE.loadAlts();
 		super.init();
 	}
@@ -138,7 +140,7 @@ public class AltManagerScreen extends HypnoticScreen {
 					status = "Logging into " + selectedAlt.getEmail();
 					loggingIn = true;
 					if (!selectedAlt.getPassword().equalsIgnoreCase("cracked")) selectedAlt.login();
-					else selectedAlt.setSession(new Session(selectedAlt.getUsername(), "", "", "mojang"));
+					else selectedAlt.setSession(new Session(selectedAlt.getUsername(), "", "", null, null, Session.AccountType.MOJANG));
 					status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
 					loggingIn = false;
 					AltsFile.INSTANCE.saveAlts();

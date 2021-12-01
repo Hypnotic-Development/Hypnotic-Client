@@ -53,7 +53,7 @@ public class PremiumAccount extends Account<PremiumAccount> {
 
         try {
             auth.logIn();
-            setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), "mojang"));
+            setSession(new Session(auth.getSelectedProfile().getName(), auth.getSelectedProfile().getId().toString(), auth.getAuthenticatedToken(), null, null, Session.AccountType.MOJANG));
 
             cache.username = auth.getSelectedProfile().getName();
             return true;

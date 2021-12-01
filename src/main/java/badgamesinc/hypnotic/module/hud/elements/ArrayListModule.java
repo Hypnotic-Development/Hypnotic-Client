@@ -22,7 +22,7 @@ import net.minecraft.client.util.math.MatrixStack;
 public class ArrayListModule extends HudModule {
 
 	public ModeSetting location = new ModeSetting("Location", "Top", "Top", "Bottom");
-	public BooleanSetting background = new BooleanSetting("Background", false);
+	public BooleanSetting background = new BooleanSetting("Background", true);
 	public NumberSetting backgroundOpacity = new NumberSetting("Background Opacity", 150, 10, 255, 1);
 	public BooleanSetting colorBar = new BooleanSetting("Color Bar", true);
 	public ModeSetting colorBarMode = new ModeSetting("Color Bar Mode", "Side", "Side", "Top", "Outline");
