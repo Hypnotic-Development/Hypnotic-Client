@@ -36,7 +36,7 @@ import badgamesinc.hypnotic.module.render.Freecam;
 import badgamesinc.hypnotic.ui.BindingScreen;
 import badgamesinc.hypnotic.ui.OptionsScreen;
 import badgamesinc.hypnotic.utils.render.RenderUtils;
-//import baritone.api.BaritoneAPI;
+import baritone.api.BaritoneAPI;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
@@ -176,7 +176,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 		}
 		RenderUtils.INSTANCE.onTick();
-//		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
+		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
 		
 		if (mc.getNetworkHandler() != null) {
 			for (PlayerListEntry player : mc.getNetworkHandler().getPlayerList()) {
@@ -187,20 +187,20 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 		
 		OptionsScreen options = OptionsScreen.INSTANCE;
 		
-//		BaritoneAPI.getSettings().allowBreak.value = options.allowBreak.isEnabled();
-//		BaritoneAPI.getSettings().allowParkour.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().allowParkourAscend.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().allowParkourPlace.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().allowDownward.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().allowDiagonalAscend.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().allowDiagonalDescend.value = options.allowParkour.isEnabled();
-//		BaritoneAPI.getSettings().chatControl.value = options.chatControl.isEnabled();
-//		BaritoneAPI.getSettings().allowPlace.value = options.allowPlace.isEnabled();
-//		BaritoneAPI.getSettings().allowInventory.value = options.allowInventory.isEnabled();
-//		BaritoneAPI.getSettings().assumeWalkOnWater.value = options.assumeJesus.isEnabled();
-//		BaritoneAPI.getSettings().assumeWalkOnLava.value = options.assumeJesus.isEnabled();
-//		BaritoneAPI.getSettings().assumeStep.value = options.assumeStep.isEnabled();
-//		BaritoneAPI.getSettings().assumeSafeWalk.value = options.assumeSafewalk.isEnabled();
+		BaritoneAPI.getSettings().allowBreak.value = options.allowBreak.isEnabled();
+		BaritoneAPI.getSettings().allowParkour.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowParkourAscend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowParkourPlace.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDownward.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDiagonalAscend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().allowDiagonalDescend.value = options.allowParkour.isEnabled();
+		BaritoneAPI.getSettings().chatControl.value = options.chatControl.isEnabled();
+		BaritoneAPI.getSettings().allowPlace.value = options.allowPlace.isEnabled();
+		BaritoneAPI.getSettings().allowInventory.value = options.allowInventory.isEnabled();
+		BaritoneAPI.getSettings().assumeWalkOnWater.value = options.assumeJesus.isEnabled();
+		BaritoneAPI.getSettings().assumeWalkOnLava.value = options.assumeJesus.isEnabled();
+		BaritoneAPI.getSettings().assumeStep.value = options.assumeStep.isEnabled();
+		BaritoneAPI.getSettings().assumeSafeWalk.value = options.assumeSafewalk.isEnabled();
 	}
 	
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
