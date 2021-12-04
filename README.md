@@ -19,7 +19,7 @@ Use at your own risk, we are not responsible for any punishments on any server
 https://hypnotic.dev is our website that isn't so bad anymore  
   
 ## Requirements  
-Minecraft 1.17.1  
+Minecraft 1.18  
 Java Runtime version 17 or higher  
 Fabric Loader 0.12.8 or higher  
   
