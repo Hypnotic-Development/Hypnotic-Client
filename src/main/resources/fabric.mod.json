@@ -11,7 +11,7 @@
   ],
   "contact": {
     "homepage": "https://hypnotic.dev/",
-    "sources": "https://github.com/badgamesinc/"
+    "sources": "https://github.com/Hypnotic-Development/Hypnotic-Client"
   },
 
   "license": "GNU-3.0",
@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "badgamesinc.hypnotic.Hypnotic"
+      "dev.hypnotic.hypnotic_client.Hypnotic"
     ]
   },
   "mixins": [
