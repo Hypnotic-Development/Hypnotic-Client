@@ -11,7 +11,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import badgamesinc.hypnotic.command.commands.*;
-import badgamesinc.hypnotic.command.commands.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
@@ -38,7 +37,7 @@ public class CommandManager {
         add(new Commands());
         add(new Modules());
         add(new Toggle());
-        add(new Module());
+        add(new badgamesinc.hypnotic.command.commands.Module());
         add(new Bind());
         add(new Teleport());
         commands.sort(Comparator.comparing(Command::getName));
