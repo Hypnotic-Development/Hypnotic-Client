@@ -4,6 +4,7 @@ import dev.hypnotic.hypnotic_client.mixin.MinecraftClientAccessor;
 import dev.hypnotic.hypnotic_client.mixin.RenderTickCounterAccessor;
 import dev.hypnotic.hypnotic_client.module.hud.HudModule;
 import dev.hypnotic.hypnotic_client.settings.settingtypes.ColorSetting;
+import dev.hypnotic.hypnotic_client.settings.settingtypes.ModeSetting;
 import dev.hypnotic.hypnotic_client.utils.ColorUtils;
 import dev.hypnotic.hypnotic_client.utils.font.FontManager;
 import dev.hypnotic.hypnotic_client.utils.math.MathUtils;
@@ -14,9 +15,11 @@ import net.minecraft.util.math.Vec3d;
 public class BPS extends HudModule {
 
 	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
+	public ModeSetting mode = new ModeSetting("Mode", "Blocks/s", "Blocks/s", "Kilometers/h");
+	
 	public BPS() {
 		super("Blocks/s Display", "Renders your blocks/s", (int) FontManager.roboto.getStringWidth("Ping 80") + 5, 1050, (int)FontManager.roboto.getStringWidth("Ping 80"), (int)FontManager.roboto.getStringHeight("Ping 80"));
-		addSetting(color);
+		addSettings(color, mode);
 	}
 	
 	@Override
@@ -31,6 +34,7 @@ public class BPS extends HudModule {
 	@Override
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
 		String bpsString = "Blocks/s " + ColorUtils.gray + MathUtils.round(moveSpeed() * (50f / ((RenderTickCounterAccessor)((MinecraftClientAccessor)mc).getRenderTickCounter()).getTickTime()), 2);
+		if (mode.is("Kilometers/h")) bpsString = "Kilometers/h " + ColorUtils.gray + MathUtils.round(moveSpeed() * (50f / ((RenderTickCounterAccessor)((MinecraftClientAccessor)mc).getRenderTickCounter()).getTickTime())*3.6f, 2);
 		this.setDefaultX((int) FontManager.roboto.getStringWidth("TPS 20"));
 		this.setDefaultY(scaledHeight - 18);
 		this.setWidth((int) font.getStringWidth(bpsString));
