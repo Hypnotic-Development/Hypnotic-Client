@@ -11,7 +11,7 @@
   ],
   "contact": {
     "homepage": "https://hypnotic.dev/",
-    "sources": "https://github.com/Hypnotic-Development/Hypnotic-Client"
+    "sources": "https://github.com/badgamesinc/"
   },
 
   "license": "GNU-3.0",
@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.hypnotic.hypnotic_client.Hypnotic"
+      "dev.hypnotic.Hypnotic"
     ]
   },
   "mixins": [
@@ -28,7 +28,7 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.12.9",
+    "fabricloader": ">=0.12.8",
     "minecraft": "1.18.x",
     "java": ">=17"
   },

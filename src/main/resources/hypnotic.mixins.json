@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.hypnotic.hypnotic_client.mixin",
+  "package": "dev.hypnotic.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
   ],
@@ -67,7 +67,8 @@
     "CameraMixin",
     "ModelPredicateProviderRegistryMixin",
     "RenderTickCounterAccessor",
-    "FramebufferMixin"
+    "FramebufferMixin",
+    "MultiplayerScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

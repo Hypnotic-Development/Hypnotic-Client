@@ -58,5 +58,5 @@ Check out the [fabric wiki](https://fabricmc.net/wiki/tutorial:setup) for more d
 
 ## Compiled Builds  
 Please get compiled releases from the latest Github Actions artifact, we do not keep up regular releases.  
-[Latest compiled build](https://nightly.link/Hypnotic-Development/Hypnotic-Client/workflows/build/main/Latest.zip)
+[Latest compiled build](https://nightly.link/Hypnotic-Development/Hypnotic-Client/workflows/build/main/Artifacts.zip)
   
