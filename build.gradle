@@ -50,6 +50,8 @@ dependencies {
 	modImplementation "baritone:baritone:${project.baritone_version}"
 	include "baritone:baritone:${project.baritone_version}"
 	
+	implementation 'org.graalvm.js:js:21.3.0'
+	implementation 'org.graalvm.js:js-scriptengine:21.3.0'
 	dependency files('lib/java-discord-rpc-2.0.1-all.jar')
 }
 

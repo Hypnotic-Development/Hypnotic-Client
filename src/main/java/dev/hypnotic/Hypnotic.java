@@ -10,6 +10,7 @@ import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.graalvm.polyglot.Context;
 
 import dev.hypnotic.config.ConfigManager;
 import dev.hypnotic.config.SaveLoad;
@@ -67,6 +68,11 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(DamageUtils.getInstance());
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
+		
+		// Retarded bs for nashorn compatibility
+		try (Context context = Context.newBuilder().allowExperimentalOptions(true).option("js.nashorn-compat", "true").option("engine.WarnInterpreterOnly", "false").build()) {
+			context.eval("js", "print(__LINE__)");
+		}
 	}
 	
 	/*
