@@ -280,7 +280,7 @@ public class Killaura extends Mod {
 	
 	@EventTarget
 	public void render3d(EventRender3D event) {
-		if (target != null) {
+		if (target != null && esp.isEnabled()) {
 
 			if (anim > 200) {
 				dir = false;
@@ -293,17 +293,7 @@ public class Killaura extends Mod {
 			} else {
 				anim-=3;
 			}
-
 			RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() + anim / 100, target.getZ()), event.getTickDelta(), 0.6f, 1, espColor.getColor().getRGB());
-//			if (dir) {
-//				for (double i = 0; i < anim / 20; i++) {
-//					RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() - (i * 0.015) + (anim / (100)) + (dir ? 0 : 0.1), target.getZ()), event.getTickDelta(), 0.6f, 1, new Color(espColor.getColor().getRed(), espColor.getColor().getGreen(), espColor.getColor().getBlue(), (255 - ((int)i * 25))).getRGB());
-//				}
-//			} else {
-//				for (double i = 0; i < anim / 20; i++) {
-//					RenderUtils.drawCircle(event.getMatrices(), new Vec3d(target.getX(), target.getY() + (i * 0.015) + (anim / (100)), target.getZ()), event.getTickDelta(), 0.6f, 1, new Color(espColor.getColor().getRed(), espColor.getColor().getGreen(), espColor.getColor().getBlue(), (255 - ((int)i * 25))).getRGB());
-//				}
-//			}
 		} else {
 			anim = 0;
 		}

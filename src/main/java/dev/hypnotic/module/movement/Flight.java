@@ -12,6 +12,7 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.combat.Killaura;
 import dev.hypnotic.module.combat.TargetStrafe;
 import dev.hypnotic.module.exploit.AntiHunger;
+import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
@@ -44,6 +45,7 @@ public class Flight extends Mod {
     
     @Override
     public void onEnable() {
+    	ScriptManager.INSTANCE.refreshScripts();
     	super.onEnable();
     }
     

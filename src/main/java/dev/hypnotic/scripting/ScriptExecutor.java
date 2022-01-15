@@ -7,31 +7,37 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import net.minecraft.client.MinecraftClient;
-
 public class ScriptExecutor {
 
-	private File script;
+	// fuck graal.js
+	private static ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
 	
-	private ScriptEngine engine;
-	
-	public ScriptExecutor(File script) {
-		this.script = script;
-		// fuck graal.js
-		engine = new ScriptEngineManager().getEngineByName("graal.js");
-	}
-	
-	@SuppressWarnings("resource")
-	public void executeFunction() {
+	public static void executeFunction(File script, String functionName, Object args) {
 		System.out.println(script.getName());
 		try {
 			engine.eval(new FileReader(script));
 			Invocable invocable = (Invocable)engine;
-			
-			Object result = invocable.invokeFunction("test", MinecraftClient.getInstance().player);
-			System.out.println(result);
+
+			Object result = invocable.invokeFunction("fun1", args);
+			System.out.println(result + " sdfsdfsfsdf");
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void executeFunction(String script, String functionName, Object args) {
+		try {
+			engine.eval(script);
+			Invocable invocable = (Invocable)engine;
+
+			Object result = invocable.invokeFunction(functionName, args);
+			System.out.println(result + " sdfsdfsfsdf");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static ScriptEngine getEngine() {
+		return ScriptExecutor.engine;
 	}
 }

@@ -8,15 +8,17 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.graalvm.polyglot.HostAccess;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.graalvm.polyglot.Context;
 
 import dev.hypnotic.config.ConfigManager;
 import dev.hypnotic.config.SaveLoad;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.render.CustomFont;
+import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.ui.HUD;
 import dev.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import dev.hypnotic.utils.ColorUtils;
@@ -35,8 +37,10 @@ public class Hypnotic implements ModInitializer {
 			version = "r1000",
 			fullName = name + "-" + version,
 			hypnoticDir = mc.runDirectory.getPath() + File.separator + "Hypnotic",
+			scriptDir = hypnoticDir + "/scripts",
 			chatPrefix = ColorUtils.red + name + ColorUtils.gray + ": ";
 	public ModuleManager moduleManager;
+	public ScriptManager scriptManager;
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
@@ -61,6 +65,7 @@ public class Hypnotic implements ModInitializer {
 	 */
 	public void register() {
 		moduleManager = ModuleManager.INSTANCE;
+		scriptManager = ScriptManager.INSTANCE;
 		eventManager = EventManager.INSTANCE;
 		cfgManager = new ConfigManager();
 		saveload = new SaveLoad();
@@ -69,10 +74,7 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
 		
-		// Retarded bs for nashorn compatibility
-		try (Context context = Context.newBuilder().allowExperimentalOptions(true).option("js.nashorn-compat", "true").option("engine.WarnInterpreterOnly", "false").build()) {
-			context.eval("js", "print(__LINE__)");
-		}
+		ScriptManager.INSTANCE.makeScriptsFolder();
 	}
 	
 	/*

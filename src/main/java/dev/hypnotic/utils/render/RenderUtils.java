@@ -17,6 +17,7 @@ import dev.hypnotic.mixin.FrustramAccessor;
 import dev.hypnotic.mixin.WorldRendererAccessor;
 import dev.hypnotic.module.render.IItemRenderer;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.mixin.IMatrix4f;
 import dev.hypnotic.utils.render.shader.ShaderUtils;
 import net.minecraft.client.MinecraftClient;
@@ -1499,5 +1500,10 @@ public class RenderUtils {
 	
 	public static void disableStencil() {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
+	}
+	
+	// Here for scripts
+	public void drawString(String string, float x, float y, Color color, boolean shadow) {
+		FontManager.roboto.draw(new MatrixStack(), string, x, y, color.getRGB());
 	}
 }

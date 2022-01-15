@@ -8,7 +8,8 @@ public enum Category {
 	RENDER("Render", new Color(199, 78, 255), "g"),
 	MISC("Misc", new Color(20, 255, 50), "e"), 
 	PLAYER("Player", new Color(255, 147, 0), "c"),
-	EXPLOIT("Exploit", new Color(255, 110, 215), "d");
+	EXPLOIT("Exploit", new Color(255, 110, 215), "d"),
+	SCRIPT("Scripts", new Color(255, 127, 122), "h");
 	
 	public String name;
 	public Color color;

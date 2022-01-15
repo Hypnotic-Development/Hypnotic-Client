@@ -19,7 +19,7 @@ public class Mod {
 
 	protected static MinecraftClient mc = MinecraftClient.getInstance();
 	public String displayName;
-	private String description;
+	public String description;
 	private Category category;
 	public boolean expanded;
 	public ArrayList<Setting> settings = new ArrayList<>();
