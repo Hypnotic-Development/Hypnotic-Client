@@ -18,6 +18,7 @@ package dev.hypnotic.ui;
 
 import dev.hypnotic.module.options.OptionModule;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
+import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.ui.clickgui.ModuleButton;
 import dev.hypnotic.ui.clickgui.settings.SettingsWindow;
 import dev.hypnotic.ui.clickgui2.MenuBar;
@@ -34,6 +35,7 @@ public class OptionsScreen extends HypnoticScreen {
 	public BooleanSetting forceCFont = new BooleanSetting("Force Custom Font In Guis", false);
 	public BooleanSetting disableGradient = new BooleanSetting("Disable Gradient In Guis", false);
 	public BooleanSetting disableBlur = new BooleanSetting("Disable Blur In Guis", false);
+	public NumberSetting blurIntensity = new NumberSetting("Blur Intensity", 10, 1, 20, 0.1);
 	
 	// Baritone settings
 	public BooleanSetting allowParkour = new BooleanSetting("Baritone Allow Parkour", true);
@@ -50,7 +52,7 @@ public class OptionsScreen extends HypnoticScreen {
 	
 	public OptionsScreen() {
 		this.frame = new Frame("Options", 100, 100, 100, 100);
-		options = new OptionModule(forceCFont, disableGradient, disableBlur, allowParkour, allowBreak, allowSprint, allowPlace, allowInventory, chatControl, assumeJesus, assumeSafewalk, assumeStep);
+		options = new OptionModule(forceCFont, disableGradient, disableBlur, blurIntensity, allowParkour, allowBreak, allowSprint, allowPlace, allowInventory, chatControl, assumeJesus, assumeSafewalk, assumeStep);
 		window = new SettingsWindow(new ModuleButton(options, null, 0, 0));
 	}
 	
@@ -65,6 +67,7 @@ public class OptionsScreen extends HypnoticScreen {
 		this.renderBackground(matrices);
 		menuBar.renderMenuBar(matrices, mouseX, mouseY, width, height);
 		window.render(matrices, mouseX, mouseY, delta);
+		if (disableBlur.isEnabled()) blurIntensity.setVisible(false);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	

@@ -85,7 +85,7 @@ public abstract class HypnoticScreen extends Screen {
 	@Override
 	public void renderBackground(MatrixStack matrices) {
 		if (OptionsScreen.INSTANCE.disableGradient.isEnabled()) this.renderBackground(matrices, 0);
-		else RenderUtils.gradientFill(matrices, 0, 0, width, height, ColorUtils.transparent(180), ColorUtils.defaultClientColor);
+		else RenderUtils.gradientFill(matrices, 0, 0, width, height, ColorUtils.transparent(100), ColorUtils.defaultClientColor);
 	}
 	
 	@Override

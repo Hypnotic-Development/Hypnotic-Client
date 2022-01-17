@@ -32,13 +32,21 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.render.CustomFont;
 import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.ui.HUD;
+import dev.hypnotic.ui.OptionsScreen;
 import dev.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.input.MouseUtils;
 import dev.hypnotic.utils.player.DamageUtils;
+import dev.hypnotic.utils.render.RenderUtils;
 import dev.hypnotic.utils.world.BlockIterator;
+import ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.api.managed.uniform.Uniform1f;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.util.Identifier;
 
 public class Hypnotic implements ModInitializer {
 
@@ -56,6 +64,11 @@ public class Hypnotic implements ModInitializer {
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
+	
+	private final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/fade_in_blur.json"),
+            shader -> shader.setUniformValue("Radius", 8f));
+	private final Uniform1f blurProgress = blur.findUniform1f("Progress");
+	private float start;
 	
 	/*
 	 * Called when Minecraft initializes.
@@ -84,7 +97,20 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
 		
-		ScriptManager.INSTANCE.makeScriptsFolder();
+		ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
+			if (start < 1 && mc.currentScreen != null) start += 0.05f;
+			else if (start > 0 && mc.currentScreen == null) start -= 0.05f;
+			if ((start > 0) && mc.world != null && !OptionsScreen.INSTANCE.disableBlur.isEnabled()) {
+				blur.setUniformValue("Radius", OptionsScreen.INSTANCE.blurIntensity.getValueFloat());
+				blurProgress.set(mc.currentScreen instanceof ChatScreen ? 1f : start);
+				if (mc.currentScreen instanceof ChatScreen) {
+					start = 0;
+					RenderUtils.startScissor(2, mc.getWindow().getScaledHeight() - 14, mc.getWindow().getScaledWidth() - 2, 12);
+				}
+				blur.render(tickDelta);
+				if (mc.currentScreen instanceof ChatScreen) RenderUtils.endScissor();
+			}
+		});
 	}
 	
 	/*
