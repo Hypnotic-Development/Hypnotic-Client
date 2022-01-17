@@ -46,6 +46,14 @@ public class NumberSetting extends Setting {
     public double getValue() {
         return value;
     }
+    
+    public float getValueFloat() {
+        return (float)value;
+    }
+    
+    public int getValueInt() {
+        return (int)value;
+    }
 
     public void setValue(double value) {
         value = clamp(value, this.min, this.max);

@@ -19,8 +19,6 @@ package dev.hypnotic;
 import static dev.hypnotic.utils.MCUtils.mc;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -59,8 +57,6 @@ public class Hypnotic implements ModInitializer {
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
 	
-    public List<String> users = new ArrayList<>();
-
 	/*
 	 * Called when Minecraft initializes.
 	 * This is called AFTER mixins are injected
@@ -73,7 +69,7 @@ public class Hypnotic implements ModInitializer {
 		register();
 		loadFiles();
 	}
-
+	
 	/*
 	 * Registers all of the good stuff
 	 */
@@ -120,14 +116,5 @@ public class Hypnotic implements ModInitializer {
 	public void shutdown() {
 		System.out.println("SHUTING DOWN HYPNOTIC, GOODBYE");
 		AltsFile.INSTANCE.saveAlts();
-	}
-	
-	public static boolean isHypnoticUser(String name) {
-		return Hypnotic.INSTANCE.users.contains(name);
-	}
-	
-	public static void setHypnoticUser(String name, boolean using) {
-		if (using) Hypnotic.INSTANCE.users.add(name);
-		else if (!using && Hypnotic.INSTANCE.users.contains(name)) Hypnotic.INSTANCE.users.remove(name);
 	}
 }

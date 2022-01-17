@@ -18,14 +18,6 @@ repositories {
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
 	maven {
-        	name = 'Ladysnake Mods'
-        	url = 'https://ladysnake.jfrog.io/artifactory/mods'
-        	content {
-           	 includeGroup 'io.github.ladysnake'
-            	 includeGroupByRegex 'io\\.github\\.onyxstudios.*'
-		}
-        }
-	maven {
 		name = "meteor-maven"
 		url = "https://maven.meteordev.org/snapshots"
 	}
@@ -57,9 +49,6 @@ dependencies {
 	// thanks minegame159 from meteor client
 	modImplementation "baritone:baritone:${project.baritone_version}"
 	include "baritone:baritone:${project.baritone_version}"
-
-	modImplementation "io.github.ladysnake:satin:${satin_version}"
-    	include "io.github.ladysnake:satin:${satin_version}"
 	
 	implementation 'org.graalvm.js:js:21.3.0'
 	implementation 'org.graalvm.js:js-scriptengine:21.3.0'

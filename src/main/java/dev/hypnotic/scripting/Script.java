@@ -34,8 +34,12 @@ import dev.hypnotic.event.EventManager;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventKeyPress;
 import dev.hypnotic.event.events.EventMotionUpdate;
+import dev.hypnotic.event.events.EventReceiveChat;
+import dev.hypnotic.event.events.EventReceivePacket;
 import dev.hypnotic.event.events.EventRender3D;
 import dev.hypnotic.event.events.EventRenderGUI;
+import dev.hypnotic.event.events.EventSendMessage;
+import dev.hypnotic.event.events.EventSendPacket;
 import dev.hypnotic.event.events.EventTick;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
@@ -44,6 +48,7 @@ import dev.hypnotic.settings.settingtypes.ColorSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.Wrapper;
 import dev.hypnotic.utils.render.RenderUtils;
 
 /**
@@ -65,10 +70,22 @@ public class Script extends Mod {
 		
 		context.getBindings("js").putMember("mc", mc);
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
-		context.getBindings("js").putMember("player", mc.player);
 		context.getBindings("js").putMember("renderer", RenderUtils.INSTANCE);
 		context.getBindings("js").putMember("colors", new ColorUtils());
-		context.getBindings("js").putMember("createScript", this);
+		context.getBindings("js").putMember("newScript", this);
+	}
+	
+	public Script define(String name, String description, String author) {
+		this.name = name;
+		this.displayName = name;
+		this.description = description;
+		this.author = author;
+		return this;
+	}
+	
+	public void sendChatMessage(String message, boolean prefix) {
+		if (prefix) Wrapper.tellPlayer(message);
+		else Wrapper.tellPlayerRaw(message);
 	}
 	
 	public BooleanSetting booleanSetting(String name, boolean defaultValue) {
@@ -109,7 +126,7 @@ public class Script extends Mod {
 	
 	@EventTarget
 	private void onTick(EventTick event) {
-		executeEvent("tick");
+		executeEvent("tick", event);
 	}
 	
 	@EventTarget
@@ -130,6 +147,42 @@ public class Script extends Mod {
 	@EventTarget
 	private void onKeyPress(EventKeyPress event) {
 		executeEvent("keyPress", event);
+	}
+	
+	@EventTarget
+	private void onReceivePacket(EventReceivePacket event) {
+		executeEvent("receivePacket", event);
+	}
+	
+	@EventTarget
+	private void onSendPacket(EventSendPacket event) {
+		executeEvent("sendPacket", event);
+	}
+	
+	@EventTarget
+	private void onChatMessage(EventReceiveChat event) {
+		executeEvent("onChat");
+	}
+	
+	@EventTarget
+	private void onSendChat(EventSendMessage event) {
+		executeEvent("sendChat");
+	}
+	
+	public void onSendChat(Value function) {
+		executeEvent("sendChat", function);
+	}
+	
+	public void onReceiveChat(Value function) {
+		onEvent("onChat", function);
+	}
+	
+	public void onSendPacket(Value function) {
+		onEvent("sendPacket", function);
+	}
+	
+	public void onReceivePacket(Value function) {
+		onEvent("receivePacket", function);
 	}
 	
 	public void onKeyPress(Value function) {

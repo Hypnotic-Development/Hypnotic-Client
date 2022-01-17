@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "hypnotic",
+  "environment": "client",
+  "license": "GPL-3.0",
   "version": "${version}",
-
   "name": "Hypnotic Client",
   "description": "Insane epic \"utility mod\"",
   "authors": [

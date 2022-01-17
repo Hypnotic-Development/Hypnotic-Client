@@ -33,6 +33,7 @@ public class OptionsScreen extends HypnoticScreen {
 	// Options
 	public BooleanSetting forceCFont = new BooleanSetting("Force Custom Font In Guis", false);
 	public BooleanSetting disableGradient = new BooleanSetting("Disable Gradient In Guis", false);
+	public BooleanSetting disableBlur = new BooleanSetting("Disable Blur In Guis", false);
 	
 	// Baritone settings
 	public BooleanSetting allowParkour = new BooleanSetting("Baritone Allow Parkour", true);
@@ -49,7 +50,7 @@ public class OptionsScreen extends HypnoticScreen {
 	
 	public OptionsScreen() {
 		this.frame = new Frame("Options", 100, 100, 100, 100);
-		options = new OptionModule(forceCFont, disableGradient, allowParkour, allowBreak, allowSprint, allowPlace, allowInventory, chatControl, assumeJesus, assumeSafewalk, assumeStep);
+		options = new OptionModule(forceCFont, disableGradient, disableBlur, allowParkour, allowBreak, allowSprint, allowPlace, allowInventory, chatControl, assumeJesus, assumeSafewalk, assumeStep);
 		window = new SettingsWindow(new ModuleButton(options, null, 0, 0));
 	}
 	

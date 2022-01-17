@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 import com.google.common.collect.Maps;
 
-import dev.hypnotic.Hypnotic;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventRender3D;
 import dev.hypnotic.event.events.EventRenderGUI;
@@ -235,7 +234,7 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (Hypnotic.isHypnoticUser(entity.getName().asString()) ? ColorUtils.purple + " H" : "");
+        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "");
         return displayName;
     }
 

@@ -3,8 +3,6 @@
   "minVersion": "0.8",
   "package": "dev.hypnotic.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-  ],
   "client": [
     "KeyboardMixin",
     "InGameHudMixin",

@@ -55,7 +55,6 @@ public class BlockMixin {
     	VoxelShape voxelShape = VoxelShapes.combine(from.getCollisionShape(world, pos), to.getCollisionShape(world, pos), BooleanBiFunction.ONLY_SECOND).offset((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
     	EventCollide.Block event = new EventCollide.Block(voxelShape.getBoundingBox(), pos);
     	event.call();
-    	System.out.println("e");
     	if (event.isCancelled()) cir.cancel();
     }
 }

@@ -33,7 +33,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.mojang.authlib.GameProfile;
 
 import baritone.api.BaritoneAPI;
-import dev.hypnotic.Hypnotic;
 import dev.hypnotic.event.Event;
 import dev.hypnotic.event.events.EventMotionUpdate;
 import dev.hypnotic.event.events.EventMove;
@@ -57,7 +56,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
@@ -193,13 +191,6 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 		}
 		RenderUtils.INSTANCE.onTick();
 		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
-		
-		if (mc.getNetworkHandler() != null) {
-			for (PlayerListEntry player : mc.getNetworkHandler().getPlayerList()) {
-				if (player.getDisplayName() != null)
-				Hypnotic.setHypnoticUser(player.getProfile().getName(), player.getLatency() == -1000);
-			}
-		}
 		
 		OptionsScreen options = OptionsScreen.INSTANCE;
 		

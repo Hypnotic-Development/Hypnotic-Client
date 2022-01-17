@@ -32,6 +32,7 @@ public class ScriptManager {
 	private File scriptsFolder = new File(Hypnotic.scriptDir);
 	
 	public ScriptManager() {
+		makeScriptsFolder();
 		scripts = new ArrayList<>();
 		refreshScripts();
 	}
@@ -68,9 +69,9 @@ public class ScriptManager {
 			if (script.getName() == null) script.setName(script.getScriptFile().getName().replaceAll("js", ""));
 			if (script.getAuthor() == null) script.setAuthor("No author provided");
 			if (script.getDescription() == null) script.setDescription("No description provided");
-			Hypnotic.LOGGER.info("Loaded: " + script.getName());
+			Hypnotic.LOGGER.info("[ScriptManager] Loaded: " + script.getName());
 		} catch(Exception e) {
-			Hypnotic.LOGGER.error("Error loading script: " + script.getScriptFile().getName());
+			Hypnotic.LOGGER.error("[ScriptManager] Error loading script: " + script.getScriptFile().getName());
 			e.printStackTrace();
 		}
 	}

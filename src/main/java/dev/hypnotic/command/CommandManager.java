@@ -26,8 +26,23 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.hypnotic.command.commands.*;
+import dev.hypnotic.command.commands.About;
+import dev.hypnotic.command.commands.Baritone;
+import dev.hypnotic.command.commands.Bind;
+import dev.hypnotic.command.commands.Commands;
+import dev.hypnotic.command.commands.Enchant;
+import dev.hypnotic.command.commands.Explosion;
+import dev.hypnotic.command.commands.FriendCmd;
+import dev.hypnotic.command.commands.Give;
 import dev.hypnotic.command.commands.Module;
+import dev.hypnotic.command.commands.Modules;
+import dev.hypnotic.command.commands.NBT;
+import dev.hypnotic.command.commands.Say;
+import dev.hypnotic.command.commands.Script;
+import dev.hypnotic.command.commands.Search;
+import dev.hypnotic.command.commands.Teleport;
+import dev.hypnotic.command.commands.Toggle;
+import dev.hypnotic.command.commands.VClip;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
@@ -57,6 +72,7 @@ public class CommandManager {
         add(new Module());
         add(new Bind());
         add(new Teleport());
+        add(new Script());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

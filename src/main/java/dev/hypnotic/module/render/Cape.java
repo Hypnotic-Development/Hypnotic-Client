@@ -16,7 +16,6 @@
 */
 package dev.hypnotic.module.render;
 
-import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
@@ -33,7 +32,7 @@ public class Cape extends Mod {
 	}
 	
 	public Identifier getTexture(PlayerEntity player) {
-		if (this.isEnabled() && (player == mc.player || Hypnotic.isHypnoticUser(player.getName().getString()))) {
+		if (this.isEnabled() && (player == mc.player)) {
 			return mode.is("Hypnotic") ? new Identifier("hypnotic", "textures/cape.png") : new Identifier("hypnotic", "textures/sigmacape.png");
 		} else {
 			return null;

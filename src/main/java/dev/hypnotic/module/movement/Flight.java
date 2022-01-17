@@ -145,9 +145,7 @@ public class Flight extends Mod {
     
     @EventTarget
     public void eventReceivePacket(EventReceivePacket event) {
-    	if (event.getPacket() instanceof PlayerMoveC2SPacket && mode.is("Verus") && !damage.isEnabled()) {
-    		((PlayerMoveC2SPacketAccessor) event.getPacket()).setOnGround(true);
-    	}
+    	
     }
     
     @EventTarget 
@@ -156,6 +154,9 @@ public class Flight extends Mod {
     		if (blinkTimer.hasTimeElapsed(50, true) && (damage.isEnabled() ? hasDamaged : true)) {
     			ModuleManager.INSTANCE.getModule(FlightBlink.class).toggle();
     		}
+    	}
+    	if (event.getPacket() instanceof PlayerMoveC2SPacket && mode.is("Verus") && !damage.isEnabled()) {
+    		((PlayerMoveC2SPacketAccessor) event.getPacket()).setOnGround(true);
     	}
     }
 
