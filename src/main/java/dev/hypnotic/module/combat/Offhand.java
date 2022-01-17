@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.module.combat;
 
 import org.lwjgl.glfw.GLFW;
@@ -42,21 +58,17 @@ public class Offhand extends Mod {
 		this.setDisplayName("Offhand " + ColorUtils.gray + mode.getSelected());
 		AutoTotem autoTotem = ModuleManager.INSTANCE.getModule(AutoTotem.class);
 
-        // Sword Gap
         if ((mc.player.getMainHandStack().getItem() instanceof SwordItem
             || mc.player.getMainHandStack().getItem() instanceof AxeItem) && swordGap.isEnabled()) currentItem = Item.EGap;
 
-        // Ca and mining
         else if ((ModuleManager.INSTANCE.getModule(CrystalAura.class).isEnabled() && crystalCa.isEnabled())
             || mc.interactionManager.isBreakingBlock() && crystalMine.isEnabled()) currentItem = Item.Crystal;
 
         else currentItem = getItem();
 
-        // Checking offhand item
         if (mc.player.getOffHandStack().getItem() != currentItem.item) {
             FindItemResult item = InventoryUtils.find(itemStack -> itemStack.getItem() == currentItem.item, hotbar.isEnabled() ? 0 : 9, 35);
 
-            // No offhand item
             if (!item.found()) {
                 if (!sentMessage) {
                     Wrapper.tellPlayer("Chosen item not found.");
@@ -64,14 +76,12 @@ public class Offhand extends Mod {
                 }
             }
 
-            // Swap to offhand
             else if ((isClicking || !rightClick.isEnabled()) && !autoTotem.isLocked() && !item.isOffhand()) {
                 InventoryUtils.move().from(item.getSlot()).toOffhand();
                 sentMessage = false;
             }
         }
 
-        // If not clicking, set to totem if auto totem is on
         else if (!isClicking && rightClick.isEnabled()) {
             if (autoTotem.isEnabled()) {
                 FindItemResult totem = InventoryUtils.find(itemStack -> itemStack.getItem() == Items.TOTEM_OF_UNDYING, hotbar.isEnabled() ? 0 : 9, 35);

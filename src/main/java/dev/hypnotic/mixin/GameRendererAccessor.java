@@ -10,23 +10,21 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.hypnotic.event;
+package dev.hypnotic.mixin;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Invoker;
+
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.util.Identifier;
 
 /**
- * Created by Hexeption on 18/12/2016.
- */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface EventTarget {
+* @author BadGamesInc
+*/
+@Mixin(GameRenderer.class)
+public interface GameRendererAccessor {
 
-    byte value() default 2;
+	@Invoker("loadShader")
+	void loadShader(Identifier id);
 }

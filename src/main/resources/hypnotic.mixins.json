@@ -54,21 +54,20 @@
     "EntityMixin",
     "FrustramAccessor",
     "WorldRendererAccessor",
-    "ServerWorldMixin",
     "EntityRenderDispatcherMixin",
     "WorldRendererMixin",
     "BlockEntityRenderDispatcherMixin",
     "SoundSystemMixin",
     "InGameOverlayRendererMixin",
     "HandshakeC2SPacketAccessor",
-    "PlayerListEntryMixin",
     "AbstractClientPlayerEntityMixin",
     "PlayerInputC2SPacketAccessor",
     "CameraMixin",
     "ModelPredicateProviderRegistryMixin",
     "RenderTickCounterAccessor",
     "FramebufferMixin",
-    "MultiplayerScreenMixin"
+    "MultiplayerScreenMixin",
+    "GameRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

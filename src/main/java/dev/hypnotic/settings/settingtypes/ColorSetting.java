@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.settings.settingtypes;
 
 import java.awt.Color;
@@ -51,6 +67,20 @@ public class ColorSetting extends Setting {
 			this.bri = vals[2];
 			this.alpha = 1;
 		}
+		
+		this.defaultHue = hue;
+		this.defaultSat = sat;
+		this.defaultBri = bri;
+	}
+	
+	public ColorSetting(String name, Color color) {
+		this.name = name;
+		float[] vals = rgbToHsv(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+		this.setHSV(vals[0], vals[1], vals[2]);
+		this.hue = vals[0];
+		this.sat = vals[1];
+		this.bri = vals[2];
+		this.alpha = vals[3];
 		
 		this.defaultHue = hue;
 		this.defaultSat = sat;

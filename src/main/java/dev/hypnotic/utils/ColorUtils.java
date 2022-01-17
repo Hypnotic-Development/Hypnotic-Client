@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.utils;
 
 import java.awt.Color;
@@ -89,5 +105,19 @@ public class ColorUtils {
 	public static int transparent(int opacity) {
 		Color color = Color.BLACK;
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity).getRGB();
+	}
+	
+	// Here for scripts
+	
+	public Color hex(String hex) {
+		return Color.decode(hex);
+	}
+	
+	public Color rgba(int red, int green, int blue, int alpha) {
+		return new Color(red, green, blue, alpha);
+	}
+	
+	public Color rgb(int red, int green, int blue) {
+		return rgba(red, green, blue, 255);
 	}
 }

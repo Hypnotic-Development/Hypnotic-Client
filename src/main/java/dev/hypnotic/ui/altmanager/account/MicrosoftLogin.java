@@ -1,7 +1,19 @@
 /*
- * This file is (mostly) from the Meteor Client distribution (https://github.com/MeteorDevelopment/meteor-client/).
- */
-
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.ui.altmanager.account;
 
 import java.io.IOException;
@@ -22,6 +34,7 @@ import com.sun.net.httpserver.HttpServer;
 import dev.hypnotic.ui.altmanager.Http;
 import net.minecraft.util.Util;
 
+//Credits (mostly) to meteor client (https://github.com/MeteorDevelopment/meteor-client)
 public class MicrosoftLogin {
     public static class LoginData {
         public String mcToken;
@@ -131,8 +144,7 @@ public class MicrosoftLogin {
         public void handle(HttpExchange req) throws IOException {
             if (req.getRequestMethod().equals("GET")) {
                 // Login
-                @SuppressWarnings("deprecation")
-				List<NameValuePair> query = URLEncodedUtils.parse(req.getRequestURI(), StandardCharsets.UTF_8.name());
+				List<NameValuePair> query = URLEncodedUtils.parse(req.getRequestURI(), StandardCharsets.UTF_8);
 
                 boolean ok = false;
 

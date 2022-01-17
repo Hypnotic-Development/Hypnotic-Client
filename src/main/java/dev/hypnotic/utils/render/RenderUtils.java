@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.utils.render;
 
 import java.awt.Color;
@@ -55,8 +71,6 @@ import net.minecraft.util.shape.VoxelShapes;
 
 public class RenderUtils {
     
-	// Made by lavaflowglow 11/19/2020 3:39 AM
-	
 		public static RenderUtils INSTANCE = new RenderUtils();
 		static MinecraftClient mc = MinecraftClient.getInstance();
 		public static boolean SetCustomYaw = false;
@@ -1503,7 +1517,8 @@ public class RenderUtils {
 	}
 	
 	// Here for scripts
-	public void drawString(String string, float x, float y, Color color, boolean shadow) {
-		FontManager.roboto.draw(new MatrixStack(), string, x, y, color.getRGB());
+	public void drawString(MatrixStack matrices, String string, float x, float y, Color color, boolean shadow) {
+		if (shadow) FontManager.roboto.drawWithShadow(matrices, string, x, y, color.getRGB());
+		else FontManager.roboto.draw(matrices, string, x, y, color.getRGB());
 	}
 }

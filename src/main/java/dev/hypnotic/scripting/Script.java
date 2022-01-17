@@ -1,5 +1,22 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.scripting;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,18 +30,35 @@ import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
 import dev.hypnotic.Hypnotic;
+import dev.hypnotic.event.EventManager;
+import dev.hypnotic.event.EventTarget;
+import dev.hypnotic.event.events.EventKeyPress;
+import dev.hypnotic.event.events.EventMotionUpdate;
+import dev.hypnotic.event.events.EventRender3D;
+import dev.hypnotic.event.events.EventRenderGUI;
+import dev.hypnotic.event.events.EventTick;
+import dev.hypnotic.module.Category;
+import dev.hypnotic.module.Mod;
+import dev.hypnotic.settings.settingtypes.BooleanSetting;
+import dev.hypnotic.settings.settingtypes.ColorSetting;
+import dev.hypnotic.settings.settingtypes.ModeSetting;
+import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.render.RenderUtils;
-import net.minecraft.client.MinecraftClient;
 
-public class Script {
+/**
+* @author BadGamesInc
+*/
+public class Script extends Mod {
 
 	private Context context;
-	public String name, description, author;
+	public String author;
 	private File scriptFile;
 	private Map<String, Value> events = new HashMap<>();
-	private MinecraftClient mc = MinecraftClient.getInstance();
 	
 	public Script(File scriptFile) {
+		super("", "", Category.SCRIPT);
+		
 		this.scriptFile = scriptFile;
 
 		context = Context.newBuilder().allowExperimentalOptions(true).option("js.nashorn-compat", "true").option("engine.WarnInterpreterOnly", "false").allowHostAccess(HostAccess.ALL).build();
@@ -33,41 +67,28 @@ public class Script {
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
 		context.getBindings("js").putMember("player", mc.player);
 		context.getBindings("js").putMember("renderer", RenderUtils.INSTANCE);
+		context.getBindings("js").putMember("colors", new ColorUtils());
 		context.getBindings("js").putMember("createScript", this);
 	}
 	
-
-	public void onLoad(Value function) {
-		onEvent("load", function);
+	public BooleanSetting booleanSetting(String name, boolean defaultValue) {
+		return new BooleanSetting(name, defaultValue);
 	}
 	
-	public void onEnable(Value function) {
-		onEvent("enable", function);
+	public NumberSetting numberSetting(String name, double defaultValue, double minValue, double maxValue, double increment) {
+		return new NumberSetting(name, defaultValue, minValue, maxValue, increment);
 	}
 	
-	public void onDisable(Value function) {
-		onEvent("disable", function);
+	public ModeSetting modeSetting(String name, String defaultValue, String... modes) {
+		return new ModeSetting(name, defaultValue, modes);
 	}
 	
-	public void load() throws ScriptException, IOException {
-		context.eval(Source.newBuilder("js", scriptFile).build());
-		executeEvent("load");
+	public ColorSetting colorSetting(String name, Color defaultValue) {
+		return new ColorSetting(name, defaultValue);
 	}
 	
-	private void onEvent(String event, Value function) {
-		events.put(event, function);
-	}
-	
-	private void executeEvent(String event) {
-		if (events.containsKey(event)) events.get(event).executeVoid();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getDescription() {
-		return description;
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	public String getAuthor() {
@@ -76,5 +97,95 @@ public class Script {
 	
 	public File getScriptFile() {
 		return scriptFile;
+	}
+	
+	@Override
+	public void setName(String name) {
+		this.displayName = name;
+		super.setName(name);
+	}
+	
+	// Event stuff
+	
+	@EventTarget
+	private void onTick(EventTick event) {
+		executeEvent("tick");
+	}
+	
+	@EventTarget
+	private void onRender2d(EventRenderGUI event) {
+		executeEvent("render2d", event);
+	}
+	
+	@EventTarget
+	private void onRender3d(EventRender3D event) {
+		executeEvent("render3d");
+	}
+	
+	@EventTarget
+	private void onMotionUpdate(EventMotionUpdate event) {
+		executeEvent("motionUpdate", event);
+	}
+	
+	@EventTarget
+	private void onKeyPress(EventKeyPress event) {
+		executeEvent("keyPress", event);
+	}
+	
+	public void onKeyPress(Value function) {
+		onEvent("keyPress", function);
+	}
+	
+	public void onMotionUpdate(Value function) {
+		onEvent("motionUpdate", function);
+	}
+	
+	public void onRender2d(Value function) {
+		onEvent("render2d", function);
+	}
+	
+	public void onRender3d(Value function) {
+		onEvent("render3d", function);
+	}
+	
+	public void onTick(Value function) {
+		onEvent("tick", function);
+	}
+	
+	public void onLoad(Value function) {
+		onEvent("load", function);
+	}
+	
+	public void onEnable(Value function) {
+		onEvent("enable", function);
+		super.onEnable();
+	}
+	
+	public void onDisable(Value function) {
+		onEvent("disable", function);
+		super.onDisable();
+	}
+	
+	public void load() throws ScriptException, IOException {
+		context.eval(Source.newBuilder("js", scriptFile).build());
+		executeEvent("load");
+		EventManager.INSTANCE.register(this);
+	}
+	
+	private void onEvent(String event, Value function) {
+		events.put(event, function);
+	}
+	
+	private void executeEvent(String event) {
+		if (events.containsKey(event) && canExecute(event)) events.get(event).executeVoid();
+	}
+	
+	private void executeEvent(String event, Object... args) {
+		if (events.containsKey(event) && canExecute(event)) events.get(event).execute(args);
+	}
+	
+	private boolean canExecute(String event) {
+		if (this.isEnabled()) return true; 
+		else return (event.equalsIgnoreCase("load") || event.equalsIgnoreCase("enable") || event.equalsIgnoreCase("disable"));
 	}
 }

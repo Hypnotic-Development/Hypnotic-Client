@@ -1,3 +1,19 @@
+/*
+* Copyright (C) 2022 Hypnotic Development
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 package dev.hypnotic.module.movement;
 
 import dev.hypnotic.event.EventTarget;
@@ -12,7 +28,6 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.combat.Killaura;
 import dev.hypnotic.module.combat.TargetStrafe;
 import dev.hypnotic.module.exploit.AntiHunger;
-import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
@@ -45,7 +60,6 @@ public class Flight extends Mod {
     
     @Override
     public void onEnable() {
-    	ScriptManager.INSTANCE.refreshScripts();
     	super.onEnable();
     }
     
