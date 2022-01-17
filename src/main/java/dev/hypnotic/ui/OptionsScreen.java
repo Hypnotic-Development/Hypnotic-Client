@@ -87,30 +87,7 @@ public class OptionsScreen extends HypnoticScreen {
 	}
 	
 	@Override
-	public boolean isPauseScreen() {
+	public boolean shouldPause() {
 		return false;
 	}
-	
-//	public static class Button {
-//		public String name;
-//		public Setting setting;
-//		public float x, y, width, height;
-//		
-//		public Button(String name, Setting setting, float x, float y, float width, float height) {
-//			this.name = name;
-//			this.setting = setting;
-//			this.x = x;
-//			this.y = y;
-//			this.width = width;
-//			this.height = height;
-//		}
-//		
-//		public void render(MatrixStack matrices, int mouseX, int mousey, float partialTicks) {
-//			
-//		}
-//		
-//		public void mouseClicked(double mouseX, double mouseY, int button) {
-//			
-//		}
-//	}
 }

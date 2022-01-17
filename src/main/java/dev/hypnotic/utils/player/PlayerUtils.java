@@ -258,7 +258,7 @@ public class PlayerUtils {
                         return (float) (e.getY() - a) < 0.0F ? 0.0F : (float) (e.getY() - a);
                     }
                 }
-                return (float) (e.getY() - a + block.getBlock().getMaxModelOffset() - 1.0D);
+                return (float) (e.getY() - a + block.getBlock().getMaxHorizontalModelOffset() - 1.0D);
             }
         }
         return 0.0F;

@@ -96,7 +96,7 @@ public class HudEditorScreen extends HypnoticScreen {
 	}
 	
 	@Override
-	public boolean isPauseScreen() {
+	public boolean shouldPause() {
 		return false;
 	}
 }
