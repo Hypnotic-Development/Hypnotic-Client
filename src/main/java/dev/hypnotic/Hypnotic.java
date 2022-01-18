@@ -64,6 +64,10 @@ public class Hypnotic implements ModInitializer {
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
 	public SaveLoad saveload;
+	public String[] devUUIDs = {
+			"09e5dd42-19b9-488a-bb4b-cc19bdf068b7",
+			"c0052794-2f10-4f2c-b535-150db217f45d"
+	};
 	
 	private final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/fade_in_blur.json"),
             shader -> shader.setUniformValue("Radius", 8f));

@@ -14,7 +14,7 @@
 <h2 align="center">Gaming awards frame winner 2004/2006/2007</h2>           
   
 ## About
-"Utility Mod" for Minecraft 1.18.1
+"Utility Mod" for Minecraft 1.18.1  
 Use at your own risk, we are not responsible for any punishments on any server  
 https://hypnotic.dev is our website that isn't so bad anymore  
   

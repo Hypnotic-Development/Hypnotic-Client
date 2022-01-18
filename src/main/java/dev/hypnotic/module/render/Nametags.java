@@ -18,10 +18,12 @@ package dev.hypnotic.module.render;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import com.google.common.collect.Maps;
 
+import dev.hypnotic.Hypnotic;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventRender3D;
 import dev.hypnotic.event.events.EventRenderGUI;
@@ -225,6 +227,7 @@ public class Nametags extends Mod {
         String gameModeText = gamemode.isEnabled() ? (playerListEntry != null ? ColorUtils.aqua + playerListEntry.getGameMode().getName().substring(0, 1).toUpperCase() + " " + ColorUtils.reset : "") : "";
         String pingText = ping.isEnabled() ? (playerListEntry != null ? playerListEntry.getLatency() : "0") + "ms " : "";
         String distanceText = distance.isEnabled() ? Math.round(mc.player.distanceTo(entity)) + "m " : " ";   	
+        String devText = (Arrays.asList(Hypnotic.INSTANCE.devUUIDs).contains(entity.getUuidAsString()) ? ColorUtils.purple + " DEV" + ColorUtils.reset : "");
         if (name.trim().isEmpty())
             name = entity.getName().getString();
         if (entity instanceof ItemEntity) {
@@ -234,7 +237,7 @@ public class Nametags extends Mod {
         }
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "");
+        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + devText + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "");
         return displayName;
     }
 
