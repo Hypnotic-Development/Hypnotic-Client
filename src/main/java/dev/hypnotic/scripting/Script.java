@@ -49,7 +49,6 @@ import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.Wrapper;
-import dev.hypnotic.utils.render.RenderUtils;
 
 /**
 * @author BadGamesInc
@@ -70,7 +69,8 @@ public class Script extends Mod {
 		
 		context.getBindings("js").putMember("mc", mc);
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
-		context.getBindings("js").putMember("renderer", RenderUtils.INSTANCE);
+		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);
+		context.getBindings("js").putMember("renderer", new ScriptRenderer());
 		context.getBindings("js").putMember("colors", new ColorUtils());
 		context.getBindings("js").putMember("newScript", this);
 	}
@@ -136,7 +136,7 @@ public class Script extends Mod {
 	
 	@EventTarget
 	private void onRender3d(EventRender3D event) {
-		executeEvent("render3d");
+		executeEvent("render3d", event);
 	}
 	
 	@EventTarget

@@ -22,11 +22,11 @@ import net.minecraft.client.util.math.MatrixStack;
 public class EventRenderGUI extends Event {
 
 	private MatrixStack matrices;
-	private float partialTicks;
+	private float tickDelta;
 	
-	public EventRenderGUI(MatrixStack matrices, float partialTicks) {
+	public EventRenderGUI(MatrixStack matrices, float tickDelta) {
 		this.matrices = matrices;
-		this.partialTicks = partialTicks;
+		this.tickDelta = tickDelta;
 	}
 	
 	protected EventRenderGUI() {}
@@ -35,8 +35,8 @@ public class EventRenderGUI extends Event {
 		return matrices;
 	}
 	
-	public float getPartialTicks() {
-		return partialTicks;
+	public float getTickDelta() {
+		return tickDelta;
 	}
 	
 	public static class Tick extends EventRenderGUI {

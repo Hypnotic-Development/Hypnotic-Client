@@ -18,6 +18,9 @@ package dev.hypnotic.scripting;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.ModuleManager;
@@ -44,13 +47,21 @@ public class ScriptManager {
 	}
 	
 	public void refreshScripts() {
+		Hypnotic.LOGGER.info("Refreshing scripts");
+		List<String> enabledScripts = Lists.newArrayList();
+		scripts.forEach(script -> {
+			enabledScripts.add(script.getName());
+			script.setEnabled(false);
+		});
 		ModuleManager.INSTANCE.modules.removeAll(scripts);
 		scripts.clear();
-		Hypnotic.LOGGER.info("Refreshing scripts");
+		System.out.println(scripts.size());
 		for (File script : scriptsFolder.listFiles()) {
 			registerScript(script);
 		}
 		ModuleManager.INSTANCE.modules.addAll(scripts);
+		enabledScripts.forEach(name -> getScriptByName(name).setEnabled(true));
+		enabledScripts.clear();
 	}
 	
 	public boolean registerScript(File scriptFile) {

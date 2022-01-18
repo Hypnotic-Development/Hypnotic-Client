@@ -31,7 +31,6 @@ public class Frame {
 		this.height = 100;
 		this.centerX = scaledWidth / 2;
 		this.centerY = scaledHeight / 2;
-		System.out.println(scaledWidth + "height" + scaledHeight);
 	}
 	
 	public void draw(MatrixStack matrices, int mouseX, int mouseY) {

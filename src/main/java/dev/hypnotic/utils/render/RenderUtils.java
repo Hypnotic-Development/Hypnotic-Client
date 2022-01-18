@@ -33,7 +33,6 @@ import dev.hypnotic.mixin.FrustramAccessor;
 import dev.hypnotic.mixin.WorldRendererAccessor;
 import dev.hypnotic.module.render.IItemRenderer;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.mixin.IMatrix4f;
 import dev.hypnotic.utils.render.shader.ShaderUtils;
 import net.minecraft.client.MinecraftClient;
@@ -73,8 +72,6 @@ public class RenderUtils {
     
 		public static RenderUtils INSTANCE = new RenderUtils();
 		static MinecraftClient mc = MinecraftClient.getInstance();
-		public static boolean SetCustomYaw = false;
-		public static float CustomYaw = 0;
 		public int scaledWidth = 0;
 		public int scaledHeight = 0;
 		
@@ -83,139 +80,9 @@ public class RenderUtils {
 			scaledHeight = mc.getWindow().getScaledHeight();
 		}
 		
-		public static void setCustomYaw(float customYaw) {
-			CustomYaw = customYaw;
-			SetCustomYaw = true;
-			mc.player.headYaw = customYaw;
-		}
-		
-		public static void resetPlayerYaw() {
-			SetCustomYaw = false;
-		}
-		
-		public static float getCustomYaw() {
-			
-			return CustomYaw;
-			
-		}
-		public static boolean SetCustomPitch = false;
-		public static float CustomPitch = 0;
-		
-		public static void setCustomPitch(float customPitch) {
-			CustomPitch = customPitch;
-			SetCustomPitch = true;
-		}
-		
-		public static void resetPlayerPitch() {
-			SetCustomPitch = false;
-		}
-		
-		public static float getCustomPitch() {
-			
-			return CustomPitch;
-			
-		}
-		
-		// Made by lavaflowglow 11/19/2020 3:39 AM
-		
 		public static WorldRenderer worldRenderer = mc.worldRenderer;
 		public static Tessellator tessellator = Tessellator.getInstance();
 
-		public static void fix(MatrixStack matrices) {
-	        DrawableHelper.fill(matrices, 0, 0, 0, 0, -1);
-	    }
-
-		public static void drawTracerLine(double x, double y, double z, float red, float green, float blue, float alpha, float lineWdith) {
-			GL11.glPushMatrix();
-	        GL11.glEnable(GL11.GL_BLEND);
-	        GL11.glEnable(GL11.GL_LINE_SMOOTH);
-	        GL11.glDisable(GL11.GL_DEPTH_TEST);
-	        // GL11.glDisable(GL11.GL_LIGHTING);
-	        GL11.glDisable(GL11.GL_TEXTURE_2D);
-	        GL11.glBlendFunc(770, 771);
-	        GL11.glEnable(GL11.GL_BLEND);
-	        GL11.glLineWidth(lineWdith);
-	        GL11.glColor4f(red, green, blue, alpha);
-	        GL11.glBegin(2);
-	        GL11.glVertex3d(0.0D, 0.0D + mc.player.getStandingEyeHeight(), 0.0D);
-	        GL11.glVertex3d(x, y, z);
-	        GL11.glEnd();
-	        GL11.glDisable(GL11.GL_BLEND);
-	        GL11.glEnable(GL11.GL_TEXTURE_2D);
-	        GL11.glEnable(GL11.GL_DEPTH_TEST);
-	        GL11.glDisable(GL11.GL_LINE_SMOOTH);
-	        GL11.glDisable(GL11.GL_BLEND);
-	        // GL11.glEnable(GL11.GL_LIGHTING);
-	        GL11.glPopMatrix();
-		}
-	    
-	    public static int rainbow(final int delay) {
-	        double rainbowState = Math.ceil((System.currentTimeMillis() + delay) / 20.0);
-	        rainbowState %= 360.0;
-	        return Color.getHSBColor((float)(rainbowState / 360.0), 0.8f, 0.7f).getRGB();
-	    }
-
-	    public static void setColor(Color c) {
-	        GL11.glColor4d(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
-	    }
-	    
-	    public static void enableGL2D() {
-	        GL11.glDisable((int)2929);
-	        GL11.glEnable((int)3042);
-	        GL11.glDisable((int)3553);
-	        GL11.glBlendFunc((int)770, (int)771);
-	        GL11.glDepthMask((boolean)true);
-	        GL11.glEnable((int)2848);
-	        GL11.glHint((int)3154, (int)4354);
-	        GL11.glHint((int)3155, (int)4354);
-	    }
-
-	    public static void disableGL2D() {
-	        GL11.glEnable((int)3553);
-	        GL11.glDisable((int)3042);
-	        GL11.glEnable((int)2929);
-	        GL11.glDisable((int)2848);
-	        GL11.glHint((int)3154, (int)4352);
-	        GL11.glHint((int)3155, (int)4352);
-	    }
-		
-		
-		public static void disableGL3D() {
-	        GL11.glEnable(3553);
-	        GL11.glEnable(2929);
-	        GL11.glDisable(3042);
-	        GL11.glEnable(3008);
-	        GL11.glDepthMask(true);
-	        GL11.glCullFace(1029);
-	        GL11.glDisable(2848);
-	        GL11.glHint(3154, 4352);
-	        GL11.glHint(3155, 4352);
-	    }
-		
-		public static void enableGL3D(final float lineWidth) {
-	        GL11.glDisable(3008);
-	        GL11.glEnable(3042);
-	        GL11.glBlendFunc(770, 771);
-	        GL11.glDisable(3553);
-	        GL11.glDisable(2929);
-	        GL11.glDepthMask(false);
-	        GL11.glEnable(2884);
-	      //  Shaders.disableLightmap();
-	        //Shaders.disableFog();
-	        GL11.glEnable(2848);
-	        GL11.glHint(3154, 4354);
-	        GL11.glHint(3155, 4354);
-	        GL11.glLineWidth(lineWidth);
-	    }
-		
-		public static void setColor(final int colorHex) {
-	        final float alpha = (colorHex >> 24 & 0xFF) / 255.0f;
-	        final float red = (colorHex >> 16 & 0xFF) / 255.0f;
-	        final float green = (colorHex >> 8 & 0xFF) / 255.0f;
-	        final float blue = (colorHex & 0xFF) / 255.0f;
-	        GL11.glColor4f(red, green, blue, (alpha == 0.0f) ? 1.0f : alpha);
-	    }
-		 
 		//took me too long to do this
 		 public static void drawFilledCircle(MatrixStack matrices, float xx, float yy, float radius, int sides, Color color) {
 			 	int sections = sides;
@@ -276,7 +143,6 @@ public class RenderUtils {
 		        float x = radius *= 2.0f;
 		        float y = 0.0f;
 		        float lastX = x, lastY = 0;
-		        RenderUtils.enableGL2D();
 		        for (int ii = -1; ii < sections; ++ii) {
 		            Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
@@ -409,30 +275,6 @@ public class RenderUtils {
 			 RenderSystem.disableBlend();
 			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		 }
-		 
-		 /*public static void scissor(double x, double y, double width, double height) {
-		        ScaledResolution sr = new ScaledResolution(mc);
-		        final double scale = sr.getScaleFactor();
-
-		        y = sr.getScaledHeight() - y;
-
-		        x *= scale;
-		        y *= scale;
-		        width *= scale;
-		        height *= scale;
-
-		        GL11.glScissor((int) x, (int) (y - height), (int) width, (int) height);
-		    }*/
-		 
-
-		 /*
-		    GL11.glPushMatrix();
-			GL11.glEnable(3089);
-			RenderUtils.scissor(mouseX, mouseY, mouseY, partialTicks);
-			GL11.glDisable(3089);
-			GL11.glPopMatrix();
-		  
-		  */
 
 		 public static void drawCenteredStringWithShadow(MatrixStack matrices, TextRenderer textRenderer, String text, int x, int y, int color) {
 			 Screen.drawStringWithShadow(matrices, textRenderer, text, x - textRenderer.getWidth(text) / 2, y, color);
@@ -662,6 +504,41 @@ public class RenderUtils {
 	        float g = (float)(color >> 16 & 255) / 255.0F;
 	        float h = (float)(color >> 8 & 255) / 255.0F;
 	        float k = (float)(color & 255) / 255.0F;
+	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+	        RenderSystem.enableBlend();
+	        RenderSystem.disableTexture();
+	        RenderSystem.defaultBlendFunc();
+	        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+	        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y2, 0.0F).color(g, h, k, f).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g, h, k, f).next();
+	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g, h, k, f).next();
+	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g, h, k, f).next();
+	        bufferBuilder.end();
+	        BufferRenderer.draw(bufferBuilder);
+	        RenderSystem.enableTexture();
+	        RenderSystem.disableBlend();
+	    }
+	    
+	    public static void fill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, Color color) {
+	        Matrix4f matrix = matrixStack.peek().getPositionMatrix();
+	        double j;
+	        if (x1 < x2) {
+	            j = x1;
+	            x1 = x2;
+	            x2 = j;
+	        }
+
+	        if (y1 < y2) {
+	            j = y1;
+	            y1 = y2;
+	            y2 = j;
+	        }
+
+	        float f = (float)color.getRed() / 255.0F;
+	        float g = (float)color.getGreen() / 255.0F;
+	        float h = (float)color.getBlue() / 255.0F;
+	        float k = (float)color.getAlpha() / 255.0F;
 	        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 	        RenderSystem.enableBlend();
 	        RenderSystem.disableTexture();
@@ -1106,10 +983,6 @@ public class RenderUtils {
 
 				float x = (float) (rad * sin);
 				float z = (float) (rad * cos);
-//				drawLine(
-//						pos.x + lastX, pos.y, pos.z + lastZ,
-//						pos.x + x, pos.y, pos.z + z,
-//						LineColor.single(color), 2);
 				
 	            Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder buffer = tessellator.getBuffer();
@@ -1130,40 +1003,6 @@ public class RenderUtils {
 				lastX = x;
 				lastZ = z;
 			}
-//			Color c = new Color(color);
-//			for (int i = 0; i < 10; i++) {
-//				drawCircle(matrices, pos.add(0, i * 0.01, 0), partialTicks, rad, height, new Color(c.getRed(), c.getGreen(), c.getBlue(), 255 - i * 3).getRGB());
-//			}
-			
-//			int sections = 50;
-//	        double dAngle = 2 * Math.PI / sections;
-//	        float x, y, z, lastX = 0, lastY = 0, lastZ = 0;
-//	        
-//	        for (int i = -1; i < sections; i++) {
-//				x = (float) (rad * Math.sin((i * dAngle)));
-//	            y = (float) (rad * Math.cos((i * dAngle)));
-//	            z = (float) (rad * Math.cos((i * dAngle)));
-//	            
-//	            Tessellator tessellator = Tessellator.getInstance();
-//				BufferBuilder buffer = tessellator.getBuffer();
-//
-//				RenderSystem.enableBlend();
-//				RenderSystem.disableDepthTest();
-//				RenderSystem.disableCull();
-//				RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
-//				RenderSystem.lineWidth(1);
-//
-//				buffer.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
-//				Vertexer.vertexTri(matrices, buffer, (float)pos.x, (float)pos.y, (float)pos.z, (float)pos.x + x, (float)pos.y + y, (float)pos.z + z, (float)pos.x + lastX, (float)pos.y + lastY, (float)pos.z + lastZ, Color.WHITE);
-//				tessellator.draw();
-//
-//				RenderSystem.enableCull();
-//				RenderSystem.enableDepthTest();
-//
-//				lastX = x;
-//				lastY = y;
-//				lastZ = z;
-//			}
 	    }
 		
 		public static void drawBoxFill(Box box, QuadColor color, Direction... excludeDirs) {
@@ -1514,11 +1353,5 @@ public class RenderUtils {
 	
 	public static void disableStencil() {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
-	}
-	
-	// Here for scripts
-	public void drawString(MatrixStack matrices, String string, float x, float y, Color color, boolean shadow) {
-		if (shadow) FontManager.roboto.drawWithShadow(matrices, string, x, y, color.getRGB());
-		else FontManager.roboto.draw(matrices, string, x, y, color.getRGB());
 	}
 }

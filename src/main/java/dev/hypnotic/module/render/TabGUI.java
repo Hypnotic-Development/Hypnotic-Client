@@ -103,11 +103,11 @@ public class TabGUI extends Mod {
 		}
 		if (expanded) {
 			if (expandTicks < 165) {
-				expandTicks += Math.max(event.getPartialTicks() * 10, 10);
+				expandTicks += Math.max(event.getTickDelta() * 10, 10);
 			}
 		} else {
 			if (expandTicks > 0) {
-				expandTicks -= Math.max(event.getPartialTicks() * 10, 10);
+				expandTicks -= Math.max(event.getTickDelta() * 10, 10);
 			}
 		}
 		int x2 = x + 4;
