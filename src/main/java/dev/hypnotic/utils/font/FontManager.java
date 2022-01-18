@@ -22,7 +22,7 @@ public class FontManager {
 
 	public static FontManager INSTANCE = new FontManager();
 	public static String font = "Roboto-Regular.ttf";
-	private static final String assets = "assets/hypnotic/fonts/";
+	public static final String assets = "assets/hypnotic/fonts/";
 	public static int size = 20;
 	public static boolean mcFont = false;
 	public static NahrFont robotoSmaller = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 14, 1, mcFont);

@@ -60,13 +60,13 @@ public class Script extends Mod {
 	private File scriptFile;
 	private Map<String, Value> events = new HashMap<>();
 	
+	
 	public Script(File scriptFile) {
 		super("", "", Category.SCRIPT);
 		
 		this.scriptFile = scriptFile;
 
 		context = Context.newBuilder().allowExperimentalOptions(true).option("js.nashorn-compat", "true").option("engine.WarnInterpreterOnly", "false").allowHostAccess(HostAccess.ALL).build();
-		
 		context.getBindings("js").putMember("mc", mc);
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
 		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);

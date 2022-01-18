@@ -52,6 +52,10 @@ public class ScriptRenderer {
 		RenderUtils.fill(matrices, x, y, x2, y2, color.getRGB());
 	}
 	
+	public void drawRoundedRect(MatrixStack matrices, float x, float y, float x2, float y2, float smooth, Color color) {
+		RenderUtils.drawRoundedRect(matrices, x, y, x2, y2, smooth, color);
+	}
+	
 	public void drawFilledCircle(MatrixStack matrices, double x, double y, float radius, Color color) {
 		RenderUtils.drawFilledCircle(matrices, x, y, radius, color);
 	}

@@ -86,7 +86,7 @@ public class Hypnotic implements ModInitializer {
 	/*
 	 * Registers all of the good stuff
 	 */
-	public void register() {
+	private void register() {
 		moduleManager = ModuleManager.INSTANCE;
 		scriptManager = ScriptManager.INSTANCE;
 		eventManager = EventManager.INSTANCE;
@@ -116,7 +116,7 @@ public class Hypnotic implements ModInitializer {
 	/*
 	 * Loads all* of the stuff that should be saved
 	 */
-	public void loadFiles() {
+	private void loadFiles() {
 		if (cfgManager.config.exists()) {
             cfgManager.loadConfig();
         }
