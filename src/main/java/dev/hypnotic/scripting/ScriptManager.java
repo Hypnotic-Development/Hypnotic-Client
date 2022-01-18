@@ -17,7 +17,12 @@
 package dev.hypnotic.scripting;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import com.google.common.collect.Lists;
 
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.ModuleManager;
@@ -44,17 +49,48 @@ public class ScriptManager {
 	}
 	
 	public void refreshScripts() {
+		Hypnotic.LOGGER.info("Refreshing scripts");
+		List<String> enabledScripts = Lists.newArrayList();
+		scripts.forEach(script -> {
+			enabledScripts.add(script.getName());
+			script.setEnabled(false);
+		});
 		ModuleManager.INSTANCE.modules.removeAll(scripts);
 		scripts.clear();
-		Hypnotic.LOGGER.info("Refreshing scripts");
+		System.out.println(scripts.size());
 		for (File script : scriptsFolder.listFiles()) {
 			registerScript(script);
 		}
 		ModuleManager.INSTANCE.modules.addAll(scripts);
+		enabledScripts.forEach(name -> getScriptByName(name).setEnabled(true));
+		enabledScripts.clear();
+	}
+	
+	// Just in case some retard can't read someone's poorly made session grabber
+	private boolean containsMaliciousLine(File scriptFile) {
+		try {
+			Scanner scanner = new Scanner(scriptFile);
+			int lineNum = 1;
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				if (line.contains("getSessionId") || line.contains("getAccessToken")) {
+					scanner.close();
+					Hypnotic.LOGGER.warn("[ScriptManager] Found malicious line in " + scriptFile.getName() + " at line " + lineNum);
+					Hypnotic.LOGGER.warn("[ScriptManager] Malicious code: " + line);
+					Hypnotic.LOGGER.warn("[ScriptManager] Skipping malicious script");
+					return true;
+				}
+				lineNum++;
+			}
+			scanner.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	public boolean registerScript(File scriptFile) {
-		if (scriptFile.getName().contains(".js")) {
+		if (scriptFile.getName().contains(".js") && !containsMaliciousLine(scriptFile)) {
 			Script script = new Script(scriptFile);
 			loadScript(script);
 			scripts.add(script);

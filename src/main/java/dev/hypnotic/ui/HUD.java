@@ -49,7 +49,7 @@ public class HUD {
 		}
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
-			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getPartialTicks());
+			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getTickDelta());
 		}
 	}
 }

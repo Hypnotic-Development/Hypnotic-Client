@@ -95,6 +95,7 @@ public class ClickGUI extends HypnoticScreen {
 		anim2 = 0;
 		aStartX = x;
 		aStartY = y;
+		if (this.currentCategory == Category.SCRIPT) this.refresh();
 		super.init();
 	}
 	
@@ -236,29 +237,7 @@ public class ClickGUI extends HypnoticScreen {
 			for (CategoryButton catButton : categories) {
 				catButton.mouseClicked(mouseX, mouseY, button);
 				if (catButton.hovered(mouseX, mouseY)) {
-					buttons.clear();
-					buttonNames.clear();
-					Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
-					
-					// Sort buttons alphabetically
-					
-					for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
-						if (!(mod instanceof FlightBlink)) {
-							buttonNames.add(mod.getName());
-							
-						}
-					}
-					buttonNames.sort(Collator.getInstance());
-					Collections.sort(buttons, Comparator.comparing(ModuleButton::getName));
-					int count = 0;
-					for (String name : buttonNames) {
-						ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + count);
-						buttons.add(mb);
-						mb.startY = count;
-						count+=30;
-					}
-					
-					this.offset = 0;
+					this.refresh();
 				}
 			}
 			for (ModuleButton modButton : buttons) {
@@ -266,6 +245,32 @@ public class ClickGUI extends HypnoticScreen {
 			}
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
+	}
+	
+	private void refresh() {
+		buttons.clear();
+		buttonNames.clear();
+		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
+		
+		// Sort buttons alphabetically
+		
+		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
+			if (!(mod instanceof FlightBlink)) {
+				buttonNames.add(mod.getName());
+				
+			}
+		}
+		buttonNames.sort(Collator.getInstance());
+		Collections.sort(buttons, Comparator.comparing(ModuleButton::getName));
+		int count = 0;
+		for (String name : buttonNames) {
+			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + count);
+			buttons.add(mb);
+			mb.startY = count;
+			count+=30;
+		}
+		
+		this.offset = 0;
 	}
 	
 	@Override

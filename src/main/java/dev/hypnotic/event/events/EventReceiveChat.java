@@ -36,4 +36,8 @@ public class EventReceiveChat extends Event {
 	public int getId() {
 		return id;
 	}
+	
+	public String getMessageAsString() {
+		return message.asString();
+	}
 }

@@ -96,6 +96,10 @@ public class ModuleManager {
 	// Here to prevent a NullPointerException in various mixins
 	public static ModuleManager INSTANCE = new ModuleManager();
 	
+	public ArrayList<Mod> getModules() {
+		return modules;
+	}
+	
 	public ArrayList<Mod> getEnabledModules() {
 		ArrayList<Mod> enabledModules = new ArrayList<>();
 		for (Mod module : modules) {
