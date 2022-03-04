@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.script.ScriptException;
 
@@ -72,16 +73,28 @@ public class Script extends Mod {
 		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);
 		context.getBindings("js").putMember("renderer", new ScriptRenderer());
 		context.getBindings("js").putMember("colors", new ColorUtils());
-		context.getBindings("js").putMember("newScript", this);
+		context.getBindings("js").putMember("newScript", new SetupScript());
 	}
 	
-	public Script define(String name, String description, String author) {
+	protected static Script define(String name, String description, String author) {
 		this.name = name;
 		this.displayName = name;
 		this.description = description;
 		this.author = author;
 		return this;
 	}
+
+	public class SetupScript extends Function<Map<String, Object>, Script> {
+		@Override
+        public Script apply(Map<String, Object> script) {
+            name = (String)script.get("name");
+			displayName = name;
+            author = (String)script.get("author");
+			description = (String)script.get("description");
+
+            return Script.define(name, description, author);
+        }
+    }
 	
 	public void sendChatMessage(String message, boolean prefix) {
 		if (prefix) Wrapper.tellPlayer(message);
