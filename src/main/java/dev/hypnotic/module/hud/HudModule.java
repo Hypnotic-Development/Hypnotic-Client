@@ -18,9 +18,11 @@ package dev.hypnotic.module.hud;
 
 import java.awt.Color;
 
-import dev.hypnotic.config.SaveLoad;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import dev.hypnotic.module.Mod;
-import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.ui.HudEditorScreen;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
@@ -29,12 +31,17 @@ import net.minecraft.client.util.math.MatrixStack;
 
 public class HudModule extends Mod {
 
-	private int defaultX, defaultY, x, y, dragX, dragY;
+	private int defaultX, defaultY, dragX, dragY;
+	@Expose
+    @SerializedName("x")
+	public int x;
+	@Expose
+    @SerializedName("y")
+	private int y;
 	private float width, height;
 	private double scaleX, scaleY, scaleStartX, scaleStartY, startWidth, startHeight, prevScaleX, prevScaleY;
 	private boolean dragging, scaling, draggable;
-	public NumberSetting xSet;
-	public NumberSetting ySet;
+	private BooleanSetting dragSetting = new BooleanSetting("Locked", false);
 	protected NahrFont font = FontManager.robotoMed; 
 	
 	public HudModule(String name, String description, int defaultX, int defaultY, int width, int height) {
@@ -46,10 +53,7 @@ public class HudModule extends Mod {
 		this.scaleX = 1;
 		this.scaleY = 1;
 		this.draggable = true;
-		xSet = new NumberSetting("X", defaultX, 0, 1920, 1);
-		ySet = new NumberSetting("Y", defaultY, 0, 1080, 1);
-		this.x = (int) xSet.getValue();
-		this.y = (int) ySet.getValue();
+		this.addSetting(dragSetting);
 	}
 
 	public int getDefaultX() {
@@ -74,7 +78,6 @@ public class HudModule extends Mod {
 
 	public void setX(int x) {
 		this.x = x;
-		this.xSet.setValue(x);
 	}
 
 	public int getY() {
@@ -83,7 +86,6 @@ public class HudModule extends Mod {
 
 	public void setY(int y) {
 		this.y = y;
-		this.ySet.setValue(y);
 	}
 
 	public float getWidth() {
@@ -131,7 +133,6 @@ public class HudModule extends Mod {
 	}
 	
 	public void setDragging(boolean dragging) {
-		SaveLoad.INSTANCE.save();
 		if (this.isDraggable()) this.dragging = dragging;
 		else this.dragging = false;
 	}
@@ -228,6 +229,7 @@ public class HudModule extends Mod {
 	
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
 		font = FontManager.robotoMed2;
+		this.setDraggable(!dragSetting.isEnabled());
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			if (mc.currentScreen instanceof HudEditorScreen) {
 				if (element.isDraggable()) RenderUtils.fillAndBorder(matrices, element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);

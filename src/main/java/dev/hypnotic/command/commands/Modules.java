@@ -22,7 +22,7 @@ import dev.hypnotic.command.Command;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.command.CommandSource;
 
 public class Modules extends Command {
@@ -35,8 +35,8 @@ public class Modules extends Command {
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
 		builder.executes(context -> {
 			for (Mod mod : ModuleManager.INSTANCE.modules) {
-				Wrapper.tellPlayerRaw(ColorUtils.red + "Module" + ColorUtils.gray + ": " + mod.getName());
-				Wrapper.tellPlayerRaw(ColorUtils.gray +  mod.getDescription());
+				ChatUtils.tellPlayerRaw(ColorUtils.red + "Module" + ColorUtils.gray + ": " + mod.getName());
+				ChatUtils.tellPlayerRaw(ColorUtils.gray +  mod.getDescription());
 			}
 			return SINGLE_SUCCESS;
 		});

@@ -30,8 +30,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
@@ -54,7 +52,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
-@Environment(EnvType.CLIENT)
 public class TextBox extends ClickableWidget implements Drawable, Element {
    public static final int field_32194 = -1;
    public static final int field_32195 = 1;

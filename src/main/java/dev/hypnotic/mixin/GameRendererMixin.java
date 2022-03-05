@@ -62,7 +62,7 @@ public abstract class GameRendererMixin {
 	@Inject(method = "render", at = @At(value = "INVOKE", target = "net/minecraft/client/render/WorldRenderer.drawEntityOutlinesFramebuffer()V"))
     public void renderForEvent(float float_1, long long_1, boolean boolean_1, CallbackInfo ci) {
         RenderUtils.setup2DProjection();
-        new EventRender2DNoScale().call();
+        new EventRender2DNoScale(new MatrixStack(), float_1).call();
     }
 	
 	@Inject(method = "renderHand", at = @At("HEAD"), cancellable = true)

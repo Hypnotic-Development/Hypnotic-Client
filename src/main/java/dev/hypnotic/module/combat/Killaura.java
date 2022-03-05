@@ -263,22 +263,27 @@ public class Killaura extends Mod {
 	
 	private boolean canAttack(LivingEntity entity) {
 		if (entity != mc.player && mc.player.distanceTo(entity) <= range.getValue() && entity.isAlive() && mc.player.isAlive()) {
-				if (!trigger.isEnabled()) {
-				if (players.isEnabled() && entity instanceof PlayerEntity) return true;
-				if (animals.isEnabled() && entity instanceof AnimalEntity) return true;
-				if (monsters.isEnabled() && entity instanceof Monster) return true;
-				if (passives.isEnabled() && entity instanceof PassiveEntity && !(entity instanceof ArmorStandEntity)) return true;
-				if (passives.isEnabled() && entity.isInvisible()) return true;
+			if (!trigger.isEnabled()) {
+				return isKillauraEntity(entity);
 			} else {
 				HitResult hitResult = mc.crosshairTarget;
 				if (hitResult != null && hitResult.getType() == Type.ENTITY) {
 					Entity entity1 = ((EntityHitResult) hitResult).getEntity();
-					if (entity1 != null && entity1 == entity) return true;
+					if (entity1 != null && entity1 == entity) return isKillauraEntity(entity);
 				} else {
 					return false;
 				}
 			}
 		}
+		return false;
+	}
+	
+	public boolean isKillauraEntity(LivingEntity entity) {
+		if (players.isEnabled() && entity instanceof PlayerEntity) return true;
+		if (animals.isEnabled() && entity instanceof AnimalEntity) return true;
+		if (monsters.isEnabled() && entity instanceof Monster) return true;
+		if (passives.isEnabled() && entity instanceof PassiveEntity && !(entity instanceof ArmorStandEntity)) return true;
+		if (passives.isEnabled() && entity.isInvisible()) return true;
 		return false;
 	}
 	

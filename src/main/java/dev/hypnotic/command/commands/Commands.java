@@ -21,7 +21,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.hypnotic.command.Command;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.command.CommandSource;
 
 public class Commands extends Command {
@@ -33,9 +33,9 @@ public class Commands extends Command {
 	@Override
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
 		builder.executes(context -> {
-			for (Command cmd : CommandManager.get().getAll()) {
-				Wrapper.tellPlayerRaw(ColorUtils.red + "Command" + ColorUtils.gray + ": " + cmd.getName());
-				Wrapper.tellPlayerRaw(ColorUtils.gray + cmd.getDescription());
+			for (Command cmd : CommandManager.INSTANCE.getCommands()) {
+				ChatUtils.tellPlayerRaw(ColorUtils.red + "Command" + ColorUtils.gray + ": " + cmd.getName());
+				ChatUtils.tellPlayerRaw(ColorUtils.gray + cmd.getDescription());
 			}
 			return SINGLE_SUCCESS;
 		});

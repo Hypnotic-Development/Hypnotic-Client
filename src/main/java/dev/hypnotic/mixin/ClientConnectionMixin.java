@@ -26,7 +26,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.event.events.EventReceivePacket;
 import dev.hypnotic.event.events.EventSendPacket;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -39,12 +39,12 @@ public class ClientConnectionMixin {
     @Inject(method = "send(Lnet/minecraft/network/Packet;Lio/netty/util/concurrent/GenericFutureListener;)V", at = @At("HEAD"), cancellable = true)
     public void send(Packet<?> packet, GenericFutureListener<? extends Future<? super Void>> callback, CallbackInfo ci) {
     	// Call commands if the prefix is sent
-    	if(packet instanceof ChatMessageC2SPacket && ((ChatMessageC2SPacket) packet).getChatMessage().startsWith(CommandManager.get().getPrefix())) {
+    	if(packet instanceof ChatMessageC2SPacket && ((ChatMessageC2SPacket) packet).getChatMessage().startsWith(CommandManager.INSTANCE.getPrefix())) {
     		try {
-				CommandManager.get().dispatch(((ChatMessageC2SPacket) packet).getChatMessage().substring(CommandManager.get().getPrefix().length()));
+				CommandManager.INSTANCE.dispatch(((ChatMessageC2SPacket) packet).getChatMessage().substring(CommandManager.INSTANCE.getPrefix().length()));
             } catch (CommandSyntaxException e) {
             	e.printStackTrace();
-                Wrapper.tellPlayer(e.getMessage());
+                ChatUtils.tellPlayer(e.getMessage());
             }
 			ci.cancel();
         }

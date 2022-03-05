@@ -30,7 +30,11 @@ import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+
 import dev.hypnotic.Hypnotic;
+import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventKeyPress;
@@ -48,8 +52,9 @@ import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ColorSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
+import net.minecraft.command.CommandSource;
 
 /**
 * @author BadGamesInc
@@ -73,10 +78,11 @@ public class Script extends Mod {
 		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);
 		context.getBindings("js").putMember("renderer", new ScriptRenderer());
 		context.getBindings("js").putMember("colors", new ColorUtils());
+		context.getBindings("js").putMember("args", new ScriptArgumentTypes());
 		context.getBindings("js").putMember("newScript", new SetupScript());
 	}
 	
-	protected static Script define(String name, String description, String author) {
+	protected Script define(String name, String description, String author) {
 		this.name = name;
 		this.displayName = name;
 		this.description = description;
@@ -84,7 +90,7 @@ public class Script extends Mod {
 		return this;
 	}
 
-	public class SetupScript extends Function<Map<String, Object>, Script> {
+	public class SetupScript implements Function<Map<String, Object>, Script> {
 		@Override
         public Script apply(Map<String, Object> script) {
             name = (String)script.get("name");
@@ -92,13 +98,13 @@ public class Script extends Mod {
             author = (String)script.get("author");
 			description = (String)script.get("description");
 
-            return Script.define(name, description, author);
+            return define(name, description, author);
         }
     }
 	
 	public void sendChatMessage(String message, boolean prefix) {
-		if (prefix) Wrapper.tellPlayer(message);
-		else Wrapper.tellPlayerRaw(message);
+		if (prefix) ChatUtils.tellPlayer(message);
+		else ChatUtils.tellPlayerRaw(message);
 	}
 	
 	public BooleanSetting booleanSetting(String name, boolean defaultValue) {
@@ -134,6 +140,20 @@ public class Script extends Mod {
 		this.displayName = name;
 		super.setName(name);
 	}
+	
+	// Command stuff
+	
+	public void addCommand(String name, String description, RequiredArgumentBuilder<CommandSource, ?>[] args, Value command) {
+		ScriptCommand scriptCommand = new ScriptCommand(name, name, command, new String[]{});
+		scriptCommand.commandFunc = command;
+		scriptCommand.args = args;
+		CommandManager.INSTANCE.add(scriptCommand);
+	}
+	
+	public <T> RequiredArgumentBuilder<CommandSource, T> argument(final String name, final ArgumentType<T> type) {
+        return RequiredArgumentBuilder.argument(name, type);
+    }
+	
 	
 	// Event stuff
 	

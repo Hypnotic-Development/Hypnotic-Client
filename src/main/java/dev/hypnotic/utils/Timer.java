@@ -18,7 +18,7 @@ package dev.hypnotic.utils;
 
 public class Timer {
 
-public long lastMS = System.currentTimeMillis();
+	public long lastMS = System.currentTimeMillis();
 	
 	public void reset() {
 		lastMS = System.currentTimeMillis();

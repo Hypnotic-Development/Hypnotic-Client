@@ -73,7 +73,6 @@ public class AltsFile {
             }
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         for (String s : lines) {
@@ -84,7 +83,6 @@ public class AltsFile {
 	            	if (args[2] != null) alt.setUsername(args[2]);
 	            	if (args[3] != null && !args[3].equalsIgnoreCase("null") && !args[3].equalsIgnoreCase("")) alt.setUuid(UUID.fromString(args[3]));
 	            } catch(Exception e) {
-	            	e.printStackTrace();
 	            }
 	            AltManagerScreen.INSTANCE.alts.add(alt);
             } else {

@@ -28,6 +28,7 @@ public class FileDownloader implements Runnable {
 
 	public String link;
 	public File out;
+	public double progress;
 	
 	public FileDownloader(String link, File out) {
 		this.link = link;
@@ -53,6 +54,7 @@ public class FileDownloader implements Runnable {
 				downloaded+=read;
 				percentDownloaded = (downloaded * 100) / fileSize;
 				String percent = String.format("%.4f", percentDownloaded);
+				progress = percentDownloaded;
 				System.out.println("Downloaded " + percent + "%");
 			}
 			bout.close();

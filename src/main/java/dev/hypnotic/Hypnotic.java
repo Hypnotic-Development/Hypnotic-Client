@@ -50,9 +50,9 @@ import net.minecraft.util.Identifier;
 
 public class Hypnotic implements ModInitializer {
 
-	public static Hypnotic INSTANCE = new Hypnotic();
-	public static Executor EXECUTOR = Executors.newCachedThreadPool();
-	public static Logger LOGGER = LogManager.getLogger("Hypnotic");
+	public static final Hypnotic INSTANCE = new Hypnotic();
+	public static final Executor EXECUTOR = Executors.newCachedThreadPool();
+	public static final Logger LOGGER = LogManager.getLogger("Hypnotic");
 	public static String name = "Hypnotic",
 			version = "r1000",
 			fullName = name + "-" + version,
@@ -69,10 +69,13 @@ public class Hypnotic implements ModInitializer {
 			"c0052794-2f10-4f2c-b535-150db217f45d"
 	};
 	
-	private final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/fade_in_blur.json"),
+	private boolean hasShutdown = false;
+	
+	public final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/fade_in_blur.json"),
             shader -> shader.setUniformValue("Radius", 8f));
 	private final Uniform1f blurProgress = blur.findUniform1f("Progress");
 	private float start;
+	public final ManagedShaderEffect bloom = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/bloom.json"));
 	
 	/*
 	 * Called when Minecraft initializes.
@@ -83,8 +86,9 @@ public class Hypnotic implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		System.out.println("Loading Hypnotic stuff");
+		ModuleManager.INSTANCE.loadModules();
 		register();
-		loadFiles();
+		hasShutdown = false;
 	}
 	
 	/*
@@ -94,14 +98,12 @@ public class Hypnotic implements ModInitializer {
 		moduleManager = ModuleManager.INSTANCE;
 		scriptManager = ScriptManager.INSTANCE;
 		eventManager = EventManager.INSTANCE;
-		cfgManager = new ConfigManager();
-		saveload = new SaveLoad();
 		EventManager.INSTANCE.register(HUD.INSTANCE);
 		EventManager.INSTANCE.register(DamageUtils.getInstance());
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
-		
 		ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
+			
 			if (start < 1 && mc.currentScreen != null) start += 0.05f;
 			else if (start > 0 && mc.currentScreen == null) start -= 0.05f;
 			if ((start > 0) && mc.world != null && !OptionsScreen.INSTANCE.disableBlur.isEnabled()) {
@@ -120,31 +122,38 @@ public class Hypnotic implements ModInitializer {
 	/*
 	 * Loads all* of the stuff that should be saved
 	 */
-	private void loadFiles() {
-		if (cfgManager.config.exists()) {
-            cfgManager.loadConfig();
+	public void loadFiles() {
+		SaveLoad.INSTANCE.load();
+		if (ConfigManager.INSTANCE.config.exists()) {
+            ConfigManager.INSTANCE.loadConfig();
         }
+		ConfigManager.INSTANCE.loadConfigs();
+        AltsFile.INSTANCE.loadAlts();
+        if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
+        else FontManager.setMcFont(true);
+        
         Thread configDaemon = new Thread(() -> {
-            while (true) {
+            while (!hasShutdown && ModuleManager.INSTANCE.modules != null) {
                 try {
                     Thread.sleep(30000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                cfgManager.saveConfig();
-                saveload.save();
+                ConfigManager.INSTANCE.saveConfig();
+                SaveLoad.INSTANCE.save();
             }
         });
         configDaemon.setDaemon(true);
         configDaemon.start();
-        AltsFile.INSTANCE.loadAlts();
-        saveload.load();
-        if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
-        else FontManager.setMcFont(true);
 	}
 	
 	public void shutdown() {
-		System.out.println("SHUTING DOWN HYPNOTIC, GOODBYE");
-		AltsFile.INSTANCE.saveAlts();
+		if (!hasShutdown) {
+			System.out.println("Stopping Hypnotic services...");
+			AltsFile.INSTANCE.saveAlts();
+			ConfigManager.INSTANCE.saveConfig();
+			ConfigManager.INSTANCE.saveAll();
+			SaveLoad.INSTANCE.save();
+		}
 	}
 }

@@ -17,6 +17,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import dev.hypnotic.command.Command;
 import dev.hypnotic.scripting.ScriptManager;
+import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
 import net.minecraft.command.CommandSource;
 
@@ -39,7 +40,7 @@ public class Script extends Command {
 				
 		builder.then(literal("list").executes(context -> {
 			info("Scripts: " + ScriptManager.INSTANCE.getScripts().size());
-			ScriptManager.INSTANCE.getScripts().forEach(script -> info("Script: " + ColorUtils.white + script.getName() + ColorUtils.gray + " by " + ColorUtils.white + script.getAuthor()));
+			ScriptManager.INSTANCE.getScripts().forEach(script -> ChatUtils.tellPlayerRaw(ColorUtils.red + "Script" + ColorUtils.gray + ": " + ColorUtils.white + script.getName() + ColorUtils.gray + " by " + ColorUtils.white + script.getAuthor()));
 			return SINGLE_SUCCESS;
 		}));
 	}

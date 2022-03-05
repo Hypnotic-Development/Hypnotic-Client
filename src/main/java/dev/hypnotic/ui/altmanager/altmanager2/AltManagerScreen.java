@@ -94,7 +94,17 @@ public class AltManagerScreen extends HypnoticScreen {
 			}
 			font.drawWithShadow(matrices, !alt.getUsername().equalsIgnoreCase("null") && !alt.getUsername().equalsIgnoreCase("") ? alt.getUsername() : alt.getEmail(), alt.getX() + 37, alt.getY() + scrollY + 5, -1);
 			font.drawWithShadow(matrices, alt.getPassword().replaceAll("(?s).", "*"), alt.getX() + 37, alt.getY() + scrollY + 20, -1);
+			
+			RenderUtils.preStencil();
+			
+			RenderUtils.renderRoundedQuad(matrices, ColorUtils.defaultClientColor(), alt.getX(), alt.getY() + scrollY, alt.getX() + 32, alt.getY() + 32 + scrollY, 5, 50);
+			
+			RenderUtils.postStencil();
+			
 			alt.drawFace(matrices, alt.getX(), alt.getY() + scrollY);
+			
+			RenderUtils.disableStencil();
+			
 			offset+=50;
 		}
 		RenderUtils.endScissor();

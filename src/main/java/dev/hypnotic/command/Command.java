@@ -28,7 +28,6 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
@@ -48,7 +47,6 @@ public abstract class Command {
         mc = MinecraftClient.getInstance();
     }
 
-    // Helper methods to painlessly infer the CommandSource generic type argument
     protected static <T> RequiredArgumentBuilder<CommandSource, T> argument(final String name, final ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
@@ -83,7 +81,7 @@ public abstract class Command {
     }
 
     public String toString() {
-        return CommandManager.get().getPrefix() + name;
+        return CommandManager.INSTANCE.getPrefix() + name;
     }
 
     public String toString(String... args) {
@@ -99,7 +97,7 @@ public abstract class Command {
     }
 
     public void info(String message) {
-        Wrapper.tellPlayer(message.replace("(highlight)", ColorUtils.white).replace("(default)", ColorUtils.gray));
+        ChatUtils.tellPlayer(message.replace("(highlight)", ColorUtils.white).replace("(default)", ColorUtils.gray));
     }
 
     public void warning(String message, Object... args) {

@@ -19,6 +19,7 @@ package dev.hypnotic.settings.settingtypes;
 import java.awt.Color;
 
 import dev.hypnotic.settings.Setting;
+import dev.hypnotic.utils.ColorUtils;
 import net.minecraft.util.math.MathHelper;
 
 public class ColorSetting extends Setting {
@@ -27,6 +28,10 @@ public class ColorSetting extends Setting {
 	public float sat;
 	public float bri;
 	public float alpha;
+	
+	public boolean rainbow = false;
+	public float rainbowSpeed = 6;
+	public float rainbowSat = 0.6f;
 
 	protected float defaultHue;
 	protected float defaultSat;
@@ -102,6 +107,22 @@ public class ColorSetting extends Setting {
 		this.defaultBri = bri;
 	}
 	
+	public ColorSetting(String name, float rainbowSpeed, float rainbowSat) {
+		this.name = name;
+		this.rainbow = true;
+		Color color = new Color(ColorUtils.rainbow(rainbowSpeed, rainbowSat, 1));
+		float[] vals = rgbToHsv(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+		this.setHSV(vals[0], vals[1], vals[2]);
+		this.hue = vals[0];
+		this.sat = vals[1];
+		this.bri = vals[2];
+		this.alpha = vals[3];
+		
+		this.defaultHue = hue;
+		this.defaultSat = sat;
+		this.defaultBri = bri;
+	}
+	
 	public int getRGB() {
 		Color c = new Color(MathHelper.hsvToRgb(hue, sat, bri));
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)alpha).getRGB();
@@ -146,24 +167,9 @@ public class ColorSetting extends Setting {
 		return Integer.toHexString(getRGB());
 	}
 
-	/*public float[] rgbToHsv(float r, float g, float b) {
-		float minRGB = Math.min(r, Math.min(g, b));
-		float maxRGB = Math.max(r, Math.max(g, b));
-
-		// Black-gray-white
-		if (minRGB == maxRGB) {
-			return new float[] { 0f, 0f, minRGB };
-		}
-
-		// Colors other than black-gray-white:
-		float d = (r == minRGB) ? g - b : (b == minRGB) ? r - g : b - r;
-		float h = (r == minRGB) ? 3 : (b == minRGB) ? 1 : 5;
-		float computedH = 60 * (h - d / (maxRGB - minRGB)) / 360f;
-		float computedS = (maxRGB - minRGB) / maxRGB;
-		float computedV = maxRGB;
-
-		return new float[] { computedH, computedS, computedV };
-	}*/
+	public boolean isRainbow() {
+		return rainbow;
+	}
 	
 	public float[] rgbToHsv(float r, float g, float b, float a) {
 		float[] hsv = Color.RGBtoHSB((int)r, (int)g, (int)b, null);

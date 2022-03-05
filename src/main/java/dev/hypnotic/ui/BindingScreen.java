@@ -23,7 +23,7 @@ import org.lwjgl.glfw.GLFW;
 import dev.hypnotic.config.SaveLoad;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.render.ClickGUIModule;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -85,7 +85,7 @@ public class BindingScreen extends Screen {
 				mod.setBinding(false);
 			} else {
 				if (mod instanceof ClickGUIModule) { 
-					Wrapper.tellPlayer("You cannot unbind the ClickGUI"); 
+					ChatUtils.tellPlayer("You cannot unbind the ClickGUI"); 
 					return false;
 				} else {
 					mod.setKey(0);

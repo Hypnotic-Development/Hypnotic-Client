@@ -29,15 +29,19 @@ import com.google.gson.GsonBuilder;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
+import dev.hypnotic.module.hud.HudModule;
 import dev.hypnotic.settings.Setting;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ColorSetting;
 import dev.hypnotic.settings.settingtypes.KeybindSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.utils.ChatUtils;
+import dev.hypnotic.utils.ColorUtils;
 
 public class ConfigManager {
 
+	public static final ConfigManager INSTANCE = new ConfigManager();
     private static final List<Config> configs = new ArrayList<>();
     private final File file = new File(Hypnotic.hypnoticDir, "/configs");
     public File config = new File(Hypnotic.hypnoticDir, "/Config.json");
@@ -69,6 +73,15 @@ public class ConfigManager {
                                 module.toggle();
                             else if (!configModule.isEnabled() && module.isEnabled())
                                 module.setEnabled(false);
+                            
+                            module.setKey(configModule.getKey());
+                            
+                            if (module instanceof HudModule) {
+                            	HudModule hudMod = (HudModule)module;
+                            	HudModule configHudMod = (HudModule)configModule;
+                            	hudMod.setX(configHudMod.getX());
+                            	hudMod.setY(configHudMod.getY());
+                            }
                             
                             for (Setting setting : module.settings) {
                                 for (ConfigSetting cfgSetting : configModule.cfgSettings) {
@@ -114,6 +127,18 @@ public class ConfigManager {
                         try {
                             if (configModule.isEnabled() && !module.isEnabled())
                                 module.setEnabled(true);
+                            else if (!configModule.isEnabled() && module.isEnabled())
+                                module.setEnabled(false);
+                            
+                            module.setKey(configModule.getKey());
+                            
+                            if (module instanceof HudModule  && configModule instanceof HudModule) {
+                            	HudModule hudMod = (HudModule)module;
+                            	HudModule configHudMod = (HudModule)configModule;
+                            	hudMod.setX(configHudMod.getX());
+                            	hudMod.setY(configHudMod.getY());
+                            }
+                            
                             for (Setting setting : module.settings) {
                                 for (ConfigSetting cfgSetting : configModule.cfgSettings) {
                                     if (setting.name.equals(cfgSetting.name)) {
@@ -212,6 +237,7 @@ public class ConfigManager {
     }
 
     public void loadConfigs() {
+    	configs.clear();
         for (File file : file.listFiles()) {
             configs.add(new Config(file.getName().replace(".json", "")));
         }
@@ -225,7 +251,7 @@ public class ConfigManager {
         pathnames = file.list();
         for (String pathname : pathnames) {
         	System.out.println(pathname.substring(0, pathname.length() - 5));
-//            Wrapper.tellPlayer(pathname.substring(0, pathname.length() - 5));
+            ChatUtils.tellPlayerRaw(ColorUtils.red + "Config" + ColorUtils.gray + ": " + pathname.substring(0, pathname.length() - 5));
         }
     }
 

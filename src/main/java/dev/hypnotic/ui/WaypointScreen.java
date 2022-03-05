@@ -95,7 +95,6 @@ public class WaypointScreen extends HypnoticScreen {
 				try {
 					waypoint = new Waypoint(nameBox.getText(), Integer.parseInt(xBox.getText()), Integer.parseInt(yBox.getText()), Integer.parseInt(zBox.getText()));
 					WaypointManager.INSTANCE.waypoints.add(waypoint);
-					System.out.println("slkdgfjs");
 					mc.setScreen(WaypointManagerScreen.INSTANCE);
 				} catch(NumberFormatException e) {
 					System.out.println("Invalid x y or z!");

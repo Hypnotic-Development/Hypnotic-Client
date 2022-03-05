@@ -23,6 +23,7 @@ import dev.hypnotic.module.Mod;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ColorSetting;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.render.QuadColor;
 import dev.hypnotic.utils.render.RenderUtils;
 import dev.hypnotic.utils.world.WorldUtils;
@@ -33,35 +34,36 @@ import net.minecraft.util.math.BlockPos;
 public class AirPlace extends Mod {
 
 	public NumberSetting range = new NumberSetting("Range", 4, 1, 6, 0.1);
-	public NumberSetting delay = new NumberSetting("Place Delay", 25, 0, 100, 1);
+	public NumberSetting delay = new NumberSetting("Place Delay", 6, 0, 10, 1);
 	public BooleanSetting outline = new BooleanSetting("Render Outline", true);
 	public ColorSetting outlineColor = new ColorSetting("Outline Color", 0, 0.71f, 0.64f, 1f, true);
 	
 	private BlockPos placePos;
+	
+	private Timer placeTimer = new Timer();
+	private boolean hasPlacedOne = false;
 	
 	public AirPlace() {
 		super("AirPlace", "Places a block in the air where you are looking", Category.PLAYER);
 		addSettings(range, delay, outline, outlineColor);
 	}
 	
-	int delayTicks;
 	@Override
 	public void onTick() {
-		System.out.println(delayTicks);
 		if (mc.world != null && mc.player != null) {
 			placePos = new BlockPos(mc.getCameraEntity().raycast(range.getValue(), 0, false).getPos());
-				if (placePos != null && mc.world.getBlockState(placePos).getMaterial().isReplaceable() && mc.options.keyUse.isPressed()) {
-					if (delayTicks < delay.getValue() * 10) {
-						delayTicks++;
-					} else if (delayTicks == delay.getValue() * 10) {
-						if (mc.player.getMainHandStack().getItem() instanceof BlockItem) {
-							WorldUtils.placeBlockMainHand(placePos, false, true);
-						} else if (mc.player.getOffHandStack().getItem() instanceof BlockItem) {
-							WorldUtils.placeBlockNoRotate(Hand.OFF_HAND, placePos, true);
-						}
-						delayTicks = 0;
+			if (placePos != null && mc.world.getBlockState(placePos).getMaterial().isReplaceable() && mc.options.keyUse.isPressed()) {
+				if (placeTimer.hasTimeElapsed((long)delay.getValue() * 60, true) || !hasPlacedOne) {
+					if (mc.player.getMainHandStack().getItem() instanceof BlockItem) {
+						WorldUtils.placeBlockMainHand(placePos, false, true);
+					} else if (mc.player.getOffHandStack().getItem() instanceof BlockItem) {
+						WorldUtils.placeBlockNoRotate(Hand.OFF_HAND, placePos, true);
 					}
+					hasPlacedOne = true;
 				}
+			} else {
+				hasPlacedOne = false;
+			}
 		}
 		super.onTick();
 	}

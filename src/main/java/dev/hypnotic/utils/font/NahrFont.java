@@ -522,7 +522,7 @@ public class NahrFont {
     public void drawCenteredString(MatrixStack matrixStack, String string, float x, float y, int color, boolean shadow) {
         float newX = x - ((getStringWidth(string)) / 2);
         if (!mcFont) {
-            this.drawString(matrixStack, string, newX, y, shadow ? NahrFont.FontType.SHADOW_THIN : NahrFont.FontType.NORMAL, color);
+             this.drawString(matrixStack, string, newX, y, shadow ? NahrFont.FontType.SHADOW_THIN : NahrFont.FontType.NORMAL, color);
         } else {
             mc.textRenderer.drawWithShadow(matrixStack, string, newX, y + 2, color);
         }

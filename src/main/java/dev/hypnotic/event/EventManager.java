@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class EventManager {
 	private Map<Class<? extends Event>, ArrayHelper<Data>> REGISTRY_MAP = new HashMap<Class<? extends Event>, ArrayHelper<Data>>();
-	public static EventManager INSTANCE = new EventManager();
+	public static final EventManager INSTANCE = new EventManager();
 
 	public void register(Object o) {
 

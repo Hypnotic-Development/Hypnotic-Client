@@ -15,6 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package dev.hypnotic.command.argtypes;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;

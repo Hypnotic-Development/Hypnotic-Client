@@ -30,6 +30,7 @@ import dev.hypnotic.command.commands.About;
 import dev.hypnotic.command.commands.Baritone;
 import dev.hypnotic.command.commands.Bind;
 import dev.hypnotic.command.commands.Commands;
+import dev.hypnotic.command.commands.ConfigCmd;
 import dev.hypnotic.command.commands.Enchant;
 import dev.hypnotic.command.commands.Explosion;
 import dev.hypnotic.command.commands.FriendCmd;
@@ -49,6 +50,7 @@ import net.minecraft.command.CommandSource;
 
 public class CommandManager {
 
+	public static final CommandManager INSTANCE = new CommandManager();
 	private static MinecraftClient mc = MinecraftClient.getInstance();
 	private final CommandDispatcher<CommandSource> DISPATCHER = new CommandDispatcher<>();
     private final CommandSource COMMAND_SOURCE = new ChatCommandSource(mc);
@@ -56,6 +58,10 @@ public class CommandManager {
     private final Map<Class<? extends Command>, Command> commandInstances = new HashMap<>();
 
     private CommandManager() {
+    	
+    }
+    
+    public void loadCommands() {
     	add(new VClip());
         add(new FriendCmd());
         add(new NBT());
@@ -73,11 +79,8 @@ public class CommandManager {
         add(new Bind());
         add(new Teleport());
         add(new Script());
+        add(new ConfigCmd());
         commands.sort(Comparator.comparing(Command::getName));
-    }
-
-    public static CommandManager get() {
-        return new CommandManager();
     }
 
     public void dispatch(String message) throws CommandSyntaxException {
@@ -116,7 +119,7 @@ public class CommandManager {
         return commands.size();
     }
 
-    public List<Command> getAll() {
+    public List<Command> getCommands() {
         return commands;
     }
 
@@ -127,5 +130,14 @@ public class CommandManager {
 
 	public String getPrefix() {
 		return ".";
+	}
+	
+	public Command getCommandByName(String commandName) {
+		for(Command command : commands) {
+			if ((command.getName().trim().equalsIgnoreCase(commandName)) || (command.toString().trim().equalsIgnoreCase(commandName.trim()))) {
+				return command;
+			}
+		}
+		return null;
 	}
 }

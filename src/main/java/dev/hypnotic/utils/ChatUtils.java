@@ -18,17 +18,46 @@ package dev.hypnotic.utils;
 
 import org.jetbrains.annotations.Nullable;
 
+import dev.hypnotic.Hypnotic;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.mixin.ChatHudAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.BaseText;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 public class ChatUtils {
 
 	private static MinecraftClient mc = MinecraftClient.getInstance();
+	
+	public static void tellPlayerRaw(Text message) {
+		mc.inGameHud.getChatHud().addMessage(message);
+	}
+	
+	public static void tellPlayer(Text message) {
+		tellPlayerRaw(new LiteralText(Hypnotic.chatPrefix).append(new LiteralText(ColorUtils.gray + message.asString())));
+	}
+	
+	public static void tellPlayer(String message) {
+        tellPlayer(new LiteralText(message));
+    }
+	
+	public static void tellPlayerRaw(String message) {
+		tellPlayerRaw(new LiteralText(message));
+	}
+	
+	public static Text clickableText(String text, ClickEvent clickEvent, HoverEvent hoverEvent) {
+		return new LiteralText(text).setStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+	}
+	
+	public static Text clickableText(String text, ClickEvent clickEvent) {
+		return new LiteralText(text).setStyle(Style.EMPTY.withClickEvent(clickEvent));
+	}
+	
     // Default
     public static void info(String message, Object... args) {
         sendMsg(Formatting.GRAY, message, args);
@@ -87,8 +116,8 @@ public class ChatUtils {
         if (mc.world == null) return;
 
         BaseText message = new LiteralText("");
-        message.append(CommandManager.get().getPrefix());
-        if (prefixTitle != null) message.append(CommandManager.get().getPrefix());
+        message.append(CommandManager.INSTANCE.getPrefix());
+        if (prefixTitle != null) message.append(CommandManager.INSTANCE.getPrefix());
         message.append(msg);
 
         id = 0;

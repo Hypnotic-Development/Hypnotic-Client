@@ -26,7 +26,7 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.player.inventory.FindItemResult;
 import dev.hypnotic.utils.player.inventory.InventoryUtils;
 import net.minecraft.item.AxeItem;
@@ -71,7 +71,7 @@ public class Offhand extends Mod {
 
             if (!item.found()) {
                 if (!sentMessage) {
-                    Wrapper.tellPlayer("Chosen item not found.");
+                    ChatUtils.tellPlayer("Chosen item not found.");
                     sentMessage = true;
                 }
             }

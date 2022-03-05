@@ -36,7 +36,7 @@ import dev.hypnotic.settings.settingtypes.NumberSetting;
 public class Config {
 
     private final String name;
-    private final File file;
+    protected File file;
 
     public Config(String name) {
         this.name = name;

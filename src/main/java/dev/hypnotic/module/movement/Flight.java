@@ -34,12 +34,8 @@ import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.player.PlayerUtils;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 
 public class Flight extends Mod {
 
@@ -47,7 +43,6 @@ public class Flight extends Mod {
 	public NumberSetting speed = new NumberSetting("Speed", 1, 0, 10, 0.1);
 	public BooleanSetting damage = new BooleanSetting("Damage", false);
 	public BooleanSetting blink = new BooleanSetting("Blink", false);
-	public BooleanSetting viewBobbing = new BooleanSetting("View Bobbing", false);
 	boolean hasDamaged = false;
 	private int wallTicks = 0;
 	private boolean direction = false;
@@ -55,7 +50,7 @@ public class Flight extends Mod {
 	
     public Flight() {
         super("Flight", "Allows you to fly", Category.MOVEMENT);
-        addSettings(mode, speed, damage, blink, viewBobbing);
+        addSettings(mode, speed, damage, blink);
     }
     
     @Override
@@ -65,20 +60,6 @@ public class Flight extends Mod {
     
     @EventTarget
     public void eventRender3d(EventRender3D event) {
-    	if (viewBobbing.isEnabled()) {
-    		if (mc.getCameraEntity() instanceof PlayerEntity) {
-    			PlayerEntity playerEntity = (PlayerEntity)mc.getCameraEntity();
-    			MatrixStack matrices = event.getMatrices();
-    			matrices.push();
-    			float g = playerEntity.horizontalSpeed - playerEntity.prevHorizontalSpeed;
-    			float h = -(playerEntity.horizontalSpeed + g * event.getTickDelta());
-    			float i = MathHelper.lerp(event.getTickDelta(), wallTicks, wallTicks);
-    			matrices.translate((double)(MathHelper.sin(h * 3.1415927F) * i * 0.5F), (double)(-Math.abs(MathHelper.cos(h * 3.1415927F) * i)), 0.0D);
-    			matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.sin(h * 3.1415927F) * i * 3.0F));
-    			matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(Math.abs(MathHelper.cos(h * 3.1415927F - 0.2F) * i) * 5.0F));
-    			matrices.pop();
-    		}
-    	}
     }
 
     @Override

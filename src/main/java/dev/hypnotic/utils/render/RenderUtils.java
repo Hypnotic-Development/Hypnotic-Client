@@ -17,11 +17,22 @@
 package dev.hypnotic.utils.render;
 
 import java.awt.Color;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
+
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.Maps;
@@ -35,6 +46,8 @@ import dev.hypnotic.module.render.IItemRenderer;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.mixin.IMatrix4f;
 import dev.hypnotic.utils.render.shader.ShaderUtils;
+import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -50,6 +63,8 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.texture.NativeImageBackedTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -120,6 +135,15 @@ public class RenderUtils {
 			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/circle.png"));
 			 RenderSystem.enableBlend();
 			 RenderUtils.drawTexture(matrices, (float) xx, (float)yy, radius, radius, 0, 0, radius, radius, radius, radius);
+			 RenderSystem.disableBlend();
+			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		 }
+		 
+		 public static void drawDropShadow(MatrixStack matrices, double xx, double yy, double width, double height, boolean elipse) {
+			 RenderSystem.setShaderColor(1f, 1f, 1f, 0.5f);
+			 RenderUtils.bindTexture(new Identifier("hypnotic", "textures/" + (elipse ? "circle" : "") + "shadow.png"));
+			 RenderSystem.enableBlend();
+			 RenderUtils.drawTexture(matrices, (float) xx, (float)yy, (float)width, (float)height, 0, 0, (float)width, (float)height, (float)width, (float)height);
 			 RenderSystem.disableBlend();
 			 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 		 }
@@ -646,7 +670,9 @@ public class RenderUtils {
 	    }
 	    
 	    public static void drawTexture(MatrixStack matrices, float x, float y, float u, float v, float width, float height, int textureWidth, int textureHeight) {
-	        drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
+			RenderSystem.enableBlend();
+	    	drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
+			RenderSystem.disableBlend();
 	    }
 
 	    public static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, float textureWidth, float textureHeight) {
@@ -1351,7 +1377,107 @@ public class RenderUtils {
 		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0x01);
 	}
 	
+	public static void vertex2f(float x, float y) {
+		Tessellator.getInstance().getBuffer().vertex(x, y, 0);
+	}
+	
+	public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples) {
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+
+        double toX1 = toX - rad;
+        double toY1 = toY - rad;
+        double fromX1 = fromX + rad;
+        double fromY1 = fromY + rad;
+        double[][] map = new double[][]{new double[]{toX1, toY1}, new double[]{toX1, fromY1}, new double[]{fromX1, fromY1}, new double[]{fromX1, toY1}};
+        for (int i = 0; i < 4; i++) {
+            double[] current = map[i];
+            for (double r = i * 90d; r < (360 / 4d + i * 90d); r += (90 / samples)) {
+                float rad1 = (float) Math.toRadians(r);
+                float sin = (float) (Math.sin(rad1) * rad);
+                float cos = (float) (Math.cos(rad1) * rad);
+                bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
+            }
+        }
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
+    }
+
+    public static void renderRoundedQuad(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double rad, double samples) {
+        int color = c.getRGB();
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
+        float f = (float) (color >> 24 & 255) / 255.0F;
+        float g = (float) (color >> 16 & 255) / 255.0F;
+        float h = (float) (color >> 8 & 255) / 255.0F;
+        float k = (float) (color & 255) / 255.0F;
+        RenderSystem.enableBlend();
+        RenderSystem.disableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+        renderRoundedQuadInternal(matrix, g, h, k, f, fromX, fromY, toX, toY, rad, samples);
+
+        RenderSystem.enableTexture();
+        RenderSystem.disableBlend();
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+    }
+	
+    public static final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/blur.json"));
+	public static void blur(MatrixStack matrices, double x, double y, double y1, double x1) {
+		preStencil();
+		renderRoundedQuad(matrices, Color.white, x, y, x1, y1, 10 ,50);
+		
+		postStencil();
+//		blur.setUniformValue("Progress", 1f);
+//		blur.render(mc.getTickDelta());
+		fill(matrices, 0, 0, 1000, 1000, -1);
+		disableStencil();
+	}
+	
+	private static int stencilBit = 0xff;
+	
+	public static void preStencil() {
+		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		RenderSystem.colorMask(false, false, false, false);
+		RenderSystem.depthMask(false);
+		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+		RenderSystem.stencilFunc(GL11.GL_ALWAYS, stencilBit, stencilBit);
+		RenderSystem.stencilMask(stencilBit);
+//		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
+		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
+	}
+	
+	public static void postStencil() {
+		RenderSystem.colorMask(true, true, true, true);
+		RenderSystem.depthMask(true);
+		RenderSystem.stencilMask(0x00);
+		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+		RenderSystem.stencilFunc(GL11.GL_EQUAL, stencilBit, stencilBit);
+	}
+	
 	public static void disableStencil() {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
+	}
+	
+	static final HttpClient downloader = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();
+	public static void registerImageFromUrl(String url, Identifier id) {
+		HttpRequest hr = HttpRequest.newBuilder().uri(URI.create("url")).header("User-Agent", "").timeout(Duration.ofSeconds(5)).build();
+        downloader.sendAsync(hr, HttpResponse.BodyHandlers.ofByteArray()).thenAccept(httpResponse -> {
+            try {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                ImageIO.write(ImageIO.read(new ByteArrayInputStream(httpResponse.body())), "png", stream);
+                byte[] bytes = stream.toByteArray();
+
+                ByteBuffer data = BufferUtils.createByteBuffer(bytes.length).put(bytes);
+                data.flip();
+                NativeImage img = NativeImage.read(data);
+                NativeImageBackedTexture texture = new NativeImageBackedTexture(img);
+
+                mc.execute(() -> {
+                    mc.getTextureManager().registerTexture(id, texture);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }); 
 	}
 }

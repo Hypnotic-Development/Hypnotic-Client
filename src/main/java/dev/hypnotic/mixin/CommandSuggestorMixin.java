@@ -59,15 +59,15 @@ public abstract class CommandSuggestorMixin {
             cancellable = true,
             locals = LocalCapture.CAPTURE_FAILHARD)
     public void onRefresh(CallbackInfo ci, String string, StringReader reader) {
-        String prefix = CommandManager.get().getPrefix();
+        String prefix = CommandManager.INSTANCE.getPrefix();
         int length = prefix.length();
         if (reader.canRead(length) && reader.getString().startsWith(prefix, reader.getCursor())) {
             reader.setCursor(reader.getCursor() + length);
             assert this.client.player != null;
             // Pretty much copy&paste from the refresh method
-            CommandDispatcher<CommandSource> commandDispatcher = CommandManager.get().getDispatcher();
+            CommandDispatcher<CommandSource> commandDispatcher = CommandManager.INSTANCE.getDispatcher();
             if (this.parse == null) {
-                this.parse = commandDispatcher.parse(reader, CommandManager.get().getCommandSource());
+                this.parse = commandDispatcher.parse(reader, CommandManager.INSTANCE.getCommandSource());
             }
 
             int cursor = textField.getCursor();

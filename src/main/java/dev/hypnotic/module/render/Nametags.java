@@ -86,11 +86,12 @@ public class Nametags extends Mod {
 	public void eventRenderNametags(EventRenderNametags event) {
 		if (shouldRenderEntity(event.getEntity())) event.setCancelled(true);
 	}
-
+	
 	@EventTarget
 	public void eventRender3D(EventRender3D event) {
-		if (font.mcFont != forceMcFont.isEnabled()) font = new NahrFont(Utils.getFileFromJar(ModuleManager.INSTANCE.getModule(this.getClass()).getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, forceMcFont.isEnabled());
+		if (font.mcFont != (forceMcFont.isEnabled() ? forceMcFont.isEnabled() : FontManager.mcFont)) font = new NahrFont(Utils.getFileFromJar(ModuleManager.INSTANCE.getModule(this.getClass()).getClass().getClassLoader(), "assets/hypnotic/fonts/Roboto-Regular.ttf"), 18, 1, forceMcFont.isEnabled() ? forceMcFont.isEnabled() : FontManager.mcFont);
 		this.positions.clear();
+		
 		mc.world.getEntities().forEach(entity -> {
 			float offset = entity.getHeight() + 0.2f;
 			Vec3d vec = RenderUtils.getPos(entity, offset, event.getTickDelta(), event.getMatrices());

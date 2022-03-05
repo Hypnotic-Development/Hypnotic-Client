@@ -68,6 +68,7 @@ public class OptionsScreen extends HypnoticScreen {
 		menuBar.renderMenuBar(matrices, mouseX, mouseY, width, height);
 		window.render(matrices, mouseX, mouseY, delta);
 		if (disableBlur.isEnabled()) blurIntensity.setVisible(false);
+		else blurIntensity.setVisible(true);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	

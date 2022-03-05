@@ -22,9 +22,12 @@ import dev.hypnotic.Hypnotic;
 import dev.hypnotic.command.Command;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.module.ModuleManager;
+import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.Wrapper;
 import net.minecraft.command.CommandSource;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.ClickEvent.Action;
+import net.minecraft.text.LiteralText;
 
 public class About extends Command {
 
@@ -35,12 +38,12 @@ public class About extends Command {
 	@Override
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
 		builder.executes(context -> {
-			Wrapper.tellPlayerRaw(ColorUtils.red + "\n\u00A7l\u00A7nHypnotic\n");
-			Wrapper.tellPlayerRaw(ColorUtils.red + "Current build" + ColorUtils.gray + ": " + Hypnotic.version);
-			Wrapper.tellPlayerRaw(ColorUtils.red + "Modules" + ColorUtils.gray + ": " + ModuleManager.INSTANCE.modules.size());
-			Wrapper.tellPlayerRaw(ColorUtils.red + "Commands" + ColorUtils.gray + ": " + CommandManager.get().getAll().size());
-			Wrapper.tellPlayerRaw(ColorUtils.red + "Website" + ColorUtils.gray + ": https://hypnotic.dev");
-			Wrapper.tellPlayerRaw("\n\n\u00A7c                 .,;;;,.                \n"
+			ChatUtils.tellPlayerRaw(ColorUtils.red + "\n\u00A7l\u00A7nHypnotic\n");
+			ChatUtils.tellPlayerRaw(ColorUtils.red + "Current build" + ColorUtils.gray + ": " + Hypnotic.version);
+			ChatUtils.tellPlayerRaw(ColorUtils.red + "Modules" + ColorUtils.gray + ": " + ModuleManager.INSTANCE.modules.size());
+			ChatUtils.tellPlayerRaw(ColorUtils.red + "Commands" + ColorUtils.gray + ": " + CommandManager.INSTANCE.getCommands().size());
+			ChatUtils.tellPlayerRaw(new LiteralText(ColorUtils.red + "Website" + ColorUtils.gray + ": ").append(ChatUtils.clickableText(ColorUtils.gray + "https://hypnotic.dev", new ClickEvent(Action.OPEN_URL, "https://hypnotic.dev"))));
+			ChatUtils.tellPlayerRaw("\n\n\u00A7c                 .,;;;,.                \n"
 					+ "                .xXNNN0:    .....       \n"
 					+ "               .lXMMMNd.   ;OXXKd.      \n"
 					+ "               :KWMWNk'   ,OWMM0:       \n"

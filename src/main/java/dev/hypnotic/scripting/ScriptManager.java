@@ -32,11 +32,15 @@ import dev.hypnotic.module.ModuleManager;
 */
 public class ScriptManager {
 
-	public static ScriptManager INSTANCE = new ScriptManager();
+	public static final ScriptManager INSTANCE = new ScriptManager();
 	private ArrayList<Script> scripts;
 	private File scriptsFolder = new File(Hypnotic.scriptDir);
 	
 	public ScriptManager() {
+		
+	}
+	
+	public void loadScripts() {
 		makeScriptsFolder();
 		scripts = new ArrayList<>();
 		refreshScripts();
@@ -52,12 +56,11 @@ public class ScriptManager {
 		Hypnotic.LOGGER.info("Refreshing scripts");
 		List<String> enabledScripts = Lists.newArrayList();
 		scripts.forEach(script -> {
-			enabledScripts.add(script.getName());
+			if (script.isEnabled()) enabledScripts.add(script.getName());
 			script.setEnabled(false);
 		});
 		ModuleManager.INSTANCE.modules.removeAll(scripts);
 		scripts.clear();
-		System.out.println(scripts.size());
 		for (File script : scriptsFolder.listFiles()) {
 			registerScript(script);
 		}

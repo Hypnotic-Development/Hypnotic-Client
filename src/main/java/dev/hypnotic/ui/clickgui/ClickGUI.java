@@ -51,6 +51,7 @@ public class ClickGUI extends HypnoticScreen {
     double lastOffset = 0;
     
     public boolean dragging;
+    public boolean searchOpen = false;
 	
 	int fadeIn = 0;
 	double anim1, anim2, aStartX, aStartY;
@@ -95,7 +96,7 @@ public class ClickGUI extends HypnoticScreen {
 		anim2 = 0;
 		aStartX = x;
 		aStartY = y;
-		if (this.currentCategory == Category.SCRIPT) this.refresh();
+		this.refresh();
 		super.init();
 	}
 	

@@ -16,22 +16,41 @@
 */
 package dev.hypnotic.module.player;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.Timer;
 
 public class Spammer extends Mod {
-    public NumberSetting delay = new NumberSetting("Delay", 5D, 0.0D, 20.0D, 0.1D);
-    public ArrayList<String> messages = new ArrayList<>();
-    public static String message = "/sell";
+    public NumberSetting delay = new NumberSetting("Delay", 5, 0.0, 20.0, 0.1);
+    public int msgCount = 0;
+    public Map<Integer, String> customMessages = new HashMap<>();
+    public Map<Integer, String> randomShit = new HashMap<>();
+    public Map<Integer, String> facts = new HashMap<>();
     public static Timer delayTimer = new Timer();
+    public File spammerFile = new File(Hypnotic.hypnoticDir + "/spammer.txt");
     
     public Spammer() {
         super("Spammer", "Mine blocks faster", Category.PLAYER);
         this.addSettings(delay);
+        
+        try {
+			spammerFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
+        facts.put(1, "Hypnotic is proven to be 200% cooler than other clients");
+        facts.put(2, "Hypnotic features a full JavaScript scripting system");
+        facts.put(3, "https://discord.gg/aZStDUnb29 is the official discord to complain in");
+        facts.put(4, "https://hypnotic.dev has a secret floppa api");
+        facts.put(5, "Hypnotic features 100+ modules, 20+ commands, and beautiful graphics");
     }
 
     public void onTick() {
@@ -40,6 +59,14 @@ public class Spammer extends Mod {
         }
         mc.options.keySneak.setPressed(true);
         super.onTick();
+    }
+    
+    public void loadCustomMessages() {
+    	
+    }
+    
+    public void addCustomMessage(String message) {
+    	
     }
 }
 

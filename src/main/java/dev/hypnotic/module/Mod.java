@@ -22,8 +22,8 @@ import java.util.Comparator;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import dev.hypnotic.Hypnotic;
 import dev.hypnotic.config.ConfigSetting;
+import dev.hypnotic.config.SaveLoad;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.settings.Setting;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
@@ -170,8 +170,8 @@ public class Mod {
 
 	public void setKey(int key) {
 		this.keyCode = key;
-		if(Hypnotic.INSTANCE.saveload != null) {
-			Hypnotic.INSTANCE.saveload.save();
+		if(SaveLoad.INSTANCE != null) {
+			SaveLoad.INSTANCE.save();
 		}
 	}
 
@@ -189,8 +189,8 @@ public class Mod {
         		EventManager.INSTANCE.unregister(this);
         }
         this.enabled = enabled;
-        if(Hypnotic.INSTANCE.saveload != null){
-            Hypnotic.INSTANCE.saveload.save();
+        if (SaveLoad.INSTANCE != null){
+            SaveLoad.INSTANCE.save();
         }
 	}
 

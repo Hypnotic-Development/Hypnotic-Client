@@ -1,0 +1,99 @@
+{
+    "targets": [
+        "swap"
+    ],
+    "passes": [
+        {
+            "name": "hypnotic:bloom",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "uniforms": [
+                {
+                    "name": "loopRadius",
+                    "values": [ 8.0 ]
+                },
+                {
+                	"name": "radius",
+                	"values": [ 8.0 ] 
+                },
+                {
+                	"name": "texelSize",
+                	"values": [ 1.0, 1.0 ] 
+                },
+                {
+                    "name": "direction",
+                    "values": [ 0.0, 1.0 ]
+                }
+            ]
+        },
+        {
+            "name": "hypnotic:bloom",
+            "intarget": "swap",
+            "outtarget": "minecraft:main",
+            "uniforms": [
+                {
+                    "name": "loopRadius",
+                    "values": [ 8.0 ]
+                },
+                {
+                	"name": "radius",
+                	"values": [ 8.0 ] 
+                },
+                {
+                	"name": "texelSize",
+                	"values": [ 1.0, 1.0 ] 
+                },
+                {
+                    "name": "direction",
+                    "values": [ 0.0, 1.0 ]
+                }
+            ]
+        },
+        {
+            "name": "hypnotic:bloom",
+            "intarget": "minecraft:main",
+            "outtarget": "swap",
+            "uniforms": [
+                {
+                    "name": "loopRadius",
+                    "values": [ 8.0 ]
+                },
+                {
+                	"name": "radius",
+                	"values": [ 8.0 ] 
+                },
+                {
+                	"name": "texelSize",
+                	"values": [ 1.0, 1.0 ] 
+                },
+                {
+                    "name": "direction",
+                    "values": [ 0.0, 1.0 ]
+                }
+            ]
+        },
+        {
+            "name": "hypnotic:bloom",
+            "intarget": "swap",
+            "outtarget": "minecraft:main",
+            "uniforms": [
+                {
+                    "name": "loopRadius",
+                    "values": [ 8.0 ]
+                },
+                {
+                	"name": "radius",
+                	"values": [ 8.0 ] 
+                },
+                {
+                	"name": "texelSize",
+                	"values": [ 1.0, 1.0 ] 
+                },
+                {
+                    "name": "direction",
+                    "values": [ 0.0, 1.0 ]
+                }
+            ]
+        }
+    ]
+}

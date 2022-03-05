@@ -40,8 +40,9 @@ public class ArrayListModule extends HudModule {
 	public NumberSetting backgroundOpacity = new NumberSetting("Background Opacity", 150, 10, 255, 1);
 	public BooleanSetting colorBar = new BooleanSetting("Color Bar", true);
 	public ModeSetting colorBarMode = new ModeSetting("Color Bar Mode", "Side", "Side", "Top", "Outline");
-	public ModeSetting colorMode = new ModeSetting("Color Mode", "Custom", "Custom", "Category", "Rainbow", "Fade");
+	public ModeSetting colorMode = new ModeSetting("Color Mode", "Custom", "Custom", "Category", "Rainbow", "Fade", "Fade Between");
 	public ColorSetting color = new ColorSetting("Color", ColorUtils.pingle);
+	public ColorSetting color2 = new ColorSetting("Color 2", ColorUtils.defaultClientColor().brighter());
 	public NumberSetting speed = new NumberSetting("Speed", 4, 0.1, 10, 0.1);
 	public NumberSetting sat = new NumberSetting("Saturation", 0.6, 0, 1, 0.1);
 	public NumberSetting spread = new NumberSetting("Spread", 120, 0, 200, 10);
@@ -50,8 +51,7 @@ public class ArrayListModule extends HudModule {
 	public ArrayListModule() {
 		super("ArrayList", "Renders all of the enabled modules", -10000, -10000, -100, -100);
 		this.setEnabled(true);
-		addSettings(location, background, backgroundOpacity, colorBar, colorBarMode, colorMode, color, speed, sat, spread);
-		this.setDraggable(false);
+		addSettings(location, background, backgroundOpacity, colorBar, colorBarMode, colorMode, color, color2, speed, sat, spread);
 	}
 	
 	@Override
@@ -65,10 +65,6 @@ public class ArrayListModule extends HudModule {
 		int color = ColorUtils.defaultClientColor;
 		this.setDefaultX(scaledWidth);
 		this.setDefaultY(0);
-		if (this.getX() < -1000) {
-			this.setX(this.getDefaultX());
-			this.setY(this.getDefaultY());
-		}
 		CopyOnWriteArrayList<Mod> modules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.modules);
 		CopyOnWriteArrayList<Mod> enabledModules = new CopyOnWriteArrayList<Mod>(ModuleManager.INSTANCE.getEnabledModules());
 		boolean shouldmove = animationTimer.hasTimeElapsed(1000 / 75, true);
@@ -76,6 +72,7 @@ public class ArrayListModule extends HudModule {
 		modules.sort(Comparator.comparingInt(m -> (int)font.getStringWidth(((Mod)m).getDisplayName())).reversed());
 		enabledModules.sort(Comparator.comparingInt(m -> (int)font.getStringWidth(((Mod)m).getDisplayName())).reversed());
 		int count = 1;
+		String longestName = "";
 		for (Mod mod : modules) {
 			if (!mod.visible.isEnabled()) continue;
 			
@@ -89,11 +86,15 @@ public class ArrayListModule extends HudModule {
 				case "Fade":
 					color = ColorUtils.fade(this.color.getColor(), (int) (count * (speed.getValue())), ModuleManager.INSTANCE.getEnabledModules().size() * (int)(spread.getValue() / 5)).getRGB();
 					break;
+				case "Fade Between":
+					color = ColorUtils.fadeBetween(this.color.getColor().getRGB(), this.color2.getColor().getRGB(), count * (long)(spread.getValue()));
+					break;
 				case "Category":
 					color = ColorUtils.getCategoryColor(mod).getRGB();
 					break;
 			}
 			if ((mod.animation > 0 || mod.offset > 0) && mod.visible.isEnabled()) {
+				longestName = font.getStringWidth(longestName) < font.getStringWidth(mod.getDisplayName()) ? mod.getDisplayName() : longestName;
 				names.add(mod.getDisplayName());
 				float yPos = location.is("Top") ? -5 + font.getStringHeight(mod.getDisplayName()) + off : scaledHeight - font.getStringHeight(mod.getDisplayName()) - off - 10;
 				RenderUtils.startScissor(scaledWidth - 13 - (int)font.getStringWidth(mod.getDisplayName()) - 2, (int)yPos - 1, (int)font.getStringWidth(mod.getDisplayName()) + 8, 16);
@@ -156,8 +157,8 @@ public class ArrayListModule extends HudModule {
 				}
 			}
 		}
-		this.setHeight(0);
-		this.setWidth(0);
+		this.setHeight(count * 3);
+		this.setWidth(font.getStringWidth(longestName));
 		super.render(matrices, scaledWidth, scaledHeight, partialTicks);
 	}
 	
@@ -169,10 +170,11 @@ public class ArrayListModule extends HudModule {
 	@Override
 	public void onTickDisabled() {
 		colorBarMode.setVisible(colorBar.isEnabled());
-		color.setVisible(colorMode.is("Custom") || colorMode.is("Fade"));
+		color.setVisible(colorMode.is("Custom") || colorMode.is("Fade") || colorMode.is("Fade Between"));
 		speed.setVisible(colorMode.is("Rainbow") || colorMode.is("Fade"));
 		sat.setVisible(colorMode.is("Rainbow"));
-		spread.setVisible(colorMode.is("Rainbow") || colorMode.is("Fade"));
+		spread.setVisible(colorMode.is("Rainbow") || colorMode.is("Fade") || colorMode.is("Fade Between"));
+		color2.setVisible(colorMode.is("Fade Between"));
 		super.onTickDisabled();
 	}
 	

@@ -44,7 +44,7 @@ public class SaveLoad {
     public File configs;
     public File dataFile;
 
-    public static SaveLoad INSTANCE = new SaveLoad();
+    public static final SaveLoad INSTANCE = new SaveLoad();
     //Currently saves keybinds, hud positions, friends, waypoints*, and frame positions
     
     public SaveLoad() {
@@ -69,16 +69,18 @@ public class SaveLoad {
 
         ArrayList<String> toSave = new ArrayList<String>();
 
+        if (ModuleManager.INSTANCE == null || HudManager.INSTANCE == null) return;
+        
         for (Mod mod : ModuleManager.INSTANCE.modules) {
             toSave.add("MOD:" + mod.getName() + ":" + mod.isEnabled() + ":" + mod.getKey());
         }
         
-        for (Friend friend : FriendManager.INSTANCE.friends) {
-        	toSave.add("FRIEND:" + friend.name);
-        }
-        
         for (HudModule element : HudManager.INSTANCE.hudModules) {
         	toSave.add("HUD:" + element.getName() + ":" + element.getX() + ":" + element.getY());
+        }
+        
+        for (Friend friend : FriendManager.INSTANCE.friends) {
+        	toSave.add("FRIEND:" + friend.name);
         }
         
         for (Frame frame : ClickGUI.INSTANCE.frames) {
@@ -87,10 +89,6 @@ public class SaveLoad {
         
         toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
         toSave.add("CLICKGUI:X:" + dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.x + ":Y:" + dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.y);
-        
-        for (ModuleButton mb : dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.buttons) {
-        	if (mb.settingsWindow != null) toSave.add("SETTINGPOS:" + mb.mod.name + ":X:" + mb.settingsWindow.x + ":Y:" + mb.settingsWindow.y);
-        }
         
         for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
         	toSave.add("WAYPOINT:NAME:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());

@@ -20,7 +20,7 @@ import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventReceivePacket;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
-import dev.hypnotic.utils.Wrapper;
+import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.Entity.RemovalReason;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
@@ -43,7 +43,7 @@ public class EntityDesync extends Mod {
 				mc.player.dismountVehicle();
 				mc.world.removeEntity(ridingEntity.getId(), RemovalReason.UNLOADED_TO_CHUNK);
 			} else {
-				Wrapper.tellPlayer("you need to be riding something dipshit");
+				ChatUtils.tellPlayer("you need to be riding something dipshit");
 				ridingEntity = null;
 				this.toggle();
 			}
@@ -69,7 +69,7 @@ public class EntityDesync extends Mod {
 		if (event.getPacket() instanceof ClientCommandC2SPacket) {
 			ClientCommandC2SPacket packet = (ClientCommandC2SPacket)event.getPacket();
 			if (packet.getMode() == Mode.PRESS_SHIFT_KEY) {
-				Wrapper.tellPlayer("Dismounted");
+				ChatUtils.tellPlayer("Dismounted");
 				this.toggle();
 			}
 		}
@@ -83,7 +83,7 @@ public class EntityDesync extends Mod {
 				mc.player.startRiding(ridingEntity, true);
 			}
 			ridingEntity = null;
-			Wrapper.tellPlayer("Re-mounted");
+			ChatUtils.tellPlayer("Re-mounted");
 		}
 		super.onDisable();
 	}

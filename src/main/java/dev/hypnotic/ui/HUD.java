@@ -41,6 +41,7 @@ public class HUD {
 	@EventTarget
 	public void renderHUD(EventRenderGUI event) {
 		if (mc.options.debugEnabled) return;
+		
 		if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 1) {
 			String numColor = ColorUtils.green;
 			if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 5 && TPSUtils.INSTANCE.getTimeSinceLastTick() < 10 ) numColor = ColorUtils.yellow;

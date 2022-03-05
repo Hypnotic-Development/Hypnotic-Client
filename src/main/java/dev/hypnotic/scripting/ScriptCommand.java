@@ -10,34 +10,45 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.hypnotic.command.commands;
+package dev.hypnotic.scripting;
+
+import org.graalvm.polyglot.Value;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 
 import dev.hypnotic.command.Command;
-import dev.hypnotic.command.argtypes.ModuleArgumentType;
-import dev.hypnotic.module.Mod;
-import dev.hypnotic.utils.ColorUtils;
-import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.command.CommandSource;
 
-public class Module extends Command {
+/**
+* @author BadGamesInc
+*/
+public class ScriptCommand extends Command {
 
-	public Module() {
-		super("module", "Tells you more about a specific module");
+	public RequiredArgumentBuilder<CommandSource, ?>[] args;
+	public Value commandFunc;
+	
+	public ScriptCommand(String name, String description, Value commandFunc, String[] aliases) {
+		super(name, description, aliases);
+		this.commandFunc = commandFunc;
 	}
 	
+	private RequiredArgumentBuilder<CommandSource, ?> lastArg;
+
 	@Override
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
-		builder.then(argument("module", ModuleArgumentType.module()).executes(context -> {
-			Mod mod = context.getArgument("module", Mod.class);
-			ChatUtils.tellPlayerRaw(ColorUtils.red + "Module" + ColorUtils.gray + ": " + mod.getName());
-			ChatUtils.tellPlayerRaw(ColorUtils.gray +  mod.getDescription());
+		if (args != null && args.length > 0) {
+			for (RequiredArgumentBuilder<CommandSource, ?> arg : args) {
+				lastArg = arg;
+				lastArg.then(arg);
+			}
+		}
+		
+		builder.then(lastArg.executes(context -> {
+			commandFunc.execute(context);
 			return SINGLE_SUCCESS;
 		}));
 	}
+
 }
