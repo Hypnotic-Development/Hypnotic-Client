@@ -42,9 +42,11 @@ public class HudEditorScreen extends HypnoticScreen {
 		frame.updatePosition(mouseX, mouseY);
 		frame.updateButtons();
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
+			if (!element.isEnabled() && hide) continue;
 			element.render(matrices, mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), delta);
 			element.updatePosition(mouseX, mouseY);
 		}
+		hideButton.render(matrices, mouseX, mouseY, delta);
 		menuBar.renderMenuBar(matrices, mouseX, mouseY, this.width, this.height);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
@@ -53,6 +55,8 @@ public class HudEditorScreen extends HypnoticScreen {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		frame.mouseClicked(mouseX, mouseY, button);
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
+			if (!element.isEnabled() && hide) continue;
+			
 			if (element.hovered((int)mouseX, (int)mouseY)) {
 				if (button == 0) {
 					element.setDragging(true);
@@ -86,9 +90,7 @@ public class HudEditorScreen extends HypnoticScreen {
 	@Override
 	protected void init() {
 		menuBar = MenuBar.INSTANCE;
-		hideButton = new Button("Hide disabled modules", width - 100, 5, 200, 25, true, () -> {
-			hide = !hide;
-		});
+		hideButton = new Button("Hide disabled modules", (width / 2) - 60, 10, 120, 20, true, () -> { hide = !hide; System.out.println(hide); });
 		this.addButton(hideButton);
 		super.init();
 	}

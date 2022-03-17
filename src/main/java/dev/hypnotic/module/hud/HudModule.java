@@ -230,10 +230,8 @@ public class HudModule extends Mod {
 	public void render(MatrixStack matrices, int scaledWidth, int scaledHeight, float partialTicks) {
 		font = FontManager.robotoMed2;
 		this.setDraggable(!dragSetting.isEnabled());
-		for (HudModule element : HudManager.INSTANCE.hudModules) {
-			if (mc.currentScreen instanceof HudEditorScreen) {
-				if (element.isDraggable()) RenderUtils.fillAndBorder(matrices, element.getX(), element.getY(), element.getX() + element.getWidth(), element.getY() + element.getHeight(), element.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);
-			}
+		if (mc.currentScreen instanceof HudEditorScreen) {
+			if (this.isDraggable()) RenderUtils.fillAndBorder(matrices, this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), this.isEnabled() ? -1 : new Color(255, 255, 255, 20).getRGB(), 0, -1);
 		}
 	}
 	
