@@ -57,7 +57,7 @@ public class Spammer extends Mod {
         if (delayTimer.hasTimeElapsed((long)delay.getValue() * 1000, true)) {
         	mc.player.sendChatMessage("/sell");
         }
-        mc.options.keySneak.setPressed(true);
+        mc.options.sneakKey.setPressed(true);
         super.onTick();
     }
     

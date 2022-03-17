@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
@@ -21,15 +21,18 @@ repositories {
         	name = 'Ladysnake Mods'
         	url = 'https://ladysnake.jfrog.io/artifactory/mods'
         	content {
-           	 includeGroup 'io.github.ladysnake'
+           	 	 includeGroup 'io.github.ladysnake'
             	 includeGroupByRegex 'io\\.github\\.onyxstudios.*'
-		}
+			}
         }
 	maven {
 		name = "meteor-maven"
 		url = "https://maven.meteordev.org/snapshots"
 	}
-	maven { url 'https://jitpack.io' }
+	maven { 
+		url 'https://jitpack.io' 
+	}
+	
 	jcenter()
 }
 
@@ -59,11 +62,19 @@ dependencies {
 	include "baritone:baritone:${project.baritone_version}"
 
 	modImplementation "io.github.ladysnake:satin:${satin_version}"
-    	include "io.github.ladysnake:satin:${satin_version}"
+    include "io.github.ladysnake:satin:${satin_version}"
 	
 	implementation 'org.graalvm.js:js:21.3.0'
 	implementation 'org.graalvm.js:js-scriptengine:21.3.0'
+	
 	dependency files('lib/java-discord-rpc-2.0.1-all.jar')
+
+	modImplementation('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
+    include('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
+    
+    // Waiting for multiconnect to update to 1.18.2
+    //modImplementation('net.earthcomputer.multiconnect:multiconnect-slim:1.5.10') { transitive = false }
+    //include('net.earthcomputer.multiconnect:multiconnect-slim:1.5.10') { transitive = false }
 }
 
 shadowJar {

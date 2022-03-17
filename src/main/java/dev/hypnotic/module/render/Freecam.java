@@ -92,7 +92,7 @@ public class Freecam extends Mod {
         }
 
         double s = 0.5;
-        if (mc.options.keySprint.isPressed()) s = 1;
+        if (mc.options.sprintKey.isPressed()) s = 1;
 
         boolean a = false;
         if (this.forward) {
@@ -166,17 +166,17 @@ public class Freecam extends Mod {
 
         boolean cancel = true;
 
-        if (mc.options.keyForward.matchesKey(event.getKey(), 0) || mc.options.keyForward.matchesMouse(event.getKey())) {
+        if (mc.options.forwardKey.matchesKey(event.getKey(), 0) || mc.options.forwardKey.matchesMouse(event.getKey())) {
             forward = event.getAction() != GLFW.GLFW_RELEASE;
-        } else if (mc.options.keyBack.matchesKey(event.getKey(), 0) || mc.options.keyBack.matchesMouse(event.getKey())) {
+        } else if (mc.options.backKey.matchesKey(event.getKey(), 0) || mc.options.backKey.matchesMouse(event.getKey())) {
             backward = event.getAction() != GLFW.GLFW_RELEASE;
-        } else if (mc.options.keyRight.matchesKey(event.getKey(), 0) || mc.options.keyRight.matchesMouse(event.getKey())) {
+        } else if (mc.options.rightKey.matchesKey(event.getKey(), 0) || mc.options.rightKey.matchesMouse(event.getKey())) {
             right = event.getAction() != GLFW.GLFW_RELEASE;
-        } else if (mc.options.keyLeft.matchesKey(event.getKey(), 0) || mc.options.keyLeft.matchesMouse(event.getKey())) {
+        } else if (mc.options.leftKey.matchesKey(event.getKey(), 0) || mc.options.leftKey.matchesMouse(event.getKey())) {
             left = event.getAction() != GLFW.GLFW_RELEASE;
-        } else if (mc.options.keyJump.matchesKey(event.getKey(), 0) || mc.options.keyJump.matchesMouse(event.getKey())) {
+        } else if (mc.options.jumpKey.matchesKey(event.getKey(), 0) || mc.options.jumpKey.matchesMouse(event.getKey())) {
             up = event.getAction() != GLFW.GLFW_RELEASE;
-        } else if (mc.options.keySneak.matchesKey(event.getKey(), 0) || mc.options.keySneak.matchesMouse(event.getKey())) {
+        } else if (mc.options.sneakKey.matchesKey(event.getKey(), 0) || mc.options.sneakKey.matchesMouse(event.getKey())) {
             down = event.getAction() != GLFW.GLFW_RELEASE;
         } else {
             cancel = false;
@@ -192,12 +192,12 @@ public class Freecam extends Mod {
     }
 
     private void unpress() {
-        mc.options.keyForward.setPressed(false);
-        mc.options.keyBack.setPressed(false);
-        mc.options.keyRight.setPressed(false);
-        mc.options.keyLeft.setPressed(false);
-        mc.options.keyJump.setPressed(false);
-        mc.options.keySneak.setPressed(false);
+        mc.options.forwardKey.setPressed(false);
+        mc.options.backKey.setPressed(false);
+        mc.options.rightKey.setPressed(false);
+        mc.options.leftKey.setPressed(false);
+        mc.options.jumpKey.setPressed(false);
+        mc.options.sneakKey.setPressed(false);
     }
     
     public double getX(float tickDelta) {

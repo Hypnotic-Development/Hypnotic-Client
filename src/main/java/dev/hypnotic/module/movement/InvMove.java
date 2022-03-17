@@ -35,12 +35,12 @@ public class InvMove extends Mod {
     @Override
     public void onTick() {
     	if (mc.currentScreen != null && !(mc.currentScreen instanceof ChatScreen)) {
-    		mc.options.keyForward.setPressed(KeyUtils.isPressed(mc.options.keyForward));
-            mc.options.keyBack.setPressed(KeyUtils.isPressed(mc.options.keyBack));
-            mc.options.keyLeft.setPressed(KeyUtils.isPressed(mc.options.keyLeft));
-            mc.options.keyRight.setPressed(KeyUtils.isPressed(mc.options.keyRight));
-            if (space.isEnabled()) mc.options.keyJump.setPressed(KeyUtils.isPressed(mc.options.keyJump));
-            if (shift.isEnabled()) mc.options.keySneak.setPressed(KeyUtils.isPressed(mc.options.keySneak));
+    		mc.options.forwardKey.setPressed(KeyUtils.isPressed(mc.options.forwardKey));
+            mc.options.backKey.setPressed(KeyUtils.isPressed(mc.options.backKey));
+            mc.options.leftKey.setPressed(KeyUtils.isPressed(mc.options.leftKey));
+            mc.options.rightKey.setPressed(KeyUtils.isPressed(mc.options.rightKey));
+            if (space.isEnabled()) mc.options.jumpKey.setPressed(KeyUtils.isPressed(mc.options.jumpKey));
+            if (shift.isEnabled()) mc.options.sneakKey.setPressed(KeyUtils.isPressed(mc.options.sneakKey));
     	}
     	super.onTick();
     }

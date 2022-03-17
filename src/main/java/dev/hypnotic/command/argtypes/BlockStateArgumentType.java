@@ -16,20 +16,21 @@
 */
 package dev.hypnotic.command.argtypes;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
 
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.BlockArgumentParser;
 import net.minecraft.command.argument.BlockStateArgument;
-import net.minecraft.tag.BlockTags;
+import net.minecraft.util.registry.Registry;
 
 //minecraft one needs server context
 public class BlockStateArgumentType implements ArgumentType<BlockStateArgument> {
@@ -39,6 +40,7 @@ public class BlockStateArgumentType implements ArgumentType<BlockStateArgument> 
       return new BlockStateArgumentType();
    }
 
+   @Override
    public BlockStateArgument parse(StringReader stringReader) throws CommandSyntaxException {
       BlockArgumentParser blockArgumentParser = (new BlockArgumentParser(stringReader, false)).parse(true);
       return new BlockStateArgument(blockArgumentParser.getBlockState(), blockArgumentParser.getBlockProperties().keySet(), blockArgumentParser.getNbtData());
@@ -58,7 +60,7 @@ public class BlockStateArgumentType implements ArgumentType<BlockStateArgument> 
       } catch (CommandSyntaxException var6) {
       }
 
-      return blockArgumentParser.getSuggestions(builder, BlockTags.getTagGroup());
+      return blockArgumentParser.getSuggestions(builder, Registry.BLOCK);
    }
 
    public Collection<String> getExamples() {

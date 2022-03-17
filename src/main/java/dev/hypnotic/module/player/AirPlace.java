@@ -52,7 +52,7 @@ public class AirPlace extends Mod {
 	public void onTick() {
 		if (mc.world != null && mc.player != null) {
 			placePos = new BlockPos(mc.getCameraEntity().raycast(range.getValue(), 0, false).getPos());
-			if (placePos != null && mc.world.getBlockState(placePos).getMaterial().isReplaceable() && mc.options.keyUse.isPressed()) {
+			if (placePos != null && mc.world.getBlockState(placePos).getMaterial().isReplaceable() && mc.options.useKey.isPressed()) {
 				if (placeTimer.hasTimeElapsed((long)delay.getValue() * 60, true) || !hasPlacedOne) {
 					if (mc.player.getMainHandStack().getItem() instanceof BlockItem) {
 						WorldUtils.placeBlockMainHand(placePos, false, true);

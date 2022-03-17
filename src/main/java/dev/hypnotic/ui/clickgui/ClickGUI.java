@@ -280,11 +280,11 @@ public class ClickGUI extends HypnoticScreen {
 	}
 	
 	@Override
-	public void onClose() {
+	public void close() {
 		for (ModuleButton button : buttons) {
 			button.open = false;;
 		}
-		super.onClose();
+		super.close();
 	}
 
 	@Override

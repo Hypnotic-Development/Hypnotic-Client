@@ -67,12 +67,12 @@ public class Scaffold extends Mod {
     
     @EventTarget
     public void onWalkOffLedge(EventWalkOffLedge event) {
-        if(down.isEnabled() && mc.options.keySneak.isPressed()) event.isSneaking = false;
+        if(down.isEnabled() && mc.options.sneakKey.isPressed()) event.isSneaking = false;
     }
 
     @EventTarget
     public void onPlayerJump(EventPlayerJump event) {
-        if(tower.isEnabled() && getBlockInHotbar() != -1 && !PlayerUtils.isMoving() && !(this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true))) {
+        if(tower.isEnabled() && getBlockInHotbar() != -1 && !PlayerUtils.isMoving() && !(this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.jumpKey.isPressed() : true))) {
             event.setCancelled(true);
         }
     }
@@ -136,13 +136,13 @@ public class Scaffold extends Mod {
 	            yaw1 = (float) Math.toRadians(yaw1);
 	        }
 	        
-	        boolean keepY = this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.keyJump.isPressed() : true);
+	        boolean keepY = this.keepY.isEnabled() && (this.space.isEnabled() ? !mc.options.jumpKey.isPressed() : true);
 	        
-	        if (mc.options.keyJump.isPressed() && this.space.isEnabled() && mc.options.keyJump.isPressed()) {
+	        if (mc.options.jumpKey.isPressed() && this.space.isEnabled() && mc.options.jumpKey.isPressed()) {
 	        	startY = (int) (mc.player.getY() - 1);
 	        }
 	        
-	        if (tower.isEnabled() && mc.options.keyJump.isPressed() && getBlockInHotbar() != -1 && !keepY) {
+	        if (tower.isEnabled() && mc.options.jumpKey.isPressed() && getBlockInHotbar() != -1 && !keepY) {
 	        	if ((PlayerUtils.isOnGround(0.70) || mc.player.isOnGround()) && mc.world.getBlockState(mc.player.getBlockPos().down()).getBlock() != Blocks.AIR) {
 	        		
 	        		mc.player.setVelocity(0, 0.40985, 0);
@@ -155,7 +155,7 @@ public class Scaffold extends Mod {
 	        	towerTimer.reset();
 	        }
 	        
-	        if(mc.options.keySneak.isPressed() && down.isEnabled()) {
+	        if(mc.options.sneakKey.isPressed() && down.isEnabled()) {
 	
 	            BlockPos under = new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 2 : startY, mc.player.getZ());
 	            pos = under;
@@ -181,7 +181,7 @@ public class Scaffold extends Mod {
 	        for(double i = (int) 0; i < extend.getValue(); i+=0.01) {
 	        	BlockPos pos = WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down();
 	        	if (PlayerUtils.distanceTo(pos) > 10) startY = (int) (mc.player.getY() - 1);
-	        	if (tower.isEnabled() ? (this.keepY.isEnabled() && !space.isEnabled() ? true : !mc.options.keyJump.isPressed()) : true) blocks.add(new BlockPos(pos.getX(), !keepY ? pos.getY() : startY, pos.getZ()));
+	        	if (tower.isEnabled() ? (this.keepY.isEnabled() && !space.isEnabled() ? true : !mc.options.jumpKey.isPressed()) : true) blocks.add(new BlockPos(pos.getX(), !keepY ? pos.getY() : startY, pos.getZ()));
 	        	else blocks.add(new BlockPos(mc.player.getX(), !keepY ? mc.player.getBlockPos().getY() - 0.2 : startY, mc.player.getZ()));
 	        }
 	

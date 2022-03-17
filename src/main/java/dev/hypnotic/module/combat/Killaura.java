@@ -162,7 +162,7 @@ public class Killaura extends Mod {
 										RotationUtils.resetPitch();
 									}
 								}else{
-									if (blocking) mc.options.keyUse.setPressed(false);
+									if (blocking) mc.options.useKey.setPressed(false);
 									blocking = false;
 									if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){
 										RotationUtils.resetPitch();
@@ -171,7 +171,7 @@ public class Killaura extends Mod {
 									this.setDisplayName("Killaura " + ColorUtils.gray + "None");
 								}
 							} else {
-								if (blocking) mc.options.keyUse.setPressed(false);
+								if (blocking) mc.options.useKey.setPressed(false);
 								blocking = false;
 								if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){
 									RotationUtils.resetPitch();

@@ -66,8 +66,8 @@ public class ElytraFly extends Mod {
                     if (event.getY() <= 0)
                         event.setY(mc.player.isSneaking() ? (float)-downSpeed.getValue() : (slowGlide.isEnabled() ? -0.01 : 0));
                     if (mode.is("Vanilla")) {
-                    	if (mc.options.keyJump.isPressed()) event.setY(flySpeed.getValue());
-                    	if (mc.options.keySneak.isPressed()) event.setY(-flySpeed.getValue());
+                    	if (mc.options.jumpKey.isPressed()) event.setY(flySpeed.getValue());
+                    	if (mc.options.sneakKey.isPressed()) event.setY(-flySpeed.getValue());
                     }
                 }
 

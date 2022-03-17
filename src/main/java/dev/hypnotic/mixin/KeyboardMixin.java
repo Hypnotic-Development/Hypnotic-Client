@@ -49,6 +49,7 @@ public abstract class KeyboardMixin {
                 if (mod.getKey() == key && action == GLFW.GLFW_PRESS && MinecraftClient.getInstance().currentScreen == null)
                     mod.toggle();
             }
+            
             EventKeyPress event = new EventKeyPress(key, scancode, action);
             event.call();
             if (event.isCancelled()) info.cancel();

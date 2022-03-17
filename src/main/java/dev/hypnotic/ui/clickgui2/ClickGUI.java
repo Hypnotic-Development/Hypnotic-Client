@@ -95,8 +95,8 @@ public class ClickGUI extends HypnoticScreen {
 	}
 	
 	@Override
-	public void onClose() {
+	public void close() {
 		mouseReleased(mc.mouse.getX() * mc.getWindow().getScaleFactor(), mc.mouse.getY() * mc.getWindow().getScaleFactor(), 0);
-		super.onClose();
+		super.close();
 	}
 }

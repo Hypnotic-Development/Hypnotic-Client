@@ -40,7 +40,7 @@ public class Sprint extends Mod {
     	ModuleManager.INSTANCE.getModule(ClickGUIModule.class).setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
     	this.setDisplayName("Sprint " + ColorUtils.gray + mode.getSelected());
     	if (mc.player != null && mc.player.input != null) {
-	    	if (mode.is("Vanilla")) mc.options.keySprint.setPressed(true);
+	    	if (mode.is("Vanilla")) mc.options.sprintKey.setPressed(true);
 	    	else if (mode.is("Omni") && PlayerUtils.isMoving()) mc.player.setSprinting(true);
     	}
     	super.onMotion();

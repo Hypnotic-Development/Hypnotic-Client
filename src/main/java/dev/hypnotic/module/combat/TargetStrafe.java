@@ -85,7 +85,7 @@ public class TargetStrafe extends Mod {
 
     public static boolean canStrafe() {
     	if (Killaura.target == null) return false;
-        return Killaura.target != null && !Killaura.target.isDead() && (spacebar.isEnabled() ? ModuleManager.INSTANCE.getModule(Killaura.class).isEnabled() && Killaura.target != null && PlayerUtils.isMoving() && ModuleManager.INSTANCE.getModule(TargetStrafe.class).isEnabled() && (ModuleManager.INSTANCE.getModule(Flight.class).isEnabled() ? true : mc.options.keyJump.isPressed()) : ModuleManager.INSTANCE.getModule(Killaura.class).isEnabled() && Killaura.target != null && PlayerUtils.isMoving() && ModuleManager.INSTANCE.getModule(TargetStrafe.class).isEnabled());
+        return Killaura.target != null && !Killaura.target.isDead() && (spacebar.isEnabled() ? ModuleManager.INSTANCE.getModule(Killaura.class).isEnabled() && Killaura.target != null && PlayerUtils.isMoving() && ModuleManager.INSTANCE.getModule(TargetStrafe.class).isEnabled() && (ModuleManager.INSTANCE.getModule(Flight.class).isEnabled() ? true : mc.options.jumpKey.isPressed()) : ModuleManager.INSTANCE.getModule(Killaura.class).isEnabled() && Killaura.target != null && PlayerUtils.isMoving() && ModuleManager.INSTANCE.getModule(TargetStrafe.class).isEnabled());
     }
 
     private void drawCircle(MatrixStack matrices, Entity entity, float partialTicks, double rad, double height) {

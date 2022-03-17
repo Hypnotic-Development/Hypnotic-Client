@@ -154,6 +154,7 @@ public class Hypnotic implements ModInitializer {
 			ConfigManager.INSTANCE.saveConfig();
 			ConfigManager.INSTANCE.saveAll();
 			SaveLoad.INSTANCE.save();
+			hasShutdown = true;
 		}
 	}
 }

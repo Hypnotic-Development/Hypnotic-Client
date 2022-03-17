@@ -42,11 +42,11 @@ public class MiddleClickFriend extends Mod {
 			HitResult hitResult = mc.crosshairTarget;
 			if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
 				PlayerEntity player = (PlayerEntity) ((EntityHitResult) hitResult).getEntity();
-				if (!FriendManager.INSTANCE.isFriend(player) && !mc.options.keySneak.isPressed()) {
+				if (!FriendManager.INSTANCE.isFriend(player) && !mc.options.sneakKey.isPressed()) {
 					FriendManager.INSTANCE.add(new Friend(player.getName().asString()));
 					ChatUtils.tellPlayer("Added " + ColorUtils.green + player.getName().asString() + ColorUtils.white + " to your friends list");
 				} 
-				if (mc.options.keySneak.isPressed() && FriendManager.INSTANCE.isFriend(player)) {
+				if (mc.options.sneakKey.isPressed() && FriendManager.INSTANCE.isFriend(player)) {
 					for (Friend friend : FriendManager.INSTANCE.friends) {
 						if (friend.name == player.getName().asString()) {
 							FriendManager.INSTANCE.friends.remove(friend);

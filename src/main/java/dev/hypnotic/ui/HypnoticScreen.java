@@ -89,8 +89,8 @@ public abstract class HypnoticScreen extends Screen {
 	}
 	
 	@Override
-	public void onClose() {
+	public void close() {
 		this.buttons.clear();
-		super.onClose();
+		super.close();
 	}
 }

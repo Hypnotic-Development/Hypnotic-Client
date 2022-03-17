@@ -88,8 +88,8 @@ public class WaypointManagerScreen extends HypnoticScreen {
 	}
 	
 	@Override
-	public void onClose() {
+	public void close() {
 		frame.buttons.clear();
-		super.onClose();
+		super.close();
 	}
 }

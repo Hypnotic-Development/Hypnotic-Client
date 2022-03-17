@@ -136,13 +136,6 @@ public class SaveLoad {
                 
             } else if (s.toLowerCase().startsWith("friend:")) {
             	FriendManager.INSTANCE.add(new Friend(args[1]));
-            } else if (s.toLowerCase().startsWith("hud:")) {
-            	for (HudModule element : HudManager.INSTANCE.hudModules) {
-            		if (element.getName().equalsIgnoreCase(args[1])) {
-            			element.setX(Integer.parseInt(args[2]));
-            			element.setY(Integer.parseInt(args[3]));
-            		}
-            	}
             } else if (s.toLowerCase().startsWith("frame:")) {
             	for (Frame frame : ClickGUI.INSTANCE.frames) {
             		if (frame.name.equalsIgnoreCase(args[1])) {

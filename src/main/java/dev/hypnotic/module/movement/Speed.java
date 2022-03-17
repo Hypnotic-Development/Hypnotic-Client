@@ -50,7 +50,7 @@ public class Speed extends Mod {
 	
 	@Override
 	public void onTick() {
-		if(mc.player.isOnGround() && PlayerUtils.isMoving() && jump.isEnabled()) mc.player.setVelocity(mc.player.getVelocity().x, override.isEnabled() && mc.options.keyJump.isPressed() ? 0.45 : jumpHeight.getValue() * 0.1, mc.player.getVelocity().z);
+		if(mc.player.isOnGround() && PlayerUtils.isMoving() && jump.isEnabled()) mc.player.setVelocity(mc.player.getVelocity().x, override.isEnabled() && mc.options.jumpKey.isPressed() ? 0.45 : jumpHeight.getValue() * 0.1, mc.player.getVelocity().z);
 		super.onTick();
 	}
 

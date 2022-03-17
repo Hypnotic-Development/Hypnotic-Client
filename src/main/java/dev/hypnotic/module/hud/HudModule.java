@@ -37,7 +37,7 @@ public class HudModule extends Mod {
 	public int x;
 	@Expose
     @SerializedName("y")
-	private int y;
+	public int y;
 	private float width, height;
 	private double scaleX, scaleY, scaleStartX, scaleStartY, startWidth, startHeight, prevScaleX, prevScaleY;
 	private boolean dragging, scaling, draggable;

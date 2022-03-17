@@ -112,11 +112,11 @@ public class Flight extends Mod {
     			if (event.isPre()) event.setOnGround(true);
     			PlayerUtils.setMotion(speed.getValue());
     		} else {
-	    		if(mc.options.keyJump.isPressed() && !mc.options.keySneak.isPressed()) {
+	    		if(mc.options.jumpKey.isPressed() && !mc.options.sneakKey.isPressed()) {
 	    			mc.player.setVelocity(velocity.add(0, speed.getValue(), 0));
 	    		}
 	    		
-	    		if(mc.options.keySneak.isPressed() && !mc.options.keyJump.isPressed()) {
+	    		if(mc.options.sneakKey.isPressed() && !mc.options.jumpKey.isPressed()) {
 	    			mc.player.setVelocity(velocity.subtract(0, speed.getValue(), 0));
 	    		}
     		}

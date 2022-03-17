@@ -77,7 +77,7 @@ public class OldBlock extends Mod {
     
     @EventTarget
     public void onSwingHand(EventSwingHand event) {
-    	if (mc.options.keyUse.isPressed() && (mc.player.getMainHandStack().getItem() instanceof SwordItem || mc.player.getMainHandStack().getItem() instanceof AxeItem ) && !animation.is("Swing"))
+    	if (mc.options.useKey.isPressed() && (mc.player.getMainHandStack().getItem() instanceof SwordItem || mc.player.getMainHandStack().getItem() instanceof AxeItem ) && !animation.is("Swing"))
     	event.setCancelled(true);
     }
 }

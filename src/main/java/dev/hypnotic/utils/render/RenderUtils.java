@@ -1381,6 +1381,8 @@ public class RenderUtils {
 		Tessellator.getInstance().getBuffer().vertex(x, y, 0);
 	}
 	
+	// Taken from Coffee client (https://github.com/business-goose/Coffee/tree/master)
+	// My rounded stuff looked retarded
 	public static void renderRoundedQuadInternal(Matrix4f matrix, float cr, float cg, float cb, float ca, double fromX, double fromY, double toX, double toY, double rad, double samples) {
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
@@ -1403,6 +1405,8 @@ public class RenderUtils {
         BufferRenderer.draw(bufferBuilder);
     }
 
+	// Taken from Coffee client (https://github.com/business-goose/Coffee/tree/master)
+	// My rounded stuff looked retarded
     public static void renderRoundedQuad(MatrixStack matrices, Color c, double fromX, double fromY, double toX, double toY, double rad, double samples) {
         int color = c.getRGB();
         Matrix4f matrix = matrices.peek().getPositionMatrix();
@@ -1437,18 +1441,19 @@ public class RenderUtils {
 	
 	public static void preStencil() {
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		RenderSystem.colorMask(false, false, false, false);
 		RenderSystem.depthMask(false);
 		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 		RenderSystem.stencilFunc(GL11.GL_ALWAYS, stencilBit, stencilBit);
 		RenderSystem.stencilMask(stencilBit);
-//		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
 		RenderSystem.clear(GL11.GL_STENCIL_BUFFER_BIT, false);
 	}
 	
 	public static void postStencil() {
 		RenderSystem.colorMask(true, true, true, true);
 		RenderSystem.depthMask(true);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		RenderSystem.stencilMask(0x00);
 		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 		RenderSystem.stencilFunc(GL11.GL_EQUAL, stencilBit, stencilBit);
@@ -1458,6 +1463,8 @@ public class RenderUtils {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}
 	
+	// Taken from Coffee client (https://github.com/business-goose/Coffee/tree/master)
+	// I had no clue how to register a texture from a url
 	static final HttpClient downloader = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(3)).build();
 	public static void registerImageFromUrl(String url, Identifier id) {
 		HttpRequest hr = HttpRequest.newBuilder().uri(URI.create("url")).header("User-Agent", "").timeout(Duration.ofSeconds(5)).build();

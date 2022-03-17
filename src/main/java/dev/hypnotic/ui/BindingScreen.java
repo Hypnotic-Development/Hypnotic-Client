@@ -101,9 +101,9 @@ public class BindingScreen extends Screen {
 	}
 	
 	@Override
-	public void onClose() {
+	public void close() {
 		mod.setBinding(false);
-		super.onClose();
+		super.close();
 	}
 	
 	@Override

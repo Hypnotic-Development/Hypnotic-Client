@@ -42,7 +42,7 @@ public class Phase extends Mod {
 	@Override
 	public void onTick() {
 //		this.setEnabled(false);
-		/*if (mc.options.keySneak.isPressed()) {
+		/*if (mc.options.sneakKey.isPressed()) {
 			mc.player.setSneaking(false);
 //			mc.player.noClip = true;
 //			mc.player.setBoundingBox(new Box(0, 0, 0, 0, 0, 0));
@@ -54,7 +54,7 @@ public class Phase extends Mod {
 //			mc.player.setVelocity(mc.player.getVelocity().x * 3, 0, mc.player.getVelocity().z * 3);
 			
 		}*/
-		if (mc.player.horizontalCollision && mc.options.keySneak.isPressed()) {
+		if (mc.player.horizontalCollision && mc.options.sneakKey.isPressed()) {
 			Vec3i v31 = mc.player.getMovementDirection().getVector();
 	        Vec3d v3 = new Vec3d(v31.getX(), 0, v31.getZ());
 	        for (double o = 2; o < 100; o++) {

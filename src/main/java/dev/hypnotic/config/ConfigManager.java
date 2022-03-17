@@ -64,8 +64,14 @@ public class ConfigManager {
             String configString = new String(Files.readAllBytes(config.getFile().toPath()));
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
             Mod[] modules = gson.fromJson(configString, Mod[].class);
-
+            HudModule[] hudModules = gson.fromJson(configString, HudModule[].class);
+            
             for (Mod module : ModuleManager.INSTANCE.getAllModules()) {
+            	for (HudModule configHudModule : hudModules) {
+            		HudModule hudMod = (HudModule)module;
+                	hudMod.setX(configHudModule.getX());
+                	hudMod.setY(configHudModule.getY());
+            	}
                 for (Mod configModule : modules) {
                     if (module.getName().equals(configModule.getName())) {
                         try {
@@ -120,8 +126,19 @@ public class ConfigManager {
             String configString = new String(Files.readAllBytes(config.toPath()));
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
             Mod[] modules = gson.fromJson(configString, Mod[].class);
+            HudModule[] hudModules = gson.fromJson(configString, HudModule[].class);
 
             for (Mod module : ModuleManager.INSTANCE.getAllModules()) {
+            	if (module instanceof HudModule) {
+            		HudModule hudMod = (HudModule)module;
+	            	for (HudModule configHudModule : hudModules) {
+	            		if (hudMod.getName().equals(configHudModule.getName())) {
+		                	hudMod.setX(configHudModule.getX());
+		                	hudMod.setY(configHudModule.getY());
+		                	System.out.println(hudMod.getName() + ":" + configHudModule.getX());
+	            		}
+	            	}
+            	}
                 for (Mod configModule : modules) {
                     if (module.getName().equals(configModule.getName())) {
                         try {
@@ -131,13 +148,6 @@ public class ConfigManager {
                                 module.setEnabled(false);
                             
                             module.setKey(configModule.getKey());
-                            
-                            if (module instanceof HudModule  && configModule instanceof HudModule) {
-                            	HudModule hudMod = (HudModule)module;
-                            	HudModule configHudMod = (HudModule)configModule;
-                            	hudMod.setX(configHudMod.getX());
-                            	hudMod.setY(configHudMod.getY());
-                            }
                             
                             for (Setting setting : module.settings) {
                                 for (ConfigSetting cfgSetting : configModule.cfgSettings) {
