@@ -44,13 +44,13 @@ public class AltManagerScreen extends HypnoticScreen {
 	@SuppressWarnings("unused")
 	private boolean loggingIn = false;
 	private Screen previousScreen = new TitleScreen();
-	private Button add = new Button("Add alt", 54321, this.width / 2 - 100, height - 50, 200, 20, false);
-	private Button back = new Button("Back", 12345, this.width / 2 - 100, height - 25, 200, 20, false);
-	private Button msLogin = new Button("Microsoft Login", 69420, this.width / 2 - 310, height - 25, 200, 20, false);
-	private Button login = new Button("Login", 1337, this.width / 2 - 310, height - 50, 200, 20, false);
-	private Button remove = new Button("Remove", 8008, this.width / 2 + 210, height - 25, 200, 20, false);
-	private Button cracked = new Button("Add cracked", 800, this.width / 2 + 210, height - 25, 200, 20, false);
-	private Button sessionID = new Button("Use sessionID", 800, this.width / 2 + 210, height - 25, 200, 20, false);
+	private Button add = new Button("Add alt", this.width / 2 - 100, height - 50, 200, 20, false, () -> { MinecraftClient.getInstance().setScreen(new AddAltScreen(this)); });
+	private Button back = new Button("Back", this.width / 2 - 100, height - 25, 200, 20, false, () -> { MinecraftClient.getInstance().setScreen(previousScreen); });
+	private Button msLogin = new Button("Microsoft Login", this.width / 2 - 310, height - 25, 200, 20, false, this::msLogin);
+	private Button login = new Button("Login", this.width / 2 - 310, height - 50, 200, 20, false, this::login);
+	private Button remove = new Button("Remove", this.width / 2 + 210, height - 25, 200, 20, false, this::remove);
+	private Button cracked = new Button("Add cracked", this.width / 2 + 210, height - 25, 200, 20, false, () -> { MinecraftClient.getInstance().setScreen(new AddCrackedAltScreen(this)); });
+	private Button sessionID = new Button("Use sessionID", this.width / 2 + 210, height - 25, 200, 20, false, () -> {});
 	private Alt selectedAlt = null;
 	
 	@Override
@@ -163,56 +163,6 @@ public class AltManagerScreen extends HypnoticScreen {
 	}
 	
 	@Override
-	public void buttonClicked(Button button) {
-		if (selectedAlt != null) {
-			if (button.getId() == 1337) {
-				try {
-					status = "Logging into " + selectedAlt.getEmail();
-					loggingIn = true;
-					if (!selectedAlt.getPassword().equalsIgnoreCase("cracked")) selectedAlt.login();
-					else selectedAlt.setSession(new Session(selectedAlt.getUsername(), "", "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG));
-					status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
-					loggingIn = false;
-					AltsFile.INSTANCE.saveAlts();
-				} catch (AuthenticationException e) {
-					e.printStackTrace();
-				}
-			} else if (button.getId() == 8008) {
-				if (alts.contains(selectedAlt)) {
-					try {
-						alts.remove(selectedAlt);
-						status = "Removed " + ColorUtils.red + selectedAlt.getUsername();
-						AltsFile.INSTANCE.saveAlts();
-					} catch(Exception e) {
-						status = "Error removing alt";
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		if (button.getId() == 69420) {
-			MicrosoftLogin.getRefreshToken(refreshToken -> {
-              if (refreshToken != null) {
-                  MicrosoftAccount account = new MicrosoftAccount(refreshToken);
-                  account.login();
-                  Accounts.get().add(account);
-                  status = "Logged into " + ColorUtils.green + "\"" + account.getUsername() + "\"";
-              }
-			});
-		}
-		if (button.getId() == 12345) {
-			MinecraftClient.getInstance().setScreen(previousScreen);
-		}
-		if (button.getId() == 54321) {
-			MinecraftClient.getInstance().setScreen(new AddAltScreen(this));
-		}
-		if (button.getId() == 800) {
-			MinecraftClient.getInstance().setScreen(new AddCrackedAltScreen(this));
-		}
-		super.buttonClicked(button);
-	}
-	
-	@Override
 	public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
 		if (amount > 0 && scrollY < -20) {
 			scrollY+=5;
@@ -228,5 +178,47 @@ public class AltManagerScreen extends HypnoticScreen {
 	
 	public boolean hovered(int mouseX, int mouseY, int x1, int y1, int x2, int y2) {
 		return mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2 && !(y1 > height - 70);
+	}
+	
+	private void login() {
+		if (selectedAlt != null) {
+			try {
+				status = "Logging into " + selectedAlt.getEmail();
+				loggingIn = true;
+				if (!selectedAlt.getPassword().equalsIgnoreCase("cracked")) selectedAlt.login();
+				else selectedAlt.setSession(new Session(selectedAlt.getUsername(), "", "", Optional.empty(), Optional.empty(), Session.AccountType.MOJANG));
+				status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
+				loggingIn = false;
+				AltsFile.INSTANCE.saveAlts();
+			} catch (AuthenticationException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void msLogin() {
+		MicrosoftLogin.getRefreshToken(refreshToken -> {
+            if (refreshToken != null) {
+                MicrosoftAccount account = new MicrosoftAccount(refreshToken);
+                account.login();
+                Accounts.get().add(account);
+                status = "Logged into " + ColorUtils.green + "\"" + account.getUsername() + "\"";
+            }
+		});
+	}
+	
+	private void remove() {
+		if (selectedAlt != null) {
+			if (alts.contains(selectedAlt)) {
+				try {
+					alts.remove(selectedAlt);
+					status = "Removed " + ColorUtils.red + selectedAlt.getUsername();
+					AltsFile.INSTANCE.saveAlts();
+				} catch(Exception e) {
+					status = "Error removing alt";
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

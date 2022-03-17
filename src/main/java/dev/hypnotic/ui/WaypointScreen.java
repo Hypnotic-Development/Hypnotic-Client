@@ -49,7 +49,7 @@ public class WaypointScreen extends HypnoticScreen {
 		zBox.setText(mc.player.getZ() + "");
 		nameBox = new TextBox(width / 2 - 180, height / 2 - 140, 100, 10, "Name");
 		colorPicker = new ColorPicker(100, 100, 120, 20, color);
-		doneButton = new Button("Done", 209385, width / 2, height / 2 - 60, 100, 20, false);
+		doneButton = new Button("Done", width / 2, height / 2 - 60, 100, 20, false, this::addWaypoint);
 		xBox.setText(waypoint.getX() + "");
 		yBox.setText(waypoint.getY() + "");
 		zBox.setText(waypoint.getZ() + "");
@@ -88,20 +88,16 @@ public class WaypointScreen extends HypnoticScreen {
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 	
-	@Override
-	public void buttonClicked(Button button) {
-		if (button.getId() == 209385) {
-			if (!nameBox.getText().isEmpty() && !xBox.getText().isEmpty() && !yBox.getText().isEmpty() && !zBox.getText().isEmpty()) {
-				try {
-					waypoint = new Waypoint(nameBox.getText(), Integer.parseInt(xBox.getText()), Integer.parseInt(yBox.getText()), Integer.parseInt(zBox.getText()));
-					WaypointManager.INSTANCE.waypoints.add(waypoint);
-					mc.setScreen(WaypointManagerScreen.INSTANCE);
-				} catch(NumberFormatException e) {
-					System.out.println("Invalid x y or z!");
-				}
+	private void addWaypoint() {
+		if (!nameBox.getText().isEmpty() && !xBox.getText().isEmpty() && !yBox.getText().isEmpty() && !zBox.getText().isEmpty()) {
+			try {
+				waypoint = new Waypoint(nameBox.getText(), Integer.parseInt(xBox.getText()), Integer.parseInt(yBox.getText()), Integer.parseInt(zBox.getText()));
+				WaypointManager.INSTANCE.waypoints.add(waypoint);
+				mc.setScreen(WaypointManagerScreen.INSTANCE);
+			} catch(NumberFormatException e) {
+				System.out.println("Invalid x y or z!");
 			}
 		}
-		super.buttonClicked(button);
 	}
 	
 	@Override

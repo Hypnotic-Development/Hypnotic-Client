@@ -69,11 +69,11 @@ public class ServerFinder extends HypnoticScreen {
 	
 	@Override
 	protected void init() {
-		findModeButton = new Button("Find Mode: " + findMode, 1, 10, 10, 100, 20, true);
-		saveModeButton = new Button("Save Mode: " + saveMode, 2, 10, 30, 100, 20, true);
-		mhBrandButton = new Button("Minehut Server Brand: " + mhServerBrand, 3, this.width - 110, 10, 100, 20, true);
-		mhGmButton = new Button("Minehut Server Gamemode: " + mhGm, 4, this.width - 110, 30, 100, 20, true);
-		startButton = new Button("Start", 0, 10, 50, 100, 20, true);
+		findModeButton = new Button("Find Mode: " + findMode, 10, 10, 100, 20, true, this::cycleFindMode);
+		saveModeButton = new Button("Save Mode: " + saveMode, 10, 30, 100, 20, true, this::cycleSaveMode);
+		mhBrandButton = new Button("Minehut Server Brand: " + mhServerBrand, this.width - 110, 10, 100, 20, true, this::cycleMhBrand);
+		mhGmButton = new Button("Minehut Server Gamemode: " + mhGm, this.width - 110, 30, 100, 20, true, this::cycleMhGamemode);
+		startButton = new Button("Start", 10, 50, 100, 20, true, this::start);
 		ipBox = new TextBox(25, 100, 150, 20, "IP");
 		ipBox.setMaxLength(30);
 		this.addButton(findModeButton);
@@ -107,56 +107,54 @@ public class ServerFinder extends HypnoticScreen {
 		ipBox.tick();
 	}
 	
-	@Override
-	public void buttonClicked(Button button) {
-		switch(button.getId()) {
-			case 1:
-				if (findModeIndex < findModes.length - 1) {
-					findModeIndex++;
-				} else {
-					findModeIndex = 0;
-				}
-				findMode = findModes[findModeIndex];
-				findModeButton.setText("Find Mode: " + findMode);
-				break;
-			case 2:
-				if (saveModeIndex < saveModes.length - 1) {
-					saveModeIndex++;
-				} else {
-					saveModeIndex = 0;
-				}
-				saveMode = saveModes[saveModeIndex];
-				saveModeButton.setText("Save Mode: " + saveMode);
-				break;
-			case 3:
-				if (mhBrandIndex < mhServerBrands.length - 1) {
-					mhBrandIndex++;
-				} else {
-					mhBrandIndex = 0;
-				}
-				mhServerBrand = mhServerBrands[mhBrandIndex];
-				mhBrandButton.setText("Minehut Server Brand: " + mhServerBrand);
-				break;
-			case 4:
-				if (mhGmIndex < mhGms.length - 1) {
-					mhGmIndex++;
-				} else {
-					mhGmIndex = 0;
-				}
-				mhGm = mhGms[mhGmIndex];
-				mhGmButton.setText("Minehut Server Gamemode: " + mhGm);
-				break;
-			case 0:
-				 multiplayerScreen.getServerList().add(new ServerInfo((findMode.equalsIgnoreCase("Minehut") ? "Minehut server " : "Server finder "), "139.99.125.158:25569", false));
-				threads = 0;
-				try {
-					findServers();
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-				break;
+	private void cycleFindMode() {
+		if (findModeIndex < findModes.length - 1) {
+			findModeIndex++;
+		} else {
+			findModeIndex = 0;
 		}
-		super.buttonClicked(button);
+		findMode = findModes[findModeIndex];
+		findModeButton.setText("Find Mode: " + findMode);
+	}
+	
+	private void cycleSaveMode() {
+		if (saveModeIndex < saveModes.length - 1) {
+			saveModeIndex++;
+		} else {
+			saveModeIndex = 0;
+		}
+		saveMode = saveModes[saveModeIndex];
+		saveModeButton.setText("Save Mode: " + saveMode);
+	}
+	
+	private void cycleMhBrand() {
+		if (mhBrandIndex < mhServerBrands.length - 1) {
+			mhBrandIndex++;
+		} else {
+			mhBrandIndex = 0;
+		}
+		mhServerBrand = mhServerBrands[mhBrandIndex];
+		mhBrandButton.setText("Minehut Server Brand: " + mhServerBrand);
+	}
+	
+	private void cycleMhGamemode() {
+		if (mhGmIndex < mhGms.length - 1) {
+			mhGmIndex++;
+		} else {
+			mhGmIndex = 0;
+		}
+		mhGm = mhGms[mhGmIndex];
+		mhGmButton.setText("Minehut Server Gamemode: " + mhGm);
+	}
+	
+	private void start() {
+		multiplayerScreen.getServerList().add(new ServerInfo((findMode.equalsIgnoreCase("Minehut") ? "Minehut server " : "Server finder "), "139.99.125.158:25569", false));
+		threads = 0;
+		try {
+			findServers();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

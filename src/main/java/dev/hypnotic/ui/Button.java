@@ -18,34 +18,27 @@ package dev.hypnotic.ui;
 
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.render.RenderUtils;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 
 public class Button {
 
 	private String text;
-	private int id;
 	private float x, y, width, height;
 	public boolean animation;
 	public boolean enabled;
+	private Runnable onClickAction;
 	
-	public Button(String text, int id, float x, float y, float width, float height, boolean animation) {
-		this.text = text;
-		this.id = id;
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.animation = animation;
-		this.enabled = true;
-	}
-	
-	public Button(String text, float x, float y, float width, float height, boolean animation) {
+	public Button(String text, float x, float y, float width, float height, boolean animation, Runnable onClickAction) {
 		this.text = text;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.animation = animation;
+		this.onClickAction = onClickAction;
 		this.enabled = true;
 	}
 	
@@ -71,10 +64,6 @@ public class Button {
 	
 	public void setText(String text) {
 		this.text = text;
-	}
-	
-	public int getId() {
-		return id;
 	}
 	
 	public double getX() {
@@ -107,5 +96,18 @@ public class Button {
 	
 	public void setHeight(float height) {
 		this.height = height;
+	}
+	
+	public Runnable getOnClickAction() {
+		return onClickAction;
+	}
+	
+	public void setOnClickAction(Runnable onClickAction) {
+		this.onClickAction = onClickAction;
+	}
+	
+	public void onClick() {
+		this.onClickAction.run();
+		MinecraftClient.getInstance().getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.UI_BUTTON_CLICK, 1, 1));
 	}
 }

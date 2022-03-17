@@ -29,7 +29,7 @@ public class WaypointManagerScreen extends HypnoticScreen {
 
 	private MenuBar menuBar;
 	public Frame frame;
-	private Button addButton = new Button("Add waypoint", 4321, 4, height - 25, 100, 20, false);
+	private Button addButton = new Button("Add waypoint", 4, height - 25, 100, 20, false, this::addWaypoint);
 	
 	public WaypointManagerScreen() {
 		this.frame = new Frame("Waypoints", 100, 100, 200, 20);
@@ -77,14 +77,10 @@ public class WaypointManagerScreen extends HypnoticScreen {
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
-	@Override
-	public void buttonClicked(Button button) {
-		if (button.getId() == 4321) {
-			Waypoint waypoint = new Waypoint("New Waypoint", BlockPos.ORIGIN);
-			WaypointManager.INSTANCE.waypoints.add(waypoint);
-			mc.setScreen(new WaypointScreen(waypoint));
-		}
-		super.buttonClicked(button);
+	private void addWaypoint() {
+		Waypoint waypoint = new Waypoint("New Waypoint", BlockPos.ORIGIN);
+		WaypointManager.INSTANCE.waypoints.add(waypoint);
+		mc.setScreen(new WaypointScreen(waypoint));
 	}
 	
 	@Override

@@ -25,9 +25,7 @@ import dev.hypnotic.utils.font.NahrFont;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 
 public abstract class HypnoticScreen extends Screen {
@@ -71,15 +69,11 @@ public abstract class HypnoticScreen extends Screen {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		for (Button b : buttons) {
 			if (b.isHovered(mouseX, mouseY)) {
-				buttonClicked(b);
+				b.onClick();
 				return false;
 			}
 		}
 		return super.mouseClicked(mouseX, mouseY, button);
-	}
-	
-	public void buttonClicked(Button button) {
-		mc.getSoundManager().play(PositionedSoundInstance.ambient(SoundEvents.UI_BUTTON_CLICK, 1, 1));
 	}
 	
 	@Override
