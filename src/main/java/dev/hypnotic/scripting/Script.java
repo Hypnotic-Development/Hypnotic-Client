@@ -32,6 +32,7 @@ import org.graalvm.polyglot.Value;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.command.CommandManager;
@@ -55,6 +56,7 @@ import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
 import net.minecraft.command.CommandSource;
+import net.minecraft.entity.player.PlayerEntity;
 
 /**
 * @author BadGamesInc
@@ -153,6 +155,16 @@ public class Script extends Mod {
 	public <T> RequiredArgumentBuilder<CommandSource, T> argument(final String name, final ArgumentType<T> type) {
         return RequiredArgumentBuilder.argument(name, type);
     }
+	
+	public Object getArgument(String argName, String type, CommandContext<?> context) {
+		switch (type) {
+			case "double": return context.getArgument(argName, Double.class);
+			case "module": return context.getArgument(argName, Mod.class);
+			case "string": return context.getArgument(argName, String.class);
+			case "player": return context.getArgument(argName, PlayerEntity.class);
+		}
+		return null;
+	}
 	
 	
 	// Event stuff

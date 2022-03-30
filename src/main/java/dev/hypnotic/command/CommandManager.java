@@ -35,6 +35,7 @@ import dev.hypnotic.command.commands.Enchant;
 import dev.hypnotic.command.commands.Explosion;
 import dev.hypnotic.command.commands.FriendCmd;
 import dev.hypnotic.command.commands.Give;
+import dev.hypnotic.command.commands.IRCCommand;
 import dev.hypnotic.command.commands.Module;
 import dev.hypnotic.command.commands.Modules;
 import dev.hypnotic.command.commands.NBT;
@@ -80,6 +81,7 @@ public class CommandManager {
         add(new Teleport());
         add(new Script());
         add(new ConfigCmd());
+        add(new IRCCommand());
         commands.sort(Comparator.comparing(Command::getName));
     }
 

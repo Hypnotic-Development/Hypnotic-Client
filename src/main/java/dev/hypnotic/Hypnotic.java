@@ -29,12 +29,14 @@ import dev.hypnotic.config.ConfigManager;
 import dev.hypnotic.config.SaveLoad;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.module.ModuleManager;
+import dev.hypnotic.module.misc.IRC;
 import dev.hypnotic.module.render.CustomFont;
 import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.ui.HUD;
 import dev.hypnotic.ui.OptionsScreen;
 import dev.hypnotic.ui.altmanager.altmanager2.AltsFile;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.IRCClient;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.input.MouseUtils;
 import dev.hypnotic.utils.player.DamageUtils;
@@ -131,6 +133,8 @@ public class Hypnotic implements ModInitializer {
         AltsFile.INSTANCE.loadAlts();
         if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
         else FontManager.setMcFont(true);
+        
+        if (ModuleManager.INSTANCE.getModule(IRC.class).isEnabled()) IRCClient.INSTNACE.init("");
         
         Thread configDaemon = new Thread(() -> {
             while (!hasShutdown && ModuleManager.INSTANCE.modules != null) {

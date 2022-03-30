@@ -30,6 +30,7 @@ import dev.hypnotic.ui.altmanager.account.Accounts;
 import dev.hypnotic.ui.altmanager.account.MicrosoftLogin;
 import dev.hypnotic.ui.altmanager.account.types.MicrosoftAccount;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.IRCClient;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -190,6 +191,8 @@ public class AltManagerScreen extends HypnoticScreen {
 				status = "Logged into " + ColorUtils.green + "\"" + selectedAlt.getUsername() + "\"";
 				loggingIn = false;
 				AltsFile.INSTANCE.saveAlts();
+				
+				IRCClient.INSTNACE.init("");
 			} catch (AuthenticationException e) {
 				e.printStackTrace();
 			}
@@ -203,6 +206,8 @@ public class AltManagerScreen extends HypnoticScreen {
                 account.login();
                 Accounts.get().add(account);
                 status = "Logged into " + ColorUtils.green + "\"" + account.getUsername() + "\"";
+                
+                IRCClient.INSTNACE.init("");
             }
 		});
 	}

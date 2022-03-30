@@ -72,6 +72,9 @@ dependencies {
 	modImplementation('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
     include('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
     
+    // IRC client api
+    implementation 'com.github.pircbotx:pircbotx:master-SNAPSHOT'
+    
     // Waiting for multiconnect to update to 1.18.2
     //modImplementation('net.earthcomputer.multiconnect:multiconnect-slim:1.5.10') { transitive = false }
     //include('net.earthcomputer.multiconnect:multiconnect-slim:1.5.10') { transitive = false }

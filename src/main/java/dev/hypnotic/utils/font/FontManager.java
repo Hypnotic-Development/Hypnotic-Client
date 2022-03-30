@@ -32,6 +32,7 @@ public class FontManager {
 	public static NahrFont robotoMed2 = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 22, 1, mcFont);
 	public static NahrFont robotoBig = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 25, 1, mcFont);
 	public static NahrFont robotoCustomSize = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), size, 1, mcFont);
+	public static NahrFont greycliff = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "greycliff.ttf"), 20, 1, mcFont);
 	public static NahrFont icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
 	public static NahrFont iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
 	

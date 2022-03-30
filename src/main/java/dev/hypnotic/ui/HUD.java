@@ -16,6 +16,12 @@
 */
 package dev.hypnotic.ui;
 
+import java.awt.Color;
+
+import org.lwjgl.opengl.GL11;
+
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventRenderGUI;
 import dev.hypnotic.module.hud.HudManager;
@@ -26,7 +32,10 @@ import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
 import dev.hypnotic.utils.math.MathUtils;
 import dev.hypnotic.utils.math.TPSUtils;
+import dev.hypnotic.utils.render.RenderUtils;
+import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 
 public class HUD {
 	
@@ -41,6 +50,28 @@ public class HUD {
 	@EventTarget
 	public void renderHUD(EventRenderGUI event) {
 		if (mc.options.debugEnabled) return;
+		
+//		RenderUtils.preStencil();
+		
+//		GL11.glDepthFunc(GL11.GL_LESS);
+//		GL11.glEnable(GL11.GL_DEPTH_TEST);
+//		GL11.glDepthMask(true);
+		
+//		RenderUtils.drawFilledCircle(event.getMatrices(), 100, 100, 50, 100, Color.WHITE);
+		
+//		GL11.glColorMask(true, true, true, true);
+//		GL11.glDepthMask(true);
+//		GL11.glDepthFunc(GL11.GL_EQUAL);
+		
+//		RenderUtils.postStencil();
+		
+//		RenderUtils.fill(event.getMatrices(), 0, 0, 1000, 1000, Color.WHITE);
+//		RenderUtils.blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/spider.json"));
+		RenderUtils.blur.render(event.getTickDelta());
+		
+//		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		
+//		RenderUtils.disableStencil();
 		
 		if (TPSUtils.INSTANCE.getTimeSinceLastTick() >= 1) {
 			String numColor = ColorUtils.green;

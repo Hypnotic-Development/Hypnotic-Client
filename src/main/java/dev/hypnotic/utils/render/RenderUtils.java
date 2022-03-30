@@ -1425,7 +1425,7 @@ public class RenderUtils {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 	
-    public static final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/blur.json"));
+    public static ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/program/blur.json"));
 	public static void blur(MatrixStack matrices, double x, double y, double y1, double x1) {
 		preStencil();
 		renderRoundedQuad(matrices, Color.white, x, y, x1, y1, 10 ,50);
@@ -1441,7 +1441,6 @@ public class RenderUtils {
 	
 	public static void preStencil() {
 		GL11.glEnable(GL11.GL_STENCIL_TEST);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		RenderSystem.colorMask(false, false, false, false);
 		RenderSystem.depthMask(false);
 		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
@@ -1453,7 +1452,6 @@ public class RenderUtils {
 	public static void postStencil() {
 		RenderSystem.colorMask(true, true, true, true);
 		RenderSystem.depthMask(true);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		RenderSystem.stencilMask(0x00);
 		RenderSystem.stencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 		RenderSystem.stencilFunc(GL11.GL_EQUAL, stencilBit, stencilBit);

@@ -135,7 +135,6 @@ public class ConfigManager {
 	            		if (hudMod.getName().equals(configHudModule.getName())) {
 		                	hudMod.setX(configHudModule.getX());
 		                	hudMod.setY(configHudModule.getY());
-		                	System.out.println(hudMod.getName() + ":" + configHudModule.getX());
 	            		}
 	            	}
             	}

@@ -18,75 +18,13 @@ package dev.hypnotic.module;
 
 import java.util.ArrayList;
 
-import dev.hypnotic.module.combat.AutoCity;
-import dev.hypnotic.module.combat.AutoTotem;
-import dev.hypnotic.module.combat.Criticals;
-import dev.hypnotic.module.combat.CrystalAura;
-import dev.hypnotic.module.combat.Killaura;
-import dev.hypnotic.module.combat.Offhand;
-import dev.hypnotic.module.combat.TargetStrafe;
-import dev.hypnotic.module.combat.Velocity;
-import dev.hypnotic.module.exploit.AntiHunger;
-import dev.hypnotic.module.exploit.Disabler;
-import dev.hypnotic.module.exploit.EntityControl;
-import dev.hypnotic.module.exploit.InvDupe;
-import dev.hypnotic.module.exploit.OffhandCrash;
-import dev.hypnotic.module.exploit.PortalGui;
-import dev.hypnotic.module.exploit.ResourcePackSpoof;
-import dev.hypnotic.module.exploit.ServerCrasher;
-import dev.hypnotic.module.hud.HudManager;
-import dev.hypnotic.module.hud.HudModule;
-import dev.hypnotic.module.misc.DiscordRPCModule;
-import dev.hypnotic.module.misc.FakePlayer;
-import dev.hypnotic.module.misc.Nuker;
-import dev.hypnotic.module.misc.PCPinger;
-import dev.hypnotic.module.misc.SoundBlocker;
-import dev.hypnotic.module.misc.Surround;
-import dev.hypnotic.module.misc.Timer;
-import dev.hypnotic.module.movement.ElytraFly;
-import dev.hypnotic.module.movement.Flight;
-import dev.hypnotic.module.movement.FlightBlink;
-import dev.hypnotic.module.movement.InvMove;
-import dev.hypnotic.module.movement.Phase;
-import dev.hypnotic.module.movement.Speed;
-import dev.hypnotic.module.movement.Sprint;
-import dev.hypnotic.module.movement.Step;
-import dev.hypnotic.module.player.AirPlace;
-import dev.hypnotic.module.player.AntiVoid;
-import dev.hypnotic.module.player.AutoArmor;
-import dev.hypnotic.module.player.Blink;
-import dev.hypnotic.module.player.EntityDesync;
-import dev.hypnotic.module.player.ExpFast;
-import dev.hypnotic.module.player.MiddleClickFriend;
-import dev.hypnotic.module.player.NoFall;
-import dev.hypnotic.module.player.NoSlow;
-import dev.hypnotic.module.player.PacketCanceller;
-import dev.hypnotic.module.player.Scaffold;
-import dev.hypnotic.module.player.Spammer;
-import dev.hypnotic.module.player.SpeedMine;
-import dev.hypnotic.module.render.ArmCustomize;
-import dev.hypnotic.module.render.BlockOutline;
-import dev.hypnotic.module.render.Cape;
-import dev.hypnotic.module.render.ChatImprovements;
-import dev.hypnotic.module.render.CityESP;
-import dev.hypnotic.module.render.ClickGUIModule;
-import dev.hypnotic.module.render.CustomFont;
-import dev.hypnotic.module.render.ESP;
-import dev.hypnotic.module.render.Freecam;
-import dev.hypnotic.module.render.Fullbright;
-import dev.hypnotic.module.render.HoleESP;
-import dev.hypnotic.module.render.Nametags;
-import dev.hypnotic.module.render.NewChunks;
-import dev.hypnotic.module.render.NoRender;
-import dev.hypnotic.module.render.OldBlock;
-import dev.hypnotic.module.render.ParticleBlocker;
-import dev.hypnotic.module.render.Search;
-import dev.hypnotic.module.render.SpinBot;
-import dev.hypnotic.module.render.StorageESP;
-import dev.hypnotic.module.render.TabGUI;
-import dev.hypnotic.module.render.Tracers;
-import dev.hypnotic.module.render.Waypoints;
-import dev.hypnotic.module.render.Xray;
+import dev.hypnotic.module.combat.*;
+import dev.hypnotic.module.exploit.*;
+import dev.hypnotic.module.hud.*;
+import dev.hypnotic.module.misc.*;
+import dev.hypnotic.module.movement.*;
+import dev.hypnotic.module.player.*;
+import dev.hypnotic.module.render.*;
 import dev.hypnotic.ui.OptionsScreen;
 
 public class ModuleManager {
@@ -202,7 +140,8 @@ public class ModuleManager {
 				new FlightBlink(),
 				new PCPinger(),
 				new ResourcePackSpoof(),
-				new ServerCrasher()
+				new ServerCrasher(),
+				new IRC()
 			);
 	}
 	

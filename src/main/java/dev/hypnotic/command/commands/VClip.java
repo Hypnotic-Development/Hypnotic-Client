@@ -35,7 +35,6 @@ public class VClip extends Command {
     public void build(LiteralArgumentBuilder<CommandSource> builder) {
         builder.then(argument("blocks", DoubleArgumentType.doubleArg()).executes(context -> {
             ClientPlayerEntity player = mc.player;
-            assert player != null;
 
             double blocks = context.getArgument("blocks", Double.class);
             if (player.hasVehicle()) {
