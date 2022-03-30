@@ -229,6 +229,7 @@ public class Nametags extends Mod {
         String pingText = ping.isEnabled() ? (playerListEntry != null ? playerListEntry.getLatency() : "0") + "ms " : "";
         String distanceText = distance.isEnabled() ? Math.round(mc.player.distanceTo(entity)) + "m " : " ";   	
         String devText = (Arrays.asList(Hypnotic.INSTANCE.devUUIDs).contains(entity.getUuidAsString()) ? ColorUtils.purple + " DEV" + ColorUtils.reset : "");
+        
         if (name.trim().isEmpty())
             name = entity.getName().getString();
         if (entity instanceof ItemEntity) {
@@ -236,9 +237,11 @@ public class Nametags extends Mod {
             if (itemEntity.getStack().getCount() > 1)
                 name += " \247fx" + itemEntity.getStack().getCount();
         }
+        String userText = Hypnotic.INSTANCE.isHypnoticUser(name) ? ColorUtils.red + " H" : "";
+        
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + devText + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "");
+        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + devText + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "") + userText;
         return displayName;
     }
 

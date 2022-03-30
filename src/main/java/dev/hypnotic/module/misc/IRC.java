@@ -50,6 +50,7 @@ public class IRC extends Mod {
 	}
 
 	public void onRecieveMessage(GenericMessageEvent event) {
+		
 		final String ircTag = ColorUtils.darkRed + "\u00A7l[" + ColorUtils.red + "IRC" + ColorUtils.darkRed + "\u00A7l]" + ColorUtils.reset;
 		String devTag = ColorUtils.black + "\u00A7l[" + ColorUtils.darkRed + "DEV" + ColorUtils.black + "\u00A7l]" + ColorUtils.reset;
 		

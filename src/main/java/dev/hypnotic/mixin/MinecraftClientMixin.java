@@ -30,6 +30,7 @@ import dev.hypnotic.event.events.EventTick;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.misc.DiscordRPCModule;
 import dev.hypnotic.ui.HypnoticMainMenu;
+import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.world.BlockIterator;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
@@ -46,11 +47,14 @@ public class MinecraftClientMixin {
 		MinecraftClient.getInstance().getWindow().setTitle(Hypnotic.fullName);
 	}
 	
+	Timer refreshTimer = new Timer();
+	
 	@Inject(at = @At("HEAD"), method = "tick")
     private void onPreTick(CallbackInfo info) {
 		BlockIterator.INSTANCE.onTick();
 		EventTick event = new EventTick();
 		event.call();
+		
 		if (ModuleManager.INSTANCE.getModule(DiscordRPCModule.class).isEnabled()) {
 			if (mc.player == null) {
 				if (mc.currentScreen instanceof HypnoticMainMenu) DiscordRPCModule.status = "In main menu";
@@ -59,6 +63,14 @@ public class MinecraftClientMixin {
 			} else {
 				if (mc.isInSingleplayer()) DiscordRPCModule.status = "Playing singlelplayer";
 				if (mc.getCurrentServerEntry() != null && !mc.isInSingleplayer()) DiscordRPCModule.status = ModuleManager.INSTANCE.getModule(DiscordRPCModule.class).serverpriv.isEnabled() ? "Playing multiplayer." : "Playing multiplayer on " + mc.getCurrentServerEntry().address;
+			}
+		}
+		
+		if (refreshTimer.hasTimeElapsed(2500, true)) {
+			try {
+				Hypnotic.refreshUsers();
+			} catch (Exception e) {
+				// Not printing stack trace because it is just a stupid message if you aren't fully connected
 			}
 		}
 	}

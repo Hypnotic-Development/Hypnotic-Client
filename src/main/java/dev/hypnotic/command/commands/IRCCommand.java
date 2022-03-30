@@ -34,7 +34,7 @@ public class IRCCommand extends Command {
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
 		builder.then(argument("message", StringArgumentType.greedyString()).executes(context -> {
 			if (IRCClient.INSTNACE.ircMod.isEnabled()) {
-				if (!IRCClient.INSTNACE.bot.isConnected()) {
+				if (!IRCClient.INSTNACE.isConnected()) {
 					ChatUtils.tellPlayer("Not connected to the IRC!");
 					return SINGLE_SUCCESS;
 				}

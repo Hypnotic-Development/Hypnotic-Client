@@ -55,32 +55,31 @@ public class IRCClient extends ListenerAdapter {
 	}
 	
 	public void init(String username) {
+		ircMod = ModuleManager.INSTANCE.getModule(IRC.class);
 		// Calling this on the main thread kills the game
 		ircThread = new Thread(() -> {
-			ircMod = ModuleManager.INSTANCE.getModule(IRC.class);
-			
 			if (bot != null && output != null) {
 				if (bot.isConnected()) output.quitServer();
 				bot = null;
 				output = null;
 			}
 			
-			if (mc.getSession().getUuid() == "") {
+			// Check if it is a cracked account to prevent name sniping (username setting coming soon)
+			if (mc.getSession().getUuid() == null || mc.getSession().getSessionId() == null || mc.getSession().getAccessToken() == null) {
 				if (mc.inGameHud != null && mc.inGameHud.getChatHud() != null) ChatUtils.tellPlayer("You must be using a non-cracked account to use the IRC");
 				else Hypnotic.LOGGER.error("You must be using a non-cracked account to use the IRC");
 				
-				ircMod.setEnabled(false);
+				ModuleManager.INSTANCE.getModule(IRC.class).setEnabled(false);
 				return;
 			}
 			
 			mcName = mc.getSession().getUsername();
 			this.username = username + "[" + mcName + "]";
-			
 			Configuration config = new Configuration.Builder()
-	                .setName(this.username) //Set the nick of the bot. CHANGE IN YOUR CODE
-	                .addServer("irc.freenode.net") //Join the freenode network
-	                .addAutoJoinChannel("#hypnoticirc") //Join the hypnotic irc channel
-	                .addListener(this) //Add our listener that will be called on Events
+	                .setName(this.username)
+	                .addServer("irc.freenode.net")
+	                .addAutoJoinChannel("#hypnoticirc")
+	                .addListener(this)
 	                .setNickservNick(this.username)
 	                .setAutoNickChange(false)
 	                .buildConfiguration();
@@ -88,24 +87,25 @@ public class IRCClient extends ListenerAdapter {
 			bot = new PircBotX(config);
 			output = new OutputIRC(bot);
 			
+			
+			
 			try {
 				bot.startBot();
+				
+				Hypnotic.LOGGER.info("Connected to the IRC");
 			} catch (IOException | IrcException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println("sldkfjsdlfj");
 		});
 		ircThread.setName("IRC Thread");
 		
 		if (ircThread.getState() == State.NEW) ircThread.start();
-		else System.out.println("dflksf");
 	}
 	
 	public void setUsername(String username) {
 		try {
 			this.username = username;
-			init(username);
+			output.changeNick(username);
 		} catch (Exception e) {
 			Hypnotic.LOGGER.error("Failed to initialize irc bot");
 			e.printStackTrace();
@@ -114,7 +114,7 @@ public class IRCClient extends ListenerAdapter {
 	
 	public void sendMessage(String message) {
 		if (!bot.isConnected()) return;
-		
+
 		final String ircTag = ColorUtils.darkRed + "\u00A7l[" + ColorUtils.red + "IRC" + ColorUtils.darkRed + "\u00A7l]" + ColorUtils.reset;
 		String devTag = ColorUtils.black + "\u00A7l[" + ColorUtils.darkRed + "DEV" + ColorUtils.black + "\u00A7l]" + ColorUtils.reset;
 		
@@ -136,5 +136,9 @@ public class IRCClient extends ListenerAdapter {
 		ChatUtils.tellPlayerRaw(username + ": " + message);
 		
 		bot.sendIRC().message("#hypnoticirc", message);
+	}
+	
+	public boolean isConnected() {
+		return bot != null && output != null && bot.isConnected();
 	}
 }

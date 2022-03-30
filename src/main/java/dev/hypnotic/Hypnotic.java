@@ -19,11 +19,15 @@ package dev.hypnotic;
 import static dev.hypnotic.utils.MCUtils.mc;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.pircbotx.Channel;
+import org.pircbotx.User;
 
 import dev.hypnotic.config.ConfigManager;
 import dev.hypnotic.config.SaveLoad;
@@ -70,6 +74,8 @@ public class Hypnotic implements ModInitializer {
 			"09e5dd42-19b9-488a-bb4b-cc19bdf068b7",
 			"c0052794-2f10-4f2c-b535-150db217f45d"
 	};
+	
+	private static List<String> hypnoticUsers = new ArrayList<String>();
 	
 	private boolean hasShutdown = false;
 	
@@ -160,5 +166,28 @@ public class Hypnotic implements ModInitializer {
 			SaveLoad.INSTANCE.save();
 			hasShutdown = true;
 		}
+	}
+	
+	public List<String> getHypnoticUsers() {
+		return hypnoticUsers;
+	}
+	
+	public static void refreshUsers() throws Exception {
+		hypnoticUsers.clear();
+		
+		// Use the IRC to get online users
+		
+		if (IRCClient.INSTNACE.isConnected()) {
+			Channel channel = IRCClient.INSTNACE.bot.getUserChannelDao().getChannel("#hypnoticirc");
+			if (channel != null) {
+				for (User user : channel.getUsers()) {
+					hypnoticUsers.add(user.getNick().replace("[", "").replace("]", ""));
+				}
+			}
+		}
+	}
+	
+	public boolean isHypnoticUser(String name) {
+		return hypnoticUsers.contains(name);
 	}
 }
