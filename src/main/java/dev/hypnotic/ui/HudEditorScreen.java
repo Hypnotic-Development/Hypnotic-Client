@@ -90,7 +90,10 @@ public class HudEditorScreen extends HypnoticScreen {
 	@Override
 	protected void init() {
 		menuBar = MenuBar.INSTANCE;
-		hideButton = new Button("Hide disabled modules", (width / 2) - 60, 10, 120, 20, true, () -> { hide = !hide; System.out.println(hide); });
+		hideButton = new Button("Hide disabled modules", (width / 2) - 60, 10, 120, 20, true, () -> { 
+			hide = !hide; 
+			hideButton.setText((hide ? "Show" : "Hide") + " disabled modules");
+		});
 		this.addButton(hideButton);
 		super.init();
 	}

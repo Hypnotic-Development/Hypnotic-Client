@@ -229,8 +229,8 @@ public class Frame {
 	
 	public void mouseReleased(int button) {
 		if (button == 0) setDragging(false);
-		for (Button funnyButton : buttons) {
-			funnyButton.mouseReleased(button);
+		for (Button b : buttons) {
+			b.mouseReleased(button);
 		}
 	}
 	
@@ -239,7 +239,6 @@ public class Frame {
 	}
 	
 	public void setDragging(boolean dragging) {
-		if (dragging)
 		this.dragging = dragging;
 	}
 	
