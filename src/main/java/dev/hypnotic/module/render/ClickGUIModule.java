@@ -28,6 +28,7 @@ import dev.hypnotic.ui.OptionsScreen;
 import dev.hypnotic.ui.WaypointManagerScreen;
 import dev.hypnotic.ui.clickgui.ClickGUI;
 import dev.hypnotic.ui.clickgui2.MenuBar;
+import dev.hypnotic.ui.clickgui2.frame.Frame;
 import dev.hypnotic.utils.ColorUtils;
 
 public class ClickGUIModule extends Mod {
@@ -49,6 +50,10 @@ public class ClickGUIModule extends Mod {
 			case CLICKGUI:
 				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.CLICKGUI);
 				mc.setScreen(mode.is("New") ? ClickGUI.INSTANCE : dev.hypnotic.ui.clickgui2.ClickGUI.INSTANCE);
+				
+				for (Frame frame : dev.hypnotic.ui.clickgui2.ClickGUI.INSTANCE.frames) {
+					if (frame.buttons.size() == 0) frame.refresh();
+				}
 				break;
 			case HUDEDITOR:
 				MenuBar.INSTANCE.setCurrentTab(MenuBar.Tab.HUDEDITOR);

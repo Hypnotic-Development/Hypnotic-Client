@@ -83,7 +83,6 @@ public class Hypnotic implements ModInitializer {
             shader -> shader.setUniformValue("Radius", 8f));
 	private final Uniform1f blurProgress = blur.findUniform1f("Progress");
 	private float start;
-	public final ManagedShaderEffect bloom = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/bloom.json"));
 	
 	/*
 	 * Called when Minecraft initializes.

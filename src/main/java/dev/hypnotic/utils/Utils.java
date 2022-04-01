@@ -133,7 +133,7 @@ public class Utils {
 
         public Request(Method method, String url) {
             try {
-                this.builder = HttpRequest.newBuilder().uri(new URI(url)).header("User-Agent", "Meteor Client");
+                this.builder = HttpRequest.newBuilder().uri(new URI(url)).header("User-Agent", "Hypnotic Client");
                 this.method = method;
             } catch (URISyntaxException e) {
                 e.printStackTrace();

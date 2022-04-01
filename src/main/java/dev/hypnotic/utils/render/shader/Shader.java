@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import static org.lwjgl.opengl.GL20.*;
 
-public abstract class Shader {// unused as of right now. doesn't play well with Minecraft's VBO system
+public class Shader {// unused as of right now. doesn't play well with Minecraft's VBO system
 
 	private String shaderName;
 	private int shaderProgram;
@@ -40,14 +40,11 @@ public abstract class Shader {// unused as of right now. doesn't play well with 
 
 	public void bind() {
 		glUseProgram(shaderProgram);
-		updateUniforms();
 	}
 
 	public void detach() {
 		glUseProgram(0);
 	}
-
-	public abstract void updateUniforms();
 
 	public ShaderUniform addUniform(String name) {
 		int i = glGetUniformLocation(shaderProgram, name);

@@ -35,6 +35,7 @@ import dev.hypnotic.ui.HypnoticScreen;
 import dev.hypnotic.ui.clickgui.frame.Frame;
 import dev.hypnotic.ui.clickgui2.MenuBar;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -57,6 +58,8 @@ public class ClickGUI extends HypnoticScreen {
 	double anim1, anim2, aStartX, aStartY;
 	
 	public int x, y, pWidth, pHeight, dragX, dragY;
+	
+	private Timer animTimer = new Timer();
 	
 	public ClickGUI() {
 		frame = new Frame(this.width, this.height);
@@ -85,7 +88,7 @@ public class ClickGUI extends HypnoticScreen {
 			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + modCount);
 			buttons.add(mb);
 			mb.startY = modCount;
-			modCount+=30;
+			modCount += 30;
 		}
 	}
 	
@@ -105,6 +108,7 @@ public class ClickGUI extends HypnoticScreen {
 	double mouseAnim2;
 	boolean shouldDraw;
 	int animStartX, animStartY;
+	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		if (!ModuleManager.INSTANCE.getModule(ClickGUIModule.class).clickAnimation.isEnabled()) shouldDraw = false;
@@ -115,11 +119,16 @@ public class ClickGUI extends HypnoticScreen {
 		}
 		double dist1 = RenderUtils.distanceTo(anim1, pWidth / 2);
 		double dist2 = RenderUtils.distanceTo(anim2, pHeight / 2);
-		if (dist1 != 0) {
-			anim1+=dist1 / 8;
-		}
-		if (dist2 != 0) {
-			anim2+=dist2 / 8;
+		
+		boolean shouldMove = animTimer.hasTimeElapsed(1000 / 75, true);
+		
+		if (shouldMove) {
+			if (dist1 != 0) {
+				anim1 += dist1 / 8;
+			}
+			if (dist2 != 0) {
+				anim2 += dist2 / 8;
+			}
 		}
 		MenuBar.INSTANCE.renderMenuBar(matrices, mouseX, mouseY, width, height);
 		
@@ -148,40 +157,54 @@ public class ClickGUI extends HypnoticScreen {
 				return;
 			}
 		}
+		
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) + anim1, y + (pHeight / 2) - anim2, new Color(65, 65, 65).getRGB());
 		RenderUtils.fill(matrices, x + (pWidth / 2), y + (pHeight / 2), x + (pWidth / 2) - anim1, y + (pHeight / 2) + anim2, new Color(65, 65, 65).getRGB());
+		
 		if (dist1 > 0.7) return;
+		
 		double dist = RenderUtils.distanceTo(lastOffset, offset);
-	    if (dist != 0) lastOffset += dist / 10;
+		
+	    if (dist != 0 && shouldMove) lastOffset += dist / 10;
+	    
 		RenderUtils.startScissor(x, y, pWidth, pHeight);
+		
 		for (CategoryButton c : categories) {
 			if (c.category == currentCategory) currentButton = c;
 			c.render(matrices, mouseX, mouseY);
 		}
 		
 		this.renderPanel(matrices);
+		
 		int color = new Color(45, 45, 45, fadeIn).getRGB();
 		
 		RenderUtils.sideGradientFill(matrices, x + 110, y, x + 100, y + height, color, 0, false);
+		
 		fontBig.drawWithShadow(matrices, Hypnotic.fullName, x + font.getStringWidth(Hypnotic.fullName) / 6, y + 20, -1);
+		
 		if (currentButton != null) {
 			if (!dragging) {
-				double distance = RenderUtils.distanceTo(animTicks, currentButton.y);
-				if (distance != 0) {
-					animTicks+= distance / 10;
+				if (shouldMove) {
+					double distance = RenderUtils.distanceTo(animTicks, currentButton.y);
+					
+					if (distance != 0) {
+						animTicks+= distance / 10;
+					}
 				}
+				
 				RenderUtils.fill(matrices, currentButton.x, animTicks, currentButton.x + currentButton.width, animTicks + currentButton.height, ColorUtils.defaultClientColor);
 			} else {
 				animTicks = currentButton.y;
 			}
 		}
+		
 		int count = 50;
 		for (CategoryButton catButton : categories) {
 			catButton.x = x;
 			catButton.y = y + count;
-			count+=30;
+			count += 30;
 			catButton.render(matrices, mouseX, mouseY);
 		}
 		
@@ -193,14 +216,16 @@ public class ClickGUI extends HypnoticScreen {
 		RenderUtils.endScissor();
 		
 		if (shouldDraw) {
-			if (mouseAnim2 < 25) mouseAnim2++;
 			RenderUtils.drawOutlineCircle(matrices, animStartX - (mouseAnim2 / 2), animStartY - (mouseAnim2 / 2), (int)mouseAnim2, new Color(255, 255, 255, mouseAnim));
-			if (mouseAnim > 0) mouseAnim-=10;
-			if (mouseAnim2 >= 25) {
-				if (mouseAnim <= 0) {
-					mouseAnim2 = 0;
-					mouseAnim = 255;
-					shouldDraw = false;
+			if (shouldMove) {
+				if (mouseAnim2 < 25) mouseAnim2++;
+				if (mouseAnim > 0) mouseAnim-=10;
+				if (mouseAnim2 >= 25) {
+					if (mouseAnim <= 0) {
+						mouseAnim2 = 0;
+						mouseAnim = 255;
+						shouldDraw = false;
+					}
 				}
 			}
 		}
@@ -209,7 +234,7 @@ public class ClickGUI extends HypnoticScreen {
 	
 	public void renderPanel(MatrixStack matrices) {
 		if (fadeIn < 255)
-			fadeIn+=5;
+			fadeIn += 5;
 		RenderUtils.fill(matrices, x, y, x + pWidth, y + pHeight, new Color(50, 50, 50, fadeIn).getRGB());
 	}
 	
@@ -251,9 +276,10 @@ public class ClickGUI extends HypnoticScreen {
 	private void refresh() {
 		buttons.clear();
 		buttonNames.clear();
-		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
 		
 		// Sort buttons alphabetically
+		
+		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
 		
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
 			if (!(mod instanceof FlightBlink)) {
@@ -261,14 +287,17 @@ public class ClickGUI extends HypnoticScreen {
 				
 			}
 		}
+		
 		buttonNames.sort(Collator.getInstance());
+		
 		Collections.sort(buttons, Comparator.comparing(ModuleButton::getName));
+		
 		int count = 0;
 		for (String name : buttonNames) {
 			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + count);
 			buttons.add(mb);
 			mb.startY = count;
-			count+=30;
+			count += 30;
 		}
 		
 		this.offset = 0;

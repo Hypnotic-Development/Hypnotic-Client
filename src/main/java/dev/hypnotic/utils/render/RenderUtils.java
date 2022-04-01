@@ -45,7 +45,6 @@ import dev.hypnotic.mixin.WorldRendererAccessor;
 import dev.hypnotic.module.render.IItemRenderer;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.mixin.IMatrix4f;
-import dev.hypnotic.utils.render.shader.ShaderUtils;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
@@ -481,8 +480,6 @@ public class RenderUtils {
 
 	    public static void setup2DProjection() {
 	        Matrix4x4 ortho = Matrix4x4.ortho2DMatrix(0, getScaledWidth(), getScaledHeight(), 0, -0.1f, 1000.f);
-	        ShaderUtils.INSTANCE.setProjectionMatrix(ortho);
-	        ShaderUtils.INSTANCE.setModelViewMatrix(Matrix4x4.copyFromRowMajor(RenderSystem.getModelViewMatrix()));
 	    }
 	    
 	    public static void bindTexture(Identifier identifier) {

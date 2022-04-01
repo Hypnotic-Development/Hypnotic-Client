@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import dev.hypnotic.config.SaveLoad;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
@@ -58,12 +57,28 @@ public class Frame {
 		this.height = height;
 		this.extended = true;
 		this.buttons = new ArrayList<Button>();
-		
 		int offset = height;
+		
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(category)) {
+			System.out.println(mod.getName());
 			if (!(mod instanceof FlightBlink)) {
+				System.out.println(mod.getName());
 				buttons.add(new Button(mod, this.x, this.y, offset, this));
-				offset+=height;
+				offset += height;
+			}
+		}
+	}
+	
+	public void refresh() {
+		buttons.clear();
+		int offset = height;
+		
+		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(category)) {
+			System.out.println(mod.getName());
+			if (!(mod instanceof FlightBlink)) {
+				System.out.println(mod.getName());
+				buttons.add(new Button(mod, this.x, this.y, offset, this));
+				offset += height;
 			}
 		}
 	}
@@ -101,7 +116,6 @@ public class Frame {
 	float animTicks = 0;
 	int length = 0;
 	public void render(MatrixStack matrices, int mouseX, int mouseY) {
-//		RenderUtils.startScissor(this.x, this.y, this.width, (int)animTicks);
 		this.color = category != null && !ModuleManager.INSTANCE.getModule(ClickGUIModule.class).customColor.is("Custom") ? category.color : ModuleManager.INSTANCE.getModule(ClickGUIModule.class).color.getColor();
 		Screen.fill(matrices, x, y, x + width, y + height, color.getRGB());
 		Screen.fill(matrices, x + 1, y + 1, x + width - 1, y + height - (this.extended ? 0 : 0), new Color(25, 25, 25).getRGB());
@@ -166,7 +180,6 @@ public class Frame {
 			
 		}
 //		System.out.println(animTicks + this.name);
-		RenderUtils.endScissor();
 //		Screen.fill(matrices, this.x, this.y, this.x + this.width, this.y + 100, ColorUtils.transparent(-1, 50));
 		
 	}
@@ -227,7 +240,6 @@ public class Frame {
 	
 	public void setDragging(boolean dragging) {
 		if (dragging)
-		SaveLoad.INSTANCE.save();
 		this.dragging = dragging;
 	}
 	

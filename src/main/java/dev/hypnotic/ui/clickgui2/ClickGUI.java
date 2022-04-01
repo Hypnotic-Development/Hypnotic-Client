@@ -43,12 +43,14 @@ public class ClickGUI extends HypnoticScreen {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
+		
 		for (Frame frame : frames) {
 			frame.setWidth(120);
 			frame.render(matrices, mouseX, mouseY);
 			frame.updatePosition(mouseX, mouseY);
 			frame.updateButtons();
 		}
+		
 		menuBar.renderMenuBar(matrices, mouseX, mouseY, this.width, this.height);
 		super.render(matrices, mouseX, mouseY, delta);
 	}
