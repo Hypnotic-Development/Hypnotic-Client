@@ -110,7 +110,6 @@ public class Hypnotic implements ModInitializer {
 		EventManager.INSTANCE.register(BlockIterator.INSTANCE);
 		EventManager.INSTANCE.register(MouseUtils.class);
 		ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
-			
 			if (start < 1 && mc.currentScreen != null) start += 0.05f;
 			else if (start > 0 && mc.currentScreen == null) start -= 0.05f;
 			if ((start > 0) && mc.world != null && !OptionsScreen.INSTANCE.disableBlur.isEnabled()) {

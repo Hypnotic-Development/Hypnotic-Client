@@ -18,8 +18,6 @@ package dev.hypnotic.ui.clickgui2.frame.button.settings;
 
 import java.awt.Color;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.settings.Setting;
@@ -69,10 +67,6 @@ public class ColorBox extends Component {
 		HypnoticScreen.fontSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name) + (open ? 12 : 2), (int) sy - 12, colorSet.getRGB());
 		
 		if (hovered((int)mouseX, (int)mouseY, sx + (int) HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 4, sy - 12, (int) (sx + HypnoticScreen.fontSmall.getStringWidth(colorSet.name + "#" + colorSet.getHex().toUpperCase()) + 30), sy - 4) && !open) {
-			RenderUtils.setup2DRender(true);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
-			RenderUtils.end2DRender();
 			if (rmDown) open = true;
 		}
 		if (!open) {
@@ -93,7 +87,7 @@ public class ColorBox extends Component {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.setShader(GameRenderer::getPositionColorShader);
-
+		
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 		//Draw the color
@@ -128,21 +122,11 @@ public class ColorBox extends Component {
 		RenderUtils.fill(matrices, sx + 3 + HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
 
 		if (hovered((int)mouseX, (int)mouseY, sx + 3 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 12, sx + 10 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name), sy - 4) && open) {
-			RenderUtils.setup2DRender(true);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Right click me!") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Right click me!", mouseX + 2, mouseY - 10, -1);
-			RenderUtils.end2DRender();
 			if (rmDown) open = false;
 		}
 
 		//Set hex codes
 		if (hovered(mouseX, mouseY, sx + 3 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)HypnoticScreen.fontSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
-			RenderSystem.disableDepthTest();
-			RenderSystem.depthFunc(GL11.GL_ALWAYS);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			HypnoticScreen.fontSmall.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
-			RenderSystem.depthFunc(GL11.GL_LEQUAL);
-			RenderSystem.enableDepthTest();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
 				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
 				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());

@@ -1,7 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
-	id 'com.github.johnrengelman.shadow' version '7.1.0'
+	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -47,7 +47,7 @@ dependencies {
 		implementation id
 		shadow id
 	}
-
+	
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -64,9 +64,15 @@ dependencies {
 	modImplementation "io.github.ladysnake:satin:${satin_version}"
     include "io.github.ladysnake:satin:${satin_version}"
 	
-	implementation 'org.graalvm.js:js:21.3.0'
-	implementation 'org.graalvm.js:js-scriptengine:21.3.0'
+	// GraalJS
+	dependency "org.graalvm.sdk:graal-sdk:${graaljs_version}"
+	dependency "org.graalvm.js:js:${graaljs_version}"
+	dependency "org.graalvm.js:js-scriptengine:${graaljs_version}"
+	dependency "org.graalvm.tools:profiler:${graaljs_version}"
+	dependency "org.graalvm.tools:chromeinspector:${graaljs_version}"
+	dependency "org.graalvm.truffle:truffle-api:${graaljs_version}"
 	
+	// Discord RPC
 	dependency files('lib/java-discord-rpc-2.0.1-all.jar')
 
 	modImplementation('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
@@ -82,6 +88,12 @@ dependencies {
 
 shadowJar {
 	configurations = [ project.configurations.shadow ]
+	
+	manifest {
+        attributes 'Main-Class': 'dev.hypnotic.Installer'
+    }
+    
+    mergeServiceFiles()
 }
 
 processResources {
@@ -104,16 +116,19 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+	//remapSourcesJar()
 }
 
 jar {
 	from("LICENSE") {
 		rename { "${it}_${project.archivesBaseName}"}
 	}
+	
+	manifest {
+        attributes(
+                'Main-Class': 'dev.hypnotic.Installer'
+        )
+    }
 }
 
 remapJar {
@@ -129,9 +144,9 @@ publishing {
 			artifact(remapJar) {
 				builtBy remapJar
 			}
-			artifact(sourcesJar) {
-				builtBy remapSourcesJar
-			}
+			//artifact(sourcesJar) {
+				//builtBy remapSourcesJar
+			//}
 		}
 	}
 

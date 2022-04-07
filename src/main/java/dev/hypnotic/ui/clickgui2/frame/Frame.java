@@ -60,9 +60,7 @@ public class Frame {
 		int offset = height;
 		
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(category)) {
-			System.out.println(mod.getName());
 			if (!(mod instanceof FlightBlink)) {
-				System.out.println(mod.getName());
 				buttons.add(new Button(mod, this.x, this.y, offset, this));
 				offset += height;
 			}
@@ -74,9 +72,7 @@ public class Frame {
 		int offset = height;
 		
 		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(category)) {
-			System.out.println(mod.getName());
 			if (!(mod instanceof FlightBlink)) {
-				System.out.println(mod.getName());
 				buttons.add(new Button(mod, this.x, this.y, offset, this));
 				offset += height;
 			}

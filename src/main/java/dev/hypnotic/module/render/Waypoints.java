@@ -17,6 +17,7 @@
 package dev.hypnotic.module.render;
 
 import java.awt.Color;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.event.EventTarget;
@@ -24,7 +25,6 @@ import dev.hypnotic.event.events.EventRender3D;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.settings.settingtypes.NumberSetting;
-import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.player.PlayerUtils;
 import dev.hypnotic.utils.render.QuadColor;
@@ -68,10 +68,10 @@ public class Waypoints extends Mod {
 	            scale *= 0.55f;
 	            if (distance < 100) {
 	                a = (int) ((distance / 100) * 255);
-	            } else scale *= distance / 100d;
-	            RenderUtils.drawBoxOutline(new Box(new BlockPos(waypoint.getX(), 0, waypoint.getZ())).stretch(0, 500, 0), QuadColor.single(ColorUtils.defaultClientColor), 1);
-	            RenderUtils.drawBoxFill(new Box(new BlockPos(waypoint.getX(), 0, waypoint.getZ())).stretch(0, 500, 0), QuadColor.single(new Color(ColorUtils.defaultClientColor().getRed(), ColorUtils.defaultClientColor().getGreen(), ColorUtils.defaultClientColor().getBlue(), a).getRGB()));
-	            
+	            } 
+	            scale *= distance / 10d;
+	            RenderUtils.drawBoxOutline(new Box(new BlockPos(waypoint.getX(), 0, waypoint.getZ())).stretch(0, 500, 0), QuadColor.single(waypoint.getColor().getRGB()), 1);
+	            RenderUtils.drawBoxFill(new Box(new BlockPos(waypoint.getX(), 0, waypoint.getZ())).stretch(0, 500, 0), QuadColor.single(new Color(waypoint.getColor().getRed(), waypoint.getColor().getGreen(), waypoint.getColor().getBlue(), a).getRGB()));
 	            Vec3d textPos = new Vec3d(waypoint.getX() + 0.5, c.getPos().y, waypoint.getZ() + 0.25);
 	            matrices.push();
 	            matrices.translate(textPos.x - c.getPos().x - 1, textPos.y - c.getPos().y + 2, textPos.z - c.getPos().z - 0.5);

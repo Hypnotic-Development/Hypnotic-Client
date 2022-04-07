@@ -20,8 +20,6 @@ import static dev.hypnotic.utils.MCUtils.mc;
 
 import java.awt.Color;
 
-import org.lwjgl.opengl.GL11;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.settings.Setting;
@@ -45,8 +43,8 @@ public class ColorPicker {
 	public float h, s, v;
 	public int x, y, width, height;
 	
-	public ColorPicker(int x, int y, int width, int height, Setting setting) {
-		this.setting = setting;
+	public ColorPicker(String name, int x, int y, int width, int height, Color defaultColor) {
+		this.setting = new ColorSetting(name, defaultColor);
 		this.colorSet = (ColorSetting)setting;
 		this.colorSet.displayName = colorSet.name;
 		this.x = x;
@@ -65,8 +63,6 @@ public class ColorPicker {
 				ex = x + width - 17,
 				ey = y + 4 + height + getHeight(width) + 8;
 
-		RenderUtils.fill(matrices, x, y + height, x + width, y + height * 8.5, -1);
-		RenderUtils.fill(matrices, x + 1, y + height, x + width - 1, y + height * 8.5, new Color(40, 40, 40, 255).getRGB());
 		
 		RenderUtils.fill(matrices, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 4, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 12, new Color(0, 0, 0, 200).getRGB());
 		DrawableHelper.fill(matrices, sx, sy, ex, ey, -1);
@@ -112,7 +108,6 @@ public class ColorPicker {
 		int briY = (int) (ey - (ey - sy) * colorSet.bri);
 		int satX = (int) (sx + (ex - sx) * colorSet.sat);
 
-		RenderUtils.fill(matrices, satX - 2, briY - 2, satX + 2, briY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
 		FontManager.robotoSmall.drawWithShadow(matrices, colorSet.name, (int) sx, (int) sy - 12, -1);
 		FontManager.robotoSmall.drawWithShadow(matrices, "#" + colorSet.getHex().toUpperCase(), (int) sx + FontManager.robotoSmall.getStringWidth(colorSet.name) + 12, (int) sy - 12, colorSet.getRGB());
 		RenderUtils.fill(matrices, sx + 3 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 4, sx + 10 + FontManager.robotoSmall.getStringWidth(colorSet.name), sy - 12, colorSet.getColor().getRGB());
@@ -120,12 +115,6 @@ public class ColorPicker {
 
 		//Set hex codes
 		if (hovered(mouseX, mouseY, sx + 3 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)FontManager.robotoSmall.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
-			RenderSystem.disableDepthTest();
-			RenderSystem.depthFunc(GL11.GL_ALWAYS);
-			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + FontManager.robotoSmall.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
-			FontManager.robotoSmall.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
-			RenderSystem.depthFunc(GL11.GL_LEQUAL);
-			RenderSystem.enableDepthTest();
 			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
 				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
 				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
@@ -149,7 +138,8 @@ public class ColorPicker {
 		}
 
 		int hueY = (int) (sy + (ey - sy) * colorSet.hue);
-		RenderUtils.fill(matrices, sx, hueY - 2, ex, hueY + 2, Color.GRAY.brighter().getRGB(), Color.WHITE.darker().getRGB(), Color.WHITE.getRGB());
+		RenderUtils.fill(matrices, sx, hueY - 1, ex, hueY + 1, -1);
+		RenderUtils.drawOutlineCircle(matrices, satX - 2, briY - 2, 4, Color.WHITE);
 	}
 	
 	public int getHeight(int len) {
@@ -166,6 +156,10 @@ public class ColorPicker {
 	
 	public void mouseReleased(int button) {
 		if (button == 0) lmDown = false;
+	}
+	
+	public Color getColor() {
+		return colorSet.getColor();
 	}
 }
 

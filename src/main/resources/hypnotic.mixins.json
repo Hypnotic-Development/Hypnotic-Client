@@ -64,7 +64,8 @@
     "ModelPredicateProviderRegistryMixin",
     "RenderTickCounterAccessor",
     "FramebufferMixin",
-    "MultiplayerScreenMixin"
+    "MultiplayerScreenMixin",
+    "FramebufferAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -26,7 +26,10 @@ import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
 import dev.hypnotic.utils.math.MathUtils;
 import dev.hypnotic.utils.math.TPSUtils;
+import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Identifier;
 
 public class HUD {
 	
@@ -38,6 +41,8 @@ public class HUD {
 	public HUD() {
 	}
 	
+	ManagedShaderEffect test = ShaderEffectManager.getInstance().manage(new Identifier("hypnotic", "shaders/post/test.json"));
+
 	@EventTarget
 	public void renderHUD(EventRenderGUI event) {
 		if (mc.options.debugEnabled) return;

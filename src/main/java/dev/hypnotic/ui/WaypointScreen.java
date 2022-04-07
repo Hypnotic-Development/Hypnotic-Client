@@ -31,7 +31,6 @@ public class WaypointScreen extends HypnoticScreen {
 	private TextBox nameBox, xBox, yBox, zBox;
 	private Button doneButton, removeButton;
 	private ColorPicker colorPicker;
-	private ColorSetting color = new ColorSetting("Color", 255, 255, 255, true);
 	private int x = 300, y = 300, dragX, dragZ;
 	private boolean dragging = false;
 	
@@ -41,18 +40,18 @@ public class WaypointScreen extends HypnoticScreen {
 	
 	@Override
 	protected void init() {
-		xBox = new TextBox(width / 2, height / 2 - 20, 100, 10, waypoint.getX() + "");
-		yBox = new TextBox(width / 2, height / 2, 100, 10, waypoint.getX() + "");
-		zBox = new TextBox(width / 2, height / 2 + 20, 100, 10, waypoint.getX() + "");
+		xBox = new TextBox(width / 2 + 10, height / 2 - 100, 100, 10, waypoint.getX() + "");
+		yBox = new TextBox(width / 2 + 10, height / 2 - 75, 100, 10, waypoint.getX() + "");
+		zBox = new TextBox(width / 2 + 10, height / 2 - 50, 100, 10, waypoint.getX() + "");
 		xBox.setText(mc.player.getX() + "");
 		yBox.setText(mc.player.getY() + "");
 		zBox.setText(mc.player.getZ() + "");
-		nameBox = new TextBox(width / 2 - 180, height / 2 - 140, 100, 10, "Name");
-		colorPicker = new ColorPicker(100, 100, 120, 20, color);
-		doneButton = new Button("Done", width / 2, height / 2 - 60, 100, 20, false, this::addWaypoint);
-		xBox.setText(waypoint.getX() + "");
-		yBox.setText(waypoint.getY() + "");
-		zBox.setText(waypoint.getZ() + "");
+		nameBox = new TextBox(width / 2 - 110, height / 2 - 140, 220, 10, "Name");
+		colorPicker = new ColorPicker("Color", width / 2 - 115, height / 2 - 120, 120, 20, Color.WHITE);
+		doneButton = new Button("Done", width / 2 + 10, height / 2 - 20, 100, 20, false, this::addWaypoint);
+		if (Double.parseDouble(xBox.getText()) != 0) xBox.setText(waypoint.getX() + "");
+		if (Double.parseDouble(yBox.getText()) != 0) yBox.setText(waypoint.getY() + "");
+		if (Double.parseDouble(zBox.getText()) != 0) zBox.setText(waypoint.getZ() + "");
 		nameBox.setText(waypoint.getName());
 		this.buttons.add(doneButton);
 		super.init();
@@ -61,15 +60,15 @@ public class WaypointScreen extends HypnoticScreen {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
 		this.renderBackground(matrices);
-		RenderUtils.drawRoundedRect(matrices, width / 2 - 190, height / 2 - 150, width / 2 + 190, height / 2 + 150, 10, new Color(50, 50, 50));
+		RenderUtils.drawRoundedRect(matrices, width / 2 - 120, height / 2 - 150, width / 2 + 120, height / 2 + 150, 10, new Color(50, 50, 50));
 		xBox.render(matrices, mouseX, mouseY, delta);
-		if (xBox.getText().isEmpty()) font.drawWithShadow(matrices, "X", width / 2, height / 2 - 20, Color.gray.getRGB());
+		if (xBox.getText().isEmpty()) font.drawWithShadow(matrices, "X", width / 2 + 13, height / 2 - 100, Color.gray.getRGB());
 		yBox.render(matrices, mouseX, mouseY, delta);
-		if (yBox.getText().isEmpty()) font.drawWithShadow(matrices, "Y",width / 2, height / 2, Color.gray.getRGB());
+		if (yBox.getText().isEmpty()) font.drawWithShadow(matrices, "Y",width / 2 + 13, height / 2 - 75, Color.gray.getRGB());
 		zBox.render(matrices, mouseX, mouseY, delta);
-		if (zBox.getText().isEmpty()) font.drawWithShadow(matrices, "Z", width / 2, height / 2 + 20, Color.gray.getRGB());
+		if (zBox.getText().isEmpty()) font.drawWithShadow(matrices, "Z", width / 2 + 13, height / 2 - 50, Color.gray.getRGB());
 		nameBox.render(matrices, mouseX, mouseY, delta);
-		if (nameBox.getText().isEmpty()) font.drawWithShadow(matrices, "Name", width / 2 - 180, height / 2 - 140, Color.gray.getRGB());
+		if (nameBox.getText().isEmpty()) font.drawWithShadow(matrices, "Name", width / 2 - 107, height / 2 - 140, Color.gray.getRGB());
 		colorPicker.render(matrices, mouseX, mouseY);
 		doneButton.render(matrices, mouseX, mouseY, delta);
 		for (Waypoint wp : WaypointManager.INSTANCE.waypoints) {
@@ -84,14 +83,13 @@ public class WaypointScreen extends HypnoticScreen {
 		yBox.mouseClicked(mouseX, mouseY, button);
 		zBox.mouseClicked(mouseX, mouseY, button);
 		nameBox.mouseClicked(mouseX, mouseY, button);
-		
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 	
 	private void addWaypoint() {
 		if (!nameBox.getText().isEmpty() && !xBox.getText().isEmpty() && !yBox.getText().isEmpty() && !zBox.getText().isEmpty()) {
 			try {
-				waypoint = new Waypoint(nameBox.getText(), Integer.parseInt(xBox.getText()), Integer.parseInt(yBox.getText()), Integer.parseInt(zBox.getText()));
+				waypoint = new Waypoint(nameBox.getText(), Double.parseDouble(xBox.getText()), Double.parseDouble(yBox.getText()), Double.parseDouble(zBox.getText()), colorPicker.getColor());
 				WaypointManager.INSTANCE.waypoints.add(waypoint);
 				mc.setScreen(WaypointManagerScreen.INSTANCE);
 			} catch(NumberFormatException e) {

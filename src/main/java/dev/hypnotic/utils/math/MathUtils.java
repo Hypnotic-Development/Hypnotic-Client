@@ -36,4 +36,10 @@ public class MathUtils {
         double dZ = z2 - z1;
         return dX * dX + dY * dY + dZ * dZ;
     }
+
+	public static float calculateGaussianValue(float x, float sigma) {
+        double PI = 3.141592653;
+        double output = 1.0 / Math.sqrt(2.0 * PI * (sigma * sigma));
+        return (float) (output * Math.exp(-(x * x) / (2.0 * (sigma * sigma))));
+    }
 }

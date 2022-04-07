@@ -16,6 +16,8 @@
 */
 package dev.hypnotic.waypoint;
 
+import java.awt.Color;
+
 import dev.hypnotic.module.Mod;
 import net.minecraft.util.math.BlockPos;
 
@@ -24,13 +26,15 @@ public class Waypoint extends Mod {
 	private String name;
 	private double x, y, z;
 	private BlockPos pos;
+	private Color color;
 	
-	public Waypoint(String name, double x, double y, double z) {
+	public Waypoint(String name, double x, double y, double z, Color color) {
 		super(name, "", null);
 		this.name = name;
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.color = color;
 		this.pos = new BlockPos(x, y, z);
 	}
 	
@@ -73,6 +77,14 @@ public class Waypoint extends Mod {
 	
 	public void setZ(double z) {
 		this.z = z;
+	}
+	
+	public Color getColor() {
+		return color;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 	public BlockPos getPos() {

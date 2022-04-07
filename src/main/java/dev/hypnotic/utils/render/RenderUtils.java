@@ -49,6 +49,8 @@ import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.SimpleFramebuffer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -479,7 +481,7 @@ public class RenderUtils {
 	    }
 
 	    public static void setup2DProjection() {
-	        Matrix4x4 ortho = Matrix4x4.ortho2DMatrix(0, getScaledWidth(), getScaledHeight(), 0, -0.1f, 1000.f);
+//	        Matrix4x4 ortho = Matrix4x4.ortho2DMatrix(0, getScaledWidth(), getScaledHeight(), 0, -0.1f, 1000.f);
 	    }
 	    
 	    public static void bindTexture(Identifier identifier) {
@@ -1422,7 +1424,8 @@ public class RenderUtils {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
     }
 	
-    public static ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/program/blur.json"));
+    public static ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier("shaders/post/blur.json"));
+    
 	public static void blur(MatrixStack matrices, double x, double y, double y1, double x1) {
 		preStencil();
 		renderRoundedQuad(matrices, Color.white, x, y, x1, y1, 10 ,50);
@@ -1482,4 +1485,14 @@ public class RenderUtils {
             }
         }); 
 	}
+	
+	public static Framebuffer createFrameBuffer(Framebuffer framebuffer) {
+        if (framebuffer == null || framebuffer.viewportWidth != mc.getWindow().getFramebufferWidth() || framebuffer.viewportHeight != mc.getWindow().getFramebufferHeight()) {
+            if (framebuffer != null) {
+                framebuffer.delete();
+            }
+            return new SimpleFramebuffer(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight(), true, MinecraftClient.IS_SYSTEM_MAC);
+        }
+        return framebuffer;
+    }
 }

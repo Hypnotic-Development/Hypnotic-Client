@@ -161,7 +161,7 @@ public class ColorBox extends Component {
 
 		int hueY = (int) (sy + (ey - sy) * colorSet.hue);
 		RenderUtils.fill(matrices, sx, hueY - 1, ex, hueY + 1, -1);
-		RenderUtils.drawOutlineCircle(matrices, satX - 3, briY - 3, 6, Color.WHITE);
+		RenderUtils.drawOutlineCircle(matrices, satX - 2, briY - 2, 4, Color.WHITE);
 		super.render(matrices, mouseX, mouseY);
 	}
 	

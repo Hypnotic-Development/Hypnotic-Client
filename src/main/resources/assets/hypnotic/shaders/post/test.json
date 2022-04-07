@@ -1,0 +1,12 @@
+{
+    "targets": [
+        "swap"
+    ],
+    "passes": [
+        {
+            "name": "hypnotic:test",
+            "intarget": "minecraft:main",
+            "outtarget": "swap"
+        }
+    ]
+}

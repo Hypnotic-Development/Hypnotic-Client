@@ -71,10 +71,18 @@ public class Script extends Mod {
 	
 	public Script(File scriptFile) {
 		super("", "", Category.SCRIPT);
-		
+
 		this.scriptFile = scriptFile;
 
-		context = Context.newBuilder().allowExperimentalOptions(true).option("js.nashorn-compat", "true").option("engine.WarnInterpreterOnly", "false").allowHostAccess(HostAccess.ALL).build();
+		ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+		
+		context = Context.newBuilder("js", "regex")
+				.allowExperimentalOptions(true)
+				.option("js.nashorn-compat", "true")
+				.option("engine.WarnInterpreterOnly", "false")
+				.allowHostAccess(HostAccess.ALL)
+				.build();
 		context.getBindings("js").putMember("mc", mc);
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
 		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);
@@ -82,6 +90,8 @@ public class Script extends Mod {
 		context.getBindings("js").putMember("colors", new ColorUtils());
 		context.getBindings("js").putMember("args", new ScriptArgumentTypes());
 		context.getBindings("js").putMember("newScript", new SetupScript());
+		
+		Thread.currentThread().setContextClassLoader(oldCl);
 	}
 	
 	protected Script define(String name, String description, String author) {
@@ -265,9 +275,14 @@ public class Script extends Mod {
 	}
 	
 	public void load() throws ScriptException, IOException {
+		ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+		
 		context.eval(Source.newBuilder("js", scriptFile).build());
 		executeEvent("load");
 		EventManager.INSTANCE.register(this);
+		
+		Thread.currentThread().setContextClassLoader(oldCl);
 	}
 	
 	private void onEvent(String event, Value function) {
