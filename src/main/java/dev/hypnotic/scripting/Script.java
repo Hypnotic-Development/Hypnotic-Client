@@ -38,23 +38,14 @@ import dev.hypnotic.Hypnotic;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.event.EventTarget;
-import dev.hypnotic.event.events.EventKeyPress;
-import dev.hypnotic.event.events.EventMotionUpdate;
-import dev.hypnotic.event.events.EventReceiveChat;
-import dev.hypnotic.event.events.EventReceivePacket;
-import dev.hypnotic.event.events.EventRender3D;
-import dev.hypnotic.event.events.EventRenderGUI;
-import dev.hypnotic.event.events.EventSendMessage;
-import dev.hypnotic.event.events.EventSendPacket;
-import dev.hypnotic.event.events.EventTick;
+import dev.hypnotic.event.events.*;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
-import dev.hypnotic.settings.settingtypes.BooleanSetting;
-import dev.hypnotic.settings.settingtypes.ColorSetting;
-import dev.hypnotic.settings.settingtypes.ModeSetting;
-import dev.hypnotic.settings.settingtypes.NumberSetting;
+import dev.hypnotic.scripting.bindings.*;
+import dev.hypnotic.settings.settingtypes.*;
 import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -74,24 +65,23 @@ public class Script extends Mod {
 
 		this.scriptFile = scriptFile;
 
-		ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
-		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
-		
 		context = Context.newBuilder("js", "regex")
 				.allowExperimentalOptions(true)
 				.option("js.nashorn-compat", "true")
 				.option("engine.WarnInterpreterOnly", "false")
 				.allowHostAccess(HostAccess.ALL)
 				.build();
+		
 		context.getBindings("js").putMember("mc", mc);
+		context.getBindings("js").putMember("player", new ScriptPlayer());
+		context.getBindings("js").putMember("world", new ScriptWorld());
+		context.getBindings("js").putMember("keys", new Keys());
 		context.getBindings("js").putMember("hypnotic", Hypnotic.INSTANCE);
 		context.getBindings("js").putMember("utils", ScriptUtils.INSTANCE);
 		context.getBindings("js").putMember("renderer", new ScriptRenderer());
 		context.getBindings("js").putMember("colors", new ColorUtils());
 		context.getBindings("js").putMember("args", new ScriptArgumentTypes());
 		context.getBindings("js").putMember("newScript", new SetupScript());
-		
-		Thread.currentThread().setContextClassLoader(oldCl);
 	}
 	
 	protected Script define(String name, String description, String author) {
@@ -113,6 +103,10 @@ public class Script extends Mod {
             return define(name, description, author);
         }
     }
+	
+	public ClientPlayerEntity getPlayer() {
+		return mc.player;
+	}
 	
 	public void sendChatMessage(String message, boolean prefix) {
 		if (prefix) ChatUtils.tellPlayer(message);
