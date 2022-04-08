@@ -14,14 +14,14 @@
 <h2 align="center">Gaming awards frame winner 2004/2006/2007</h2>           
   
 ## About
-"Utility Mod" for Minecraft 1.18.1  
+"Utility Mod" for Minecraft 1.18.2  
 Use at your own risk, we are not responsible for any punishments on any server  
 https://hypnotic.dev is our website that isn't so bad anymore  
   
 ## Requirements  
-Minecraft 1.18.1  
+Minecraft 1.18.2  
 Java Runtime version 17 or higher  
-Fabric Loader 0.12.12 or higher  
+Fabric Loader 0.13.3 or higher  
   
 ## Authors  
 BadGamesInc - actual knowledge  
