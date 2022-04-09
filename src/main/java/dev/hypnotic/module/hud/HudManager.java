@@ -40,7 +40,8 @@ public class HudManager {
 				new ArrayListModule(),
 				new Packets(),
 				new Doll(),
-				new TargetHUD()
+				new TargetHUD(),
+				new LagIndicator()
 			);
 	}
 	

@@ -65,7 +65,8 @@
     "RenderTickCounterAccessor",
     "FramebufferMixin",
     "MultiplayerScreenMixin",
-    "FramebufferAccessor"
+    "FramebufferAccessor",
+    "CactusBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1

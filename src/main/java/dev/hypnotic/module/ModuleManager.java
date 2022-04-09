@@ -141,7 +141,9 @@ public class ModuleManager {
 				new PCPinger(),
 				new ResourcePackSpoof(),
 				new ServerCrasher(),
-				new IRC()
+				new IRC(),
+				new TrueSight()
+//				new AntiCactus()
 			);
 	}
 	

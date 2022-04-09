@@ -88,7 +88,7 @@ public class DiscordRPCModule extends Mod {
 			discordRPC.Discord_UpdatePresence(presence);
 			
 			updateThread = new Thread(() -> {
-				while (!Thread.currentThread().isInterrupted()) {
+				while (!updateThread.isInterrupted()) {
 					discordRPC.Discord_RunCallbacks();
 					presence.details = Hypnotic.fullName;
 					presence.state = status;
@@ -96,7 +96,7 @@ public class DiscordRPCModule extends Mod {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
-						discordRPC.Discord_Shutdown();
+//						discordRPC.Discord_Shutdown();
 						break;
 					}
 				}
@@ -108,7 +108,8 @@ public class DiscordRPCModule extends Mod {
 					updateThread.interrupt();
 				}
 				if (discordRPC != null) {
-					discordRPC.Discord_Shutdown();
+//					discordRPC.Discord_Shutdown();
+//					discordRPC.Discord_ClearPresence();
 					discordRPC = null;
 					presence = null;
 				}

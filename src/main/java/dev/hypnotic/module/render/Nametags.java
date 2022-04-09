@@ -173,14 +173,19 @@ public class Nametags extends Mod {
             float scaleDist = mc.player.distanceTo(playerEntity) < 60 ? 60 : (mc.player.distanceTo(playerEntity) > 100 ? 100 : mc.player.distanceTo(playerEntity));
             float scaleFactor = ((scaleDist) * 0.05f) * (float)scale.getValue() * 0.2f;
             eventRender2D.getMatrices().scale(scaleFactor, scaleFactor, 0);
+            
+            if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), - 17, (length / 2) + 6, - 1, new Color(0, 0, 0, 175).getRGB());
+//            RenderUtils.startScissor((int)((x - length / 2) + 10), (int)(y - 13), (int)(length) - 50, 13);
+//            RenderUtils.blur.render(eventRender2D.getTickDelta());
+//            RenderUtils.endScissor();
+            
             if (playerEntity instanceof LivingEntity && healthbar.isEnabled()) {
                 float percent = ((LivingEntity) playerEntity).getHealth() / ((LivingEntity) playerEntity).getMaxHealth();
                 float barLength = (int) (((length) + 6) * percent);
                 RenderUtils.fill(eventRender2D.getMatrices(), - (length / 2) - (playerEntity instanceof PlayerEntity ? (head.isEnabled() ? 18 : 2) : 2), - 1, 0 + barLength - length / 2, 0, getHealthColor(((LivingEntity) playerEntity)));
             }
-            if (bg.isEnabled()) RenderUtils.fill(eventRender2D.getMatrices(), - (length / 2) - 2 - (head.isEnabled() ? (playerEntity instanceof PlayerEntity ? 16 : 0) : 0), - 17, (length / 2) + 6, - 1, new Color(0, 0, 0, 175).getRGB());
-            if (!font.mcFont)
-            font.drawCenteredString(eventRender2D.getMatrices(), nameString, 2, - 18, -1, true);
+            
+            if (!font.mcFont) font.drawCenteredString(eventRender2D.getMatrices(), nameString, 2, - 18, -1, true);
             else font.drawCenteredString(eventRender2D.getMatrices(), nameString, 2, - 15, -1, true);
             if (playerEntity instanceof PlayerEntity) {
                 PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(playerEntity.getUuid());
