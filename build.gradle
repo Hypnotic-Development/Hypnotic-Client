@@ -73,7 +73,7 @@ dependencies {
 	dependency "org.graalvm.truffle:truffle-api:${graaljs_version}"
 	
 	// Discord RPC
-	dependency files('lib/java-discord-rpc-2.0.1-all.jar')
+	dependency "com.github.Vatuu:discord-rpc:1.6.2"
 
 	modImplementation('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }
     include('net.earthcomputer.multiconnect:multiconnect-api:1.5.10') { transitive = false }

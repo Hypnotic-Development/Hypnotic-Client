@@ -16,19 +16,18 @@
 */
 package dev.hypnotic.module.misc;
 
-import club.minnced.discord.rpc.DiscordEventHandlers;
-import club.minnced.discord.rpc.DiscordRPC;
-import club.minnced.discord.rpc.DiscordRichPresence;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
+import net.arikia.dev.drpc.DiscordEventHandlers;
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
 
 public class DiscordRPCModule extends Mod {
 
 	private final String ID = "899900778519601223";
-	public DiscordRPC discordRPC;
-	public DiscordRichPresence presence;
+	public DiscordRichPresence presence = new DiscordRichPresence();
 	public Thread updateThread;
 	public static String status = "";
 	
@@ -42,28 +41,27 @@ public class DiscordRPCModule extends Mod {
 	
 	@Override
 	public void onEnable() {
-		discordRPC = DiscordRPC.INSTANCE;
-		DiscordEventHandlers handlers = new DiscordEventHandlers();
+		DiscordEventHandlers handlers = new DiscordEventHandlers.Builder().build();
 		handlers.ready = (user) -> Hypnotic.LOGGER.info("Discord handlers ready");
-		discordRPC.Discord_Initialize(ID, handlers, true, "");
+		DiscordRPC.discordInitialize(ID, handlers, true);
 		presence = new DiscordRichPresence();
 		presence.startTimestamp = System.currentTimeMillis() / 1000;
 		presence.largeImageKey = "hypnotic_icon";
         presence.largeImageText = Hypnotic.fullName;
         presence.details = Hypnotic.fullName;
 		presence.state = status;
-		discordRPC.Discord_UpdatePresence(presence);
+		DiscordRPC.discordUpdatePresence(presence);
 		
 		updateThread = new Thread(() -> {
 			while (!Thread.currentThread().isInterrupted()) {
-				discordRPC.Discord_RunCallbacks();
+				DiscordRPC.discordRunCallbacks();
 				presence.details = Hypnotic.fullName;
 				presence.state = status;
-				discordRPC.Discord_UpdatePresence(presence);
+				DiscordRPC.discordUpdatePresence(presence);
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					discordRPC.Discord_Shutdown();
+					DiscordRPC.discordShutdown();
 					break;
 				}
 			}
@@ -75,47 +73,9 @@ public class DiscordRPCModule extends Mod {
 	@Override
 	public void setEnabled(boolean enabled) {
 		if (enabled) {
-			discordRPC = DiscordRPC.INSTANCE;
-			DiscordEventHandlers handlers = new DiscordEventHandlers();
-			handlers.ready = (user) -> Hypnotic.LOGGER.info("Discord handlers ready");
-			discordRPC.Discord_Initialize(ID, handlers, true, "");
-			presence = new DiscordRichPresence();
-			presence.startTimestamp = System.currentTimeMillis() / 1000;
-			presence.largeImageKey = "hypnotic_icon";
-	        presence.largeImageText = Hypnotic.fullName;
-	        presence.details = Hypnotic.fullName;
-			presence.state = status;
-			discordRPC.Discord_UpdatePresence(presence);
-			
-			updateThread = new Thread(() -> {
-				while (!updateThread.isInterrupted()) {
-					discordRPC.Discord_RunCallbacks();
-					presence.details = Hypnotic.fullName;
-					presence.state = status;
-					discordRPC.Discord_UpdatePresence(presence);
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-//						discordRPC.Discord_Shutdown();
-						break;
-					}
-				}
-			}, "RPC-Callback-Handler");
-			updateThread.start();
+			onEnable();
 		} else {
-			try {
-				if (updateThread != null && !updateThread.isInterrupted()) {
-					updateThread.interrupt();
-				}
-				if (discordRPC != null) {
-//					discordRPC.Discord_Shutdown();
-//					discordRPC.Discord_ClearPresence();
-					discordRPC = null;
-					presence = null;
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
+			
 		}
 		super.setEnabled(enabled);
 	}
@@ -127,18 +87,7 @@ public class DiscordRPCModule extends Mod {
 	
 	@Override
 	public void onDisable() {
-		if (updateThread != null && !updateThread.isInterrupted()) {
-			updateThread.interrupt();
-		}
-		if (discordRPC != null) {
-			try {
-				discordRPC.Discord_Shutdown();
-				discordRPC = null;
-				presence = null;
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
+		DiscordRPC.discordShutdown();
 		super.onDisable();
 	}
 }
