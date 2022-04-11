@@ -33,6 +33,7 @@ import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Formatting;
 
+// Taken from meteor client
 public class NBT extends Command {
     public NBT() {
         super("nbt", "Modifies NBT data for an item, example: .nbt add {display:{Name:'{\"text\":\"$cRed Name\"}'}}");

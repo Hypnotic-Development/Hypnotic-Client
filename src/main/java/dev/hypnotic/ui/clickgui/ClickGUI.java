@@ -111,6 +111,7 @@ public class ClickGUI extends HypnoticScreen {
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+		
 		if (!ModuleManager.INSTANCE.getModule(ClickGUIModule.class).clickAnimation.isEnabled()) shouldDraw = false;
 		this.renderBackground(matrices);
 		if (dragging) {
@@ -124,12 +125,14 @@ public class ClickGUI extends HypnoticScreen {
 		
 		if (shouldMove) {
 			if (dist1 != 0) {
-				anim1 += dist1 / 8;
+				anim1 += dist1 / 6;
 			}
 			if (dist2 != 0) {
-				anim2 += dist2 / 8;
+				anim2 += dist2 / 6;
 			}
 		}
+		matrices.push();
+//		matrices.scale(0.99f, 0.99f, 0);
 		MenuBar.INSTANCE.renderMenuBar(matrices, mouseX, mouseY, width, height);
 		
 		// Sort the buttons alphabetically
@@ -167,7 +170,7 @@ public class ClickGUI extends HypnoticScreen {
 		
 		double dist = RenderUtils.distanceTo(lastOffset, offset);
 		
-	    if (dist != 0 && shouldMove) lastOffset += dist / 10;
+	    if (dist != 0 && shouldMove) lastOffset += dist / 6;
 	    
 		RenderUtils.startScissor(x, y, pWidth, pHeight);
 		
@@ -229,6 +232,7 @@ public class ClickGUI extends HypnoticScreen {
 				}
 			}
 		}
+		matrices.pop();
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	

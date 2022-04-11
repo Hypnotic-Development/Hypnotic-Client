@@ -34,6 +34,7 @@ import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.RotationUtils;
 import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.player.PlayerUtils;
+import dev.hypnotic.utils.render.RenderUtils;
 import dev.hypnotic.utils.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -111,6 +112,9 @@ public class Scaffold extends Mod {
     public void render3d(EventRender3D event) {
     	
     }
+    
+    
+    float smoothYaw, smoothPitch;
     
     @EventTarget
     public void onMotionUpdate(EventMotionUpdate event) {
@@ -196,8 +200,12 @@ public class Scaffold extends Mod {
 	        if (rotate.isEnabled() && pos != null) {
 	        	event.setYaw((float) RotationUtils.getYaw(pos));
 	        	event.setPitch((float) RotationUtils.getPitch(pos));
-			    RotationUtils.setSilentYaw(event.getYaw());
-			    RotationUtils.setSilentPitch(event.getPitch());
+	        	
+	        	if (smoothYaw != event.getYaw()) smoothYaw += RenderUtils.distanceTo(smoothYaw, event.getYaw()) / 4f;
+	        	if (smoothPitch != event.getYaw()) smoothPitch += RenderUtils.distanceTo(smoothPitch, event.getPitch()) / 4f;
+	        	
+			    RotationUtils.setSilentYaw(smoothYaw);
+			    RotationUtils.setSilentPitch(smoothPitch);
 	        }
 	        mc.player.getInventory().selectedSlot = oldSlot;
     	}

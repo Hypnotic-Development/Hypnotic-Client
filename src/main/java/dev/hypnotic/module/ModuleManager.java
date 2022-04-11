@@ -142,8 +142,9 @@ public class ModuleManager {
 				new ResourcePackSpoof(),
 				new ServerCrasher(),
 				new IRC(),
-				new TrueSight()
-//				new AntiCactus()
+				new TrueSight(),
+				new AntiCactus(),
+				new ChestStealer()
 			);
 	}
 	

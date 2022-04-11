@@ -62,6 +62,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.texture.NativeImage;
@@ -1347,34 +1348,6 @@ public class RenderUtils {
 		public static double distanceTo(double x1, double x2) {
 			return x2 - x1;
 		}
-		
-		public static void setCircularStencil(MatrixStack matrices, double x, double y, double r) {
-		GL11.glEnable(GL11.GL_STENCIL_TEST);
-		// disable drawing to the color and depth buffers.
-		// circle will only be drawn to stencil buffer.
-		RenderSystem.colorMask(false, false, false, false);
-		RenderSystem.depthMask(false);
-		// set up stencil func and op so that a 1 is always written to the stencil buffer
-		// whenever a pixel is drawn.
-		RenderSystem.stencilFunc(GL11.GL_NEVER, 1, 0x01);
-		// replace stencil buffer value with 1 whenever stencil test fails.
-		// keep stencil buffer value otherwise.
-		RenderSystem.stencilOp(GL11.GL_REPLACE, GL11.GL_KEEP, GL11.GL_KEEP);
-		// enable writing to 8 bits of the stencil buffer
-		RenderSystem.stencilMask(0x01);
-		// clear stencil buffer, with mask 0xff
-		RenderSystem.clearStencil(GL11.GL_STENCIL_BUFFER_BIT);
-		// draw stencil pattern
-		drawFilledCircle(matrices, x, y, (float) r, Color.WHITE);
-		
-		// re-enable drawing to colour and depth buffers
-		GL11.glColorMask(true, true, true, true);
-		// probably shouldn't enable? -> GL11.glDepthMask(true);
-		// disable writing to stencil buffer
-		GL11.glStencilMask(0x00);
-		// draw only when stencil buffer value == 1 (inside circle)
-		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0x01);
-	}
 	
 	public static void vertex2f(float x, float y) {
 		Tessellator.getInstance().getBuffer().vertex(x, y, 0);
@@ -1494,5 +1467,46 @@ public class RenderUtils {
             return new SimpleFramebuffer(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight(), true, MinecraftClient.IS_SYSTEM_MAC);
         }
         return framebuffer;
+    }
+	
+	public static void drawCylinder(double x, double y, double z, float radius, float height, Color color) {
+        double startAngle = Math.atan2(z, x) + Math.PI;
+
+        BufferBuilder builder = Tessellator.getInstance().getBuffer();
+        
+        builder.begin(DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        
+        // This draws all the segments back-to-front to avoid depth issues
+        int segments = 64;
+        double angleStep = Math.PI * 2.0 / (double) segments;
+        for (int segment = 0; segment < segments / 2; segment++) {
+            double previousAngleOffset = segment * angleStep;
+            double currentAngleOffset = (segment + 1) * angleStep;
+
+            // Draw the positive side of this offset
+            double previousRotatedX = x + radius * Math.cos(startAngle + previousAngleOffset);
+            double previousRotatedZ = z + radius * Math.sin(startAngle + previousAngleOffset);
+            double rotatedX = x + radius * Math.cos(startAngle + currentAngleOffset);
+            double rotatedZ = z + radius * Math.sin(startAngle + currentAngleOffset);
+            
+            builder.vertex(previousRotatedX, y + height, previousRotatedZ).color(color.getRGB()).next();
+            builder.vertex(rotatedX, y + height, rotatedZ).color(color.getRGB()).next();
+            builder.vertex(rotatedX, y, rotatedZ).color(color.getRGB()).next();
+            builder.vertex(previousRotatedX, y, previousRotatedZ).color(color.getRGB()).next();
+
+            // Draw the negative side of this offset
+            previousRotatedX = x + radius * Math.cos(startAngle - previousAngleOffset);
+            previousRotatedZ = z + radius * Math.sin(startAngle - previousAngleOffset);
+            rotatedX = x + radius * Math.cos(startAngle - currentAngleOffset);
+            rotatedZ = z + radius * Math.sin(startAngle - currentAngleOffset);
+
+            builder.vertex(previousRotatedX, y + height, previousRotatedZ).color(color.getRGB()).next();
+            builder.vertex(previousRotatedX, y, previousRotatedZ).color(color.getRGB()).next();
+            builder.vertex(rotatedX, y, rotatedZ).color(color.getRGB()).next();
+            builder.vertex(rotatedX, y + height, rotatedZ).color(color.getRGB()).next();
+        }
+
+        builder.end();
+        BufferRenderer.draw(builder);
     }
 }

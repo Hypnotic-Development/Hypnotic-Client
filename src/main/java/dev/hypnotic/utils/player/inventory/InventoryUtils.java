@@ -19,6 +19,8 @@ package dev.hypnotic.utils.player.inventory;
 import static dev.hypnotic.utils.MCUtils.mc;
 
 import java.util.Comparator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
@@ -26,6 +28,7 @@ import dev.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.BeaconScreenHandler;
@@ -63,6 +66,42 @@ public class InventoryUtils {
 
     public static final int ARMOR_START = 36;
     public static final int ARMOR_END = 39;
+    
+    public static Map<Integer, ItemStack> getSlots(int start, int end) {
+        Map<Integer, ItemStack> slots = new ConcurrentHashMap<>();
+
+        for (int i = start; i < end; ++i) {
+            slots.put(i, mc.player.getInventory().getStack(i));
+        }
+
+        return slots;
+    }
+    
+    public static Map<Integer, ItemStack> getSlots(ScreenHandler container, int start, int end) {
+        Map<Integer, ItemStack> slots = new ConcurrentHashMap<>();
+
+        for (int i = start; i < end; ++i) {
+            slots.put(i, container.getSlot(i).getStack());
+        }
+
+        return slots;
+    }
+    
+    public static boolean isInventoryFull() {
+    	for (Integer slot : getSlots(0, MAIN_END).keySet()) {
+    		if (mc.player.getInventory().getStack(slot).getItem() == Items.AIR) return false;
+    	}
+    	
+        return true;
+    }
+    
+    public static boolean isContainerEmpty(ScreenHandler container) {
+    	for (Integer slot : getSlots(0, MAIN_END).keySet()) {
+    		if (container.getSlot(slot).getStack().getItem() == Items.AIR) return false;
+    	}
+    	
+        return true;
+    }
 
     public static int indexToId(int i) {
         if (mc.player == null) return -1;

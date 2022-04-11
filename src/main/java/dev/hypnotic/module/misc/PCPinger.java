@@ -23,7 +23,7 @@ import dev.hypnotic.utils.Utils;
 public class PCPinger extends Mod {
 
 	public PCPinger() {
-		super("PCPinger", "Pings your pc", Category.EXPLOIT);
+		super("PCPinger", "consume memory", Category.EXPLOIT);
 	}
 
 	@Override
