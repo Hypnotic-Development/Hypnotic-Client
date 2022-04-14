@@ -18,7 +18,6 @@ package dev.hypnotic.ui.clickgui;
 
 import java.awt.Color;
 
-import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.ui.HypnoticScreen;
 import dev.hypnotic.ui.clickgui.settings.SettingsWindow;
@@ -36,7 +35,7 @@ public class ModuleButton {
 	public boolean open = false;
 	public String name = "";
 	
-	public ModuleButton(Mod mod, Category cateogry, int x, int y) {
+	public ModuleButton(Mod mod, int x, int y) {
 		this.mod = mod;
 		this.x = x;
 		this.y = y;

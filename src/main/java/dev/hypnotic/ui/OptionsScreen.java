@@ -53,7 +53,7 @@ public class OptionsScreen extends HypnoticScreen {
 	public OptionsScreen() {
 		this.frame = new Frame("Options", 100, 100, 100, 100);
 		options = new OptionModule(forceCFont, disableGradient, disableBlur, blurIntensity, allowParkour, allowBreak, allowSprint, allowPlace, allowInventory, chatControl, assumeJesus, assumeSafewalk, assumeStep);
-		window = new SettingsWindow(new ModuleButton(options, null, 0, 0));
+		window = new SettingsWindow(new ModuleButton(options, 0, 0));
 	}
 	
 	@Override

@@ -43,7 +43,6 @@ public class HUD {
 	@EventTarget
 	public void renderHUD(EventRenderGUI event) {
 		if (mc.options.debugEnabled) return;
-		
 		for (HudModule element : HudManager.INSTANCE.hudModules) {
 			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
 			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getTickDelta());

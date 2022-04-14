@@ -614,6 +614,14 @@ public class TextBox extends ClickableWidget implements Drawable, Element {
    public void setX(int x) {
       this.x = x;
    }
+   
+   public void setY(int y) {
+	      this.y = y;
+   }
+   
+   public void setHeight(int height) {
+	   this.height = height;
+   }
 
    public void appendNarrations(NarrationMessageBuilder builder) {
       builder.put(NarrationPart.TITLE, (Text)(new TranslatableText("narration.edit_box", new Object[]{this.getText()})));

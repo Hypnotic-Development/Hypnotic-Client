@@ -32,10 +32,12 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.movement.FlightBlink;
 import dev.hypnotic.module.render.ClickGUIModule;
 import dev.hypnotic.ui.HypnoticScreen;
+import dev.hypnotic.ui.TextBox;
 import dev.hypnotic.ui.clickgui.frame.Frame;
 import dev.hypnotic.ui.clickgui2.MenuBar;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.Timer;
+import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
 
@@ -53,6 +55,8 @@ public class ClickGUI extends HypnoticScreen {
     
     public boolean dragging;
     public boolean searchOpen = false;
+    
+    private TextBox searchBox;
 	
 	int fadeIn = 0;
 	double anim1, anim2, aStartX, aStartY;
@@ -71,7 +75,7 @@ public class ClickGUI extends HypnoticScreen {
 		this.y = 100;
 		this.pWidth = 560;
 		this.pHeight = 290;
-
+		
 		int count = 50;
 		for (Category category : Category.values()) {
 			categories.add(new CategoryButton(200, 109 + count, category, this));
@@ -85,7 +89,7 @@ public class ClickGUI extends HypnoticScreen {
 		}
 		buttonNames.sort(Collator.getInstance());
 		for (String name : buttonNames) {
-			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + modCount);
+			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), x + 120, y + modCount);
 			buttons.add(mb);
 			mb.startY = modCount;
 			modCount += 30;
@@ -99,19 +103,21 @@ public class ClickGUI extends HypnoticScreen {
 		anim2 = 0;
 		aStartX = x;
 		aStartY = y;
-		this.refresh();
+		this.refresh(false);
+		
+		searchBox = new TextBox(0, 0, 100, 15, "Search");
 		super.init();
 	}
 	
 	double animTicks = 0;
 	int mouseAnim;
 	double mouseAnim2;
+	double searchAnim;
 	boolean shouldDraw;
 	int animStartX, animStartY;
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-		
 		if (!ModuleManager.INSTANCE.getModule(ClickGUIModule.class).clickAnimation.isEnabled()) shouldDraw = false;
 		this.renderBackground(matrices);
 		if (dragging) {
@@ -216,6 +222,20 @@ public class ClickGUI extends HypnoticScreen {
 			button.x = x + 125;
 			button.render(matrices, mouseX, mouseY);
 		}
+		
+		if (shouldMove) {
+			if (searchOpen) {
+				if (searchAnim < 10) searchAnim+=1;
+			} else {
+				if (searchAnim > 0) searchAnim-=1;
+			}
+		}
+		
+		searchBox.setX(this.x + 20);
+		searchBox.setY(this.y + 275 - (int)searchAnim);
+		searchBox.setWidth(75);
+		
+		searchBox.render(matrices, mouseX, mouseY, delta);
 		RenderUtils.endScissor();
 		
 		if (shouldDraw) {
@@ -232,7 +252,10 @@ public class ClickGUI extends HypnoticScreen {
 				}
 			}
 		}
+		
 		matrices.pop();
+		FontManager.icons.drawWithShadow(matrices, "h", x + 4, y + 275, hoveredSearch(mouseX, mouseY) ? Color.WHITE.darker().getRGB() : -1);
+		
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	
@@ -267,17 +290,37 @@ public class ClickGUI extends HypnoticScreen {
 			for (CategoryButton catButton : categories) {
 				catButton.mouseClicked(mouseX, mouseY, button);
 				if (catButton.hovered(mouseX, mouseY)) {
-					this.refresh();
+					this.refresh(false);
 				}
 			}
 			for (ModuleButton modButton : buttons) {
 				modButton.mouseClicked((int) mouseX, (int) mouseY, button);
 			}
 		}
+		
+		if (hoveredSearch((int)mouseX, (int)mouseY)) {
+			searchOpen = !searchOpen; 
+
+			if (!searchOpen) {
+				searchBox.setText("");
+				searchBox.setTextFieldFocused(false);
+				refresh(false);
+			}
+		}
+		
+		if (searchOpen) searchBox.mouseClicked(mouseX, mouseY, button);
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
 	
-	private void refresh() {
+	boolean hoveredSearch(int mouseX, int mouseY) {
+		int searchX = x + 5;
+		int searchY = y + 270;
+		int width = 10;
+		int height = 15;
+		return mouseX > searchX && mouseX < searchX + width && mouseY > searchY && mouseY < searchY + height;
+	}
+	
+	private void refresh(boolean includeAll) {
 		buttons.clear();
 		buttonNames.clear();
 		
@@ -285,10 +328,10 @@ public class ClickGUI extends HypnoticScreen {
 		
 		Collections.sort(ModuleManager.INSTANCE.getModulesInCategory(currentCategory), Comparator.comparing(Mod::getName));
 		
-		for (Mod mod : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
+		for (Mod mod : includeAll ? ModuleManager.INSTANCE.getModules() : ModuleManager.INSTANCE.getModulesInCategory(currentCategory)) {
 			if (!(mod instanceof FlightBlink)) {
+				if (includeAll && !mod.getName().toLowerCase().contains(searchBox.getText().toLowerCase())) continue;
 				buttonNames.add(mod.getName());
-				
 			}
 		}
 		
@@ -298,7 +341,7 @@ public class ClickGUI extends HypnoticScreen {
 		
 		int count = 0;
 		for (String name : buttonNames) {
-			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), currentCategory, x + 120, y + count);
+			ModuleButton mb = new ModuleButton(ModuleManager.INSTANCE.getModuleByName(name), x + 120, y + count);
 			buttons.add(mb);
 			mb.startY = count;
 			count += 30;
@@ -340,7 +383,15 @@ public class ClickGUI extends HypnoticScreen {
 	}
 	
 	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		searchBox.charTyped(chr, modifiers);
+		return super.charTyped(chr, modifiers);
+	}
+	
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		searchBox.keyPressed(keyCode, scanCode, modifiers);
+		
 		if (isButtonOpen() && keyCode == GLFW.GLFW_KEY_ESCAPE) {
 			for (ModuleButton button : buttons) {
 				if (button.open) {
@@ -349,6 +400,10 @@ public class ClickGUI extends HypnoticScreen {
 					return false;
 				}
 			}
+		} else if (!isButtonOpen() && !searchBox.getText().isEmpty()) {
+			this.refresh(true);
+		} else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && searchBox.getText().length() == 0 && searchBox.isFocused()) {
+			this.refresh(false);
 		}
 		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
@@ -372,9 +427,7 @@ public class ClickGUI extends HypnoticScreen {
 	
 	public boolean isButtonOpen() {
 		for (ModuleButton button : buttons) {
-			if (button.open) {
-				return true;
-			}
+			if (button.open) return true;
 		}
 		return false;
 	}

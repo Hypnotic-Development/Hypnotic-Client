@@ -25,7 +25,7 @@ public enum Category {
 	MISC("Misc", new Color(20, 255, 50), "e"), 
 	PLAYER("Player", new Color(255, 147, 0), "c"),
 	EXPLOIT("Exploit", new Color(255, 110, 215), "d"),
-	SCRIPT("Scripts", new Color(255, 127, 122), "h");
+	SCRIPT("Scripts", new Color(255, 127, 122), "i");
 	
 	public String name;
 	public Color color;
