@@ -16,6 +16,7 @@
 */
 package dev.hypnotic.module.render;
 
+import baritone.api.BaritoneAPI;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventSendMessage;
@@ -56,6 +57,9 @@ public class ChatImprovements extends Mod {
 	public void sendMessage(EventSendMessage event) {
 		StringBuilder sb = new StringBuilder();
 		String message = event.getMessage();
+		
+		if (message.startsWith(BaritoneAPI.getSettings().prefix.get())) return;
+		
 		switch(mode.getSelected()) {
 			case "1":
 				message = applyFancy(message.toLowerCase());
@@ -89,8 +93,7 @@ public class ChatImprovements extends Mod {
     }
 	
 	@SuppressWarnings("unused")
-	private String convertString(String input)
-	{
+	private String convertString(String input) {
 		StringBuilder sb = new StringBuilder();
 		String output = "";
 		for(char c : input.toCharArray())
@@ -100,8 +103,7 @@ public class ChatImprovements extends Mod {
 		return sb.append(getSuffix()).toString();
 	}
 	
-	private String convertChar(char c)
-	{
+	private String convertChar(char c) {
 		if(c < 0x21 || c > 0x80)
 			return "" + c;
 		

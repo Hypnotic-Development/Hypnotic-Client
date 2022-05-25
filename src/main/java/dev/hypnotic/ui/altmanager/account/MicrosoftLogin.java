@@ -31,7 +31,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import dev.hypnotic.ui.altmanager.Http;
 import net.minecraft.util.Util;
 
 //Credits (mostly) to meteor client (https://github.com/MeteorDevelopment/meteor-client)

@@ -87,11 +87,8 @@ public class IRCClient extends ListenerAdapter {
 			bot = new PircBotX(config);
 			output = new OutputIRC(bot);
 			
-			
-			
 			try {
 				bot.startBot();
-				
 				Hypnotic.LOGGER.info("Connected to the IRC");
 			} catch (IOException | IrcException e) {
 				e.printStackTrace();

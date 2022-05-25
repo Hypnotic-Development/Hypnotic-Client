@@ -95,7 +95,7 @@ public class Accounts extends System<Accounts> implements Iterable<Account<?>> {
                     case Microsoft ->  new MicrosoftAccount(null).fromTag(t);
                     case TheAltening -> new TheAlteningAccount(null).fromTag(t);
                 };
-
+                
             } catch (NbtException e) {
                 return null;
             }

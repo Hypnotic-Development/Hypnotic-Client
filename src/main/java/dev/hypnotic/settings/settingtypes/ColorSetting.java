@@ -94,7 +94,7 @@ public class ColorSetting extends Setting {
 	
 	public ColorSetting(String name, String hex) {
 		this.name = name;
-		Color hexColor = hexToRgb(hex);
+		Color hexColor = ColorUtils.hexToRgb(hex);
 		float[] vals = rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
 		this.setHSV(vals[0], vals[1], vals[2]);
 		this.hue = vals[0];
@@ -178,15 +178,6 @@ public class ColorSetting extends Setting {
 	
 	public String rgbToHex(int rgb) {
 		return Integer.toHexString(rgb);
-	}
-	
-	public Color hexToRgb(String hex) {
-		try {
-			return Color.decode("#" + hex.replace("#", ""));
-		} catch(NumberFormatException e) {
-			System.err.println("Invalid hex string!");
-			return Color.WHITE;
-		}
 	}
 	
 	public int[] hexToRgbInt(String hex) {

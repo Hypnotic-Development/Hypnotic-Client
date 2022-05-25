@@ -27,36 +27,26 @@ import java.util.ArrayList;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.config.friends.Friend;
 import dev.hypnotic.config.friends.FriendManager;
-import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.hud.HudManager;
-import dev.hypnotic.module.hud.HudModule;
 import dev.hypnotic.ui.HudEditorScreen;
 import dev.hypnotic.ui.clickgui.ModuleButton;
 import dev.hypnotic.ui.clickgui2.ClickGUI;
 import dev.hypnotic.ui.clickgui2.frame.Frame;
-import dev.hypnotic.waypoint.Waypoint;
-import dev.hypnotic.waypoint.WaypointManager;
-import net.minecraft.util.math.BlockPos;
 
-public class SaveLoad {
+public class PositionsConfig {
+	
     public File dir;
-    public File configs;
     public File dataFile;
 
-    public static final SaveLoad INSTANCE = new SaveLoad();
-    //Currently saves keybinds, hud positions, friends, waypoints*, and frame positions
+    public static final PositionsConfig INSTANCE = new PositionsConfig();
     
-    public SaveLoad() {
+    public PositionsConfig() {
         dir = new File(Hypnotic.hypnoticDir);
         if (!dir.exists()) {
-            dir.mkdir();
+            dir.mkdirs();
         }
-        configs = new File(Hypnotic.hypnoticDir);
-        if (!configs.exists()) {
-            configs.mkdir();
-        }
-        dataFile = new File(configs, "data.txt");
+        dataFile = new File(dir, "positions.txt");
         if (!dataFile.exists()) {
             try {
                 dataFile.createNewFile();
@@ -71,33 +61,12 @@ public class SaveLoad {
 
         if (ModuleManager.INSTANCE == null || HudManager.INSTANCE == null) return;
         
-        for (Mod mod : ModuleManager.INSTANCE.modules) {
-            toSave.add("MOD:" + mod.getName() + ":" + mod.isEnabled() + ":" + mod.getKey());
-        }
-        
-        for (HudModule element : HudManager.INSTANCE.hudModules) {
-        	toSave.add("HUD:" + element.getName() + ":" + element.getX() + ":" + element.getY());
-        }
-        
-        for (Friend friend : FriendManager.INSTANCE.friends) {
-        	toSave.add("FRIEND:" + friend.name);
-        }
-        
         for (Frame frame : ClickGUI.INSTANCE.frames) {
         	toSave.add("FRAME:" + frame.name + ":" + frame.getX() + ":" + frame.getY() + ":" + frame.isExtended());
         }
         
         toSave.add("FRAME:" + HudEditorScreen.INSTANCE.frame.name + ":" + HudEditorScreen.INSTANCE.frame.getX() + ":" + HudEditorScreen.INSTANCE.frame.getY() + ":" + HudEditorScreen.INSTANCE.frame.isExtended());
         toSave.add("CLICKGUI:X:" + dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.x + ":Y:" + dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.y);
-        
-        for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
-        	toSave.add("WAYPOINT:NAME:" + waypoint.getName() + ":X:" + waypoint.getX() + ":Y:" + waypoint.getY() + ":Z:" + waypoint.getZ());
-        }
-        
-        /*for (String message : ModuleManager.INSTANCE.chatSpammer.custom) {
-        	toSave.add("MESSAGE:" + message);
-        }
-        */
 
         try {
             PrintWriter pw = new PrintWriter(this.dataFile);
@@ -128,13 +97,7 @@ public class SaveLoad {
 
         for (String s : lines) {
             String[] args = s.split(":");
-            if (s.toLowerCase().startsWith("mod:")) {
-                Mod m = ModuleManager.INSTANCE.getModuleByName(args[1]);
-                if (m != null) {
-                    m.setKey(Integer.parseInt(args[3]));
-                }
-                
-            } else if (s.toLowerCase().startsWith("friend:")) {
+            if (s.toLowerCase().startsWith("friend:")) {
             	FriendManager.INSTANCE.add(new Friend(args[1]));
             } else if (s.toLowerCase().startsWith("frame:")) {
             	for (Frame frame : ClickGUI.INSTANCE.frames) {
@@ -147,18 +110,6 @@ public class SaveLoad {
             	HudEditorScreen.INSTANCE.frame.setX(Integer.parseInt(args[2]));
             	HudEditorScreen.INSTANCE.frame.setY(Integer.parseInt(args[3]));
             	HudEditorScreen.INSTANCE.frame.setExtended(Boolean.parseBoolean(args[4]));
-            } else if (s.toLowerCase().startsWith("waypoint:")) {
-            	for (Waypoint waypoint : WaypointManager.INSTANCE.waypoints) {
-            		if (waypoint.getName().equalsIgnoreCase(args[1])) {
-            			int x = Integer.parseInt(args[2]);
-            			int y = Integer.parseInt(args[3]);
-            			int z = Integer.parseInt(args[4]);
-            			waypoint.setX(x);
-            			waypoint.setY(y);
-            			waypoint.setZ(z);
-            			waypoint.setPos(new BlockPos(x, y, z));
-            		}
-            	}
             } else if (s.toLowerCase().startsWith("clickgui:")) {
             	dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.x = Integer.parseInt(args[2]);
             	dev.hypnotic.ui.clickgui.ClickGUI.INSTANCE.y = Integer.parseInt(args[4]);
@@ -170,10 +121,6 @@ public class SaveLoad {
                 	}
                 }
             }
-            
-            /*else if (s.toLowerCase().startsWith("message:")) {
-            	ModuleManager.INSTANCE.chatSpammer.custom.add(args[1]);
-            }*/
         }
     }
 }

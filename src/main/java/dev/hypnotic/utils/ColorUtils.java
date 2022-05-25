@@ -153,4 +153,18 @@ public class ColorUtils {
 	public Color rgb(int red, int green, int blue) {
 		return rgba(red, green, blue, 255);
 	}
+
+	/**
+	 * @param hex - The hex string to decode
+	 * @return A color object from the hex string,
+	 * if the hex string is invalid it will return Color.WHITE
+	 */
+	public static Color hexToRgb(String hex) {
+		try {
+			return Color.decode("#" + hex.replace("#", ""));
+		} catch(NumberFormatException e) {
+			System.err.println("Invalid hex string!");
+			return Color.WHITE;
+		}
+	}
 }

@@ -17,13 +17,12 @@
 package dev.hypnotic.ui.altmanager;
 
 import java.awt.Color;
-import java.util.concurrent.Executors;
 
-import dev.hypnotic.ui.altmanager.account.Account;
+import com.mojang.authlib.exceptions.AuthenticationException;
+
 import dev.hypnotic.ui.altmanager.account.Accounts;
 import dev.hypnotic.ui.altmanager.account.MicrosoftLogin;
 import dev.hypnotic.ui.altmanager.account.types.MicrosoftAccount;
-import dev.hypnotic.ui.altmanager.account.types.PremiumAccount;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
@@ -44,8 +43,6 @@ public class AddAltScreen extends Screen {
 		super(new LiteralText("AddAlt"));
 		this.previousScreen = previousScreen;
 	}
-	
-	boolean accountType = true;
 	
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -71,28 +68,29 @@ public class AddAltScreen extends Screen {
 			this.status = "Trying alt...";
 	        
 	        
-			if (accountType == true) {
-		        PremiumAccount alt = new PremiumAccount(usernameField.getText(), passwordField.getText());
-				Accounts.get().add(alt);
+	        try {
+				Alt alt = new Alt(usernameField.getText(), passwordField.getText(), AltManagerScreen.INSTANCE.alts.size());
+				alt.login();
+				AltManagerScreen.INSTANCE.alts.add(alt);
 				AltsFile.INSTANCE.saveAlts();
 				this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
-			} else {
 				AltsFile.INSTANCE.saveAlts();
-//				this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
+	        } catch (AuthenticationException e) {
+				System.out.println("Error: Invalid Credentials!");
+				this.status = ColorUtils.red + "Error: Invalid Credentials!";
 			}
 	    }))).active = true;
 		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, new LiteralText("Back"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 350, height / 2 + 85, 50, 20, new LiteralText("Add Microsoft"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 110, 200, 20, new LiteralText("Login to Microsoft account"), (button) -> {
 			MicrosoftLogin.getRefreshToken(refreshToken -> {
                 if (refreshToken != null) {
                     MicrosoftAccount account = new MicrosoftAccount(refreshToken);
                     account.login();
-                    addAccount(account);
+                    Accounts.get().add(account);
                 }
             });
-			accountType = false;
 	    }))).active = true;
 		status = "Idle...";
 		super.init();
@@ -119,12 +117,4 @@ public class AddAltScreen extends Screen {
 	public boolean charTyped(char chr, int modifiers) {
 		return super.charTyped(chr, modifiers);
 	}
-	
-	public static void addAccount(Account<?> account) {
-        Executors.newSingleThreadExecutor().execute(() -> {
-            if (account.fetchInfo()) {
-                Accounts.get().add(account);
-            }
-        });
-    }
 }

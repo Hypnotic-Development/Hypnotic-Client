@@ -21,7 +21,7 @@ import java.awt.Color;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.Hypnotic;
-import dev.hypnotic.ui.altmanager.altmanager2.AltManagerScreen;
+import dev.hypnotic.ui.altmanager.AltManagerScreen;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.Utils;
 import dev.hypnotic.utils.font.FontManager;
@@ -187,26 +187,28 @@ public class HypnoticMainMenu extends HypnoticScreen {
 				if (linkTicks > 0) linkTicks-=2;
 			}
 			RenderUtils.fill(matrices, 4, height - 5, 4 + linkTicks, height - 6, -1);
+			
+			if (fadeOut > 20) {
+				fadeOut -= 5;
+			} 
+			
+			if (fadeOut < 25 && fadeIn < 255) {
+				fadeIn += 5;
+			}
+			
+			if (upTicks < 25) {
+				upTicks += RenderUtils.distanceTo(upTicks, 25) / 15;
+			}
 		}
-		if (hasEntered && fadeOut > 20) {
-			fadeOut -= 5;
-		} 
-		
-		if (hasEntered && fadeOut < 25 && fadeIn < 255) {
-			fadeIn += 5;
-		}
-		
-		if (hasEntered && upTicks < 25) {
-			upTicks += RenderUtils.distanceTo(upTicks, 25) / 15;
-		}
-		
 		if (justLoaded && fadeOut > 20) {
+			RenderSystem.enableBlend();
 			DrawableHelper.fillGradient(matrices, 0, 0, width, height, hasEntered ? Color.BLACK.getRGB() : new Color(0, 0, 0, fadeOut).getRGB(), hasEntered ? ColorUtils.defaultClientColor : new Color(ColorUtils.defaultClientColor().getRed(), ColorUtils.defaultClientColor().getGreen(), ColorUtils.defaultClientColor().getBlue(), fadeOut).getRGB(), 0);
 			FontManager.robotoBig.drawCenteredString(matrices, "Welcome back, " + mc.getSession().getUsername(), width / 2, (height / 2) + 35, new Color(255, 255, 255, fadeOut).getRGB());
 			FontManager.robotoMed.drawCenteredString(matrices, "Click or press any key to enter", width / 2, (height / 2) + 55, hasEntered ? new Color(255, 255, 255, fadeOut).getRGB() : ColorUtils.fade(Color.WHITE, 0, 1).getRGB());
+			RenderSystem.disableBlend();
 		}
 		RenderSystem.enableBlend();
-		RenderSystem.setShaderTexture(0, new Identifier("hypnotic", "textures/mainmenu/hypnotic.png"));
+		RenderUtils.bindTexture(new Identifier("hypnotic", "textures/mainmenu/hypnotic.png"));
 		float factor = 779 / 2;
         RenderUtils.drawTexture(matrices, (float) (width / 2) - factor / 2, ((float) (height / 2) - 400 / 4) - upTicks, 779 / 2, 400 / 2, 0, 0, 779 / 2, 400, 779 / 2, 400);
         RenderSystem.disableBlend();
@@ -216,16 +218,18 @@ public class HypnoticMainMenu extends HypnoticScreen {
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		if (hasEntered) {
-			if (hoveredSinglePlayer(mouseX, mouseY) && button == 0)
-	        	mc.setScreen(new SelectWorldScreen(this));
-	        if (hoveredMultiplayer(mouseX, mouseY) && button == 0)
-	        	mc.setScreen(new MultiplayerScreen(this));
-	        if (hoveredAltManager(mouseX, mouseY) && button == 0)
-	        	mc.setScreen(AltManagerScreen.INSTANCE);
-	        if (hoveredOptions(mouseX, mouseY) && button == 0) 
-	        	mc.setScreen(new OptionsScreen(this, mc.options));
-	        if (hoveredQuit(mouseX, mouseY) && button == 0)
-	        	mc.scheduleStop();
+			if (button == 0) {
+				if (hoveredSinglePlayer(mouseX, mouseY))
+		        	mc.setScreen(new SelectWorldScreen(this));
+		        if (hoveredMultiplayer(mouseX, mouseY))
+		        	mc.setScreen(new MultiplayerScreen(this));
+		        if (hoveredAltManager(mouseX, mouseY))
+		        	mc.setScreen(AltManagerScreen.INSTANCE);
+		        if (hoveredOptions(mouseX, mouseY)) 
+		        	mc.setScreen(new OptionsScreen(this, mc.options));
+		        if (hoveredQuit(mouseX, mouseY))
+		        	mc.scheduleStop();
+			}
 	        if (hovered(4, height - 4, (int) font.getStringWidth(Hypnotic.fullName) + 4, height - 14)) {
 	        	Utils.openURL("hypnotic.dev");
 	        }

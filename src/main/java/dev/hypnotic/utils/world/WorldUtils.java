@@ -22,17 +22,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.google.common.collect.Streams;
-
 import dev.hypnotic.config.friends.FriendManager;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.player.Scaffold;
-import dev.hypnotic.utils.Comparators;
 import dev.hypnotic.utils.RotationUtils;
 import dev.hypnotic.utils.mixin.IVec3d;
 import dev.hypnotic.utils.player.inventory.FindItemResult;
 import dev.hypnotic.utils.player.inventory.InventoryUtils;
-import net.minecraft.block.*;
+import net.minecraft.block.AbstractButtonBlock;
+import net.minecraft.block.AbstractPressurePlateBlock;
+import net.minecraft.block.AnvilBlock;
+import net.minecraft.block.BedBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CraftingTableBlock;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.FluidBlock;
+import net.minecraft.block.NoteBlock;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.OtherClientPlayerEntity;
@@ -350,21 +361,6 @@ public class WorldUtils {
         if(bots && isBot(entity)) return true;
 
         return false;
-    }
-
-    public static List<Entity> getPlayerTargets() {
-        return getPlayerTargets(-1, false);
-    }
-    public static List<Entity> getPlayerTargets(double withinDistance) {
-        return getPlayerTargets(withinDistance, true);
-    }
-    public static List<Entity> getPlayerTargets(double withinDistance, boolean doDistance) {
-        List<Entity> targets = new ArrayList<>();
-
-        targets.addAll(Streams.stream(mc.world.getEntities()).filter(entity -> isValidTarget(entity, withinDistance, doDistance)).collect(Collectors.toList()));
-        targets.sort(Comparators.entityDistance);
-
-        return targets;
     }
 
     public static boolean isValidTarget(Entity entity) {

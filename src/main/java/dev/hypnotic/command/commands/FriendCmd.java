@@ -30,7 +30,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 
 import dev.hypnotic.command.Command;
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.config.friends.Friend;
 import dev.hypnotic.config.friends.FriendManager;
 import dev.hypnotic.utils.ChatUtils;
@@ -54,7 +54,7 @@ public class FriendCmd extends Command {
 	                    }
 	                    else info("That person is already your friend.");
 	
-	                    SaveLoad.INSTANCE.save();
+	                    PositionsConfig.INSTANCE.save();
 	                    return SINGLE_SUCCESS;
 	                })
 				)

@@ -20,6 +20,7 @@ import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventRenderGUI;
 import dev.hypnotic.module.hud.HudManager;
 import dev.hypnotic.module.hud.HudModule;
+import dev.hypnotic.ui.toasts.ToastManager;
 import dev.hypnotic.utils.Timer;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
@@ -47,5 +48,7 @@ public class HUD {
 			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
 			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getTickDelta());
 		}
+		
+		ToastManager.INSTANCE.renderToasts(event.getMatrices());
 	}
 }

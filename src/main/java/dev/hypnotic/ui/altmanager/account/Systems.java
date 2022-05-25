@@ -28,18 +28,14 @@ public class Systems {
     private static final Map<Class<? extends System>, System<?>> systems = new HashMap<>();
 
     private static final List<Runnable> preLoadTasks = new ArrayList<>(1);
-    private static System<?> config;
 
     public static void init() {
         add(new Accounts());
-        for (System<?> system : systems.values()) {
-            if (system != config) system.init();
-        }
     }
 
     private static System<?> add(System<?> system) {
         systems.put(system.getClass(), system);
-
+        system.init();
         return system;
     }
 
@@ -60,7 +56,7 @@ public class Systems {
         for (Runnable task : preLoadTasks) task.run();
 
         for (System<?> system : systems.values()) {
-            if (system != config) system.load(folder);
+            system.load(folder);
         }
 
     }

@@ -43,7 +43,6 @@ public class LoadingScreen extends HypnoticScreen {
 	public boolean isLoading = false;
 	private Timer timer = new Timer();
 	
-	
 	private LoadingScreen() {
 		
 	}
@@ -51,7 +50,7 @@ public class LoadingScreen extends HypnoticScreen {
 	@Override
 	protected void init() {
 		if (finishedLoading && waitTicks >= 285) {
-			mc.setScreen(new HypnoticMainMenu(true));
+			mc.setScreen(new HypnoticMainMenu(false));
 		}
 		start = System.currentTimeMillis();
 		timer.reset();
@@ -75,7 +74,6 @@ public class LoadingScreen extends HypnoticScreen {
 		RenderSystem.setShaderTexture(0, new Identifier("hypnotic", "textures/mainmenu/hypnotic.png"));
 		float factor = 779 / 2;
         RenderUtils.drawTexture(matrices, (float) (width / 2) - factor / 2, (float) (height / 2) - 400 / 4, 779 / 2, 400 / 2, 0, 0, 779 / 2, 400, 779 / 2, 400);
-        // TODO: fade progress bar
 		RenderUtils.fill(matrices, (width / 2) - 150, (height / 2) + 60, (width / 2) + 150, (height / 2) + 80, new Color(255, 255, 255, fadeOut2).getRGB());
 		
 		if (smoothProgress < progress) {
@@ -103,6 +101,7 @@ public class LoadingScreen extends HypnoticScreen {
 				fadeIn += 5;
 			}
 		}
+		RenderSystem.disableBlend();
 		super.render(matrices, mouseX, mouseY, delta);
 	}
 	
@@ -116,19 +115,16 @@ public class LoadingScreen extends HypnoticScreen {
 			case 25:
 				status = "Loading scritps...";
 				ScriptManager.INSTANCE.loadScripts();
-				System.out.println(System.currentTimeMillis() - start);
 				progress += 25;
 				break;
 			case 50:
 				status = "Loading commands...";
 				CommandManager.INSTANCE.loadCommands();
-				System.out.println(System.currentTimeMillis() - start);
 				progress += 25;
 				break;
 			case 75:
 				status = "Loading config files...";
 				Hypnotic.INSTANCE.loadFiles();
-				System.out.println(System.currentTimeMillis() - start);
 				progress += 25;
 				break;
 			case 100:

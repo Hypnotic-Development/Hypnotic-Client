@@ -19,7 +19,7 @@ package dev.hypnotic.ui.clickgui.settings;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.settings.Setting;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
 import dev.hypnotic.settings.settingtypes.ColorSetting;
@@ -119,7 +119,7 @@ public class SettingsWindow {
 		}
 		if (button == 0) {
 			dragging = false;
-			SaveLoad.INSTANCE.save();
+			PositionsConfig.INSTANCE.save();
 		}
 	}
 	

@@ -144,7 +144,10 @@ public class ModuleManager {
 				new IRC(),
 				new TrueSight(),
 				new AntiCactus(),
-				new ChestStealer()
+				new ChestStealer(),
+				new LightningLocator(),
+				new FightBot(),
+				new InvisibleNametag()
 			);
 	}
 	

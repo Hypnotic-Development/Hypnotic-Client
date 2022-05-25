@@ -16,9 +16,14 @@
 */
 package dev.hypnotic.config.friends;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.Hypnotic;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -27,16 +32,15 @@ public class FriendManager {
 	public static FriendManager INSTANCE = new FriendManager();
 	public ArrayList<Friend> friends = new ArrayList<>();
 	
+	// The file that friends are saved in
+	private File friendsFile = new File(Hypnotic.hypnoticDir, "friends.txt");
+	
 	public FriendManager() {
 		
 	}
 	
 	public ArrayList<Friend> getFriends() {
 		return friends;
-	}
-	
-	public void addFriend(Friend friend) {
-		friends.add(friend);
 	}
 	
 	public boolean isFriend(LivingEntity friend) {
@@ -70,7 +74,12 @@ public class FriendManager {
 	public boolean remove(Friend friend) {
         if (isFriend(friend)) {
         	getFriends().remove(friend);
-            SaveLoad.INSTANCE.save();
+            try {
+				save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            
             return true;
         }
 
@@ -82,7 +91,11 @@ public class FriendManager {
 
         if (!isFriend(friend)) {
             friends.add(friend);
-            SaveLoad.INSTANCE.save();
+            try {
+				save();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
             return true;
         }
@@ -98,5 +111,39 @@ public class FriendManager {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Saves all friends
+	 * @throws IOException
+	 */
+	public void save() throws IOException {
+		// Create the file if it doesn't exist
+		if (!friendsFile.exists()) friendsFile.createNewFile();
+		
+		PrintWriter pw = new PrintWriter(friendsFile);
+		
+		// Write the line with the friend's name
+		for (Friend friend : friends) {
+			pw.println(friend.name);
+		}
+		
+		pw.close();
+	}
+	
+	/**
+	 * Loads all friends
+	 * @throws IOException
+	 */
+	public void load() throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(friendsFile));
+		
+		// Loop through all of the lines in the file and read them
+		String line = "";
+		while ((line = reader.readLine()) != null) {
+			add(new Friend(line));
+		}
+		
+		reader.close();
 	}
 }

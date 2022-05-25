@@ -32,42 +32,32 @@ public class ChestStealer extends Mod {
 
 	public NumberSetting delay = new NumberSetting("Delay", 100, 0, 500, 10);
 	
-	private Timer delayTimer = new Timer();
-	
-	Thread stealThread = new Thread(this::steal);
+	private static Timer delayTimer = new Timer();
 	
 	public ChestStealer() {
 		super("ChestStealer", "Steals items from chests", Category.PLAYER);
 		addSetting(delay);
-		
-		stealThread.start();
 	}
 	
-	private void steal() {
-		for (;;) {
-			if (mc.currentScreen instanceof GenericContainerScreen && this.isEnabled()) {
-				if (!InventoryUtils.isInventoryFull() && !InventoryUtils.isContainerEmpty(mc.player.currentScreenHandler)) {
-					ScreenHandler handler = mc.player.currentScreenHandler;
-					if (delayTimer.hasTimeElapsed(delay.getValueInt(), true)) {
-						for (int i = 0; i < handler.slots.size() - InventoryUtils.MAIN_END; i++) {
-							Slot slot = handler.slots.get(i);
-							ItemStack stack = slot.getStack();
-							System.out.println(i);
-							if (stack.getItem() != Items.AIR) {
-								mc.interactionManager.clickSlot(handler.syncId, slot.id, 0, SlotActionType.QUICK_MOVE, mc.player);
-
-								try {
-									Thread.sleep(delay.getValueInt());
-								} catch(Exception e) {
-									e.printStackTrace();
-								}
-							}
+	@Override
+	public void onTick() {
+		if (mc.currentScreen instanceof GenericContainerScreen) {
+			if (!InventoryUtils.isInventoryFull() && !InventoryUtils.isContainerEmpty(mc.player.currentScreenHandler)) {
+				ScreenHandler handler = mc.player.currentScreenHandler;
+				
+				for (int i = 0; i < handler.slots.size() - InventoryUtils.MAIN_END; i++) {
+					Slot slot = handler.slots.get(i);
+					ItemStack stack = slot.getStack();
+					if (stack.getItem() != Items.AIR) {
+						if (delayTimer.hasTimeElapsed(delay.getValueInt(), true)) {
+							mc.interactionManager.clickSlot(handler.syncId, slot.id, 0, SlotActionType.QUICK_MOVE, mc.player);
 						}
 					}
-				} else {
-					mc.player.closeHandledScreen();
 				}
+			} else {
+				mc.player.closeHandledScreen();
 			}
 		}
+		super.onTick();
 	}
 }

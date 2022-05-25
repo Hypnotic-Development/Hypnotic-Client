@@ -16,6 +16,8 @@
 */
 package dev.hypnotic.ui;
 
+import java.awt.Color;
+
 import dev.hypnotic.ui.clickgui2.MenuBar;
 import dev.hypnotic.ui.clickgui2.frame.Frame;
 import dev.hypnotic.waypoint.Waypoint;
@@ -79,6 +81,7 @@ public class WaypointManagerScreen extends HypnoticScreen {
 	
 	private void addWaypoint() {
 		Waypoint waypoint = new Waypoint("New Waypoint", BlockPos.ORIGIN);
+		waypoint.setColor(Color.WHITE);
 		WaypointManager.INSTANCE.waypoints.add(waypoint);
 		mc.setScreen(new WaypointScreen(waypoint));
 	}

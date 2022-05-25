@@ -93,7 +93,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 		if (!message.startsWith(".") && !message.startsWith("/")) {
 			EventSendMessage event = new EventSendMessage(message);
 			event.call();
-			if (!event.isCancelled()) {
+			if (!event.isCancelled() && !message.startsWith(BaritoneAPI.getSettings().prefix.get())) {
 				ignoreMessage = true;
 				sendChatMessage(event.getMessage() + ModuleManager.INSTANCE.getModule(ChatImprovements.class).getSuffix());
 				ignoreMessage = false;

@@ -45,6 +45,7 @@ public class Waypoint extends Mod {
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
+		this.color = Color.WHITE;
 	}
 	
 	public String getName() {

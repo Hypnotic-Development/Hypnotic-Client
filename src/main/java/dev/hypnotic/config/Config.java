@@ -55,7 +55,7 @@ public class Config {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         for (Mod module : ModuleManager.INSTANCE.getAllModules()) {
             List<ConfigSetting> settings = new ArrayList<>();
-            for (Setting setting : module.settings) {
+            for (Setting setting : module.getSettings()) {
                 if (setting instanceof KeybindSetting)
                     continue;
 

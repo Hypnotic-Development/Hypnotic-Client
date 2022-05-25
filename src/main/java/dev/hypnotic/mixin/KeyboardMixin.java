@@ -28,6 +28,9 @@ import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.event.events.EventKeyPress;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
+import dev.hypnotic.ui.toasts.Toast;
+import dev.hypnotic.ui.toasts.Toast.Type;
+import dev.hypnotic.ui.toasts.ToastManager;
 import dev.hypnotic.utils.input.KeyUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -40,10 +43,7 @@ public abstract class KeyboardMixin {
 	@Inject(method = "onKey", at = @At("HEAD"), cancellable = true)
     public void onKey(long window, int key, int scancode, int action, int modifiers, CallbackInfo info) {
         if (key != GLFW.GLFW_KEY_UNKNOWN) {
-        	/*
-        	 * action == GLFW.GLFW_PRESS is important
-        	 * so the module does not toggle twice
-        	 */
+        	 // action == GLFW.GLFW_PRESS is important so the module does not toggle twice
         	KeyUtils.setKeyState(key, action != GLFW.GLFW_RELEASE);
             for (Mod mod : ModuleManager.INSTANCE.modules) {
                 if (mod.getKey() == key && action == GLFW.GLFW_PRESS && MinecraftClient.getInstance().currentScreen == null)
@@ -54,6 +54,8 @@ public abstract class KeyboardMixin {
             event.call();
             if (event.isCancelled()) info.cancel();
             if (client.currentScreen == null && key == KeyUtils.getKey(CommandManager.INSTANCE.getPrefix()) && action == GLFW.GLFW_PRESS) client.setScreen(new ChatScreen(""));
+            
+            if (action == GLFW.GLFW_PRESS && key == GLFW.GLFW_KEY_M) ToastManager.INSTANCE.showToast(new Toast(Type.INFO, "Test", "description", 2000)); 
         }
     }
 }

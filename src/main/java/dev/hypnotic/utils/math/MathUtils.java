@@ -42,4 +42,8 @@ public class MathUtils {
         double output = 1.0 / Math.sqrt(2.0 * PI * (sigma * sigma));
         return (float) (output * Math.exp(-(x * x) / (2.0 * (sigma * sigma))));
     }
+	
+	public static float percent(float value, float of) {
+		return value / of;
+	}
 }

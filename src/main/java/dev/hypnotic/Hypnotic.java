@@ -19,6 +19,7 @@ package dev.hypnotic;
 import static dev.hypnotic.utils.MCUtils.mc;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -30,7 +31,8 @@ import org.pircbotx.Channel;
 import org.pircbotx.User;
 
 import dev.hypnotic.config.ConfigManager;
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
+import dev.hypnotic.config.friends.FriendManager;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.misc.IRC;
@@ -38,7 +40,8 @@ import dev.hypnotic.module.render.CustomFont;
 import dev.hypnotic.scripting.ScriptManager;
 import dev.hypnotic.ui.HUD;
 import dev.hypnotic.ui.OptionsScreen;
-import dev.hypnotic.ui.altmanager.altmanager2.AltsFile;
+import dev.hypnotic.ui.altmanager.AltsFile;
+import dev.hypnotic.ui.altmanager.account.Systems;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.IRCClient;
 import dev.hypnotic.utils.font.FontManager;
@@ -46,6 +49,7 @@ import dev.hypnotic.utils.input.MouseUtils;
 import dev.hypnotic.utils.player.DamageUtils;
 import dev.hypnotic.utils.render.RenderUtils;
 import dev.hypnotic.utils.world.BlockIterator;
+import dev.hypnotic.waypoint.WaypointManager;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
@@ -69,7 +73,7 @@ public class Hypnotic implements ModInitializer {
 	public ScriptManager scriptManager;
 	public EventManager eventManager;
 	public ConfigManager cfgManager;
-	public SaveLoad saveload;
+	public PositionsConfig saveload;
 	public String[] devUUIDs = {
 			"09e5dd42-19b9-488a-bb4b-cc19bdf068b7",
 			"c0052794-2f10-4f2c-b535-150db217f45d"
@@ -84,7 +88,7 @@ public class Hypnotic implements ModInitializer {
 	private final Uniform1f blurProgress = blur.findUniform1f("Progress");
 	private float start;
 	
-	/*
+	/**
 	 * Called when Minecraft initializes.
 	 * This is called AFTER mixins are injected
 	 * Should probably inject the register function 
@@ -98,7 +102,7 @@ public class Hypnotic implements ModInitializer {
 		hasShutdown = false;
 	}
 	
-	/*
+	/**
 	 * Registers all of the good stuff
 	 */
 	private void register() {
@@ -125,16 +129,25 @@ public class Hypnotic implements ModInitializer {
 		});
 	}
 	
-	/*
-	 * Loads all* of the stuff that should be saved
+	/**
+	 * Loads all of the stuff that should be saved
 	 */
 	public void loadFiles() {
-		SaveLoad.INSTANCE.load();
+		PositionsConfig.INSTANCE.load();
 		if (ConfigManager.INSTANCE.config.exists()) {
             ConfigManager.INSTANCE.loadConfig();
         }
-		ConfigManager.INSTANCE.loadConfigs();
-        AltsFile.INSTANCE.loadAlts();
+		
+        try {
+			WaypointManager.INSTANCE.load();
+			ConfigManager.INSTANCE.loadConfigs();
+			Systems.load();
+	        AltsFile.INSTANCE.loadAlts();
+	        FriendManager.INSTANCE.load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        
         if (ModuleManager.INSTANCE.getModule(CustomFont.class).isEnabled()) FontManager.setMcFont(false);
         else FontManager.setMcFont(true);
         
@@ -147,8 +160,15 @@ public class Hypnotic implements ModInitializer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                ConfigManager.INSTANCE.saveConfig();
-                SaveLoad.INSTANCE.save();
+                
+                try {
+                	ConfigManager.INSTANCE.saveConfig();
+                    PositionsConfig.INSTANCE.save();
+					WaypointManager.INSTANCE.save();
+					FriendManager.INSTANCE.save();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
             }
         });
         configDaemon.setDaemon(true);
@@ -161,7 +181,7 @@ public class Hypnotic implements ModInitializer {
 			AltsFile.INSTANCE.saveAlts();
 			ConfigManager.INSTANCE.saveConfig();
 			ConfigManager.INSTANCE.saveAll();
-			SaveLoad.INSTANCE.save();
+			PositionsConfig.INSTANCE.save();
 			hasShutdown = true;
 		}
 	}

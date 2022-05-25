@@ -36,7 +36,6 @@ public class FontManager {
 	public static NahrFont icons = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 21, 1, false);
 	public static NahrFont iconsSmall = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + "icons.ttf"), 18, 1, false);
 	
-	
 	public static void setMcFont(boolean mcFont) {
 		FontManager.mcFont = mcFont;
 		robotoSmaller = new NahrFont(Utils.getFileFromJar(FontManager.INSTANCE.getClass().getClassLoader(), assets + font), 14, 1, mcFont);

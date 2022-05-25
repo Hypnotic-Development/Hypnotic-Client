@@ -89,7 +89,7 @@ public class ConfigManager {
                             	hudMod.setY(configHudMod.getY());
                             }
                             
-                            for (Setting setting : module.settings) {
+                            for (Setting setting : module.getSettings()) {
                                 for (ConfigSetting cfgSetting : configModule.cfgSettings) {
                                     if (setting.name.equals(cfgSetting.name)) {
                                         if (setting instanceof BooleanSetting) {
@@ -148,7 +148,7 @@ public class ConfigManager {
                             
                             module.setKey(configModule.getKey());
                             
-                            for (Setting setting : module.settings) {
+                            for (Setting setting : module.getSettings()) {
                                 for (ConfigSetting cfgSetting : configModule.cfgSettings) {
                                     if (setting.name.equals(cfgSetting.name)) {
                                         if (setting instanceof BooleanSetting) {
@@ -211,7 +211,7 @@ public class ConfigManager {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
         for (Mod module : ModuleManager.INSTANCE.getAllModules()) {
             List<ConfigSetting> settings = new ArrayList<>();
-            for (Setting setting : module.settings) {
+            for (Setting setting : module.getSettings()) {
                 if (setting instanceof KeybindSetting)
                     continue;
 

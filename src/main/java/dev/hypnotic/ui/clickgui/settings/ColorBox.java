@@ -23,6 +23,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import dev.hypnotic.settings.Setting;
 import dev.hypnotic.settings.settingtypes.ColorSetting;
 import dev.hypnotic.ui.HypnoticScreen;
+import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.BufferBuilder;
@@ -72,8 +73,8 @@ public class ColorBox extends Component {
 		if (hovered(mouseX, mouseY, sx + 3 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()) + 17, sy - 12, sx + 27 + (int)HypnoticScreen.fontMed.getStringWidth(colorSet.name + colorSet.getHex().toUpperCase()), sy - 4)) {
 			RenderUtils.setup2DRender(true);
 			RenderUtils.end2DRender();
-			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
-				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
+			if (lmDown && colorSet.getColor() != ColorUtils.hexToRgb(mc.keyboard.getClipboard())) {
+				Color hexColor = ColorUtils.hexToRgb(mc.keyboard.getClipboard());
 				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
 				colorSet.setHSV(vals[0], vals[1], vals[2]);
 				h = vals[0];
@@ -137,8 +138,8 @@ public class ColorBox extends Component {
 			RenderUtils.fill(matrices, mouseX, mouseY, mouseX + HypnoticScreen.fontMed.getStringWidth("Sets the hex color to your current clipboard") + 6, mouseY - 12, new Color(0, 0, 0, 200).getRGB());
 			HypnoticScreen.fontMed.drawWithShadow(matrices, "Sets the hex color to your current clipboard", mouseX + 2, mouseY - 10, -1);
 			RenderUtils.end2DRender();
-			if (lmDown && colorSet.getColor() != colorSet.hexToRgb(mc.keyboard.getClipboard())) {
-				Color hexColor = colorSet.hexToRgb(mc.keyboard.getClipboard());
+			if (lmDown && colorSet.getColor() != ColorUtils.hexToRgb(mc.keyboard.getClipboard())) {
+				Color hexColor = ColorUtils.hexToRgb(mc.keyboard.getClipboard());
 				float[] vals = colorSet.rgbToHsv(hexColor.getRed(), hexColor.getGreen(), hexColor.getBlue(), hexColor.getAlpha());
 				colorSet.setHSV(vals[0], vals[1], vals[2]);
 				h = vals[0];

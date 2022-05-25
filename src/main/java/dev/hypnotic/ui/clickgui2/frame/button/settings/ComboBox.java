@@ -42,14 +42,14 @@ public class ComboBox extends Component {
 	@Override
 	public void render(MatrixStack matrices, int mouseX, int mouseY, int offset) {
 		modeSet.displayName = modeSet.name + ": " + modeSet.getSelected();
-		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
-		HypnoticScreen.fontSmall.drawWithShadow(matrices, ColorUtils.gray + modeSet.name + ": " + ColorUtils.reset + modeSet.getSelected(), parent.getX() + 4, parent.getY() + 4 + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
+		Screen.fill(matrices, parent.getX(), parent.getY() + parent.mod.getSettings().indexOf(modeSet) * parent.getHeight() + parent.getHeight(), parent.getX() + parent.getWidth(), parent.getY() + parent.mod.getSettings().indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2, new Color(40, 40, 40, 255).getRGB());
+		HypnoticScreen.fontSmall.drawWithShadow(matrices, ColorUtils.gray + modeSet.name + ": " + ColorUtils.reset + modeSet.getSelected(), parent.getX() + 4, parent.getY() + 4 + parent.mod.getSettings().indexOf(modeSet) * parent.getHeight() + parent.getHeight(), -1);
 		super.render(matrices, mouseX, mouseY, offset);
 	}
 	
 	@Override
 	public boolean hovered(int mouseX, int mouseY) {
-		return mouseX >= parent.getX() && mouseX <= parent.getX() + parent.getWidth() && mouseY >= parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight() && mouseY <= parent.getY() + parent.mod.settings.indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2;
+		return mouseX >= parent.getX() && mouseX <= parent.getX() + parent.getWidth() && mouseY >= parent.getY() + parent.mod.getSettings().indexOf(modeSet) * parent.getHeight() + parent.getHeight() && mouseY <= parent.getY() + parent.mod.getSettings().indexOf(modeSet) * parent.getHeight() + parent.getHeight() * 2;
 	}
 	
 	@Override

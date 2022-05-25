@@ -23,7 +23,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import dev.hypnotic.config.ConfigSetting;
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.event.EventManager;
 import dev.hypnotic.settings.Setting;
 import dev.hypnotic.settings.settingtypes.BooleanSetting;
@@ -38,7 +38,7 @@ public class Mod {
 	public String description;
 	private Category category;
 	public boolean expanded;
-	public ArrayList<Setting> settings = new ArrayList<>();
+	private ArrayList<Setting> settings = new ArrayList<>();
 	@Expose
     @SerializedName("key")
 	public int keyCode;
@@ -57,13 +57,6 @@ public class Mod {
 	public transient double animation = 0;
 	public transient float offset = 0;
 	
-	private long currentMS = 0L;
-	protected long lastMS = -1L;
-	
-	public float mSize = 0;
-    public float lastSize = 0;
-    
-    public long start = 0;
     private boolean binding;
 	
 	public Mod(String name, String description, Category category) {
@@ -160,18 +153,14 @@ public class Mod {
 		EventManager.INSTANCE.unregister(this);
 	}
 	
-	public void onLivingUpdate() {
-		
-	}
-	
 	public int getKey() {
 		return keyCode;
 	}
 
 	public void setKey(int key) {
 		this.keyCode = key;
-		if(SaveLoad.INSTANCE != null) {
-			SaveLoad.INSTANCE.save();
+		if(PositionsConfig.INSTANCE != null) {
+			PositionsConfig.INSTANCE.save();
 		}
 	}
 
@@ -189,8 +178,8 @@ public class Mod {
         		EventManager.INSTANCE.unregister(this);
         }
         this.enabled = enabled;
-        if (SaveLoad.INSTANCE != null){
-            SaveLoad.INSTANCE.save();
+        if (PositionsConfig.INSTANCE != null){
+            PositionsConfig.INSTANCE.save();
         }
 	}
 
@@ -216,25 +205,5 @@ public class Mod {
 
 	public void setBinding(boolean binding) {
 		this.binding = binding;
-	}
-
-	public final void updateMS()
-	{
-		currentMS = System.currentTimeMillis();
-	}
-	
-	public final void updateLastMS()
-	{
-		lastMS = System.currentTimeMillis();
-	}
-	
-	public final boolean hasTimePassedM(long MS)
-	{
-		return currentMS >= lastMS + MS;
-	}
-	
-	public final boolean hasTimePassedS(float speed)
-	{
-		return currentMS >= lastMS + (long)(1000 / speed);
 	}
 }

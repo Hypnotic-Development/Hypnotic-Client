@@ -10,11 +10,8 @@
 * but WITHOUT ANY WARRANTY; without even the implied warranty of
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 * GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.hypnotic.ui.altmanager;
+package dev.hypnotic.ui.altmanager.account;
 
 import com.google.gson.Gson;
 
@@ -29,6 +26,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.stream.Stream;
 
+// Credits to meteor client
 public class Http {
     private static final HttpClient CLIENT = HttpClient.newHttpClient();
     private static final Gson GSON = new Gson();
@@ -44,7 +42,7 @@ public class Http {
 
         public Request(Method method, String url) {
             try {
-                this.builder = HttpRequest.newBuilder().uri(new URI(url)).header("User-Agent", "Hypnotic Client");
+                this.builder = HttpRequest.newBuilder().uri(new URI(url)).header("User-Agent", "Meteor Client");
                 this.method = method;
             } catch (URISyntaxException e) {
                 e.printStackTrace();

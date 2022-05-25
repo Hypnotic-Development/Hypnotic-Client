@@ -25,7 +25,7 @@ import java.util.Comparator;
 import org.lwjgl.glfw.GLFW;
 
 import dev.hypnotic.Hypnotic;
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
@@ -254,6 +254,7 @@ public class ClickGUI extends HypnoticScreen {
 		}
 		
 		matrices.pop();
+		// Search icon
 		FontManager.icons.drawWithShadow(matrices, "h", x + 4, y + 275, hoveredSearch(mouseX, mouseY) ? Color.WHITE.darker().getRGB() : -1);
 		
 		super.render(matrices, mouseX, mouseY, delta);
@@ -415,7 +416,7 @@ public class ClickGUI extends HypnoticScreen {
 		}
 		if (button == 0) {
 			dragging = false;
-			SaveLoad.INSTANCE.save();
+			PositionsConfig.INSTANCE.save();
 		}
 		return super.mouseReleased(mouseX, mouseY, button);
 	}

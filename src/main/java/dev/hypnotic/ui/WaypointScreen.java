@@ -17,8 +17,9 @@
 package dev.hypnotic.ui;
 
 import java.awt.Color;
+import java.io.IOException;
 
-import dev.hypnotic.settings.settingtypes.ColorSetting;
+import dev.hypnotic.Hypnotic;
 import dev.hypnotic.utils.render.RenderUtils;
 import dev.hypnotic.waypoint.Waypoint;
 import dev.hypnotic.waypoint.WaypointManager;
@@ -85,15 +86,21 @@ public class WaypointScreen extends HypnoticScreen {
 		nameBox.mouseClicked(mouseX, mouseY, button);
 		return super.mouseClicked(mouseX, mouseY, button);
 	}
-	
+
 	private void addWaypoint() {
 		if (!nameBox.getText().isEmpty() && !xBox.getText().isEmpty() && !yBox.getText().isEmpty() && !zBox.getText().isEmpty()) {
 			try {
+				WaypointManager.INSTANCE.waypoints.remove(waypoint);
 				waypoint = new Waypoint(nameBox.getText(), Double.parseDouble(xBox.getText()), Double.parseDouble(yBox.getText()), Double.parseDouble(zBox.getText()), colorPicker.getColor());
+				System.out.println(waypoint.getColor());
 				WaypointManager.INSTANCE.waypoints.add(waypoint);
+				WaypointManager.INSTANCE.save();
 				mc.setScreen(WaypointManagerScreen.INSTANCE);
 			} catch(NumberFormatException e) {
-				System.out.println("Invalid x y or z!");
+				Hypnotic.LOGGER.error("Invalid x y or z!");
+			} catch (Exception e1) {
+				Hypnotic.LOGGER.error("Failed to save waypoints");
+				e1.printStackTrace();
 			}
 		}
 	}

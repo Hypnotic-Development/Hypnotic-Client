@@ -22,7 +22,7 @@ import java.util.Comparator;
 
 import com.google.common.collect.Lists;
 
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.render.ClickGUIModule;
@@ -140,7 +140,7 @@ public class Frame {
 	
 	public void setDragging(boolean dragging) {
 		if (dragging)
-		SaveLoad.INSTANCE.save();
+		PositionsConfig.INSTANCE.save();
 		this.dragging = dragging;
 	}
 	

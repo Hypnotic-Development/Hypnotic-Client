@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package dev.hypnotic.ui.altmanager.altmanager2;
+package dev.hypnotic.ui.altmanager;
 
 import java.util.Optional;
 import java.util.UUID;

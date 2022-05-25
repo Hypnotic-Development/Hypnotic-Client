@@ -23,11 +23,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import dev.hypnotic.Hypnotic;
-import dev.hypnotic.ui.altmanager.account.Account;
-import dev.hypnotic.ui.altmanager.account.Accounts;
-import dev.hypnotic.ui.altmanager.account.types.PremiumAccount;
 
 public class AltsFile {
 
@@ -48,11 +46,9 @@ public class AltsFile {
 			}
 		}
 		
-		for (Account<?> alt : Accounts.get()) {
-			if (alt instanceof PremiumAccount) {
-				PremiumAccount premAlt = (PremiumAccount)alt;
-				credentials.add(alt.getUsername() + ":" + premAlt.getPassword());
-			}
+		for (Alt alt : AltManagerScreen.INSTANCE.alts) {
+			if (!alt.getPassword().equalsIgnoreCase("cracked")) credentials.add(alt.getEmail() + ":" + alt.getPassword() + ":" + alt.getUsername() + ":" + alt.getUuid());
+			else credentials.add(alt.getEmail() + ":cracked");
 		}
 		
 		try {
@@ -77,13 +73,23 @@ public class AltsFile {
             }
             reader.close();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         for (String s : lines) {
             String[] args = s.split(":");
-            PremiumAccount alt = new PremiumAccount(args[0], args[1]);
-            Accounts.get().add(alt);;
+            if (!args[1].equalsIgnoreCase("cracked")) {
+	            Alt alt = new Alt(args[0], args[1], AltManagerScreen.INSTANCE.alts.size());
+	            try {
+	            	if (args[2] != null) alt.setUsername(args[2]);
+	            	if (args[3] != null && !args[3].equalsIgnoreCase("null") && !args[3].equalsIgnoreCase("")) alt.setUuid(UUID.fromString(args[3]));
+	            } catch(Exception e) {
+	            }
+	            AltManagerScreen.INSTANCE.alts.add(alt);
+            } else {
+            	Alt alt = new Alt(args[0], "cracked", AltManagerScreen.INSTANCE.alts.size());
+	            if (args[0] != null) alt.setUsername(args[0]);
+	            AltManagerScreen.INSTANCE.alts.add(alt);
+            }
         }
 	}
 }

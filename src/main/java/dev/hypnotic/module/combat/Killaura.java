@@ -135,7 +135,7 @@ public class Killaura extends Mod {
 							if(!targets.isEmpty()){
 								if (!FriendManager.INSTANCE.isFriend((LivingEntity)targets.get(0))) target = (LivingEntity)targets.get(0);
 								if (mc.player.distanceTo(target) > range.getValue()) target = null;
-								if(target != null){
+								if (target != null) {
 									this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().asString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().asString()));
 									if(canAttack(target)){
 										RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
@@ -161,7 +161,7 @@ public class Killaura extends Mod {
 										RotationUtils.resetYaw();
 										RotationUtils.resetPitch();
 									}
-								}else{
+								} else {
 									if (blocking) mc.options.useKey.setPressed(false);
 									blocking = false;
 									if(!ModuleManager.INSTANCE.getModule(Scaffold.class).isEnabled()){

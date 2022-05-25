@@ -20,7 +20,7 @@ import static dev.hypnotic.utils.MCUtils.mc;
 
 import org.lwjgl.glfw.GLFW;
 
-import dev.hypnotic.config.SaveLoad;
+import dev.hypnotic.config.PositionsConfig;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.render.ClickGUIModule;
 import dev.hypnotic.utils.ChatUtils;
@@ -79,7 +79,7 @@ public class BindingScreen extends Screen {
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
 		if (mod.isBinding()) {
 			//Set bind to key pressed or unbind if the key is escape
-			SaveLoad.INSTANCE.save();
+			PositionsConfig.INSTANCE.save();
 			if (keyCode != GLFW.GLFW_KEY_ESCAPE && keyCode != GLFW.GLFW_KEY_UNKNOWN) {
 				mod.setKey(keyCode);
 				mod.setBinding(false);
