@@ -6,7 +6,6 @@
   "client": [
     "KeyboardMixin",
     "InGameHudMixin",
-    "BufferRendererAccessor",
     "MinecraftClientMixin",
     "MinecraftClientAccessor",
     "TitleScreenMixin",
@@ -48,7 +47,7 @@
     "Matrix4fMixin",
     "MouseMixin",
     "ClientPlayerEntityAccessor",
-    "HorseBaseEntityMixin",
+    "AbstractHorseEntityMixin",
     "EntityMixin",
     "FrustramAccessor",
     "WorldRendererAccessor",

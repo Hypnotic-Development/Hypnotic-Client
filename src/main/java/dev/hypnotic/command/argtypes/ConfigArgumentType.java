@@ -28,7 +28,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.hypnotic.config.Config;
 import dev.hypnotic.config.ConfigManager;
 import net.minecraft.command.CommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 /**
 * @author BadGamesInc
@@ -42,7 +42,7 @@ public class ConfigArgumentType implements ArgumentType<Config> {
             .collect(Collectors.toList());
 
     private static final DynamicCommandExceptionType NO_SUCH_CONFIG = new DynamicCommandExceptionType(o ->
-            new LiteralText("Config with name " + o + " doesn't exist."));
+            Text.literal("Config with name " + o + " doesn't exist."));
 
     public static ConfigArgumentType config() {
         return new ConfigArgumentType();

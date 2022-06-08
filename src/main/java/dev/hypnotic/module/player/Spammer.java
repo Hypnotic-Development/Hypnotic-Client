@@ -16,7 +16,9 @@
 */
 package dev.hypnotic.module.player;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,11 +35,12 @@ public class Spammer extends Mod {
     public Map<Integer, String> customMessages = new HashMap<>();
     public Map<Integer, String> randomShit = new HashMap<>();
     public Map<Integer, String> facts = new HashMap<>();
+    public Map<Integer, String> allMessages = new HashMap<>();
     public static Timer delayTimer = new Timer();
     public File spammerFile = new File(Hypnotic.hypnoticDir + "/spammer.txt");
     
     public Spammer() {
-        super("Spammer", "Mine blocks faster", Category.PLAYER);
+        super("Spammer", "Spams the chat with messages", Category.PLAYER);
         this.addSettings(delay);
         
         try {
@@ -50,23 +53,45 @@ public class Spammer extends Mod {
         facts.put(2, "Hypnotic features a full JavaScript scripting system");
         facts.put(3, "https://discord.gg/aZStDUnb29 is the official discord to complain in");
         facts.put(4, "https://hypnotic.dev has a secret floppa api");
-        facts.put(5, "Hypnotic features 100+ modules, 20+ commands, and beautiful graphics");
+        facts.put(5, "Hypnotic features 75+ modules, 20+ commands, and beautiful graphics");
+        
+        facts.forEach(allMessages::put);
+        randomShit.forEach(allMessages::put);
+    }
+    
+    @Override
+    public void onEnable() {
+    	try {
+    		loadCustomMessages();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    	super.onEnable();
     }
 
     public void onTick() {
         if (delayTimer.hasTimeElapsed((long)delay.getValue() * 1000, true)) {
-        	mc.player.sendChatMessage("/sell");
+        	mc.player.sendChatMessage("/sell all");
         }
-        mc.options.sneakKey.setPressed(true);
         super.onTick();
     }
     
-    public void loadCustomMessages() {
+    public void loadCustomMessages() throws IOException {
+    	customMessages.forEach(allMessages::remove);
+    	BufferedReader reader = new BufferedReader(new FileReader(spammerFile));
+    	String line = "";
     	
+    	while ((line = reader.readLine()) != null) {
+    		customMessages.put(customMessages.size(), line);
+    	}
+    	
+    	reader.close();
+    	customMessages.forEach(allMessages::put);
     }
     
     public void addCustomMessage(String message) {
-    	
+    	customMessages.put(customMessages.size(), message);
+    	allMessages.put(allMessages.size(), message);
     }
 }
 

@@ -27,7 +27,7 @@ import dev.hypnotic.utils.ColorUtils;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.ClickEvent.Action;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class About extends Command {
 
@@ -42,7 +42,7 @@ public class About extends Command {
 			ChatUtils.tellPlayerRaw(ColorUtils.red + "Current build" + ColorUtils.gray + ": " + Hypnotic.version);
 			ChatUtils.tellPlayerRaw(ColorUtils.red + "Modules" + ColorUtils.gray + ": " + ModuleManager.INSTANCE.modules.size());
 			ChatUtils.tellPlayerRaw(ColorUtils.red + "Commands" + ColorUtils.gray + ": " + CommandManager.INSTANCE.getCommands().size());
-			ChatUtils.tellPlayerRaw(new LiteralText(ColorUtils.red + "Website" + ColorUtils.gray + ": ").append(ChatUtils.clickableText(ColorUtils.gray + "https://hypnotic.dev", new ClickEvent(Action.OPEN_URL, "https://hypnotic.dev"))));
+			ChatUtils.tellPlayerRaw(Text.literal(ColorUtils.red + "Website" + ColorUtils.gray + ": ").append(ChatUtils.clickableText(ColorUtils.gray + "https://hypnotic.dev", new ClickEvent(Action.OPEN_URL, "https://hypnotic.dev"))));
 			ChatUtils.tellPlayerRaw("\n\n\u00A7c                 .,;;;,.                \n"
 					+ "                .xXNNN0:    .....       \n"
 					+ "               .lXMMMNd.   ;OXXKd.      \n"

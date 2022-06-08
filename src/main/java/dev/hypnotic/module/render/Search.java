@@ -84,7 +84,7 @@ public class Search extends Mod {
 		try {
 			Set<Block> blockList = (Set<Block>) blocks;
 	
-			if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.viewDistance) {
+			if (!prevBlockList.equals(blockList) || oldViewDistance != mc.options.getViewDistance().getValue()) {
 				reset();
 	
 				for (Chunk chunk: WorldUtils.getLoadedChunks()) {
@@ -92,7 +92,7 @@ public class Search extends Mod {
 				}
 	
 				prevBlockList = new HashSet<>(blockList);
-				oldViewDistance = mc.options.viewDistance;
+				oldViewDistance = mc.options.getViewDistance().getValue();
 				return;
 			}
 	

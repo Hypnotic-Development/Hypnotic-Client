@@ -22,10 +22,9 @@ import dev.hypnotic.Hypnotic;
 import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.mixin.ChatHudAccessor;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.BaseText;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -39,23 +38,23 @@ public class ChatUtils {
 	}
 	
 	public static void tellPlayer(Text message) {
-		tellPlayerRaw(new LiteralText(Hypnotic.chatPrefix).append(new LiteralText(ColorUtils.gray + message.asString())));
+		tellPlayerRaw(Text.literal((Hypnotic.chatPrefix)).append(Text.literal(ColorUtils.gray + message.getString())));
 	}
 	
 	public static void tellPlayer(String message) {
-        tellPlayer(new LiteralText(message));
+        tellPlayer(Text.literal(message));
     }
 	
 	public static void tellPlayerRaw(String message) {
-		tellPlayerRaw(new LiteralText(message));
+		tellPlayerRaw(Text.literal(message));
 	}
 	
 	public static Text clickableText(String text, ClickEvent clickEvent, HoverEvent hoverEvent) {
-		return new LiteralText(text).setStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
+		return Text.literal(text).setStyle(Style.EMPTY.withClickEvent(clickEvent).withHoverEvent(hoverEvent));
 	}
 	
 	public static Text clickableText(String text, ClickEvent clickEvent) {
-		return new LiteralText(text).setStyle(Style.EMPTY.withClickEvent(clickEvent));
+		return Text.literal(text).setStyle(Style.EMPTY.withClickEvent(clickEvent));
 	}
 	
     // Default
@@ -107,7 +106,7 @@ public class ChatUtils {
     }
 
     public static void sendMsg(int id, @Nullable String prefixTitle, @Nullable Formatting prefixColor, String messageContent, Formatting messageColor) {
-        BaseText message = new LiteralText(messageContent);
+        MutableText message = Text.literal(messageContent);
         message.setStyle(message.getStyle().withFormatting(messageColor));
         sendMsg(id, prefixTitle, prefixColor, message);
     }
@@ -115,7 +114,7 @@ public class ChatUtils {
     public static void sendMsg(int id, @Nullable String prefixTitle, @Nullable Formatting prefixColor, Text msg) {
         if (mc.world == null) return;
 
-        BaseText message = new LiteralText("");
+        MutableText message = Text.literal("");
         message.append(CommandManager.INSTANCE.getPrefix());
         if (prefixTitle != null) message.append(CommandManager.INSTANCE.getPrefix());
         message.append(msg);

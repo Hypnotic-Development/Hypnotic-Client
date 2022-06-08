@@ -25,6 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import dev.hypnotic.event.events.EventDestroyBlock;
 import dev.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
+import net.minecraft.client.network.SequencedPacketCreator;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 
 @Mixin({ClientPlayerInteractionManager.class})
@@ -34,20 +36,24 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
     @Shadow private int blockBreakingCooldown;
     
     @Shadow protected abstract void syncSelectedSlot();
+    @Shadow protected abstract void sendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator);
 
     @Inject(method = "breakBlock", at = @At("RETURN"))
     public void breakBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         new EventDestroyBlock(pos).call();
     }
     
+    @Override
     public void setBlockBreakProgress(float progress) {
         this.currentBreakingProgress = progress;
     }
 
+    @Override
     public void setBlockBreakingCooldown(int cooldown) {
         this.blockBreakingCooldown = cooldown;
     }
 
+    @Override
     public float getBlockBreakProgress() {
         return this.currentBreakingProgress;
     }
@@ -55,5 +61,10 @@ public abstract class ClientPlayerInteractionManagerMixin implements IClientPlay
 	@Override
 	public void syncSelected() {
 		syncSelectedSlot();
+	}
+	
+	@Override
+	public void _sendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator) {
+		sendSequencedPacket(world, packetCreator);
 	}
 }

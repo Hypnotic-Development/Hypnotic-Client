@@ -54,12 +54,12 @@ public class ShaderUtil {
                     fragmentShaderID = createShader(new ByteArrayInputStream(roundedRectGradient.getBytes()), GL_FRAGMENT_SHADER);
                     break;
                 default:
-                    fragmentShaderID = createShader(mc.getResourceManager().getResource(new Identifier("hypnotic", fragmentShaderLoc)).getInputStream(), GL_FRAGMENT_SHADER);
+                    fragmentShaderID = createShader(mc.getResourceManager().getResource(new Identifier("hypnotic", fragmentShaderLoc)).get().getInputStream(), GL_FRAGMENT_SHADER);
                     break;
             }
             glAttachShader(program, fragmentShaderID);
 
-            int vertexShaderID = createShader(mc.getResourceManager().getResource(new Identifier("hypnotic", vertexShaderLoc)).getInputStream(), GL_VERTEX_SHADER);
+            int vertexShaderID = createShader(mc.getResourceManager().getResource(new Identifier("hypnotic", vertexShaderLoc)).get().getInputStream(), GL_VERTEX_SHADER);
             glAttachShader(program, vertexShaderID);
 
 
@@ -128,8 +128,7 @@ public class ShaderUtil {
         bufferBuilder.vertex(matrix, x, y + height, 0.0f).texture(0.0f, 0.1f).next();
         bufferBuilder.vertex(matrix, x + width, y + height, 0.0f).texture(1.0f, 1.0f).next();
         bufferBuilder.vertex(matrix, x + width, y, 0.0f).texture(1.0f, 0.0f).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
     }
 
     public static void drawQuads(MatrixStack matrices) {
@@ -145,8 +144,7 @@ public class ShaderUtil {
         bufferBuilder.vertex(matrix, 0.0f, height, 0.0f).texture(0.0f, 1.0f).next();
         bufferBuilder.vertex(matrix, width, height, 0.0f).texture(1.0f, 1.0f).next();
         bufferBuilder.vertex(matrix, width, 0.0f, 0.0f).texture(1.0f, 0.0f).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
     }
 
     private int createShader(InputStream inputStream, int shaderType) {

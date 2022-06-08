@@ -28,14 +28,14 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class BindingScreen extends Screen {
 	private Mod mod;
 	private Screen prevScreen;
 	
 	public BindingScreen(Mod mod, Screen prevScreen) {
-		super(new LiteralText("BindingScreen"));
+		super(Text.literal("BindingScreen"));
 		this.mod = mod;
 		this.prevScreen = prevScreen;
 	}
@@ -43,11 +43,11 @@ public class BindingScreen extends Screen {
 	@Override
 	protected void init() {
 		super.init();
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 100, 100, 20, new LiteralText("Back"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 100, 100, 20, Text.literal("Back"), (button) -> {
 			 mod.setBinding(false);
 	         MinecraftClient.getInstance().setScreen(prevScreen);
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 80, 100, 20, new LiteralText("Re-bind"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 50, height / 2 + 80, 100, 20, Text.literal("Re-bind"), (button) -> {
 	         mod.setBinding(true);
 	    }))).active = !mod.isBinding();
 	}

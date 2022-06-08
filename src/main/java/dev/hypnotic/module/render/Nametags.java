@@ -228,7 +228,7 @@ public class Nametags extends Mod {
     }
 
     public String getNameString(Entity entity) {
-        String name = entity.getDisplayName().asString();
+        String name = entity.getDisplayName().getString();
         PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(entity.getUuid());
         String gameModeText = gamemode.isEnabled() ? (playerListEntry != null ? ColorUtils.aqua + playerListEntry.getGameMode().getName().substring(0, 1).toUpperCase() + " " + ColorUtils.reset : "") : "";
         String pingText = ping.isEnabled() ? (playerListEntry != null ? playerListEntry.getLatency() : "0") + "ms " : "";
@@ -246,7 +246,7 @@ public class Nametags extends Mod {
         
         String displayName = "";
         if (entity instanceof LivingEntity)
-        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + devText + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().asString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "") + userText;
+        	displayName = gameModeText + ColorUtils.white + name.replaceAll(ColorUtils.colorChar, "&") + devText + " " + pingText + distanceText + getHealthString((LivingEntity) entity) + (entity.getName().getString().equalsIgnoreCase("BadGamesInc") ? ColorUtils.purple + " Swag" : "") + userText;
         return displayName;
     }
 

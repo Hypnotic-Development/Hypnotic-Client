@@ -31,7 +31,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 @Mixin({InventoryScreen.class})
@@ -46,7 +45,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     )
     protected void init(CallbackInfo ci) {
     	if (ModuleManager.INSTANCE.getModule(InvDupe.class).isEnabled()) {
-	        this.addDrawableChild(new ButtonWidget(this.x + 130, this.height / 2 - 24, 40, 20, new LiteralText("Dupe"), (b) -> {
+	        this.addDrawableChild(new ButtonWidget(this.x + 130, this.height / 2 - 24, 40, 20, Text.literal("Dupe"), (b) -> {
 	            this.dupe();
 	        }));
     	}

@@ -43,12 +43,12 @@ public class MiddleClickFriend extends Mod {
 			if (hitResult != null && hitResult.getType() == HitResult.Type.ENTITY) {
 				PlayerEntity player = (PlayerEntity) ((EntityHitResult) hitResult).getEntity();
 				if (!FriendManager.INSTANCE.isFriend(player) && !mc.options.sneakKey.isPressed()) {
-					FriendManager.INSTANCE.add(new Friend(player.getName().asString()));
-					ChatUtils.tellPlayer("Added " + ColorUtils.green + player.getName().asString() + ColorUtils.white + " to your friends list");
+					FriendManager.INSTANCE.add(new Friend(player.getName().getString()));
+					ChatUtils.tellPlayer("Added " + ColorUtils.green + player.getName().getString() + ColorUtils.white + " to your friends list");
 				} 
 				if (mc.options.sneakKey.isPressed() && FriendManager.INSTANCE.isFriend(player)) {
 					for (Friend friend : FriendManager.INSTANCE.friends) {
-						if (friend.name == player.getName().asString()) {
+						if (friend.name == player.getName().getString()) {
 							FriendManager.INSTANCE.friends.remove(friend);
 							ChatUtils.tellPlayer("Removed " + ColorUtils.red + friend.name + ColorUtils.white + " from your friends list");
 						}

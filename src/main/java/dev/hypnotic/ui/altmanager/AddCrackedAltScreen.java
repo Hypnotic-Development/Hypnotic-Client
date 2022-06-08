@@ -28,7 +28,7 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.Session;
 import net.minecraft.client.util.Session.AccountType;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class AddCrackedAltScreen extends Screen {
 
@@ -37,7 +37,7 @@ public class AddCrackedAltScreen extends Screen {
 	private String status;
 	
 	public AddCrackedAltScreen(Screen previousScreen) {
-		super(new LiteralText("AddAlt"));
+		super(Text.literal("AddAlt"));
 		this.previousScreen = previousScreen;
 	}
 	
@@ -53,9 +53,9 @@ public class AddCrackedAltScreen extends Screen {
 	
 	@Override
 	protected void init() {
-		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, new LiteralText("Username"));
+		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, Text.literal("Username"));
 		this.addSelectableChild(usernameField);
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, new LiteralText("Login"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, Text.literal("Login"), (button) -> {
 			Alt alt = new Alt(usernameField.getText(), "cracked", AltManagerScreen.INSTANCE.alts.size());
 			alt.setUsername(usernameField.getText());
 			alt.setSession(new Session(alt.getUsername(), "", "", Optional.empty(), Optional.empty(), AccountType.MOJANG));
@@ -64,7 +64,7 @@ public class AddCrackedAltScreen extends Screen {
 			this.status = "Added alt " + ColorUtils.green + "\"" + alt.getUsername() + "\"";
 			AltsFile.INSTANCE.saveAlts();
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, new LiteralText("Back"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, Text.literal("Back"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
 		status = "Idle...";

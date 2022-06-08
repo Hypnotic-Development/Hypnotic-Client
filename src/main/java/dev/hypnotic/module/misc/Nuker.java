@@ -72,6 +72,13 @@ public class Nuker extends Mod {
 		super.onTick();
 	}
 	
+	@Override
+	public void onDisable() {
+		RotationUtils.resetYaw();
+		RotationUtils.resetPitch();
+		super.onDisable();
+	}
+	
 	@EventTarget
 	public void render3d(EventRender3D event) {
 		for (BlockPos pos : renders) {

@@ -240,9 +240,7 @@ public class ESP extends Mod {
         buffer.vertex(matrix, x + sin, y + e.getHeight(), z + cos).color(red, green, blue, alpha).next();
         buffer.vertex(matrix, x + sin, y, z + cos).color(red, green, blue, alpha).next();
 
-        buffer.end();
-
-        BufferRenderer.draw(buffer);
+        BufferRenderer.drawWithShader(buffer.end());
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         RenderSystem.disableBlend();
         stack.pop();

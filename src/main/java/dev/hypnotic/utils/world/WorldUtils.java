@@ -204,7 +204,7 @@ public class WorldUtils {
         }
 
 //        mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.PRESS_SHIFT_KEY));
-        mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(hitVec, side2, neighbor, false));
+        mc.interactionManager.interactBlock(mc.player, hand, new BlockHitResult(hitVec, side2, neighbor, false));
         if (swing) mc.player.swingHand(hand);
         else mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(hand));
 //        mc.player.networkHandler.sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.RELEASE_SHIFT_KEY));
@@ -525,7 +525,7 @@ public class WorldUtils {
         boolean wasSneaking = mc.player.input.sneaking;
         mc.player.input.sneaking = false;
 
-        ActionResult result = mc.interactionManager.interactBlock(mc.player, mc.world, hand, blockHitResult);
+        ActionResult result = mc.interactionManager.interactBlock(mc.player, hand, blockHitResult);
 
         if (result.shouldSwingHand()) {
             if (swing) mc.player.swingHand(hand);
@@ -599,7 +599,7 @@ public class WorldUtils {
     public static List<WorldChunk> getLoadedChunks() {
 		List<WorldChunk> chunks = new ArrayList<>();
 
-		int viewDist = mc.options.viewDistance;
+		int viewDist = mc.options.getViewDistance().getValue();
 
 		for (int x = -viewDist; x <= viewDist; x++) {
 			for (int z = -viewDist; z <= viewDist; z++) {

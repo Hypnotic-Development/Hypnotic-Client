@@ -44,11 +44,9 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 
@@ -80,7 +78,7 @@ public class TextBox extends ClickableWidget implements Drawable, Element {
    }
 
    public TextBox(int x, int y, int width, int height, @Nullable TextBox copyFrom, String text) {
-      super(x, y, width, height, new LiteralText(text));
+      super(x, y, width, height, Text.literal(text));
       this.text = "";
       this.maxLength = 32;
       this.drawsBackground = true;
@@ -108,7 +106,7 @@ public class TextBox extends ClickableWidget implements Drawable, Element {
 
    protected MutableText getNarrationMessage() {
       Text text = this.getMessage();
-      return new TranslatableText("gui.narrate.editBox", new Object[]{text, this.text});
+      return Text.translatable("gui.narrate.editBox", new Object[]{text, this.text});
    }
 
    public void setText(String text) {
@@ -624,6 +622,6 @@ public class TextBox extends ClickableWidget implements Drawable, Element {
    }
 
    public void appendNarrations(NarrationMessageBuilder builder) {
-      builder.put(NarrationPart.TITLE, (Text)(new TranslatableText("narration.edit_box", new Object[]{this.getText()})));
+      builder.put(NarrationPart.TITLE, (Text)(Text.translatable("narration.edit_box", new Object[]{this.getText()})));
    }
 }

@@ -15,11 +15,17 @@ package dev.hypnotic.scripting.bindings;
 
 import static dev.hypnotic.utils.MCUtils.mc;
 
+import dev.hypnotic.utils.player.PlayerUtils;
 import dev.hypnotic.utils.render.Vector3D;
 import net.minecraft.network.Packet;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 
 /**
  * This class is used because Minecraft is obfuscated and GraalVM
@@ -35,12 +41,34 @@ public class ScriptPlayer {
 		mc.player.networkHandler.sendPacket(packet);
 	}
 	
+	// Sequenced packets
+	public void sendPlayerInteractItemC2SPacket(String handName) {
+		Hand hand = Enum.valueOf(Hand.class, handName.toUpperCase());
+		PlayerUtils.sendSequencedPacket(id -> new PlayerInteractItemC2SPacket(hand, id));
+	}
+	
+	public void sendPlayerInteractBlockC2SPacket(String handName, Vector3D pos, Vector3D blockPos, String directionName) {
+		// Check if it is main or off hand, if neither just return the main hand
+		Hand hand = handName.equalsIgnoreCase("main") ? Hand.MAIN_HAND : (handName.equalsIgnoreCase("off") ? Hand.OFF_HAND : Hand.MAIN_HAND);
+		Direction direction = switch (directionName.toUpperCase()) {
+			case "DOWN" -> direction = Direction.DOWN;
+			case "UP" -> direction = Direction.UP;
+			case "EAST" -> direction = Direction.EAST;
+			case "WEST" -> direction = Direction.WEST;
+			case "NORTH" -> direction = Direction.NORTH;
+			case "SOUTH" -> direction = Direction.SOUTH;
+			case "RANDOM" -> direction = Direction.random(Random.create());
+			default -> Direction.DOWN;
+		};
+		
+		BlockHitResult hit = new BlockHitResult(pos.toMinecraft(), direction, new BlockPos(blockPos.toMinecraft()), false);
+		PlayerUtils.sendSequencedPacket(id -> new PlayerInteractBlockC2SPacket(hand, hit, id));
+	}
+	
 	public BlockPos getBlockPos() {
 		return mc.player.getBlockPos();
 	}
 	
-	
-	// Use our Vector3d because minecraft's gets obfuscated
 	public Vector3D getPos() {
 		return new Vector3D(mc.player.getPos());
 	}
@@ -108,7 +136,7 @@ public class ScriptPlayer {
 	}
 	
 	public void useItem() {
-		mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
+		mc.interactionManager.interactItem(mc.player, Hand.MAIN_HAND);
 	}
 	
 	public float getHurtTime() {
@@ -140,6 +168,6 @@ public class ScriptPlayer {
 	}
 	
 	public String getName() {
-		return mc.player.getName().asString();
+		return mc.player.getName().getString();
 	}
 }

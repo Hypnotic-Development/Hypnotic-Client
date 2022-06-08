@@ -29,8 +29,10 @@ import dev.hypnotic.Hypnotic;
 import dev.hypnotic.utils.ChatUtils;
 import dev.hypnotic.utils.ColorUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.registry.DynamicRegistryManager;
 
 public abstract class Command {
     protected static MinecraftClient mc;
@@ -39,6 +41,7 @@ public abstract class Command {
     private final String description;
     private final List<String> aliases = new ArrayList<>();
     public int SINGLE_SUCCESS = com.mojang.brigadier.Command.SINGLE_SUCCESS;
+    protected CommandRegistryAccess registryAccess = new CommandRegistryAccess(DynamicRegistryManager.BUILTIN.get());
 
     public Command(String name, String description, String... aliases) {
         this.name = name;

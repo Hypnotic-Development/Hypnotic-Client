@@ -76,6 +76,6 @@ public class WorldChunkIterator implements Iterator<WorldChunk> {
     }
     
     public static int getRenderDistance() {
-        return Math.max(mc.options.viewDistance, ((ClientPlayNetworkHandlerAccessor) mc.getNetworkHandler()).getChunkLoadDistance());
+        return Math.max(mc.options.getViewDistance().getValue(), ((ClientPlayNetworkHandlerAccessor) mc.getNetworkHandler()).getChunkLoadDistance());
     }
 }

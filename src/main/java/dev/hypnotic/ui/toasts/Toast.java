@@ -13,15 +13,18 @@
 */
 package dev.hypnotic.ui.toasts;
 
+import static dev.hypnotic.utils.MCUtils.mc;
+
 import java.awt.Color;
+
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.math.MathUtils;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
-
-import static dev.hypnotic.utils.MCUtils.mc;
+import net.minecraft.util.Identifier;
 
 /**
 * @author BadGamesInc
@@ -56,21 +59,32 @@ public class Toast {
 		int width = 205, height = 50, offset = index * (height + 5) + 10, sw = mc.getWindow().getScaledWidth(), sh = mc.getWindow().getScaledHeight();
 
 		if (y > offset) {
-			y -= 2.5;
+			y += RenderUtils.distanceTo(y, offset) / 10;
 		}
 		
 		if (percent >= 1.0f) {
-			x -= 5;
+			x += RenderUtils.distanceTo(x, -5) / 8;
 			if (x <= 0) hasLeft = true;
-		} else if (percent <= 1.0f && x < width) {
-			x += 5;
+		} else if (percent <= 1.0f && Math.round(x) < width) {
+			x += RenderUtils.distanceTo(x, width) / 8;
 		}
 		
-		RenderUtils.renderRoundedQuad(matrices, new Color(0, 0, 0, 200), sw - (x + width) + width,  sh - (y + height), sw - (x + 5) + width, sh - (y), 5, 10);
-		float barWidth = percent < 0.98f ? width * percent : width - 5;
-		if (percent < 0.98f) RenderUtils.renderRoundedQuad(matrices, Color.RED, sw - (x + width) + width,  sh - (y + 4), sw - (x + barWidth) + width, sh - (y), 2, 10);
-		FontManager.robotoBig.drawWithShadow(matrices, title, sw - (x + width - 10) + width, sh - (y + height - 5), -1);
-		FontManager.roboto.drawWithShadow(matrices, description, sw - (x + width - 11) + width, sh - (y + height - 25), -1);
+		RenderUtils.fill(matrices, sw - (x + width) + width,  sh - (y + height), sw - (x + 5) + width, sh - (y), ColorUtils.transparent(200));
+		int barColor = switch (type) {
+			case INFO -> -1;
+			case WARNING -> Color.YELLOW.getRGB();
+			case ERROR -> Color.RED.getRGB();
+		};
+		float barWidth = width * percent;
+		RenderUtils.fill(matrices, sw - (x + width) + width,  sh - (y + 2), sw - (x + barWidth) + width, sh - (y), barColor);
+		FontManager.robotoBig.drawWithShadow(matrices, title, sw - (x + width - 50) + width, sh - (y + height - 7.5f), -1);
+		FontManager.roboto.drawWithShadow(matrices, description + " (" + MathUtils.round((lifespan - elapsedTime) / 1000f, 1) + "s)", sw - (x + width - 51) + width, sh - (y + height - 25), -1);
+		
+		RenderUtils.bindTexture(new Identifier("hypnotic", "textures/" + type.toString().toLowerCase() + ".png"));
+		RenderSystem.enableBlend();
+		int size = 30;
+		RenderUtils.drawTexture(matrices, sw - (x - 10), sh - (y + (height / 2 + size / 2) + 2.5f), 0, 0, size, size, size, size);
+		RenderSystem.disableBlend();
 	}
 	
 	public enum Type {

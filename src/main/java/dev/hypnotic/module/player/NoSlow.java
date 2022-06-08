@@ -23,6 +23,7 @@ import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.combat.Killaura;
 import dev.hypnotic.settings.settingtypes.ModeSetting;
 import dev.hypnotic.utils.ColorUtils;
+import dev.hypnotic.utils.player.PlayerUtils;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.util.Hand;
@@ -57,9 +58,9 @@ public class NoSlow extends Mod {
 	        	}
 	        } else {
 	            if (mc.player.isBlocking() && mode.is("NCP") && Killaura.target == null && !blocking) {
-	                mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(0.0f, 0.0f, 0.0f), Direction.DOWN, new BlockPos(-1, -1, -1), false)));
-	                mc.interactionManager.interactItem(mc.player, mc.world, Hand.OFF_HAND);
-					mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
+	                PlayerUtils.sendSequencedPacket(id -> new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(0.0f, 0.0f, 0.0f), Direction.DOWN, new BlockPos(-1, -1, -1), false), id));
+	                mc.interactionManager.interactItem(mc.player, Hand.OFF_HAND);
+					mc.interactionManager.interactItem(mc.player, Hand.MAIN_HAND);
 					blocking = true;
 	            }
 	        }

@@ -274,7 +274,7 @@ public class CrystalAura extends Mod {
 					Hand hand = InventoryUtils.selectSlot(crystalSlot);
 	
 					render = block;
-					if (canPlace(block)) mc.interactionManager.interactBlock(mc.player, mc.world, hand, new BlockHitResult(vec, dir, block, false));
+					if (canPlace(block)) mc.interactionManager.interactBlock(mc.player, hand, new BlockHitResult(vec, dir, block, false));
 	
 					places++;
 					if (places >= (int)cps.getValue()) {

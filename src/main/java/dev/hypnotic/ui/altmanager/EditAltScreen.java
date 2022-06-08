@@ -24,7 +24,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class EditAltScreen extends Screen {
 
@@ -35,7 +35,7 @@ public class EditAltScreen extends Screen {
 	private Alt alt;
 	
 	public EditAltScreen(Screen previousScreen, Alt alt) {
-		super(new LiteralText("EditAlt"));
+		super(Text.literal("EditAlt"));
 		this.previousScreen = previousScreen;
 		this.alt = alt;
 	}
@@ -50,13 +50,13 @@ public class EditAltScreen extends Screen {
 			RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, "Username", this.width / 2 - 70, this.height / 2 + 6, new Color(100, 100, 100).getRGB());
 		if (passwordField.getText().isEmpty() && !passwordField.isFocused())
 			RenderUtils.drawCenteredStringWithShadow(matrices, textRenderer, "Password", this.width / 2 - 70, this.height / 2 + 36, new Color(100, 100, 100).getRGB());
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, new LiteralText("Confirm"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, Text.literal("Confirm"), (button) -> {
 			
 			this.status = "Edited alt";
 			alt.setEmail(usernameField.getText());
 	        alt.setPassword(passwordField.getText());
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, new LiteralText("Back"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, Text.literal("Back"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
 		super.render(matrices, mouseX, mouseY, delta);
@@ -64,8 +64,8 @@ public class EditAltScreen extends Screen {
 	
 	@Override
 	protected void init() {
-		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, new LiteralText("Username"));
-		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, new LiteralText("Password"));
+		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, Text.literal("Username"));
+		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, Text.literal("Password"));
 		this.addSelectableChild(usernameField);
 		this.addSelectableChild(passwordField);
 		usernameField.setText(alt.getEmail());

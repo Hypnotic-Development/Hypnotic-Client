@@ -43,7 +43,7 @@ public class FightBot extends Mod {
 	@Override
 	public void onEnable() {
 		if (target == null) ChatUtils.tellPlayerRaw("Use .fightbot hunt <target> to begin");
-		else mc.player.sendChatMessage(".b follow " + target.getName().asString());
+		else mc.player.sendChatMessage(".b follow " + target.getName().getString());
 		super.onEnable();
 	}
 	

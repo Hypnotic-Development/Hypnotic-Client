@@ -32,7 +32,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.authlib.GameProfile;
 
-import baritone.api.BaritoneAPI;
 import dev.hypnotic.event.Event;
 import dev.hypnotic.event.events.EventMotionUpdate;
 import dev.hypnotic.event.events.EventMove;
@@ -59,6 +58,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.ClientPlayerTickable;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.MovementType;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.Hand;
@@ -83,8 +83,8 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 	@Shadow @Final private List<ClientPlayerTickable> tickables;
 	private boolean ignoreMessage = false;
 	
-	public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
-		super(world, profile);
+	public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile, PlayerPublicKey publicKey) {
+		super(world, profile, publicKey);
 	}
 	
 	@Inject(method = "sendChatMessage", at = @At("HEAD"), cancellable = true)
@@ -93,7 +93,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 		if (!message.startsWith(".") && !message.startsWith("/")) {
 			EventSendMessage event = new EventSendMessage(message);
 			event.call();
-			if (!event.isCancelled() && !message.startsWith(BaritoneAPI.getSettings().prefix.get())) {
+			if (!event.isCancelled() /*&& !message.startsWith(BaritoneAPI.getSettings().prefix.get())*/) {
 				ignoreMessage = true;
 				sendChatMessage(event.getMessage() + ModuleManager.INSTANCE.getModule(ChatImprovements.class).getSuffix());
 				ignoreMessage = false;
@@ -190,24 +190,24 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 		}
 		RenderUtils.INSTANCE.onTick();
-		if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
+		//if (mc.world != null) BaritoneAPI.getSettings().chatControl.value = false;
 		
 		OptionsScreen options = OptionsScreen.INSTANCE;
 		
-		BaritoneAPI.getSettings().allowBreak.value = options.allowBreak.isEnabled();
-		BaritoneAPI.getSettings().allowParkour.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().allowParkourAscend.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().allowParkourPlace.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().allowDownward.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().allowDiagonalAscend.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().allowDiagonalDescend.value = options.allowParkour.isEnabled();
-		BaritoneAPI.getSettings().chatControl.value = options.chatControl.isEnabled();
-		BaritoneAPI.getSettings().allowPlace.value = options.allowPlace.isEnabled();
-		BaritoneAPI.getSettings().allowInventory.value = options.allowInventory.isEnabled();
-		BaritoneAPI.getSettings().assumeWalkOnWater.value = options.assumeJesus.isEnabled();
-		BaritoneAPI.getSettings().assumeWalkOnLava.value = options.assumeJesus.isEnabled();
-		BaritoneAPI.getSettings().assumeStep.value = options.assumeStep.isEnabled();
-		BaritoneAPI.getSettings().assumeSafeWalk.value = options.assumeSafewalk.isEnabled();
+//		BaritoneAPI.getSettings().allowBreak.value = options.allowBreak.isEnabled();
+//		BaritoneAPI.getSettings().allowParkour.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().allowParkourAscend.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().allowParkourPlace.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().allowDownward.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().allowDiagonalAscend.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().allowDiagonalDescend.value = options.allowParkour.isEnabled();
+//		BaritoneAPI.getSettings().chatControl.value = options.chatControl.isEnabled();
+//		BaritoneAPI.getSettings().allowPlace.value = options.allowPlace.isEnabled();
+//		BaritoneAPI.getSettings().allowInventory.value = options.allowInventory.isEnabled();
+//		BaritoneAPI.getSettings().assumeWalkOnWater.value = options.assumeJesus.isEnabled();
+//		BaritoneAPI.getSettings().assumeWalkOnLava.value = options.assumeJesus.isEnabled();
+//		BaritoneAPI.getSettings().assumeStep.value = options.assumeStep.isEnabled();
+//		BaritoneAPI.getSettings().assumeSafeWalk.value = options.assumeSafewalk.isEnabled();
 	}
 	
 	@Inject(method = "sendMovementPackets", at = @At("HEAD"), cancellable = true)
@@ -273,7 +273,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 			}
 
 			this.lastOnGround = event.isOnGround();
-			this.autoJumpEnabled = mc.options.autoJump;
+			this.autoJumpEnabled = mc.options.getAutoJump().getValue();
 		}
 	}
 	

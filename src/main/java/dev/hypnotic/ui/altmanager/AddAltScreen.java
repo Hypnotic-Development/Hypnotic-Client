@@ -30,7 +30,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class AddAltScreen extends Screen {
 
@@ -40,7 +40,7 @@ public class AddAltScreen extends Screen {
 	private String status;
 	
 	public AddAltScreen(Screen previousScreen) {
-		super(new LiteralText("AddAlt"));
+		super(Text.literal("AddAlt"));
 		this.previousScreen = previousScreen;
 	}
 	
@@ -59,11 +59,11 @@ public class AddAltScreen extends Screen {
 	
 	@Override
 	protected void init() {
-		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, new LiteralText("Username"));
-		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, new LiteralText("Password"));
+		usernameField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2, 200, 20, Text.literal("Username"));
+		passwordField = new TextFieldWidget(textRenderer, width / 2 - 100, height / 2 + 30, 200, 20, Text.literal("Password"));
 		this.addSelectableChild(usernameField);
 		this.addSelectableChild(passwordField);
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, new LiteralText("Login"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 60, 200, 20, Text.literal("Login"), (button) -> {
 			
 			this.status = "Trying alt...";
 	        
@@ -80,10 +80,10 @@ public class AddAltScreen extends Screen {
 				this.status = ColorUtils.red + "Error: Invalid Credentials!";
 			}
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, new LiteralText("Back"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 85, 200, 20, Text.literal("Back"), (button) -> {
 	         MinecraftClient.getInstance().setScreen(previousScreen);
 	    }))).active = true;
-		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 110, 200, 20, new LiteralText("Login to Microsoft account"), (button) -> {
+		((ButtonWidget)this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, height / 2 + 110, 200, 20, Text.literal("Login to Microsoft account"), (button) -> {
 			MicrosoftLogin.getRefreshToken(refreshToken -> {
                 if (refreshToken != null) {
                     MicrosoftAccount account = new MicrosoftAccount(refreshToken);

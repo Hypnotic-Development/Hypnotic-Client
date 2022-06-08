@@ -19,8 +19,9 @@ package dev.hypnotic.utils.render.shader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -35,7 +36,7 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.metadata.ResourceMetadataReader;
+import net.minecraft.resource.metadata.ResourceMetadata;
 import net.minecraft.util.Identifier;
 
 public class ShaderEffectLoader {
@@ -56,22 +57,13 @@ public class ShaderEffectLoader {
 		return new ShaderEffect(textureManager, new OwResourceManager(resourceManager, id, new InputStreamResource(new FastByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)))), framebuffer, id);
 	}
 
-	private static class InputStreamResource implements Resource {
+	private static class InputStreamResource extends Resource {
 
 		private InputStream input;
 
 		public InputStreamResource(InputStream input) {
+			super(null, () -> input);
 			this.input = input;
-		}
-
-		@Override
-		public void close() throws IOException {
-			input.close();
-		}
-
-		@Override
-		public boolean hasMetadata() {
-			return false;
 		}
 
 		@Override
@@ -80,7 +72,7 @@ public class ShaderEffectLoader {
 		}
 
 		@Override
-		public <T> T getMetadata(ResourceMetadataReader<T> metaReader) {
+		public ResourceMetadata getMetadata() throws IOException {
 			return null;
 		}
 
@@ -88,28 +80,18 @@ public class ShaderEffectLoader {
 		public InputStream getInputStream() {
 			return input;
 		}
-
-		@Override
-		public Identifier getId() {
-			return null;
-		}
 	}
 
 	private static class OwResourceManager implements ResourceManager {
 
 		private ResourceManager resourceMang;
 		private Identifier id;
-		private Resource resource;
+		private InputStreamResource resource;
 
-		public OwResourceManager(ResourceManager resourceMang, Identifier id, Resource resource) {
+		public OwResourceManager(ResourceManager resourceMang, Identifier id, InputStreamResource resource) {
 			this.resourceMang = resourceMang;
 			this.id = id;
 			this.resource = resource;
-		}
-
-		@Override
-		public Resource getResource(Identifier id) throws IOException {
-			return id.equals(this.id) ? resource : resourceMang.getResource(id);
 		}
 
 		@Override
@@ -118,23 +100,28 @@ public class ShaderEffectLoader {
 		}
 
 		@Override
-		public boolean containsResource(Identifier id) {
-			return resourceMang.containsResource(id);
-		}
-
-		@Override
-		public List<Resource> getAllResources(Identifier id) throws IOException {
+		public List<Resource> getAllResources(Identifier id) {
 			return resourceMang.getAllResources(id);
-		}
-
-		@Override
-		public Collection<Identifier> findResources(String startingPath, Predicate<String> pathPredicate) {
-			return resourceMang.findResources(startingPath, pathPredicate);
 		}
 
 		@Override
 		public Stream<ResourcePack> streamResourcePacks() {
 			return resourceMang.streamResourcePacks();
+		}
+
+		@Override
+		public Optional<Resource> getResource(Identifier var1) {
+			return id.equals(this.id) ? Optional.of(resource) : resourceMang.getResource(id);
+		}
+
+		@Override
+		public Map<Identifier, Resource> findResources(String var1, Predicate<Identifier> var2) {
+			return resourceMang.findResources(var1, var2);
+		}
+
+		@Override
+		public Map<Identifier, List<Resource>> findAllResources(String var1, Predicate<Identifier> var2) {
+			return resourceMang.findAllResources(var1, var2);
 		}
 
 	}

@@ -57,7 +57,7 @@ public class Speed extends Mod {
 	@Override
 	public void onMotion() {
 		this.setDisplayName("Speed " + ColorUtils.gray + mode.getSelected());
-		PlayerUtils.setTimerSpeed((float) timerBoost.getValue());
+		if (timerBoost.getValue() != 1.0) PlayerUtils.setTimerSpeed((float) timerBoost.getValue());
 		if(mc.player != null && (mc.player.input.movementForward != 0 || mc.player.input.movementSideways != 0) && !mc.player.isTouchingWater()) {
 			if (!mc.player.isOnGround()) {
 				wallTicks++;

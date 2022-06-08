@@ -36,7 +36,7 @@ public class Search extends Command {
 	@Override
 	public void build(LiteralArgumentBuilder<CommandSource> builder) {
 		builder.then(
-                literal("add").then(argument("block", BlockStateArgumentType.blockState()).executes(context -> {
+                literal("add").then(argument("block", BlockStateArgumentType.blockState(registryAccess)).executes(context -> {
                     Block block = BlockStateArgumentType.getBlockState(context, "block").getBlockState().getBlock();
 
                     if(block == null) error("Block not Found!");
@@ -50,7 +50,7 @@ public class Search extends Command {
 
                     return 1;
                 }))).then(
-                literal("del").then(argument("block", BlockStateArgumentType.blockState()).executes(c -> {
+                literal("del").then(argument("block", BlockStateArgumentType.blockState(registryAccess)).executes(c -> {
                     Block block = BlockStateArgumentType.getBlockState(c, "block").getBlockState().getBlock();
 
                     if(block == null) error("Block not Found!");

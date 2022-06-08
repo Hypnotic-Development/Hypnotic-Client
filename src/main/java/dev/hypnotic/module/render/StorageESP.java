@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -66,6 +65,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 
 public class StorageESP extends Mod {
 
@@ -243,7 +243,7 @@ public class StorageESP extends Mod {
 								matrices,
 								OutlineVertexConsumers.outlineOnlyConsumer(be.getValue()[0], be.getValue()[1], be.getValue()[2], 1f),
 								false,
-								new Random(),
+								Random.create(),
 								0L,
 								OverlayTexture.DEFAULT_UV);
 					}

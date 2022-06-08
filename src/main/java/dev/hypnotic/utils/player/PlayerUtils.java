@@ -25,6 +25,7 @@ import dev.hypnotic.mixin.SectionedEntityCacheAccessor;
 import dev.hypnotic.mixin.SimpleEntityLookupAccessor;
 import dev.hypnotic.mixin.WorldAccessor;
 import dev.hypnotic.utils.ReflectionHelper;
+import dev.hypnotic.utils.mixin.IClientPlayerInteractionManager;
 import dev.hypnotic.utils.world.Dimension;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
@@ -35,6 +36,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HopperBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.network.SequencedPacketCreator;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -400,5 +402,9 @@ public class PlayerUtils {
         } else {
             return false;
         }
+    }
+    
+    public static void sendSequencedPacket(SequencedPacketCreator packetCreator) {
+    	((IClientPlayerInteractionManager)mc.interactionManager)._sendSequencedPacket(mc.world, packetCreator);
     }
 }

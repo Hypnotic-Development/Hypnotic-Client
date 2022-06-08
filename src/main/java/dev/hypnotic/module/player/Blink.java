@@ -58,7 +58,7 @@ public class Blink extends Mod {
     public void onEnable() {
     	stopCatching = false;
     	if (mc.player != null) {
-    		playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().asString()));
+    		playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().getString()));
     		playerEntity.copyFrom(mc.player);
     		playerEntity.copyPositionAndRotation(mc.player);
 			mc.world.addEntity(1000000, playerEntity);

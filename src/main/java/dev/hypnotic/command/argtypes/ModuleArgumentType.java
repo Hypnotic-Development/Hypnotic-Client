@@ -31,7 +31,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
 import net.minecraft.command.CommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class ModuleArgumentType implements ArgumentType<Mod> {
     
@@ -42,7 +42,7 @@ public class ModuleArgumentType implements ArgumentType<Mod> {
             .collect(Collectors.toList());
 
     private static final DynamicCommandExceptionType NO_SUCH_MODULE = new DynamicCommandExceptionType(o ->
-            new LiteralText("Module with name " + o + " doesn't exist."));
+            Text.literal("Module with name " + o + " doesn't exist."));
 
     public static ModuleArgumentType module() {
         return new ModuleArgumentType();

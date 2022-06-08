@@ -300,8 +300,7 @@ public class NahrFont {
 
                 }
             }
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderUtils.shaderColor(0xffffffff);
     }
 

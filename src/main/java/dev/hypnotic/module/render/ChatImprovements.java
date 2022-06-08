@@ -16,7 +16,6 @@
 */
 package dev.hypnotic.module.render;
 
-import baritone.api.BaritoneAPI;
 import dev.hypnotic.Hypnotic;
 import dev.hypnotic.event.EventTarget;
 import dev.hypnotic.event.events.EventSendMessage;
@@ -58,7 +57,7 @@ public class ChatImprovements extends Mod {
 		StringBuilder sb = new StringBuilder();
 		String message = event.getMessage();
 		
-		if (message.startsWith(BaritoneAPI.getSettings().prefix.get())) return;
+		//if (message.startsWith(BaritoneAPI.getSettings().prefix.get())) return;
 		
 		switch(mode.getSelected()) {
 			case "1":

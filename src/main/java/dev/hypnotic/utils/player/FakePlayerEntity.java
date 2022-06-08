@@ -28,7 +28,7 @@ import net.minecraft.util.Identifier;
 public class FakePlayerEntity extends AbstractClientPlayerEntity {
 
     public FakePlayerEntity(ClientWorld world, GameProfile profile) {
-        super(world, profile);
+        super(world, profile, null);
     }
 
     public void setUUID(UUID uuid) {

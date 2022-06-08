@@ -28,6 +28,7 @@ import dev.hypnotic.utils.font.FontManager;
 import dev.hypnotic.utils.font.NahrFont;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 
 public class HudModule extends Mod {
 
@@ -237,8 +238,8 @@ public class HudModule extends Mod {
 	
 	public void updatePosition(int mouseX, int mouseY) {
 		if (isDragging()) {
-			setX(mouseX - dragX);
-			setY(mouseY - dragY);
+			setX((int)MathHelper.clamp(mouseX - dragX, 0, mc.getWindow().getScaledWidth() - width));
+			setY((int)MathHelper.clamp(mouseY - dragY, 0, mc.getWindow().getScaledHeight() - height));
 		}
 		if (isScaling()) {
 			if (1 - (getScaleStartX() - mouseX) * 0.1 > -1000000) {

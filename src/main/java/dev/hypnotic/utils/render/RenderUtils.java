@@ -79,6 +79,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.Vector4f;
@@ -378,8 +379,7 @@ public class RenderUtils {
 		        bufferBuilder.vertex(matrix4f, minX, maxY, maxZ).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 		        bufferBuilder.vertex(matrix4f, minX, maxY, minZ).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 		        if (draw) {
-			        bufferBuilder.end();
-			        BufferRenderer.draw(bufferBuilder);
+			        BufferRenderer.drawWithShader(bufferBuilder.end());
 		        }
 		        end3DRender();
 		    }
@@ -398,8 +398,7 @@ public class RenderUtils {
 		            bufferBuilder.vertex(matrix4f, (float)x2, (float)y2, (float)z2).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 		        });
 		        if (draw) {
-			        bufferBuilder.end();
-			        BufferRenderer.draw(bufferBuilder);
+			        BufferRenderer.drawWithShader(bufferBuilder.end());
 		        }
 		 }
 
@@ -538,10 +537,17 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g, h, k, f).next();
-	        bufferBuilder.end();
-	        BufferRenderer.draw(bufferBuilder);
+	        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        RenderSystem.enableTexture();
 	        RenderSystem.disableBlend();
+	    }
+	    
+	    public static void fillWithScale(MatrixStack matrixStack, double x, double y, double width, double height, Vec2f scale, float orgin, int color) {
+	        matrixStack.push();
+	    	matrixStack.translate(x, y, 0);
+	        matrixStack.scale(scale.x, scale.y, 0.0f);
+	        fill(matrixStack, 0, 0, width, height, color);
+	        matrixStack.pop();
 	    }
 	    
 	    public static void fill(MatrixStack matrixStack, double x1, double y1, double x2, double y2, Color color) {
@@ -573,8 +579,7 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g, h, k, f).next();
 	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g, h, k, f).next();
-	        bufferBuilder.end();
-	        BufferRenderer.draw(bufferBuilder);
+	        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        RenderSystem.enableTexture();
 	        RenderSystem.disableBlend();
 	    }
@@ -614,8 +619,7 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(g1, h1, k1, f1).next();
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(g2, h2, k2, f2).next();
 	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(g2, h2, k2, f2).next();
-	        bufferBuilder.end();
-	        BufferRenderer.draw(bufferBuilder);
+	        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        RenderSystem.enableTexture();
 	        RenderSystem.disableBlend();
 	    }
@@ -655,8 +659,7 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y2, 0.0F).color(dir ? g2 : g1, dir ? h2 : h1, dir ? k2 : k1, dir ? f2 : f1).next();
 	        bufferBuilder.vertex(matrix, (float)x2, (float)y1, 0.0F).color(dir ? g2 : g1, dir ? h2 : h1, dir ? k2 : k1, dir ? f2 : f1).next();
 	        bufferBuilder.vertex(matrix, (float)x1, (float)y1, 0.0F).color(!dir ? g2 : g1, !dir ? h2 : h1, !dir ? k2 : k1, !dir ? f2 : f1).next();
-	        bufferBuilder.end();
-	        BufferRenderer.draw(bufferBuilder);
+	        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        RenderSystem.enableTexture();
 	        RenderSystem.disableBlend();
 	    }
@@ -691,8 +694,7 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrices, (float)x1, (float)y1, (float)z).texture(u1, v1).next();
 	        bufferBuilder.vertex(matrices, (float)x1, (float)y0, (float)z).texture(u1, v0).next();
 	        bufferBuilder.vertex(matrices, (float)x0, (float)y0, (float)z).texture(u0, v0).next();
-	        bufferBuilder.end();
-	        BufferRenderer.draw(bufferBuilder);
+	        BufferRenderer.drawWithShader(bufferBuilder.end());
 	    }
 	    
 	    public static void drawItem(ItemStack stack, float xPosition, float yPosition) {
@@ -890,8 +892,7 @@ public class RenderUtils {
 	        bufferBuilder.vertex(matrix4f, minX, maxY, maxZ).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 	        bufferBuilder.vertex(matrix4f, minX, maxY, minZ).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 	        if (draw) {
-		        bufferBuilder.end();
-		        BufferRenderer.draw(bufferBuilder);
+		        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        }
 	    }
 		
@@ -917,8 +918,7 @@ public class RenderUtils {
 	            bufferBuilder.vertex(matrix4f, (float)x2, (float)y2, (float)z2).color(color1.getRed(), color1.getGreen(), color1.getBlue(), color1.getAlpha()).next();
 	        });
 	        if (draw) {
-		        bufferBuilder.end();
-		        BufferRenderer.draw(bufferBuilder);
+		        BufferRenderer.drawWithShader(bufferBuilder.end());
 	        }
 	    }
 
@@ -930,8 +930,7 @@ public class RenderUtils {
 
 	        renderOutlineIntern(start, dimensions, stack, buffer);
 
-	        buffer.end();
-	        BufferRenderer.draw(buffer);
+	        BufferRenderer.drawWithShader(buffer.end());
 	        GL11.glDepthFunc(GL11.GL_LEQUAL);
 	        RenderSystem.disableBlend();
 	    }
@@ -974,9 +973,7 @@ public class RenderUtils {
 	        buffer.vertex(matrix, x1, y1, z1).color(red, green, blue, alpha).next();
 	        buffer.vertex(matrix, x2, y2, z2).color(red, green, blue, alpha).next();
 
-	        buffer.end();
-
-	        BufferRenderer.draw(buffer);
+	        BufferRenderer.drawWithShader(buffer.end());
 	        GL11.glDepthFunc(GL11.GL_LEQUAL);
 	        RenderSystem.disableBlend();
 	    }
@@ -1147,7 +1144,7 @@ public class RenderUtils {
 		public static Vec3d center() {
 			Vec3d pos = new Vec3d(0, 0, 1);
 
-	        if (mc.options.bobView) {
+	        if (mc.options.getBobView().getValue()) {
 	            MatrixStack bobViewMatrices = new MatrixStack();
 
 	            bobView(bobViewMatrices);
@@ -1349,6 +1346,10 @@ public class RenderUtils {
 			return x2 - x1;
 		}
 	
+		public static double slowDownTo(double x1, double x2, float smooth) {
+			return (x2 - x1) / smooth;
+		}
+	
 	public static void vertex2f(float x, float y) {
 		Tessellator.getInstance().getBuffer().vertex(x, y, 0);
 	}
@@ -1373,8 +1374,7 @@ public class RenderUtils {
                 bufferBuilder.vertex(matrix, (float) current[0] + sin, (float) current[1] + cos, 0.0F).color(cr, cg, cb, ca).next();
             }
         }
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
     }
 
 	// Taken from Coffee client (https://github.com/business-goose/Coffee/tree/master)
@@ -1506,7 +1506,6 @@ public class RenderUtils {
             builder.vertex(rotatedX, y + height, rotatedZ).color(color.getRGB()).next();
         }
 
-        builder.end();
-        BufferRenderer.draw(builder);
+        BufferRenderer.drawWithShader(builder.end());
     }
 }

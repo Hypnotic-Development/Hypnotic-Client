@@ -38,6 +38,6 @@ public class EventReceiveChat extends Event {
 	}
 	
 	public String getMessageAsString() {
-		return message.asString();
+		return message.getString();
 	}
 }

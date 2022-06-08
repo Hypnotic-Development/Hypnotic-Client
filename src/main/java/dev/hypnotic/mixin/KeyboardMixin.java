@@ -28,9 +28,6 @@ import dev.hypnotic.command.CommandManager;
 import dev.hypnotic.event.events.EventKeyPress;
 import dev.hypnotic.module.Mod;
 import dev.hypnotic.module.ModuleManager;
-import dev.hypnotic.ui.toasts.Toast;
-import dev.hypnotic.ui.toasts.Toast.Type;
-import dev.hypnotic.ui.toasts.ToastManager;
 import dev.hypnotic.utils.input.KeyUtils;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
@@ -54,8 +51,6 @@ public abstract class KeyboardMixin {
             event.call();
             if (event.isCancelled()) info.cancel();
             if (client.currentScreen == null && key == KeyUtils.getKey(CommandManager.INSTANCE.getPrefix()) && action == GLFW.GLFW_PRESS) client.setScreen(new ChatScreen(""));
-            
-            if (action == GLFW.GLFW_PRESS && key == GLFW.GLFW_KEY_M) ToastManager.INSTANCE.showToast(new Toast(Type.INFO, "Test", "description", 2000)); 
         }
     }
 }

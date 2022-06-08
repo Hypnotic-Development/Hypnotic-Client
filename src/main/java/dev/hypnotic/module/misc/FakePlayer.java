@@ -39,7 +39,7 @@ public class FakePlayer extends Mod {
 	@Override
 	public void onEnable() {
 		if (mc.player != null) {
-			playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().asString()));
+			playerEntity = new FakePlayerEntity(mc.world, new GameProfile(UUID.randomUUID(), mc.player.getName().getString()));
     		playerEntity.copyFrom(mc.player);
     		playerEntity.copyPositionAndRotation(mc.player);
 			mc.world.addEntity(1000000, playerEntity);

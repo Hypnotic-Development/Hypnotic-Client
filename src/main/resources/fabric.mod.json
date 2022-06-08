@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "hypnotic",
   "environment": "client",
-  "license": "GPL-3.0",
+  "license": "GNU-3.0",
   "version": "${version}",
   "name": "Hypnotic Client",
   "description": "Insane epic \"utility mod\"",
@@ -29,8 +29,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.12.8",
-    "minecraft": "1.18.x",
+    "fabricloader": ">=0.14.6",
+    "minecraft": "1.19.x",
     "java": ">=17"
   },
   "suggests": {

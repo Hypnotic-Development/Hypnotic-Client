@@ -16,18 +16,18 @@
 */
 package dev.hypnotic.mixin;
 
-import net.minecraft.client.render.BufferRenderer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(BufferRenderer.class)
-public interface BufferRendererAccessor {
-    @Accessor("currentVertexArray")
-    static void setCurrentVertexArray(int vao) {}
+import dev.hypnotic.utils.mixin.IHorseBaseEntity;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 
-    @Accessor("currentVertexBuffer")
-    static void setCurrentVertexBuffer(int vbo) {}
+@Mixin(AbstractHorseEntity.class)
+public abstract class AbstractHorseEntityMixin implements IHorseBaseEntity {
+    @Shadow protected abstract void setHorseFlag(int bitmask, boolean flag);
 
-    @Accessor("currentElementBuffer")
-    static void setCurrentElementBuffer(int ibo) {}
+    @Override
+    public void setSaddled(boolean saddled) {
+        setHorseFlag(4, saddled);
+    }
 }

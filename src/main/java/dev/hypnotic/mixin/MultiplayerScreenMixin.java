@@ -26,7 +26,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 @Mixin(MultiplayerScreen.class)
@@ -38,7 +37,7 @@ public abstract class MultiplayerScreenMixin extends Screen {
 
 	@Inject(method = "init", at = @At("TAIL"), cancellable = true)
 	private void addServerFinderButton(CallbackInfo ci) {
-		this.addDrawableChild(new ButtonWidget(this.width - 120, this.height - 30, 100, 20, new LiteralText("Server Finder"), (button) -> {
+		this.addDrawableChild(new ButtonWidget(this.width - 120, this.height - 30, 100, 20, Text.literal("Server Finder"), (button) -> {
 			MinecraftClient.getInstance().setScreen(new ServerFinder((MultiplayerScreen)(Object)this));
 	    }));
 	}

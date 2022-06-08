@@ -27,6 +27,7 @@ import dev.hypnotic.module.ModuleManager;
 import dev.hypnotic.module.exploit.OffhandCrash;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -38,7 +39,7 @@ public abstract class LivingEntityMixin extends Entity {
 	}
 
 	@Inject(method = "onEquipStack", at = @At("HEAD"), cancellable = true)
-    private void onEquipStack(ItemStack stack, CallbackInfo info) {
+    private void onEquipStack(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack, CallbackInfo info) {
         if ((Object) this == mc.player && ModuleManager.INSTANCE.getModule(OffhandCrash.class).antiCrash.isEnabled() && ModuleManager.INSTANCE.getModule(OffhandCrash.class).isEnabled()) {
             info.cancel();
         }

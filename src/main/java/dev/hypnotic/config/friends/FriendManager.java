@@ -46,7 +46,7 @@ public class FriendManager {
 	public boolean isFriend(LivingEntity friend) {
 		for (Friend f : friends) {
 			if (friend instanceof PlayerEntity)
-	            if (f.name.equalsIgnoreCase(friend.getName().asString()))
+	            if (f.name.equalsIgnoreCase(friend.getName().getString()))
 	                return true;
         }
 		return false;

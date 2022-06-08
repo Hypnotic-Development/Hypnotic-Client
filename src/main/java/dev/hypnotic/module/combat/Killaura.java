@@ -40,6 +40,7 @@ import dev.hypnotic.settings.settingtypes.NumberSetting;
 import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.RotationUtils;
 import dev.hypnotic.utils.Timer;
+import dev.hypnotic.utils.player.PlayerUtils;
 import dev.hypnotic.utils.render.RenderUtils;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
@@ -92,6 +93,7 @@ public class Killaura extends Mod {
 	public BooleanSetting invisibles = new BooleanSetting("Invisibles", false);
 	
 	private static Timer attackTimer = new Timer();
+	private float smoothYaw, smoothPitch;
 	
 	int passedTicks;
 	boolean blocking = false;
@@ -136,10 +138,14 @@ public class Killaura extends Mod {
 								if (!FriendManager.INSTANCE.isFriend((LivingEntity)targets.get(0))) target = (LivingEntity)targets.get(0);
 								if (mc.player.distanceTo(target) > range.getValue()) target = null;
 								if (target != null) {
-									this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().asString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().asString()));
+									this.setDisplayName("Killaura " + ColorUtils.gray + (target instanceof PlayerEntity ? target.getName().getString().replaceAll(ColorUtils.colorChar, "&") : target.getDisplayName().getString()));
 									if(canAttack(target)){
-										RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
-										RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
+										float yaw = RotationUtils.getRotations(target)[0];
+										float pitch = RotationUtils.getRotations(target)[1];
+										if (smoothYaw != yaw) smoothYaw += RenderUtils.slowDownTo(smoothYaw, yaw, 10);
+										if (smoothPitch != pitch) smoothYaw += RenderUtils.slowDownTo(smoothPitch, pitch, 10);
+										RotationUtils.setSilentPitch(smoothPitch);
+										RotationUtils.setSilentYaw(smoothYaw);
 										if (rotation.is("Lock View")) {
 											mc.player.setYaw(RotationUtils.getRotations(target)[0]);
 											mc.player.setPitch(RotationUtils.getRotations(target)[1]);
@@ -183,7 +189,7 @@ public class Killaura extends Mod {
 							if(!targets.isEmpty()){
 								for (LivingEntity entity : targets) {
 									if(entity != null && !FriendManager.INSTANCE.isFriend(entity)){
-										this.setDisplayName("Killaura " + ColorUtils.gray + (entity instanceof PlayerEntity ? entity.getName().asString().replaceAll(ColorUtils.colorChar, "&") : entity.getDisplayName().asString()));
+										this.setDisplayName("Killaura " + ColorUtils.gray + (entity instanceof PlayerEntity ? entity.getName().getString().replaceAll(ColorUtils.colorChar, "&") : entity.getDisplayName().getString()));
 										if(canAttack(entity)){
 										 	if (target != null) RotationUtils.setSilentPitch(RotationUtils.getRotations(target)[1]);
 										 	if (target != null) RotationUtils.setSilentYaw(RotationUtils.getRotations(target)[0]);
@@ -230,10 +236,10 @@ public class Killaura extends Mod {
 		} else {
 			if (target == null) return;
 			if(autoBlock.isEnabled() && (mc.player.getMainHandStack().getItem() instanceof ToolItem || mc.player.getMainHandStack().getItem() == Items.AIR || mc.player.getMainHandStack().getItem() instanceof AxeItem || mc.player.getMainHandStack().getItem() instanceof SwordItem) && !autoBlockMode.is("Visual")) {
-				mc.interactionManager.interactItem(mc.player, mc.world, Hand.OFF_HAND);
-				mc.interactionManager.interactItem(mc.player, mc.world, Hand.MAIN_HAND);
+				mc.interactionManager.interactItem(mc.player, Hand.OFF_HAND);
+				mc.interactionManager.interactItem(mc.player, Hand.MAIN_HAND);
 				if (!blocking && autoBlockMode.is("NCP")) {
-					mc.player.networkHandler.sendPacket(new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(0.0f, 0.0f, 0.0f), Direction.DOWN, new BlockPos(-1, -1, -1), false)));
+					PlayerUtils.sendSequencedPacket(id -> new PlayerInteractBlockC2SPacket(Hand.MAIN_HAND, new BlockHitResult(new Vec3d(0.0f, 0.0f, 0.0f), Direction.DOWN, new BlockPos(-1, -1, -1), false), id));
 					blocking = true;
 				}
 			}

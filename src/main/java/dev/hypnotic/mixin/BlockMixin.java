@@ -32,7 +32,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 
 @Mixin(Block.class)
 public class BlockMixin {
@@ -51,8 +51,8 @@ public class BlockMixin {
     }
     
     @Inject(method = "pushEntitiesUpBeforeBlockChange", at = @At("HEAD"), cancellable = true)
-    private static void pushEntitiesUpBeforeBlockChange(BlockState from, BlockState to, World world, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
-    	VoxelShape voxelShape = VoxelShapes.combine(from.getCollisionShape(world, pos), to.getCollisionShape(world, pos), BooleanBiFunction.ONLY_SECOND).offset((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
+    private static void pushEntitiesUpBeforeBlockChange(BlockState from, BlockState to, WorldAccess worldAccess, BlockPos pos, CallbackInfoReturnable<BlockState> cir) {
+    	VoxelShape voxelShape = VoxelShapes.combine(from.getCollisionShape(worldAccess, pos), to.getCollisionShape(worldAccess, pos), BooleanBiFunction.ONLY_SECOND).offset((double)pos.getX(), (double)pos.getY(), (double)pos.getZ());
     	EventCollide.Block event = new EventCollide.Block(voxelShape.getBoundingBox(), pos);
     	event.call();
     	if (event.isCancelled()) cir.cancel();

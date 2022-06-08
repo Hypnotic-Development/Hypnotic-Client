@@ -27,13 +27,13 @@ public class Fullbright extends Mod {
 
 	@Override
 	public void onTick() {
-		mc.options.gamma = 100;
+		mc.options.getGamma().setValue(100.0);
 		super.onEnable();
 	}
 	
 	@Override
 	public void onDisable() {
-		mc.options.gamma = 0;
+		mc.options.getGamma().setValue(0.0);
 		super.onDisable();
 	}
 }

@@ -48,7 +48,6 @@ public class HUD {
 			if (element.isEnabled() && !(mc.currentScreen instanceof HudEditorScreen))
 			element.render(event.getMatrices(), mc.getWindow().getScaledWidth(), mc.getWindow().getScaledHeight(), event.getTickDelta());
 		}
-		
 		ToastManager.INSTANCE.renderToasts(event.getMatrices());
 	}
 }

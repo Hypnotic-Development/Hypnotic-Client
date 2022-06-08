@@ -59,6 +59,7 @@ public class Scaffold extends Mod {
     
     private int startY;
     private BlockPos pos;
+    
     public Timer towerTimer = new Timer();
     
     public Scaffold() {
@@ -95,12 +96,9 @@ public class Scaffold extends Mod {
     }
     
     public int getBlockInHotbar() {
-        for(int i = 0; i < 9; i++) {
-            if(
-                    mc.player.getInventory().getStack(i) == ItemStack.EMPTY
-                            || !(mc.player.getInventory().getStack(i).getItem() instanceof BlockItem)
-                            || !Block.getBlockFromItem(mc.player.getInventory().getStack(i).getItem()).getDefaultState().isFullCube(mc.world, new BlockPos(0, 0, 0))
-            ) continue;
+        for (int i = 0; i < 9; i++) {
+            if (mc.player.getInventory().getStack(i) == ItemStack.EMPTY || !(mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) || !Block.getBlockFromItem(mc.player.getInventory().getStack(i).getItem()).getDefaultState().isFullCube(mc.world, new BlockPos(0, 0, 0))) 
+            	continue;
 
             return i;
         }
@@ -170,6 +168,16 @@ public class Scaffold extends Mod {
 	
 	            return;
 	        }
+	        
+	        if (rotate.isEnabled() && pos != null) {
+	        	event.setYaw((float) RotationUtils.getYaw(pos));
+	        	event.setPitch((float) RotationUtils.getPitch(pos));
+	        	
+	        	if (smoothYaw != event.getYaw()) smoothYaw += RenderUtils.slowDownTo(smoothYaw, event.getYaw(), 6f);
+	        	if (smoothPitch != event.getYaw()) smoothPitch += RenderUtils.slowDownTo(smoothPitch, event.getPitch(), 6f);
+			    RotationUtils.setSilentYaw(smoothYaw);
+			    RotationUtils.setSilentPitch(smoothPitch);
+	        }
 	
 	        if(extend.getValue() == 0) {
 	            BlockPos under = new BlockPos(mc.player.getX(), !keepY ? mc.player.getY() - 1 : startY, mc.player.getZ());
@@ -182,7 +190,7 @@ public class Scaffold extends Mod {
 	        }
 	
 	        ArrayList<BlockPos> blocks = new ArrayList<>();
-	        for(double i = (int) 0; i < extend.getValue(); i+=0.01) {
+	        for (double i = (int) 0; i < extend.getValue(); i += 0.01) {
 	        	BlockPos pos = WorldUtils.getForwardBlock((mc.player.input.movementForward < 0) ? (-i) : (i)).down();
 	        	if (PlayerUtils.distanceTo(pos) > 10) startY = (int) (mc.player.getY() - 1);
 	        	if (tower.isEnabled() ? (this.keepY.isEnabled() && !space.isEnabled() ? true : !mc.options.jumpKey.isPressed()) : true) blocks.add(new BlockPos(pos.getX(), !keepY ? pos.getY() : startY, pos.getZ()));
@@ -196,16 +204,6 @@ public class Scaffold extends Mod {
 	                WorldUtils.placeBlockMainHand(x, false, true, true, swing.isEnabled());
 	                break;
 	            }
-	        }
-	        if (rotate.isEnabled() && pos != null) {
-	        	event.setYaw((float) RotationUtils.getYaw(pos));
-	        	event.setPitch((float) RotationUtils.getPitch(pos));
-	        	
-	        	if (smoothYaw != event.getYaw()) smoothYaw += RenderUtils.distanceTo(smoothYaw, event.getYaw()) / 4f;
-	        	if (smoothPitch != event.getYaw()) smoothPitch += RenderUtils.distanceTo(smoothPitch, event.getPitch()) / 4f;
-	        	
-			    RotationUtils.setSilentYaw(smoothYaw);
-			    RotationUtils.setSilentPitch(smoothPitch);
 	        }
 	        mc.player.getInventory().selectedSlot = oldSlot;
     	}

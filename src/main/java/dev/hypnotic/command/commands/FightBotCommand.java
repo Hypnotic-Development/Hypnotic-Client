@@ -37,7 +37,7 @@ public class FightBotCommand extends Command {
 			PlayerEntity target = PlayerArgumentType.getPlayer(context, "player");
 			FightBot fightBot = ModuleManager.INSTANCE.getModule(FightBot.class);
 			
-			if (target.getName().asString().equalsIgnoreCase(mc.player.getName().asString())) {
+			if (target.getName().getString().equalsIgnoreCase(mc.player.getName().getString())) {
 				error("You can't hunt yourself");
 				return SINGLE_SUCCESS;
 			}
