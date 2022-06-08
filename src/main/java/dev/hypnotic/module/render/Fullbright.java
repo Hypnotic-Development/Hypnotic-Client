@@ -18,6 +18,7 @@ package dev.hypnotic.module.render;
 
 import dev.hypnotic.module.Category;
 import dev.hypnotic.module.Mod;
+import dev.hypnotic.utils.mixin.ISimpleOption;
 
 public class Fullbright extends Mod {
 
@@ -25,10 +26,11 @@ public class Fullbright extends Mod {
 		super("Fullbright", "Turns your gamma very high", Category.RENDER);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onTick() {
-		mc.options.getGamma().setValue(100.0);
-		super.onEnable();
+		((ISimpleOption<Double>)(Object)mc.options.getGamma()).setValueUnrestricted(100.0d);
+		super.onTick();
 	}
 	
 	@Override

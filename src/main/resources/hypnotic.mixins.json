@@ -65,7 +65,8 @@
     "FramebufferMixin",
     "MultiplayerScreenMixin",
     "FramebufferAccessor",
-    "CactusBlockMixin"
+    "CactusBlockMixin",
+    "SimpleOptionMixin"
   ],
   "injectors": {
     "defaultRequire": 1
