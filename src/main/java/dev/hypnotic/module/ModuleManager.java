@@ -147,7 +147,7 @@ public class ModuleManager {
 				new ChestStealer(),
 				new LightningLocator(),
 				new FightBot(),
-				new InvisibleNametag()
+				new AntiSculkSensor()
 			);
 	}
 	
