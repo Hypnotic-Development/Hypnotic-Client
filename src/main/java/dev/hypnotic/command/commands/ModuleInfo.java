@@ -25,9 +25,9 @@ import dev.hypnotic.utils.ColorUtils;
 import dev.hypnotic.utils.ChatUtils;
 import net.minecraft.command.CommandSource;
 
-public class Module extends Command {
+public class ModuleInfo extends Command {
 
-	public Module() {
+	public ModuleInfo() {
 		super("module", "Tells you more about a specific module");
 	}
 	

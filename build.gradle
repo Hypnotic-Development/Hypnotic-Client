@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
 	id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
@@ -58,8 +58,8 @@ dependencies {
 	modImplementation include(fabricApi.module("fabric-resource-loader-v0", project.fabric_version));
 
 	// thanks minegame159 from meteor client
-	//modImplementation "baritone:baritone:${project.baritone_version}"
-	//include "baritone:baritone:${project.baritone_version}"
+	modImplementation "baritone:fabric:${project.baritone_version}"
+	include "baritone:fabric:${project.baritone_version}"
 
 	modImplementation "io.github.ladysnake:satin:${satin_version}"
     include "io.github.ladysnake:satin:${satin_version}"

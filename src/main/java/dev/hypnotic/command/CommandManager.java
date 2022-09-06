@@ -27,7 +27,6 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.hypnotic.command.commands.*;
-import dev.hypnotic.command.commands.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.command.CommandSource;
@@ -59,7 +58,7 @@ public class CommandManager {
         add(new Commands());
         add(new Modules());
         add(new Toggle());
-        add(new Module());
+        add(new ModuleInfo());
         add(new Bind());
         add(new Teleport());
         add(new Script());
